@@ -1,0 +1,13 @@
+Change logic = if candle green - price (inc)
+               if candle red   - price (dec)
+
+price (in %)   volume(in %)  result
+inc            inc/neu       strong buy
+inc            dec           buy
+dec            inc/neu       strong sell
+dec            dec           sell
+
+Bank Nifty options to be brought in into a new sheet
+from angleone api
+
+Also bring the entire nifty 50 components and update the live data.

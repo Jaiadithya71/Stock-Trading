@@ -1,0 +1,3 @@
+Use nseindia.com to get the bank nifty options, bring all the data and display all the data in a new sheet to calculate the decision metrics.
+
+Nifty 50 (stock composition) details to be brought in just like the bank nifty.
