@@ -37,6 +37,16 @@ router.post("/indices-data", requireAuth, async (req, res) => {
   for (const [symbol, info] of Object.entries(INDICES_INSTRUMENTS)) {
     results[symbol] = {};
     
+    // Get LTP from the most recent candle (ONE_MINUTE data)
+    const ltpResponse = await dashboard.getCandleData(info.exchange, info.token, "ONE_MINUTE");
+    if (ltpResponse.status && ltpResponse.data && ltpResponse.data.length > 0) {
+      const latestCandle = ltpResponse.data[ltpResponse.data.length - 1];
+      results[symbol].ltp = latestCandle[4].toFixed(2); // Close price
+    } else {
+      results[symbol].ltp = null;
+    }
+    
+    // Get sentiment for each time interval
     for (const interval of TIME_INTERVALS) {
       const response = await dashboard.getCandleData(info.exchange, info.token, interval);
       

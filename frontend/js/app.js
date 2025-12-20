@@ -135,8 +135,8 @@ const App = {
         const dashboard = document.getElementById('dashboardContent');
         if (dashboard) {
             dashboard.innerHTML = `
-                ${BankNiftyTable.render(this.state.bankNiftyData, this.state.bankNiftyTimestamp)}
                 ${IndicesGrid.render(this.state.indicesData, this.state.indicesTimestamp)}
+                ${BankNiftyTable.render(this.state.bankNiftyData, this.state.bankNiftyTimestamp)}
             `;
         }
     },
