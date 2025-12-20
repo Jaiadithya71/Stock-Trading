@@ -1,6 +1,7 @@
 # Credentials and keys
 credentials.enc
 encryption.key
+backend/credentials_jai.txt
 
 # Dependencies
 node_modules/
@@ -15,4 +16,4 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-backend/credentials_jai.txt
+
