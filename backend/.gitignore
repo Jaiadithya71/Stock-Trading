@@ -1,0 +1,16 @@
+# Credentials and keys
+credentials.enc
+encryption.key
+
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

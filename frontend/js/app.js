@@ -167,3 +167,8 @@ const App = {
         }
     }
 };
+
+// ⭐ THIS IS THE MISSING LINE - Initialize the app when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    App.init();
+});
