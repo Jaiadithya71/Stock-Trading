@@ -4,35 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bank Nifty Trading Dashboard</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/modals.css">
-    <link rel="stylesheet" href="css/indices-styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/interactive.css">
 </head>
 <body>
     <div id="app"></div>
-    
-    <!-- Load config first -->
+
+    <!-- Configuration -->
     <script src="config/config.js"></script>
     
-    <!-- Load utilities -->
+    <!-- Utilities -->
     <script src="js/utils/helpers.js"></script>
     <script src="js/utils/formatters.js"></script>
+    <script src="js/utils/eventHandler.js"></script>
     
-    <!-- Load API service -->
-    <script src="js/api/apiService.js"></script>
-    
-    <!-- Load components -->
+    <!-- Components -->
     <script src="js/components/LoadingSpinner.js"></script>
     <script src="js/components/Header.js"></script>
-    <script src="js/components/BankNiftyTable.js"></script>
+    <script src="js/components/Toolbar.js"></script>
     <script src="js/components/IndicesGrid.js"></script>
+    <script src="js/components/BankNiftyTable.js"></script>
     
-    <!-- Load modals -->
+    <!-- Modals -->
     <script src="js/modals/LoginModal.js"></script>
     <script src="js/modals/CredentialsModal.js"></script>
     
-    <!-- Load main app -->
+    <!-- Services -->
+    <script src="js/api/apiService.js"></script>
+    
+    <!-- Main App -->
     <script src="js/app.js"></script>
 </body>
 </html>

@@ -5,11 +5,13 @@ const LoginModal = {
                 <div class="modal-content">
                     <div class="modal-header">Bank Nifty Dashboard</div>
                     <div id="loginError"></div>
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" placeholder="Enter your username" />
-                    </div>
-                    <button class="btn-primary" onclick="App.checkUser()">Continue</button>
+                    <form data-submit-action="check-user" onsubmit="return false;">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" placeholder="Enter your username" />
+                        </div>
+                        <button class="btn-primary" data-action="check-user" type="button">Continue</button>
+                    </form>
                 </div>
             </div>
         `;

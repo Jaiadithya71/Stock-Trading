@@ -5,7 +5,7 @@ const BankNiftyTable = {
         }
 
         const rows = data.map(row => `
-            <tr>
+            <tr data-action="view-details" data-bank="${row.bank}">
                 <td>${row.bank}</td>
                 <td>${Formatters.formatCurrency(row.ltp)}</td>
                 <td>${Formatters.formatNumber(row.volume)}</td>
@@ -24,7 +24,7 @@ const BankNiftyTable = {
                         <div class="card-title">Bank Nifty Stocks</div>
                         <div class="timestamp">Last updated: ${timestamp || '--'}</div>
                     </div>
-                    <button class="refresh-btn" onclick="App.refreshBankNifty()">🔄 Refresh</button>
+                    <button class="refresh-btn" data-action="refresh-banknifty">🔄 Refresh</button>
                 </div>
                 <table>
                     <thead>
