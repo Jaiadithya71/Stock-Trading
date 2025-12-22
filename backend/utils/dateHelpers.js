@@ -27,29 +27,32 @@ function getDateRange() {
   let fromDate, toDate;
   
   if (now.getDay() === 0 || now.getDay() === 6) {
-    // Weekend
+    // Weekend - use last trading day's full session
     const lastTradingDay = getLastTradingDay(now);
     fromDate = new Date(lastTradingDay);
-    fromDate.setHours(14, 30, 0, 0);
+    fromDate.setHours(9, 15, 0, 0);
     toDate = new Date(lastTradingDay);
     toDate.setHours(15, 30, 0, 0);
   } else if (now < marketOpen) {
-    // Before market open
+    // Before market open - use previous day's full session
     const lastTradingDay = getLastTradingDay(now);
     fromDate = new Date(lastTradingDay);
-    fromDate.setHours(14, 30, 0, 0);
+    fromDate.setHours(9, 15, 0, 0);
     toDate = new Date(lastTradingDay);
     toDate.setHours(15, 30, 0, 0);
   } else if (now > marketClose) {
-    // After market close
-    fromDate = new Date(marketClose);
-    fromDate.setHours(14, 30, 0, 0);
-    toDate = marketClose;
+    // After market close - use today's full session
+    fromDate = new Date(now);
+    fromDate.setHours(9, 15, 0, 0);
+    toDate = new Date(now);
+    toDate.setHours(15, 30, 0, 0);
   } else {
-    // During market hours
-    fromDate = new Date(now.getTime() - 60 * 60 * 1000); // 1 hour ago
+    // During market hours - use last 2 hours for better data availability
+    fromDate = new Date(now.getTime() - 2 * 60 * 60 * 1000); // 2 hours ago
     toDate = now;
   }
+  
+  console.log(`📅 Date Range: ${formatDateTime(fromDate)} to ${formatDateTime(toDate)}`);
   
   return {
     fromDate: formatDateTime(fromDate),

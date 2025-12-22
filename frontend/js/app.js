@@ -5,7 +5,8 @@ const App = {
         indicesData: null,
         bankNiftyTimestamp: null,
         indicesTimestamp: null,
-        refreshInterval: null,
+        refreshIntervalId: null,
+        refreshIntervalTime: 60000, // Default 60 seconds
         autoRefreshEnabled: true,
         selectedInterval: 'ONE_MINUTE',
         filters: {
@@ -36,8 +37,9 @@ const App = {
         EventHandler.on('toggle-autorefresh', (e, target) => this.toggleAutoRefresh(target));
         EventHandler.on('toggle-filter', (e, target) => this.toggleFilter(target));
         
-        // Interval selector
+        // Interval selectors
         EventHandler.on('change-interval', (e, target) => this.changeInterval(target));
+        EventHandler.on('change-refresh-interval', (e, target) => this.changeRefreshInterval(target));
         
         // Export handlers
         EventHandler.on('export-csv', () => this.exportToCSV());
@@ -170,14 +172,46 @@ const App = {
     updateDashboard() {
         const dashboard = document.getElementById('dashboardContent');
         if (dashboard) {
+            // Get complete bank list with data
+            const completeData = this.getCompleteBankNiftyData();
+            
             // Filter data based on current filters
-            const filteredData = this.filterBankNiftyData(this.state.bankNiftyData);
+            const filteredData = this.filterBankNiftyData(completeData);
             
             dashboard.innerHTML = `
                 ${IndicesGrid.render(this.state.indicesData, this.state.indicesTimestamp)}
                 ${BankNiftyTable.render(filteredData, this.state.bankNiftyTimestamp)}
             `;
         }
+    },
+
+    getCompleteBankNiftyData() {
+        const allBanks = [
+            "HDFCBANK", "ICICIBANK", "AXISBANK", "KOTAKBANK", 
+            "SBIN", "INDUSINDBK", "BANDHANBNK", "PNB", 
+            "IDFCFIRSTB", "AUBANK", "FEDERALBNK", "BANKBARODA"
+        ];
+        
+        const dataMap = {};
+        if (this.state.bankNiftyData) {
+            this.state.bankNiftyData.forEach(item => {
+                dataMap[item.bank] = item;
+            });
+        }
+        
+        return allBanks.map(bank => {
+            if (dataMap[bank]) {
+                return dataMap[bank];
+            } else {
+                return {
+                    bank: bank,
+                    ltp: null,
+                    volume: null,
+                    changePercent: null,
+                    status: "Data Not Fetched"
+                };
+            }
+        });
     },
 
     filterBankNiftyData(data) {
@@ -204,12 +238,29 @@ const App = {
     toggleAutoRefresh(target) {
         this.state.autoRefreshEnabled = target.checked;
         
+        // Enable/disable the interval select
+        const intervalSelect = document.getElementById('refreshIntervalSelect');
+        if (intervalSelect) {
+            intervalSelect.disabled = !target.checked;
+        }
+        
         if (this.state.autoRefreshEnabled) {
             this.startAutoRefresh();
-            Helpers.log('Auto-refresh enabled');
+            Helpers.log('Auto-refresh enabled with interval: ' + this.state.refreshIntervalTime + 'ms');
         } else {
             this.stopAutoRefresh();
             Helpers.log('Auto-refresh disabled');
+        }
+    },
+
+    changeRefreshInterval(target) {
+        this.state.refreshIntervalTime = parseInt(target.value);
+        Helpers.log('Refresh interval changed to: ' + this.state.refreshIntervalTime + 'ms');
+        
+        // Restart auto-refresh with new interval if enabled
+        if (this.state.autoRefreshEnabled) {
+            this.stopAutoRefresh();
+            this.startAutoRefresh();
         }
     },
 
@@ -222,31 +273,37 @@ const App = {
     changeInterval(target) {
         this.state.selectedInterval = target.value;
         Helpers.log('Interval changed to: ' + target.value);
-        // You can implement interval-specific data fetching here
     },
 
     startAutoRefresh() {
-        if (this.state.autoRefreshEnabled && !this.state.refreshInterval) {
-            this.state.refreshInterval = setInterval(() => {
+        if (this.state.autoRefreshEnabled && !this.state.refreshIntervalId) {
+            this.state.refreshIntervalId = setInterval(() => {
                 Helpers.log('Auto-refreshing data...');
                 this.loadAllData();
-            }, AppConfig.REFRESH_INTERVAL);
+            }, this.state.refreshIntervalTime);
         }
     },
 
     stopAutoRefresh() {
-        if (this.state.refreshInterval) {
-            clearInterval(this.state.refreshInterval);
-            this.state.refreshInterval = null;
+        if (this.state.refreshIntervalId) {
+            clearInterval(this.state.refreshIntervalId);
+            this.state.refreshIntervalId = null;
         }
     },
 
     exportToCSV() {
-        if (!this.state.bankNiftyData) return;
+        const completeData = this.getCompleteBankNiftyData();
+        if (!completeData) return;
         
         const headers = ['Bank', 'LTP', 'Volume', 'Change %', 'Status'];
-        const rows = this.state.bankNiftyData.map(row => 
-            [row.bank, row.ltp, row.volume, row.changePercent, row.status]
+        const rows = completeData.map(row => 
+            [
+                row.bank, 
+                row.ltp || 'N/A', 
+                row.volume || 'N/A', 
+                row.changePercent || 'N/A', 
+                row.status
+            ]
         );
         
         const csv = [headers, ...rows]
@@ -258,7 +315,7 @@ const App = {
 
     exportToJSON() {
         const data = {
-            bankNifty: this.state.bankNiftyData,
+            bankNifty: this.getCompleteBankNiftyData(),
             indices: this.state.indicesData,
             timestamp: new Date().toISOString()
         };
@@ -278,12 +335,10 @@ const App = {
     },
 
     openSettings() {
-        // Implement settings modal
         Helpers.log('Opening settings...');
     },
 
     saveSettings() {
-        // Implement settings save
         Helpers.log('Saving settings...');
     }
 };

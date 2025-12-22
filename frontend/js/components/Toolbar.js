@@ -12,12 +12,27 @@ const Toolbar = {
                         <label class="toggle">
                             <input 
                                 type="checkbox" 
+                                id="autoRefreshToggle"
                                 data-change-action="toggle-autorefresh" 
                                 ${state.autoRefreshEnabled ? 'checked' : ''}
                             >
-                            <span class="toggle-slider"></span>
                             <span class="toggle-label">Auto Refresh</span>
                         </label>
+                        
+                        <select 
+                            id="refreshIntervalSelect"
+                            class="auto-refresh-interval" 
+                            data-change-action="change-refresh-interval"
+                            ${!state.autoRefreshEnabled ? 'disabled' : ''}
+                        >
+                            <option value="10000" ${state.refreshInterval === 10000 ? 'selected' : ''}>Every 10 sec</option>
+                            <option value="15000" ${state.refreshInterval === 15000 ? 'selected' : ''}>Every 15 sec</option>
+                            <option value="30000" ${state.refreshInterval === 30000 ? 'selected' : ''}>Every 30 sec</option>
+                            <option value="45000" ${state.refreshInterval === 45000 ? 'selected' : ''}>Every 45 sec</option>
+                            <option value="60000" ${state.refreshInterval === 60000 ? 'selected' : ''}>Every 1 min</option>
+                            <option value="120000" ${state.refreshInterval === 120000 ? 'selected' : ''}>Every 2 min</option>
+                            <option value="300000" ${state.refreshInterval === 300000 ? 'selected' : ''}>Every 5 min</option>
+                        </select>
                     </div>
                 </div>
 

@@ -118,6 +118,19 @@ class TradingDashboard {
     }
     return "Neutral";
   }
+
+  async getCandleDataWithFallback(exchange, symboltoken, preferredInterval) {
+    const intervals = [preferredInterval, "FIVE_MINUTE", "FIFTEEN_MINUTE", "ONE_HOUR"];
+    
+    for (const interval of intervals) {
+      const response = await this.getCandleData(exchange, symboltoken, interval);
+      if (response.status && response.data && response.data.length > 0) {
+        return response;
+      }
+    }
+    
+    return { status: false, data: null };
+  }
 }
 
 module.exports = TradingDashboard;

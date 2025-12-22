@@ -4,18 +4,22 @@ const BankNiftyTable = {
             return LoadingSpinner.render('Loading Bank Nifty data...');
         }
 
-        const rows = data.map(row => `
-            <tr data-action="view-details" data-bank="${row.bank}">
-                <td>${row.bank}</td>
-                <td>${Formatters.formatCurrency(row.ltp)}</td>
-                <td>${Formatters.formatNumber(row.volume)}</td>
-                <td class="${Formatters.getChangeClass(row.changePercent)}">
-                    ${Formatters.formatPercentage(row.changePercent)}
-                </td>
-                <td class="${Formatters.getStatusClass(row.status)}">${row.status}</td>
-                <td>${row.weightage || '-'}%</td>
-            </tr>
-        `).join('');
+        const rows = data.map(row => {
+            const isDataMissing = row.status === "Data Not Fetched" || row.status === "No Data";
+            
+            return `
+                <tr data-action="view-details" data-bank="${row.bank}" class="${isDataMissing ? 'no-data-row' : ''}">
+                    <td>${row.bank}</td>
+                    <td>${row.ltp ? Formatters.formatCurrency(row.ltp) : '<span class="no-data-text">-</span>'}</td>
+                    <td>${row.volume ? Formatters.formatNumber(row.volume) : '<span class="no-data-text">-</span>'}</td>
+                    <td class="${row.changePercent ? Formatters.getChangeClass(row.changePercent) : ''}">
+                        ${row.changePercent ? Formatters.formatPercentage(row.changePercent) : '<span class="no-data-text">-</span>'}
+                    </td>
+                    <td class="${Formatters.getStatusClass(row.status)}">${row.status}</td>
+                    <td>${row.weightage || '-'}%</td>
+                </tr>
+            `;
+        }).join('');
 
         return `
             <div class="card" style="grid-column: span 2;">
