@@ -1,3 +1,4 @@
+// frontend/js/api/apiService.js - UPDATED
 const ApiService = {
     async request(endpoint, data = null) {
         try {
@@ -38,5 +39,22 @@ const ApiService = {
 
     async getIndicesData(username) {
         return await this.request('/indices-data', { username });
+    },
+
+    // Currency API methods
+    async getCurrencyRates(username) {
+        return await this.request('/currency-rates', { username });
+    },
+
+    async getCurrencyRate(username, code) {
+        return await this.request(`/currency-rate/${code}`, { username });
+    },
+
+    async clearCurrencyCache(username) {
+        return await this.request('/currency-clear-cache', { username });
+    },
+
+    async getCurrencyCacheStats(username) {
+        return await this.request('/currency-cache-stats', { username });
     }
 };

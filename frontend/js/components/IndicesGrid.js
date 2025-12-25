@@ -35,18 +35,32 @@ const IndicesGrid = {
 
         const rows = indices.map((index, idx) => {
             const label = String.fromCharCode(65 + idx); // A, B, C, D, E
-            const ltpValue = index.key && data[index.key]?.ltp ? data[index.key].ltp : '--';
+            const indexData = index.key && data[index.key];
+            const ltpValue = indexData?.ltp || '--';
+            
+            // Get data age if available
+            let dataAge = '';
+            let ageClass = '';
+            if (indexData?.ltpTimestamp) {
+                dataAge = Formatters.formatDataAge(indexData.ltpTimestamp);
+                ageClass = Formatters.getDataAgeClass(indexData.ltpTimestamp);
+            }
             
             return `
                 <tr>
                     <td class="index-label">${label}</td>
                     <td class="index-name">${index.name}</td>
-                    <td class="index-ltp">${ltpValue}</td>
+                    <td class="ltp-col">
+                        <div class="index-ltp-wrapper">
+                            <div class="index-ltp">${ltpValue}</div>
+                            ${dataAge ? `<span class="data-age ${ageClass}" title="Last updated ${dataAge}">${dataAge}</span>` : ''}
+                        </div>
+                    </td>
                     ${timeIntervals.map(interval => {
                         if (!index.key) {
                             return `<td class="sentiment-cell coming-soon-cell">Coming Soon</td>`;
                         }
-                        const sentiment = data[index.key]?.[interval.key] || 'No Data';
+                        const sentiment = indexData?.[interval.key] || 'No Data';
                         return `<td class="sentiment-cell ${Formatters.getSentimentClass(sentiment)}">${sentiment}</td>`;
                     }).join('')}
                 </tr>
@@ -69,7 +83,7 @@ const IndicesGrid = {
                             <tr>
                                 <th rowspan="2" class="label-col"></th>
                                 <th rowspan="2" class="name-col">Index</th>
-                                <th rowspan="2" class="ltp-col">LTP</th>
+                                <th rowspan="2" class="ltp-col">LTP & Age</th>
                                 ${timeIntervals.map(interval => 
                                     `<th class="interval-col">${interval.label}</th>`
                                 ).join('')}

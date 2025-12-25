@@ -1,3 +1,4 @@
+// frontend/js/components/Toolbar.js - UPDATED
 const Toolbar = {
     render(state) {
         return `
@@ -33,6 +34,21 @@ const Toolbar = {
                             <option value="120000" ${state.refreshInterval === 120000 ? 'selected' : ''}>Every 2 min</option>
                             <option value="300000" ${state.refreshInterval === 300000 ? 'selected' : ''}>Every 5 min</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="toolbar-section">
+                    <h3>Display</h3>
+                    <div class="toggle-group">
+                        <label class="toggle">
+                            <input 
+                                type="checkbox" 
+                                id="currencyToggle"
+                                data-change-action="toggle-currency" 
+                                ${state.showCurrency ? 'checked' : ''}
+                            >
+                            <span class="toggle-label">💱 Show Currency Rates</span>
+                        </label>
                     </div>
                 </div>
 

@@ -1,14 +1,18 @@
+// frontend/js/app.js - UPDATED WITH CURRENCY
 const App = {
     state: {
         currentUsername: '',
         bankNiftyData: null,
         indicesData: null,
+        currencyData: null,
         bankNiftyTimestamp: null,
         indicesTimestamp: null,
+        currencyTimestamp: null,
         refreshIntervalId: null,
         refreshIntervalTime: 60000, // Default 60 seconds
         autoRefreshEnabled: true,
         selectedInterval: 'ONE_MINUTE',
+        showCurrency: true, // Show currency widget by default
         filters: {
             showBuying: true,
             showSelling: true,
@@ -31,11 +35,13 @@ const App = {
         // Dashboard handlers
         EventHandler.on('refresh-banknifty', () => this.refreshBankNifty());
         EventHandler.on('refresh-indices', () => this.refreshIndices());
+        EventHandler.on('refresh-currency', () => this.refreshCurrency());
         EventHandler.on('refresh-all', () => this.loadAllData());
         
         // Toggle handlers
         EventHandler.on('toggle-autorefresh', (e, target) => this.toggleAutoRefresh(target));
         EventHandler.on('toggle-filter', (e, target) => this.toggleFilter(target));
+        EventHandler.on('toggle-currency', (e, target) => this.toggleCurrency(target));
         
         // Interval selectors
         EventHandler.on('change-interval', (e, target) => this.changeInterval(target));
@@ -138,10 +144,17 @@ const App = {
     },
 
     async loadAllData() {
-        await Promise.all([
+        const promises = [
             this.fetchBankNiftyData(),
             this.fetchIndicesData()
-        ]);
+        ];
+        
+        // Add currency data fetch if enabled
+        if (this.state.showCurrency) {
+            promises.push(this.fetchCurrencyData());
+        }
+        
+        await Promise.all(promises);
         this.updateDashboard();
     },
 
@@ -169,6 +182,19 @@ const App = {
         }
     },
 
+    async fetchCurrencyData() {
+        try {
+            const result = await ApiService.getCurrencyRates(this.state.currentUsername);
+            if (result.success) {
+                this.state.currencyData = result;
+                this.state.currencyTimestamp = Helpers.getCurrentTime();
+                Helpers.log('Currency rates fetched: ' + result.currencies.length + ' currencies');
+            }
+        } catch (error) {
+            Helpers.log('Error fetching currency data: ' + error.message, 'error');
+        }
+    },
+
     updateDashboard() {
         const dashboard = document.getElementById('dashboardContent');
         if (dashboard) {
@@ -178,10 +204,18 @@ const App = {
             // Filter data based on current filters
             const filteredData = this.filterBankNiftyData(completeData);
             
-            dashboard.innerHTML = `
+            let html = `
                 ${IndicesGrid.render(this.state.indicesData, this.state.indicesTimestamp)}
-                ${BankNiftyTable.render(filteredData, this.state.bankNiftyTimestamp)}
             `;
+            
+            // Add currency widget if enabled
+            if (this.state.showCurrency && this.state.currencyData) {
+                html += CurrencyWidget.render(this.state.currencyData, this.state.currencyTimestamp);
+            }
+            
+            html += BankNiftyTable.render(filteredData, this.state.bankNiftyTimestamp);
+            
+            dashboard.innerHTML = html;
         }
     },
 
@@ -235,6 +269,12 @@ const App = {
         this.updateDashboard();
     },
 
+    async refreshCurrency() {
+        Helpers.log('Refreshing currency data...');
+        await this.fetchCurrencyData();
+        this.updateDashboard();
+    },
+
     toggleAutoRefresh(target) {
         this.state.autoRefreshEnabled = target.checked;
         
@@ -250,6 +290,18 @@ const App = {
         } else {
             this.stopAutoRefresh();
             Helpers.log('Auto-refresh disabled');
+        }
+    },
+
+    toggleCurrency(target) {
+        this.state.showCurrency = target.checked;
+        Helpers.log('Currency widget: ' + (this.state.showCurrency ? 'enabled' : 'disabled'));
+        
+        if (this.state.showCurrency && !this.state.currencyData) {
+            // Fetch currency data if not already loaded
+            this.fetchCurrencyData().then(() => this.updateDashboard());
+        } else {
+            this.updateDashboard();
         }
     },
 
@@ -317,6 +369,7 @@ const App = {
         const data = {
             bankNifty: this.getCompleteBankNiftyData(),
             indices: this.state.indicesData,
+            currency: this.state.currencyData,
             timestamp: new Date().toISOString()
         };
         

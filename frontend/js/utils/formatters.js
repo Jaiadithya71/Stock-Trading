@@ -29,5 +29,63 @@ const Formatters = {
 
     formatInterval(interval) {
         return interval.replace('_', ' ');
+    },
+
+    /**
+     * Calculate and format the age of data
+     * @param {string} timestamp - ISO timestamp or timestamp string from data
+     * @returns {string} Formatted age string (e.g., "2m ago", "45s ago", "1h ago")
+     */
+    formatDataAge(timestamp) {
+        if (!timestamp) return '';
+        
+        try {
+            const dataTime = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - dataTime;
+            const diffSeconds = Math.floor(diffMs / 1000);
+            const diffMinutes = Math.floor(diffSeconds / 60);
+            const diffHours = Math.floor(diffMinutes / 60);
+            
+            if (diffSeconds < 60) {
+                return `${diffSeconds}s ago`;
+            } else if (diffMinutes < 60) {
+                return `${diffMinutes}m ago`;
+            } else if (diffHours < 24) {
+                return `${diffHours}h ago`;
+            } else {
+                const diffDays = Math.floor(diffHours / 24);
+                return `${diffDays}d ago`;
+            }
+        } catch (error) {
+            console.error('Error formatting data age:', error);
+            return '';
+        }
+    },
+
+    /**
+     * Get color class based on data age
+     * @param {string} timestamp - ISO timestamp or timestamp string
+     * @returns {string} CSS class for age color coding
+     */
+    getDataAgeClass(timestamp) {
+        if (!timestamp) return 'age-unknown';
+        
+        try {
+            const dataTime = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - dataTime;
+            const diffSeconds = Math.floor(diffMs / 1000);
+            
+            if (diffSeconds < 60) {
+                return 'age-fresh'; // < 1 minute - green
+            } else if (diffSeconds < 300) {
+                return 'age-recent'; // 1-5 minutes - yellow
+            } else {
+                return 'age-stale'; // > 5 minutes - red
+            }
+        } catch (error) {
+            return 'age-unknown';
+        }
     }
 };
