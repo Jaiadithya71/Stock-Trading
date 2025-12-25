@@ -1,0 +1,10 @@
+╔═══════════════════════════════════════════════════════════╗
+║         DISCOVER AVAILABLE SMARTAPI METHODS              ║
+╚═══════════════════════════════════════════════════════════╝
+
+Output will be saved to: api_discovery_1766667817693.txt
+
+ℹ️  Loading credentials for: Jai
+✅ Credentials loaded
+ℹ️  Authenticating...
+❌ Authentication failed: Authentication failed
