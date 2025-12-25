@@ -1,3 +1,4 @@
+// backend/config/constants.js - UPDATED WITH OPTION CHAIN
 const path = require("path");
 
 module.exports = {
@@ -38,5 +39,51 @@ module.exports = {
   MARKET_HOURS: {
     OPEN: { hour: 9, minute: 15 },
     CLOSE: { hour: 15, minute: 30 }
+  },
+
+  // Option Chain Configuration
+  OPTION_SYMBOLS: {
+    "NIFTY": {
+      symbol: "NIFTY",
+      displayName: "Nifty 50",
+      token: "99926000",
+      exchange: "NFO",
+      spotExchange: "NSE",
+      lotSize: 50,
+      tickSize: 0.05,
+      strikeInterval: 50
+    },
+    "BANKNIFTY": {
+      symbol: "BANKNIFTY",
+      displayName: "Bank Nifty",
+      token: "99926009",
+      exchange: "NFO",
+      spotExchange: "NSE",
+      lotSize: 15,
+      tickSize: 0.05,
+      strikeInterval: 100
+    },
+    "FINNIFTY": {
+      symbol: "FINNIFTY",
+      displayName: "Fin Nifty",
+      token: "99926037",
+      exchange: "NFO",
+      spotExchange: "NSE",
+      lotSize: 40,
+      tickSize: 0.05,
+      strikeInterval: 50
+    }
+  },
+  
+  OPTION_CONFIG: {
+    strikesAbove: 15,
+    strikesBelow: 15,
+    cacheDuration: 5000,
+    maxExpiryMonths: 3
+  },
+  
+  OPTION_TYPES: {
+    CALL: "CE",
+    PUT: "PE"
   }
 };

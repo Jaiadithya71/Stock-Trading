@@ -1,4 +1,4 @@
-// frontend/js/components/Toolbar.js - UPDATED
+// frontend/js/components/Toolbar.js - COMPLETE WITH OPTION CHAIN
 const Toolbar = {
     render(state) {
         return `
@@ -48,6 +48,16 @@ const Toolbar = {
                                 ${state.showCurrency ? 'checked' : ''}
                             >
                             <span class="toggle-label">💱 Show Currency Rates</span>
+                        </label>
+                        
+                        <label class="toggle">
+                            <input 
+                                type="checkbox" 
+                                id="optionChainToggle"
+                                data-change-action="toggle-option-chain" 
+                                ${state.showOptionChain ? 'checked' : ''}
+                            >
+                            <span class="toggle-label">📊 Show Option Chain</span>
                         </label>
                     </div>
                 </div>

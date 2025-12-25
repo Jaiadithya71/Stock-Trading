@@ -1,18 +1,23 @@
-// frontend/js/app.js - UPDATED WITH CURRENCY
+// frontend/js/app.js - COMPLETE WITH OPTION CHAIN
 const App = {
     state: {
         currentUsername: '',
         bankNiftyData: null,
         indicesData: null,
         currencyData: null,
+        optionChainData: null,
+        optionExpiries: null,
         bankNiftyTimestamp: null,
         indicesTimestamp: null,
         currencyTimestamp: null,
         refreshIntervalId: null,
-        refreshIntervalTime: 60000, // Default 60 seconds
+        refreshIntervalTime: 60000,
         autoRefreshEnabled: true,
         selectedInterval: 'ONE_MINUTE',
-        showCurrency: true, // Show currency widget by default
+        selectedOptionSymbol: 'BANKNIFTY',
+        selectedOptionExpiry: null,
+        showCurrency: true,
+        showOptionChain: false,
         filters: {
             showBuying: true,
             showSelling: true,
@@ -37,6 +42,12 @@ const App = {
         EventHandler.on('refresh-indices', () => this.refreshIndices());
         EventHandler.on('refresh-currency', () => this.refreshCurrency());
         EventHandler.on('refresh-all', () => this.loadAllData());
+        
+        // Option Chain handlers
+        EventHandler.on('refresh-option-chain', () => this.refreshOptionChain());
+        EventHandler.on('select-option-symbol', (e, target) => this.selectOptionSymbol(target.dataset.symbol));
+        EventHandler.on('change-option-expiry', (e, target) => this.changeOptionExpiry(target.value));
+        EventHandler.on('toggle-option-chain', (e, target) => this.toggleOptionChain(target));
         
         // Toggle handlers
         EventHandler.on('toggle-autorefresh', (e, target) => this.toggleAutoRefresh(target));
@@ -149,9 +160,12 @@ const App = {
             this.fetchIndicesData()
         ];
         
-        // Add currency data fetch if enabled
         if (this.state.showCurrency) {
             promises.push(this.fetchCurrencyData());
+        }
+
+        if (this.state.showOptionChain) {
+            promises.push(this.fetchOptionChain());
         }
         
         await Promise.all(promises);
@@ -195,22 +209,94 @@ const App = {
         }
     },
 
+    async fetchOptionExpiries(symbol) {
+        try {
+            const result = await ApiService.getOptionExpiries(this.state.currentUsername, symbol);
+            if (result.success) {
+                this.state.optionExpiries = result.data.expiries;
+                if (result.data.expiries.length > 0) {
+                    this.state.selectedOptionExpiry = result.data.expiries[0].date;
+                }
+                Helpers.log(`Option expiries fetched: ${result.data.expiries.length}`);
+            }
+        } catch (error) {
+            Helpers.log('Error fetching option expiries: ' + error.message, 'error');
+        }
+    },
+
+    async fetchOptionChain() {
+        if (!this.state.selectedOptionExpiry) {
+            await this.fetchOptionExpiries(this.state.selectedOptionSymbol);
+        }
+
+        try {
+            const result = await ApiService.getOptionChain(
+                this.state.currentUsername,
+                this.state.selectedOptionSymbol,
+                this.state.selectedOptionExpiry
+            );
+            
+            if (result.success) {
+                this.state.optionChainData = result.data;
+                Helpers.log(`Option chain fetched: ${result.data.optionChain.length} strikes`);
+            }
+        } catch (error) {
+            Helpers.log('Error fetching option chain: ' + error.message, 'error');
+        }
+    },
+
+    async refreshOptionChain() {
+        Helpers.log('Refreshing option chain...');
+        await this.fetchOptionChain();
+        this.updateDashboard();
+    },
+
+    async selectOptionSymbol(symbol) {
+        this.state.selectedOptionSymbol = symbol;
+        this.state.selectedOptionExpiry = null;
+        this.state.optionExpiries = null;
+        await this.fetchOptionExpiries(symbol);
+        await this.fetchOptionChain();
+        this.updateDashboard();
+    },
+
+    async changeOptionExpiry(expiryDate) {
+        this.state.selectedOptionExpiry = expiryDate;
+        await this.fetchOptionChain();
+        this.updateDashboard();
+    },
+
+    toggleOptionChain(target) {
+        this.state.showOptionChain = target.checked;
+        Helpers.log('Option chain: ' + (this.state.showOptionChain ? 'enabled' : 'disabled'));
+        
+        if (this.state.showOptionChain && !this.state.optionChainData) {
+            this.fetchOptionExpiries(this.state.selectedOptionSymbol)
+                .then(() => this.fetchOptionChain())
+                .then(() => this.updateDashboard());
+        } else {
+            this.updateDashboard();
+        }
+    },
+
     updateDashboard() {
         const dashboard = document.getElementById('dashboardContent');
         if (dashboard) {
-            // Get complete bank list with data
             const completeData = this.getCompleteBankNiftyData();
-            
-            // Filter data based on current filters
             const filteredData = this.filterBankNiftyData(completeData);
             
-            let html = `
-                ${IndicesGrid.render(this.state.indicesData, this.state.indicesTimestamp)}
-            `;
+            let html = `${IndicesGrid.render(this.state.indicesData, this.state.indicesTimestamp)}`;
             
-            // Add currency widget if enabled
             if (this.state.showCurrency && this.state.currencyData) {
                 html += CurrencyWidget.render(this.state.currencyData, this.state.currencyTimestamp);
+            }
+
+            if (this.state.showOptionChain && this.state.optionChainData) {
+                html += OptionChain.render(
+                    this.state.optionChainData, 
+                    this.state.optionExpiries,
+                    this.state.selectedOptionSymbol
+                );
             }
             
             html += BankNiftyTable.render(filteredData, this.state.bankNiftyTimestamp);
@@ -278,7 +364,6 @@ const App = {
     toggleAutoRefresh(target) {
         this.state.autoRefreshEnabled = target.checked;
         
-        // Enable/disable the interval select
         const intervalSelect = document.getElementById('refreshIntervalSelect');
         if (intervalSelect) {
             intervalSelect.disabled = !target.checked;
@@ -298,7 +383,6 @@ const App = {
         Helpers.log('Currency widget: ' + (this.state.showCurrency ? 'enabled' : 'disabled'));
         
         if (this.state.showCurrency && !this.state.currencyData) {
-            // Fetch currency data if not already loaded
             this.fetchCurrencyData().then(() => this.updateDashboard());
         } else {
             this.updateDashboard();
@@ -309,7 +393,6 @@ const App = {
         this.state.refreshIntervalTime = parseInt(target.value);
         Helpers.log('Refresh interval changed to: ' + this.state.refreshIntervalTime + 'ms');
         
-        // Restart auto-refresh with new interval if enabled
         if (this.state.autoRefreshEnabled) {
             this.stopAutoRefresh();
             this.startAutoRefresh();
@@ -370,6 +453,7 @@ const App = {
             bankNifty: this.getCompleteBankNiftyData(),
             indices: this.state.indicesData,
             currency: this.state.currencyData,
+            optionChain: this.state.optionChainData,
             timestamp: new Date().toISOString()
         };
         

@@ -1,4 +1,4 @@
-// frontend/js/api/apiService.js - UPDATED
+// frontend/js/api/apiService.js - COMPLETE VERSION
 const ApiService = {
     async request(endpoint, data = null) {
         try {
@@ -56,5 +56,22 @@ const ApiService = {
 
     async getCurrencyCacheStats(username) {
         return await this.request('/currency-cache-stats', { username });
+    },
+
+    // Option Chain API methods
+    async getOptionExpiries(username, symbol) {
+        return await this.request('/option-expiries', { username, symbol });
+    },
+
+    async getOptionChain(username, symbol, expiryDate) {
+        return await this.request('/option-chain', { username, symbol, expiryDate });
+    },
+
+    async getOptionSpotPrice(username, symbol) {
+        return await this.request('/option-spot-price', { username, symbol });
+    },
+
+    async clearOptionCache(username) {
+        return await this.request('/option-clear-cache', { username });
     }
 };

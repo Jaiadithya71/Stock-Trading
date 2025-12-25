@@ -1,8 +1,4 @@
-// ============================================================================
-// FILE: backend/services/optionService.js - CREATE THIS NEW FILE
-// LOCATION: backend/services/optionService.js
-// ============================================================================
-
+// backend/services/optionService.js - FIXED VERSION
 const { OPTION_SYMBOLS, OPTION_CONFIG, OPTION_TYPES } = require("../config/constants");
 
 class OptionService {
@@ -13,7 +9,7 @@ class OptionService {
   }
 
   /**
-   * Get spot price for the underlying index
+   * Get spot price for the underlying index using getCandleData
    */
   async getSpotPrice(symbol) {
     const config = OPTION_SYMBOLS[symbol];
@@ -22,16 +18,23 @@ class OptionService {
     }
 
     try {
-      const response = await this.smartAPI.getQuote({
-        mode: "LTP",
-        exchangeTokens: {
-          [config.spotExchange]: [config.token]
-        }
-      });
+      // Use getCandleData to get the latest price
+      const now = new Date();
+      const fromDate = new Date(now.getTime() - 2 * 60 * 60 * 1000); // 2 hours ago
+      
+      const params = {
+        exchange: config.spotExchange,
+        symboltoken: config.token,
+        interval: "ONE_MINUTE",
+        fromdate: this.formatDateTime(fromDate),
+        todate: this.formatDateTime(now)
+      };
 
-      if (response && response.data && response.data.fetched) {
-        const data = response.data.fetched[0];
-        return parseFloat(data.ltp);
+      const response = await this.smartAPI.getCandleData(params);
+
+      if (response && response.status && response.data && response.data.length > 0) {
+        const latestCandle = response.data[response.data.length - 1];
+        return parseFloat(latestCandle[4]); // Close price
       }
 
       throw new Error("Failed to fetch spot price");
@@ -39,6 +42,18 @@ class OptionService {
       console.error(`Error fetching spot price for ${symbol}:`, error);
       throw error;
     }
+  }
+
+  /**
+   * Format date time for API
+   */
+  formatDateTime(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
   }
 
   /**
@@ -80,8 +95,8 @@ class OptionService {
 
   /**
    * Format expiry date for trading symbol
-   * Input: "26-DEC-2024" or Date object
-   * Output: "26DEC24"
+   * Input: "25-DEC-2025" or Date object
+   * Output: "25DEC25"
    */
   formatExpiryForSymbol(expiryDate) {
     let date;
@@ -108,17 +123,22 @@ class OptionService {
   }
 
   /**
-   * Search for option contracts
+   * Search for option contracts using searchScrip
    */
   async searchOptionContracts(symbol, expiryDate) {
     try {
+      const config = OPTION_SYMBOLS[symbol];
       const searchString = `${symbol}${this.formatExpiryForSymbol(expiryDate)}`;
       
+      console.log(`🔍 Searching for contracts: ${searchString}`);
+      
       const response = await this.smartAPI.searchScrip({
-        exchange: OPTION_SYMBOLS[symbol].exchange,
+        exchange: config.exchange,
         searchscrip: searchString
       });
 
+      console.log(`✅ Search response:`, response ? `Found ${response.data?.length || 0} contracts` : 'No response');
+      
       return response;
     } catch (error) {
       console.error(`Error searching option contracts:`, error);
@@ -127,59 +147,55 @@ class OptionService {
   }
 
   /**
-   * Get option quote data
+   * Get option quote data using getCandleData (fallback method)
    */
-  async getOptionQuote(tradingSymbol, symbolToken) {
-    const config = OPTION_SYMBOLS[tradingSymbol.match(/^[A-Z]+/)[0]];
-    
+  async getOptionQuote(tradingSymbol, symbolToken, exchange) {
     try {
-      const response = await this.smartAPI.getQuote({
-        mode: "FULL",
-        exchangeTokens: {
-          [config.exchange]: [symbolToken]
-        }
-      });
+      const now = new Date();
+      const fromDate = new Date(now.getTime() - 2 * 60 * 60 * 1000); // 2 hours ago
+      
+      const params = {
+        exchange: exchange,
+        symboltoken: symbolToken,
+        interval: "ONE_MINUTE",
+        fromdate: this.formatDateTime(fromDate),
+        todate: this.formatDateTime(now)
+      };
 
-      if (response && response.data && response.data.fetched) {
-        const data = response.data.fetched[0];
+      const response = await this.smartAPI.getCandleData(params);
+
+      if (response && response.status && response.data && response.data.length > 0) {
+        const candles = response.data;
+        const latestCandle = candles[candles.length - 1];
+        
+        // Calculate some basic statistics
+        const volumes = candles.map(c => c[5]);
+        const totalVolume = volumes.reduce((a, b) => a + b, 0);
         
         return {
-          ltp: parseFloat(data.ltp || 0),
-          open: parseFloat(data.open || 0),
-          high: parseFloat(data.high || 0),
-          low: parseFloat(data.low || 0),
-          close: parseFloat(data.close || 0),
-          volume: parseInt(data.volume || 0),
-          oi: parseInt(data.oi || 0),
-          change: parseFloat(data.change || 0),
-          changePercent: parseFloat(data.changePercent || 0),
-          bidPrice: parseFloat(data.depth?.buy?.[0]?.price || 0),
-          bidQty: parseInt(data.depth?.buy?.[0]?.quantity || 0),
-          askPrice: parseFloat(data.depth?.sell?.[0]?.price || 0),
-          askQty: parseInt(data.depth?.sell?.[0]?.quantity || 0),
-          timestamp: data.exchangeTimestamp || new Date().toISOString()
+          ltp: parseFloat(latestCandle[4]) || 0,
+          open: parseFloat(latestCandle[1]) || 0,
+          high: parseFloat(latestCandle[2]) || 0,
+          low: parseFloat(latestCandle[3]) || 0,
+          close: parseFloat(latestCandle[4]) || 0,
+          volume: parseInt(totalVolume) || 0,
+          oi: 0, // Not available from candle data
+          change: parseFloat(latestCandle[4] - latestCandle[1]) || 0,
+          changePercent: parseFloat(((latestCandle[4] - latestCandle[1]) / latestCandle[1]) * 100) || 0,
+          bidPrice: 0, // Not available from candle data
+          bidQty: 0,
+          askPrice: 0,
+          askQty: 0,
+          iv: 0, // Would need separate calculation
+          changeInOI: 0,
+          timestamp: latestCandle[0] || new Date().toISOString()
         };
       }
 
-      throw new Error("Failed to fetch option quote");
+      return this.getDefaultOptionData();
     } catch (error) {
       console.error(`Error fetching option quote for ${tradingSymbol}:`, error);
-      return {
-        ltp: 0,
-        open: 0,
-        high: 0,
-        low: 0,
-        close: 0,
-        volume: 0,
-        oi: 0,
-        change: 0,
-        changePercent: 0,
-        bidPrice: 0,
-        bidQty: 0,
-        askPrice: 0,
-        askQty: 0,
-        timestamp: new Date().toISOString()
-      };
+      return this.getDefaultOptionData();
     }
   }
 
@@ -206,12 +222,24 @@ class OptionService {
       
       const contracts = await this.searchOptionContracts(symbol, expiryDate);
       
-      if (!contracts || !contracts.data) {
-        throw new Error("No contracts found");
+      if (!contracts || !contracts.data || contracts.data.length === 0) {
+        console.log(`⚠️ No contracts found. This may be because:`);
+        console.log(`   - Market is closed`);
+        console.log(`   - Expiry date format is incorrect`);
+        console.log(`   - Contracts not yet available for this expiry`);
+        
+        // Return mock data for demonstration
+        return this.getMockOptionChain(symbol, spotPrice, strikes, expiryDate);
       }
 
       const optionChain = [];
       const config = OPTION_SYMBOLS[symbol];
+      
+      // Create a map of contracts for quick lookup
+      const contractMap = {};
+      contracts.data.forEach(contract => {
+        contractMap[contract.tradingsymbol] = contract;
+      });
       
       for (const strike of strikes) {
         console.log(`  Processing strike ${strike}...`);
@@ -219,20 +247,24 @@ class OptionService {
         const ceSymbol = this.buildTradingSymbol(symbol, expiryDate, strike, OPTION_TYPES.CALL);
         const peSymbol = this.buildTradingSymbol(symbol, expiryDate, strike, OPTION_TYPES.PUT);
         
-        const ceContract = contracts.data.find(c => c.tradingsymbol === ceSymbol);
-        const peContract = contracts.data.find(c => c.tradingsymbol === peSymbol);
+        const ceContract = contractMap[ceSymbol];
+        const peContract = contractMap[peSymbol];
         
         let callData = null;
         let putData = null;
         
         if (ceContract) {
-          callData = await this.getOptionQuote(ceSymbol, ceContract.symboltoken);
+          callData = await this.getOptionQuote(ceSymbol, ceContract.symboltoken, config.exchange);
           await this.delay(50);
+        } else {
+          callData = this.getDefaultOptionData();
         }
         
         if (peContract) {
-          putData = await this.getOptionQuote(peSymbol, peContract.symboltoken);
+          putData = await this.getOptionQuote(peSymbol, peContract.symboltoken, config.exchange);
           await this.delay(50);
+        } else {
+          putData = this.getDefaultOptionData();
         }
         
         const isATM = Math.abs(strike - spotPrice) < config.strikeInterval / 2;
@@ -240,8 +272,8 @@ class OptionService {
         optionChain.push({
           strike,
           isATM,
-          call: callData || this.getDefaultOptionData(),
-          put: putData || this.getDefaultOptionData(),
+          call: callData,
+          put: putData,
           callSymbol: ceSymbol,
           putSymbol: peSymbol
         });
@@ -273,6 +305,67 @@ class OptionService {
   }
 
   /**
+   * Generate mock option chain for demonstration when market is closed
+   */
+  getMockOptionChain(symbol, spotPrice, strikes, expiryDate) {
+    const config = OPTION_SYMBOLS[symbol];
+    const optionChain = strikes.map(strike => {
+      const isATM = Math.abs(strike - spotPrice) < config.strikeInterval / 2;
+      const distance = strike - spotPrice;
+      
+      // Generate realistic mock data based on distance from spot
+      const callLTP = Math.max(0, spotPrice - strike + Math.random() * 50);
+      const putLTP = Math.max(0, strike - spotPrice + Math.random() * 50);
+      
+      return {
+        strike,
+        isATM,
+        call: {
+          ltp: parseFloat(callLTP.toFixed(2)),
+          volume: Math.floor(Math.random() * 10000),
+          oi: Math.floor(Math.random() * 50000),
+          changeInOI: Math.floor(Math.random() * 5000) - 2500,
+          iv: parseFloat((15 + Math.random() * 10).toFixed(2)),
+          change: parseFloat((Math.random() * 10 - 5).toFixed(2)),
+          changePercent: parseFloat((Math.random() * 5 - 2.5).toFixed(2)),
+          bidPrice: parseFloat((callLTP * 0.99).toFixed(2)),
+          askPrice: parseFloat((callLTP * 1.01).toFixed(2)),
+          bidQty: 0,
+          askQty: 0
+        },
+        put: {
+          ltp: parseFloat(putLTP.toFixed(2)),
+          volume: Math.floor(Math.random() * 10000),
+          oi: Math.floor(Math.random() * 50000),
+          changeInOI: Math.floor(Math.random() * 5000) - 2500,
+          iv: parseFloat((15 + Math.random() * 10).toFixed(2)),
+          change: parseFloat((Math.random() * 10 - 5).toFixed(2)),
+          changePercent: parseFloat((Math.random() * 5 - 2.5).toFixed(2)),
+          bidPrice: parseFloat((putLTP * 0.99).toFixed(2)),
+          askPrice: parseFloat((putLTP * 1.01).toFixed(2)),
+          bidQty: 0,
+          askQty: 0
+        },
+        callSymbol: this.buildTradingSymbol(symbol, expiryDate, strike, OPTION_TYPES.CALL),
+        putSymbol: this.buildTradingSymbol(symbol, expiryDate, strike, OPTION_TYPES.PUT)
+      };
+    });
+    
+    console.log(`⚠️ Using mock data for demonstration (${optionChain.length} strikes)`);
+    
+    return {
+      symbol,
+      displayName: config.displayName,
+      expiryDate,
+      spotPrice,
+      optionChain,
+      timestamp: new Date().toISOString(),
+      lotSize: config.lotSize,
+      isMockData: true
+    };
+  }
+
+  /**
    * Get default option data when contract is not available
    */
   getDefaultOptionData() {
@@ -290,6 +383,8 @@ class OptionService {
       bidQty: 0,
       askPrice: 0,
       askQty: 0,
+      iv: 0,
+      changeInOI: 0,
       timestamp: new Date().toISOString()
     };
   }
@@ -305,9 +400,12 @@ class OptionService {
     const expiries = [];
     const today = new Date();
     
+    // Find next Thursday
     let nextThursday = new Date(today);
-    nextThursday.setDate(today.getDate() + ((4 - today.getDay() + 7) % 7));
+    const daysUntilThursday = (4 - today.getDay() + 7) % 7;
+    nextThursday.setDate(today.getDate() + (daysUntilThursday || 7));
     
+    // Add next 4 weekly expiries
     for (let i = 0; i < 4; i++) {
       const expiry = new Date(nextThursday);
       expiry.setDate(nextThursday.getDate() + (i * 7));
@@ -321,10 +419,11 @@ class OptionService {
       expiries.push({
         date: `${day}-${month}-${year}`,
         formatted: `${day} ${month} ${year}`,
-        type: i === 0 ? 'weekly' : 'weekly'
+        type: i === 0 ? 'current' : 'weekly'
       });
     }
     
+    // Add monthly expiry (last Thursday of current month)
     const lastThursday = this.getLastThursday(today);
     const day = String(lastThursday.getDate()).padStart(2, '0');
     const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 
