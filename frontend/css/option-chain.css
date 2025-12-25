@@ -1,0 +1,406 @@
+/* ============================================================================
+   FILE: frontend/css/option-chain.css - CREATE THIS NEW FILE
+   LOCATION: frontend/css/option-chain.css
+   ============================================================================ */
+
+/* Option Chain Container */
+.option-chain-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Header Section */
+.option-chain-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.symbol-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.symbol-info h2 {
+  font-size: 24px;
+  margin: 0 0 10px 0;
+  color: #667eea;
+  font-weight: 700;
+}
+
+.spot-price {
+  font-size: 20px;
+  font-weight: 600;
+  color: #4ade80;
+  font-family: 'Courier New', monospace;
+}
+
+.expiry-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.expiry-selector label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #888;
+}
+
+.expiry-selector select {
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 200px;
+  transition: all 0.3s ease;
+}
+
+.expiry-selector select:hover {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.expiry-selector select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+/* Symbol Selector */
+.symbol-selector {
+  display: flex;
+  gap: 10px;
+}
+
+.symbol-btn {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #888;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.symbol-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.symbol-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+  color: #fff;
+}
+
+/* Option Table Wrapper */
+.option-table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Option Chain Table */
+.option-chain-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 1400px;
+}
+
+/* Table Headers */
+.option-chain-table thead th {
+  padding: 14px 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  letter-spacing: 0.5px;
+}
+
+/* Section Headers */
+.calls-header {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(74, 222, 128, 0.1));
+  color: #4ade80;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.strike-header {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(102, 126, 234, 0.1));
+  color: #667eea;
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 100px;
+}
+
+.puts-header {
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.2), rgba(248, 113, 113, 0.1));
+  color: #f87171;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Column Headers */
+.option-chain-table thead tr:nth-child(2) th {
+  background: rgba(255, 255, 255, 0.05);
+  color: #aaa;
+  font-size: 10px;
+}
+
+/* Table Body */
+.option-chain-table tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.option-chain-table tbody tr:hover {
+  background: rgba(102, 126, 234, 0.08);
+  transform: scale(1.01);
+}
+
+.option-chain-table tbody td {
+  padding: 12px 8px;
+  text-align: right;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.option-chain-table tbody td:last-child {
+  border-right: none;
+}
+
+/* Strike Cell */
+.strike-cell {
+  text-align: center !important;
+  background: rgba(102, 126, 234, 0.08);
+  font-size: 13px;
+  font-weight: 700;
+  color: #667eea;
+  border-left: 2px solid rgba(102, 126, 234, 0.3);
+  border-right: 2px solid rgba(102, 126, 234, 0.3);
+  min-width: 100px;
+}
+
+/* ATM Strike */
+.atm-strike {
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.atm-strike .strike-cell {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(251, 191, 36, 0.15));
+  color: #fbbf24;
+  font-size: 14px;
+  font-weight: 800;
+  border-left: 3px solid #fbbf24;
+  border-right: 3px solid #fbbf24;
+  animation: pulse-atm 2s ease-in-out infinite;
+}
+
+@keyframes pulse-atm {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+  }
+}
+
+/* ITM/OTM */
+.itm-call {
+  background: linear-gradient(90deg, rgba(74, 222, 128, 0.08), transparent);
+}
+
+.itm-put {
+  background: linear-gradient(270deg, rgba(248, 113, 113, 0.08), transparent);
+}
+
+.otm {
+  opacity: 0.7;
+}
+
+/* Column Styles */
+.oi-cell {
+  font-weight: 600;
+  color: #a78bfa;
+}
+
+.change-oi-cell {
+  font-weight: 500;
+}
+
+.change-oi-cell.positive {
+  color: #4ade80;
+}
+
+.change-oi-cell.negative {
+  color: #f87171;
+}
+
+.volume-cell {
+  color: #60a5fa;
+}
+
+.iv-cell {
+  color: #c084fc;
+  font-weight: 500;
+}
+
+.ltp-cell {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.ltp-cell.change-positive {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.ltp-cell.change-negative {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.change-cell {
+  font-size: 11px;
+}
+
+.change-cell.positive {
+  color: #4ade80;
+}
+
+.change-cell.negative {
+  color: #f87171;
+}
+
+.bid-ask-cell {
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.bid {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.ask {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Summary Stats */
+.option-chain-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+}
+
+.stat-box {
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+}
+
+.stat-value.positive {
+  color: #4ade80;
+}
+
+.stat-value.negative {
+  color: #f87171;
+}
+
+/* Responsive */
+@media (max-width: 1600px) {
+  .option-chain-table {
+    font-size: 11px;
+  }
+  
+  .option-chain-table tbody td {
+    padding: 10px 6px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .option-chain-table {
+    font-size: 10px;
+  }
+  
+  .option-chain-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .expiry-selector {
+    width: 100%;
+  }
+  
+  .expiry-selector select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .option-chain-container {
+    padding: 10px;
+  }
+  
+  .option-chain-header {
+    padding: 15px;
+  }
+  
+  .symbol-info h2 {
+    font-size: 20px;
+  }
+  
+  .spot-price {
+    font-size: 16px;
+  }
+  
+  .option-chain-table {
+    font-size: 9px;
+  }
+  
+  .option-chain-table tbody td,
+  .option-chain-table thead th {
+    padding: 8px 4px;
+  }
+}
