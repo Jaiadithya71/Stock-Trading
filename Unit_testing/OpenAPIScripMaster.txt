@@ -1,0 +1,6477 @@
+========================================================================================================================
+ANGEL ONE SCRIP MASTER FILE
+========================================================================================================================
+Downloaded: 26/12/2025, 1:56:52 pm
+Total Instruments: 160927
+========================================================================================================================
+
+SUMMARY BY EXCHANGE:
+------------------------------------------------------------------------------------------------------------------------
+NSE                   8933 instruments
+BSE                  12590 instruments
+NFO                  37907 instruments
+CDS                  10123 instruments
+MCX                  35711 instruments
+NCDEX                 1520 instruments
+BFO                  31506 instruments
+NCO                  22637 instruments
+
+========================================================================================================================
+DETAILED INSTRUMENT LIST
+========================================================================================================================
+
+
+========================================================================================================================
+EXCHANGE: NSE (8933 instruments)
+========================================================================================================================
+
+1. Nifty 50
+   Token: 99926000
+   Name: NIFTY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+2. Nifty GrowSect 15
+   Token: 99926001
+   Name: NIFTY GROWSECT 15
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+3. Nifty50 PR 2x Lev
+   Token: 99926002
+   Name: NIFTY50 PR 2X LEV
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+4. Nifty 500
+   Token: 99926004
+   Name: NIFTY 500
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+5. Nifty IT
+   Token: 99926008
+   Name: NIFTY IT
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+6. Nifty Bank
+   Token: 99926009
+   Name: BANKNIFTY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+7. NIFTY MIDCAP 100
+   Token: 99926011
+   Name: NIFTY MIDCAP 100
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+8. Nifty 100
+   Token: 99926012
+   Name: NIFTY 100
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+9. Nifty Next 50
+   Token: 99926013
+   Name: NIFTYNXT50
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+10. Nifty Midcap 50
+   Token: 99926014
+   Name: NIFTY MIDCAP 50
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+11. HangSeng BeES-NAV
+   Token: 99926016
+   Name: HANGSENG BEES-NAV
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+12. India VIX
+   Token: 99926017
+   Name: INDIA VIX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+13. Nifty Realty
+   Token: 99926018
+   Name: NIFTY REALTY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+14. Nifty Infra
+   Token: 99926019
+   Name: NIFTY INFRA
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+15. Nifty Energy
+   Token: 99926020
+   Name: NIFTY ENERGY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+16. Nifty FMCG
+   Token: 99926021
+   Name: NIFTY FMCG
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+17. Nifty MNC
+   Token: 99926022
+   Name: NIFTY MNC
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+18. Nifty Pharma
+   Token: 99926023
+   Name: NIFTY PHARMA
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+19. Nifty PSE
+   Token: 99926024
+   Name: NIFTY PSE
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+20. Nifty PSU Bank
+   Token: 99926025
+   Name: NIFTY PSU BANK
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+21. Nifty Serv Sector
+   Token: 99926026
+   Name: NIFTY SERV SECTOR
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+22. Nifty Auto
+   Token: 99926029
+   Name: NIFTY AUTO
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+23. Nifty Metal
+   Token: 99926030
+   Name: NIFTY METAL
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+24. Nifty Media
+   Token: 99926031
+   Name: NIFTY MEDIA
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+25. NIFTY SMLCAP 100
+   Token: 99926032
+   Name: NIFTY SMLCAP 100
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+26. Nifty 200
+   Token: 99926033
+   Name: NIFTY 200
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+27. Nifty Div Opps 50
+   Token: 99926034
+   Name: NIFTY DIV OPPS 50
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+28. Nifty Commodities
+   Token: 99926035
+   Name: NIFTY COMMODITIES
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+29. Nifty Consumption
+   Token: 99926036
+   Name: NIFTY CONSUMPTION
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+30. Nifty Fin Service
+   Token: 99926037
+   Name: FINNIFTY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+31. Nifty50 Div Point
+   Token: 99926038
+   Name: NIFTY50 DIV POINT
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+32. Nifty100 Liq 15
+   Token: 99926040
+   Name: NIFTY100 LIQ 15
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+33. Nifty CPSE
+   Token: 99926041
+   Name: NIFTY CPSE
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+34. Nifty50 PR 1x Inv
+   Token: 99926042
+   Name: NIFTY50 PR 1X INV
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+35. Nifty50 TR 2x Lev
+   Token: 99926043
+   Name: NIFTY50 TR 2X LEV
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+36. Nifty50 TR 1x Inv
+   Token: 99926044
+   Name: NIFTY50 TR 1X INV
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+37. Nifty50 Value 20
+   Token: 99926045
+   Name: NIFTY50 VALUE 20
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+38. Nifty Mid Liq 15
+   Token: 99926046
+   Name: NIFTY MID LIQ 15
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+39. Nifty Pvt Bank
+   Token: 99926047
+   Name: NIFTY PVT BANK
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+40. NIFTY100 Qualty30
+   Token: 99926048
+   Name: NIFTY100 QUALTY30
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+41. Nifty GS 8 13Yr
+   Token: 99926049
+   Name: NIFTY GS 8 13YR
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+42. Nifty GS 10Yr
+   Token: 99926050
+   Name: NIFTY GS 10YR
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+43. Nifty GS 10Yr Cln
+   Token: 99926051
+   Name: NIFTY GS 10YR CLN
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+44. Nifty GS 4 8Yr
+   Token: 99926052
+   Name: NIFTY GS 4 8YR
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+45. Nifty GS 11 15Yr
+   Token: 99926053
+   Name: NIFTY GS 11 15YR
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+46. Nifty GS 15YrPlus
+   Token: 99926054
+   Name: NIFTY GS 15YRPLUS
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+47. Nifty GS Compsite
+   Token: 99926055
+   Name: NIFTY GS COMPSITE
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+48. NIFTY50 EQL Wgt
+   Token: 99926056
+   Name: NIFTY50 EQL WGT
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+49. NIFTY100 EQL Wgt
+   Token: 99926057
+   Name: NIFTY100 EQL WGT
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+50. NIFTY100 LowVol30
+   Token: 99926058
+   Name: NIFTY100 LOWVOL30
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+51. NIFTY Alpha 50
+   Token: 99926059
+   Name: NIFTY ALPHA 50
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+52. NIFTY MIDCAP 150
+   Token: 99926060
+   Name: NIFTY MIDCAP 150
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+53. NIFTY SMLCAP 50
+   Token: 99926061
+   Name: NIFTY SMLCAP 50
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+54. NIFTY SMLCAP 250
+   Token: 99926062
+   Name: NIFTY SMLCAP 250
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+55. NIFTY MIDSML 400
+   Token: 99926063
+   Name: NIFTY MIDSML 400
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+56. NIFTY200 QUALTY30
+   Token: 99926064
+   Name: NIFTY200 QUALTY30
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+57. NIFTY MID SELECT
+   Token: 99926074
+   Name: MIDCPNIFTY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+58. ARE&M-EQ
+   Token: 100
+   Name: ARE&M
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+59. 656MH32-SG
+   Token: 1000
+   Name: 656MH32
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+60. ICICI5INAV-EQ
+   Token: 10048
+   Name: ICICI5INAV
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+61. SFMP6DD-MF
+   Token: 10051
+   Name: SFMP6DD
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+62. MOM50INAV-EQ
+   Token: 10127
+   Name: MOM50INAV
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+63. MON100INAV-EQ
+   Token: 10130
+   Name: MON100INAV
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+64. ICICM58-M1
+   Token: 10201
+   Name: ICICM58
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+65. 795AP40-SG
+   Token: 10216
+   Name: 795AP40
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+66. SYNGENE-EQ
+   Token: 10243
+   Name: SYNGENE
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+67. 792TS45-SG
+   Token: 10272
+   Name: 792TS45
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+68. KCK-ST
+   Token: 10296
+   Name: KCK
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 2500
+
+69. AURUM-EQ
+   Token: 10310
+   Name: AURUM
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+70. AXISBNKETF-EQ
+   Token: 1044
+   Name: AXISBNKETF
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+71. UNITDSPR-EQ
+   Token: 10447
+   Name: UNITDSPR
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+72. 779AP31-SG
+   Token: 10458
+   Name: 779AP31
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+73. 781HR32B-SG
+   Token: 10461
+   Name: 781HR32B
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+74. 789HP37-SG
+   Token: 10551
+   Name: 789HP37
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+75. 789WB37-SG
+   Token: 10553
+   Name: 789WB37
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+76. 795HR37-SG
+   Token: 10640
+   Name: 795HR37
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+77. NAVKARCORP-EQ
+   Token: 10557
+   Name: NAVKARCORP
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+78. 774AP31-SG
+   Token: 10647
+   Name: 774AP31
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+79. INDIAMART-EQ
+   Token: 10726
+   Name: INDIAMART
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+80. 793RJ45-SG
+   Token: 10645
+   Name: 793RJ45
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+81. INFRAIETF-EQ
+   Token: 10723
+   Name: INFRAIETF
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+82. 762NTPC35F-ND
+   Token: 10751
+   Name: 762NTPC35F
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+83. 775PN42-SG
+   Token: 10782
+   Name: 775PN42
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+84. 66SK30-SG
+   Token: 1084
+   Name: 66SK30
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+85. CANBK-EQ
+   Token: 10794
+   Name: CANBK
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+86. 771AP42-SG
+   Token: 10846
+   Name: 771AP42
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+87. 771AP39-SG
+   Token: 10847
+   Name: 771AP39
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+88. GABRIEL-EQ
+   Token: 1085
+   Name: GABRIEL
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+89. 767KL34-SG
+   Token: 10851
+   Name: 767KL34
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+90. GVPTECH-EQ
+   Token: 10865
+   Name: GVPTECH
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+91. AMEYA-SM
+   Token: 10898
+   Name: AMEYA
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+92. 675KA34-SG
+   Token: 1092
+   Name: 675KA34
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+93. 747TS31-SG
+   Token: 10904
+   Name: 747TS31
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+94. 758PN42-SG
+   Token: 10907
+   Name: 758PN42
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+95. 745HR32-SG
+   Token: 10955
+   Name: 745HR32
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+96. 745BR32-SG
+   Token: 10956
+   Name: 745BR32
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+97. 75HP36-SG
+   Token: 10960
+   Name: 75HP36
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+98. MARUTI-EQ
+   Token: 10999
+   Name: MARUTI
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+99. CNL-EQ
+   Token: 11155
+   Name: CNL
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+100. 756WB39-SG
+   Token: 11159
+   Name: 756WB39
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 100
+
+... and 8833 more instruments in NSE
+
+
+========================================================================================================================
+EXCHANGE: BSE (12590 instruments)
+========================================================================================================================
+
+1. SENSEX
+   Token: 99919000
+   Name: SENSEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+2. BSEPSU
+   Token: 99919001
+   Name: S&P BSE PSU
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+3. BSE100
+   Token: 99919002
+   Name: S&P BSE 100
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+4. BSE200
+   Token: 99919003
+   Name: S&P BSE 200
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+5. BSE500
+   Token: 99919004
+   Name: S&P BSE 500
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+6. BSE IT
+   Token: 99919005
+   Name: S&P BSE INFORMATION TECHNOLOGY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+7. BSEFMC
+   Token: 99919006
+   Name: S&P BSE FAST MOVING CONSUMER GOODS
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+8. BSE CG
+   Token: 99919007
+   Name: S&P BSE CAPITAL GOODS
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+9. BSE CD
+   Token: 99919008
+   Name: S&P BSE CONSUMER DURABLES
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+10. BSE HC
+   Token: 99919009
+   Name: S&P BSE HEALTHCARE
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+11. TECK
+   Token: 99919011
+   Name: S&P BSE TECK
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+12. BANKEX
+   Token: 99919012
+   Name: BANKEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+13. AUTO
+   Token: 99919013
+   Name: S&P BSE AUTO
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+14. METAL
+   Token: 99919014
+   Name: S&P BSE METAL
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+15. CPSE
+   Token: 99919015
+   Name: S&P BSE CPSE
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+16. MIDCAP
+   Token: 99919016
+   Name: S&P BSE MIDCAP
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+17. SMLCAP
+   Token: 99919017
+   Name: S&P BSE SMALLCAP
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+18. DOL30
+   Token: 99919018
+   Name: S&P BSE DOLLEX 30
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+19. DOL100
+   Token: 99919019
+   Name: S&P BSE DOLLEX 100
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+20. DOL200
+   Token: 99919020
+   Name: S&P BSE DOLLEX 200
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+21. LRGCAP
+   Token: 99919042
+   Name: S&P BSE LARGECAP
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+22. MIDSEL
+   Token: 99919043
+   Name: S&P BSE MIDCAP SELECT INDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+23. SMLSEL
+   Token: 99919044
+   Name: S&P BSE SMALLCAP SELECT INDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+24. OILGAS
+   Token: 99919051
+   Name: S&P BSE OIL & GAS
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+25. POWER
+   Token: 99919052
+   Name: S&P BSE POWER
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+26. REALTY
+   Token: 99919053
+   Name: S&P BSE REALTY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+27. BSEIPO
+   Token: 99919054
+   Name: S&P BSE IPO
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+28. CARBON
+   Token: 99919058
+   Name: S&P BSE CARBONEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+29. SMEIPO
+   Token: 99919059
+   Name: S&P BSE SME IPO
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+30. INFRA
+   Token: 99919060
+   Name: S&P BSE INDIA INFRASTRUCTURE INDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+31. GREENX
+   Token: 99919081
+   Name: S&P BSE GREENEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+32. SNSX50
+   Token: 99919082
+   Name: S&P BSE SENSEX 50
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+33. SNXT50
+   Token: 99919083
+   Name: S&P BSE SENSEX NEXT 50
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+34. ENERGY
+   Token: 99919084
+   Name: S&P BSE ENERGY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+35. FINSER
+   Token: 99919085
+   Name: S&P BSE FINANCIAL SERVICES
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+36. INDSTR
+   Token: 99919086
+   Name: S&P BSE INDUSTRIALS
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+37. TELCOM
+   Token: 99919087
+   Name: S&P BSE TELECOM
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+38. MID150
+   Token: 99919088
+   Name: S&P BSE 150 MIDCAP INDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+39. LMI250
+   Token: 99919089
+   Name: S&P BSE 250 LARGEMIDCAP INDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+40. MSL400
+   Token: 99919090
+   Name: S&P BSE 400 MIDSMALLCAP INDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+41. AEGISLOG
+   Token: 500003
+   Name: AEGISLOG
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+42. ANSALAPI
+   Token: 500013
+   Name: ANSALAPI
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+43. ABREL
+   Token: 500040
+   Name: ABREL
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+44. BLUESTARCO
+   Token: 500067
+   Name: BLUESTARCO
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+45. ASIANHOTNR
+   Token: 500023
+   Name: ASIANHOTNR
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+46. ATUL
+   Token: 500027
+   Name: ATUL
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+47. BASF
+   Token: 500042
+   Name: BASF
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+48. BIRLACABLE
+   Token: 500060
+   Name: BIRLACABLE
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+49. CENTEXT
+   Token: 500083
+   Name: CENTEXT
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+50. CGPOWER
+   Token: 500093
+   Name: CGPOWER
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+51. HINDPETRO
+   Token: 500104
+   Name: HINDPETRO
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+52. MTNL
+   Token: 500108
+   Name: MTNL
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+53. GTNINDS
+   Token: 500170
+   Name: GTNINDS
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+54. INDLEASE
+   Token: 500202
+   Name: INDLEASE
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+55. KINETICENG
+   Token: 500240
+   Name: KINETICENG
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+56. KIRLOSIND
+   Token: 500243
+   Name: KIRLOSIND
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+57. MAHSCOOTER
+   Token: 500266
+   Name: MAHSCOOTER
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+58. MFSL
+   Token: 500271
+   Name: MFSL
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+59. CENTENKA
+   Token: 500280
+   Name: CENTENKA
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+60. MRF
+   Token: 500290
+   Name: MRF
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+61. OAL
+   Token: 500078
+   Name: OAL
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+62. CESC
+   Token: 500084
+   Name: CESC
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+63. DICIND
+   Token: 500089
+   Name: DICIND
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+64. TITAN
+   Token: 500114
+   Name: TITAN
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+65. HEIDELBERG
+   Token: 500292
+   Name: HEIDELBERG
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+66. JAYKAY
+   Token: 500306
+   Name: JAYKAY
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+67. ORIENTHOT
+   Token: 500314
+   Name: ORIENTHOT
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+68. PIXTRANS
+   Token: 500333
+   Name: PIXTRANS
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+69. ELANTAS
+   Token: 500123
+   Name: ELANTAS
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+70. ESTER
+   Token: 500136
+   Name: ESTER
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+71. PHCAP
+   Token: 500143
+   Name: PHCAP
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+72. UFLEX
+   Token: 500148
+   Name: UFLEX
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+73. PRSMJOHNSN
+   Token: 500338
+   Name: PRSMJOHNSN
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+74. SPMLINFRA
+   Token: 500402
+   Name: SPMLINFRA
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+75. SWARAJENG
+   Token: 500407
+   Name: SWARAJENG
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+76. HOCL
+   Token: 500449
+   Name: HOCL
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+77. GTL
+   Token: 500160
+   Name: GTL
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+78. INGERRAND
+   Token: 500210
+   Name: INGERRAND
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+79. KOTAKBANK
+   Token: 500247
+   Name: KOTAKBANK
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+80. SPICEJET
+   Token: 500285
+   Name: SPICEJET
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+81. PASUPTAC
+   Token: 500456
+   Name: PASUPTAC
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+82. MUKANDLTD
+   Token: 500460
+   Name: MUKANDLTD
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+83. ESCORTS
+   Token: 500495
+   Name: ESCORTS
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+84. EIHOTEL
+   Token: 500840
+   Name: EIHOTEL
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+85. PANCM
+   Token: 500322
+   Name: PANCM
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+86. RAIN
+   Token: 500339
+   Name: RAIN
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+87. AMJLAND
+   Token: 500343
+   Name: AMJLAND
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+88. RALLIS
+   Token: 500355
+   Name: RALLIS
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+89. MODIRUBBER
+   Token: 500890
+   Name: MODIRUBBER
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+90. INDPRUD
+   Token: 501298
+   Name: INDPRUD
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+91. RAPIDIN
+   Token: 501351
+   Name: RAPIDIN
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+92. EENTER
+   Token: 501386
+   Name: EENTER
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+93. JINDALSAW
+   Token: 500378
+   Name: JINDALSAW
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+94. TORNTPHARM
+   Token: 500420
+   Name: TORNTPHARM
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+95. TRANSCHEM
+   Token: 500422
+   Name: TRANSCHEM
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+96. HARRMALAYA
+   Token: 500467
+   Name: HARRMALAYA
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+97. TECHNVISN
+   Token: 501421
+   Name: TECHNVISN
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+98. SHAILY
+   Token: 501423
+   Name: SHAILY
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+99. BBTC
+   Token: 501425
+   Name: BBTC
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+100. BOMBCYC
+   Token: 501430
+   Name: BOMBCYC
+   Instrument: N/A
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+... and 12490 more instruments in BSE
+
+
+========================================================================================================================
+EXCHANGE: NFO (37907 instruments)
+========================================================================================================================
+
+1. HINDUNILVR24FEB262520CE
+   Token: 100104
+   Name: HINDUNILVR
+   Instrument: OPTSTK
+   Strike: 252000.000000
+   Expiry: 24FEB2026
+   Lot Size: 300
+
+2. IIFL27JAN26660CE
+   Token: 100159
+   Name: IIFL
+   Instrument: OPTSTK
+   Strike: 66000.000000
+   Expiry: 27JAN2026
+   Lot Size: 1650
+
+3. HINDZINC27JAN26445CE
+   Token: 100277
+   Name: HINDZINC
+   Instrument: OPTSTK
+   Strike: 44500.000000
+   Expiry: 27JAN2026
+   Lot Size: 1225
+
+4. INDHOTEL27JAN26640PE
+   Token: 100517
+   Name: INDHOTEL
+   Instrument: OPTSTK
+   Strike: 64000.000000
+   Expiry: 27JAN2026
+   Lot Size: 1000
+
+5. HINDZINC24FEB26520PE
+   Token: 100524
+   Name: HINDZINC
+   Instrument: OPTSTK
+   Strike: 52000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1225
+
+6. HINDZINC24FEB26530PE
+   Token: 100526
+   Name: HINDZINC
+   Instrument: OPTSTK
+   Strike: 53000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1225
+
+7. HINDZINC24FEB26590PE
+   Token: 100562
+   Name: HINDZINC
+   Instrument: OPTSTK
+   Strike: 59000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1225
+
+8. HINDZINC24FEB26640PE
+   Token: 100570
+   Name: HINDZINC
+   Instrument: OPTSTK
+   Strike: 64000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1225
+
+9. HUDCO27JAN26187.5CE
+   Token: 100591
+   Name: HUDCO
+   Instrument: OPTSTK
+   Strike: 18750.000000
+   Expiry: 27JAN2026
+   Lot Size: 2775
+
+10. HUDCO27JAN26257.5PE
+   Token: 100717
+   Name: HUDCO
+   Instrument: OPTSTK
+   Strike: 25750.000000
+   Expiry: 27JAN2026
+   Lot Size: 2775
+
+11. HUDCO24FEB26190CE
+   Token: 100822
+   Name: HUDCO
+   Instrument: OPTSTK
+   Strike: 19000.000000
+   Expiry: 24FEB2026
+   Lot Size: 2775
+
+12. HUDCO24FEB26215CE
+   Token: 100832
+   Name: HUDCO
+   Instrument: OPTSTK
+   Strike: 21500.000000
+   Expiry: 24FEB2026
+   Lot Size: 2775
+
+13. HUDCO24FEB26225PE
+   Token: 100839
+   Name: HUDCO
+   Instrument: OPTSTK
+   Strike: 22500.000000
+   Expiry: 24FEB2026
+   Lot Size: 2775
+
+14. GAIL30DEC25140CE
+   Token: 101076
+   Name: GAIL
+   Instrument: OPTSTK
+   Strike: 14000.000000
+   Expiry: 30DEC2025
+   Lot Size: 3150
+
+15. HUDCO24FEB26260PE
+   Token: 100939
+   Name: HUDCO
+   Instrument: OPTSTK
+   Strike: 26000.000000
+   Expiry: 24FEB2026
+   Lot Size: 2775
+
+16. ICICIBANK24FEB261200CE
+   Token: 101373
+   Name: ICICIBANK
+   Instrument: OPTSTK
+   Strike: 120000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+17. ICICIBANK24FEB261200PE
+   Token: 101374
+   Name: ICICIBANK
+   Instrument: OPTSTK
+   Strike: 120000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+18. ICICIBANK24FEB261260CE
+   Token: 101399
+   Name: ICICIBANK
+   Instrument: OPTSTK
+   Strike: 126000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+19. ICICIBANK24FEB261420CE
+   Token: 101426
+   Name: ICICIBANK
+   Instrument: OPTSTK
+   Strike: 142000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+20. ICICIBANK24FEB261460PE
+   Token: 101433
+   Name: ICICIBANK
+   Instrument: OPTSTK
+   Strike: 146000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+21. INDIGO30DEC256450PE
+   Token: 101606
+   Name: INDIGO
+   Instrument: OPTSTK
+   Strike: 645000.000000
+   Expiry: 30DEC2025
+   Lot Size: 150
+
+22. ICICIGI27JAN261980PE
+   Token: 101757
+   Name: ICICIGI
+   Instrument: OPTSTK
+   Strike: 198000.000000
+   Expiry: 27JAN2026
+   Lot Size: 325
+
+23. ICICIGI27JAN262180PE
+   Token: 101773
+   Name: ICICIGI
+   Instrument: OPTSTK
+   Strike: 218000.000000
+   Expiry: 27JAN2026
+   Lot Size: 325
+
+24. ICICIGI24FEB262120PE
+   Token: 101958
+   Name: ICICIGI
+   Instrument: OPTSTK
+   Strike: 212000.000000
+   Expiry: 24FEB2026
+   Lot Size: 325
+
+25. ICICIGI24FEB262320PE
+   Token: 101975
+   Name: ICICIGI
+   Instrument: OPTSTK
+   Strike: 232000.000000
+   Expiry: 24FEB2026
+   Lot Size: 325
+
+26. ICICIPRULI27JAN26555CE
+   Token: 102235
+   Name: ICICIPRULI
+   Instrument: OPTSTK
+   Strike: 55500.000000
+   Expiry: 27JAN2026
+   Lot Size: 925
+
+27. ICICIPRULI27JAN26615CE
+   Token: 102255
+   Name: ICICIPRULI
+   Instrument: OPTSTK
+   Strike: 61500.000000
+   Expiry: 27JAN2026
+   Lot Size: 925
+
+28. ICICIPRULI27JAN26625CE
+   Token: 102257
+   Name: ICICIPRULI
+   Instrument: OPTSTK
+   Strike: 62500.000000
+   Expiry: 27JAN2026
+   Lot Size: 925
+
+29. ICICIPRULI27JAN26675PE
+   Token: 102271
+   Name: ICICIPRULI
+   Instrument: OPTSTK
+   Strike: 67500.000000
+   Expiry: 27JAN2026
+   Lot Size: 925
+
+30. ICICIPRULI24FEB26560CE
+   Token: 102506
+   Name: ICICIPRULI
+   Instrument: OPTSTK
+   Strike: 56000.000000
+   Expiry: 24FEB2026
+   Lot Size: 925
+
+31. GODREJCP30DEC25920PE
+   Token: 102509
+   Name: GODREJCP
+   Instrument: OPTSTK
+   Strike: 92000.000000
+   Expiry: 30DEC2025
+   Lot Size: 500
+
+32. ICICIPRULI24FEB26580CE
+   Token: 102517
+   Name: ICICIPRULI
+   Instrument: OPTSTK
+   Strike: 58000.000000
+   Expiry: 24FEB2026
+   Lot Size: 925
+
+33. ICICIPRULI24FEB26640PE
+   Token: 102553
+   Name: ICICIPRULI
+   Instrument: OPTSTK
+   Strike: 64000.000000
+   Expiry: 24FEB2026
+   Lot Size: 925
+
+34. ICICIPRULI24FEB26710CE
+   Token: 102566
+   Name: ICICIPRULI
+   Instrument: OPTSTK
+   Strike: 71000.000000
+   Expiry: 24FEB2026
+   Lot Size: 925
+
+35. INDUSTOWER30DEC25455CE
+   Token: 102604
+   Name: INDUSTOWER
+   Instrument: OPTSTK
+   Strike: 45500.000000
+   Expiry: 30DEC2025
+   Lot Size: 1700
+
+36. GODREJCP30DEC251360PE
+   Token: 102661
+   Name: GODREJCP
+   Instrument: OPTSTK
+   Strike: 136000.000000
+   Expiry: 30DEC2025
+   Lot Size: 500
+
+37. IDEA24FEB264CE
+   Token: 102833
+   Name: IDEA
+   Instrument: OPTSTK
+   Strike: 400.000000
+   Expiry: 24FEB2026
+   Lot Size: 71475
+
+38. IDEA24FEB2616PE
+   Token: 102846
+   Name: IDEA
+   Instrument: OPTSTK
+   Strike: 1600.000000
+   Expiry: 24FEB2026
+   Lot Size: 71475
+
+39. IDFCFIRSTB24FEB2688PE
+   Token: 102988
+   Name: IDFCFIRSTB
+   Instrument: OPTSTK
+   Strike: 8800.000000
+   Expiry: 24FEB2026
+   Lot Size: 9275
+
+40. IEX27JAN26127.5CE
+   Token: 103050
+   Name: IEX
+   Instrument: OPTSTK
+   Strike: 12750.000000
+   Expiry: 27JAN2026
+   Lot Size: 3750
+
+41. INDHOTEL27JAN26710PE
+   Token: 103367
+   Name: INDHOTEL
+   Instrument: OPTSTK
+   Strike: 71000.000000
+   Expiry: 27JAN2026
+   Lot Size: 1000
+
+42. INDHOTEL24FEB26600CE
+   Token: 103453
+   Name: INDHOTEL
+   Instrument: OPTSTK
+   Strike: 60000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1000
+
+43. GODREJPROP30DEC251680PE
+   Token: 103492
+   Name: GODREJPROP
+   Instrument: OPTSTK
+   Strike: 168000.000000
+   Expiry: 30DEC2025
+   Lot Size: 275
+
+44. GODREJPROP30DEC251720CE
+   Token: 103495
+   Name: GODREJPROP
+   Instrument: OPTSTK
+   Strike: 172000.000000
+   Expiry: 30DEC2025
+   Lot Size: 275
+
+45. IOC30DEC25146CE
+   Token: 103509
+   Name: IOC
+   Instrument: OPTSTK
+   Strike: 14600.000000
+   Expiry: 30DEC2025
+   Lot Size: 4875
+
+46. IOC30DEC25182PE
+   Token: 103546
+   Name: IOC
+   Instrument: OPTSTK
+   Strike: 18200.000000
+   Expiry: 30DEC2025
+   Lot Size: 4875
+
+47. IOC30DEC25184PE
+   Token: 103548
+   Name: IOC
+   Instrument: OPTSTK
+   Strike: 18400.000000
+   Expiry: 30DEC2025
+   Lot Size: 4875
+
+48. INDHOTEL24FEB26800CE
+   Token: 103583
+   Name: INDHOTEL
+   Instrument: OPTSTK
+   Strike: 80000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1000
+
+49. INDIANB27JAN26690CE
+   Token: 103656
+   Name: INDIANB
+   Instrument: OPTSTK
+   Strike: 69000.000000
+   Expiry: 27JAN2026
+   Lot Size: 1000
+
+50. INDIANB24FEB26720PE
+   Token: 103767
+   Name: INDIANB
+   Instrument: OPTSTK
+   Strike: 72000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1000
+
+51. IOC27JAN26151CE
+   Token: 103830
+   Name: IOC
+   Instrument: OPTSTK
+   Strike: 15100.000000
+   Expiry: 27JAN2026
+   Lot Size: 4875
+
+52. INDIANB24FEB26880CE
+   Token: 103835
+   Name: INDIANB
+   Instrument: OPTSTK
+   Strike: 88000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1000
+
+53. INDIANB24FEB26960PE
+   Token: 103844
+   Name: INDIANB
+   Instrument: OPTSTK
+   Strike: 96000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1000
+
+54. INDIANB24FEB261000CE
+   Token: 103847
+   Name: INDIANB
+   Instrument: OPTSTK
+   Strike: 100000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1000
+
+55. INDIGO27JAN264450CE
+   Token: 104099
+   Name: INDIGO
+   Instrument: OPTSTK
+   Strike: 445000.000000
+   Expiry: 27JAN2026
+   Lot Size: 150
+
+56. GRASIM30DEC252640CE
+   Token: 104178
+   Name: GRASIM
+   Instrument: OPTSTK
+   Strike: 264000.000000
+   Expiry: 30DEC2025
+   Lot Size: 250
+
+57. INDIGO27JAN265750PE
+   Token: 104195
+   Name: INDIGO
+   Instrument: OPTSTK
+   Strike: 575000.000000
+   Expiry: 27JAN2026
+   Lot Size: 150
+
+58. INDIGO27JAN266150CE
+   Token: 104235
+   Name: INDIGO
+   Instrument: OPTSTK
+   Strike: 615000.000000
+   Expiry: 27JAN2026
+   Lot Size: 150
+
+59. INDIGO24FEB264500PE
+   Token: 104360
+   Name: INDIGO
+   Instrument: OPTSTK
+   Strike: 450000.000000
+   Expiry: 24FEB2026
+   Lot Size: 150
+
+60. INDIGO24FEB264600CE
+   Token: 104361
+   Name: INDIGO
+   Instrument: OPTSTK
+   Strike: 460000.000000
+   Expiry: 24FEB2026
+   Lot Size: 150
+
+61. INDIGO24FEB266200PE
+   Token: 104398
+   Name: INDIGO
+   Instrument: OPTSTK
+   Strike: 620000.000000
+   Expiry: 24FEB2026
+   Lot Size: 150
+
+62. IRCTC27JAN26590CE
+   Token: 104407
+   Name: IRCTC
+   Instrument: OPTSTK
+   Strike: 59000.000000
+   Expiry: 27JAN2026
+   Lot Size: 875
+
+63. INDUSINDBK27JAN26770CE
+   Token: 104574
+   Name: INDUSINDBK
+   Instrument: OPTSTK
+   Strike: 77000.000000
+   Expiry: 27JAN2026
+   Lot Size: 700
+
+64. INDUSINDBK24FEB26840PE
+   Token: 104654
+   Name: INDUSINDBK
+   Instrument: OPTSTK
+   Strike: 84000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+65. INDUSINDBK24FEB26860CE
+   Token: 104655
+   Name: INDUSINDBK
+   Instrument: OPTSTK
+   Strike: 86000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+66. INDUSINDBK24FEB26880PE
+   Token: 104658
+   Name: INDUSINDBK
+   Instrument: OPTSTK
+   Strike: 88000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+67. INDUSINDBK24FEB26960PE
+   Token: 104672
+   Name: INDUSINDBK
+   Instrument: OPTSTK
+   Strike: 96000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+68. INDUSINDBK24FEB261000CE
+   Token: 104745
+   Name: INDUSINDBK
+   Instrument: OPTSTK
+   Strike: 100000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+69. INDUSINDBK24FEB261000PE
+   Token: 104746
+   Name: INDUSINDBK
+   Instrument: OPTSTK
+   Strike: 100000.000000
+   Expiry: 24FEB2026
+   Lot Size: 700
+
+70. INDUSTOWER24FEB26380CE
+   Token: 105022
+   Name: INDUSTOWER
+   Instrument: OPTSTK
+   Strike: 38000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1700
+
+71. INDUSTOWER24FEB26430PE
+   Token: 105037
+   Name: INDUSTOWER
+   Instrument: OPTSTK
+   Strike: 43000.000000
+   Expiry: 24FEB2026
+   Lot Size: 1700
+
+72. IRFC30DEC25139CE
+   Token: 105189
+   Name: IRFC
+   Instrument: OPTSTK
+   Strike: 13900.000000
+   Expiry: 30DEC2025
+   Lot Size: 4250
+
+73. IRFC27JAN2692CE
+   Token: 105285
+   Name: IRFC
+   Instrument: OPTSTK
+   Strike: 9200.000000
+   Expiry: 27JAN2026
+   Lot Size: 4250
+
+74. INFY27JAN261820PE
+   Token: 105321
+   Name: INFY
+   Instrument: OPTSTK
+   Strike: 182000.000000
+   Expiry: 27JAN2026
+   Lot Size: 400
+
+75. IRFC27JAN2696CE
+   Token: 105332
+   Name: IRFC
+   Instrument: OPTSTK
+   Strike: 9600.000000
+   Expiry: 27JAN2026
+   Lot Size: 4250
+
+76. IRFC27JAN26104CE
+   Token: 105383
+   Name: IRFC
+   Instrument: OPTSTK
+   Strike: 10400.000000
+   Expiry: 27JAN2026
+   Lot Size: 4250
+
+77. IRFC27JAN26134PE
+   Token: 105422
+   Name: IRFC
+   Instrument: OPTSTK
+   Strike: 13400.000000
+   Expiry: 27JAN2026
+   Lot Size: 4250
+
+78. INFY24FEB261360CE
+   Token: 105498
+   Name: INFY
+   Instrument: OPTSTK
+   Strike: 136000.000000
+   Expiry: 24FEB2026
+   Lot Size: 400
+
+79. HAVELLS30DEC251240CE
+   Token: 105565
+   Name: HAVELLS
+   Instrument: OPTSTK
+   Strike: 124000.000000
+   Expiry: 30DEC2025
+   Lot Size: 500
+
+80. INOXWIND24FEB26105CE
+   Token: 105682
+   Name: INOXWIND
+   Instrument: OPTSTK
+   Strike: 10500.000000
+   Expiry: 24FEB2026
+   Lot Size: 3575
+
+81. INOXWIND24FEB26115PE
+   Token: 105687
+   Name: INOXWIND
+   Instrument: OPTSTK
+   Strike: 11500.000000
+   Expiry: 24FEB2026
+   Lot Size: 3575
+
+82. ITC27JAN26345PE
+   Token: 106124
+   Name: ITC
+   Instrument: OPTSTK
+   Strike: 34500.000000
+   Expiry: 27JAN2026
+   Lot Size: 1600
+
+83. ITC27JAN26375CE
+   Token: 106137
+   Name: ITC
+   Instrument: OPTSTK
+   Strike: 37500.000000
+   Expiry: 27JAN2026
+   Lot Size: 1600
+
+84. IOC24FEB26143CE
+   Token: 106155
+   Name: IOC
+   Instrument: OPTSTK
+   Strike: 14300.000000
+   Expiry: 24FEB2026
+   Lot Size: 4875
+
+85. ITC27JAN26435PE
+   Token: 106183
+   Name: ITC
+   Instrument: OPTSTK
+   Strike: 43500.000000
+   Expiry: 27JAN2026
+   Lot Size: 1600
+
+86. IOC24FEB26155PE
+   Token: 106202
+   Name: IOC
+   Instrument: OPTSTK
+   Strike: 15500.000000
+   Expiry: 24FEB2026
+   Lot Size: 4875
+
+87. IOC24FEB26179PE
+   Token: 106288
+   Name: IOC
+   Instrument: OPTSTK
+   Strike: 17900.000000
+   Expiry: 24FEB2026
+   Lot Size: 4875
+
+88. IRCTC27JAN26625CE
+   Token: 106390
+   Name: IRCTC
+   Instrument: OPTSTK
+   Strike: 62500.000000
+   Expiry: 27JAN2026
+   Lot Size: 875
+
+89. IRCTC27JAN26695PE
+   Token: 106429
+   Name: IRCTC
+   Instrument: OPTSTK
+   Strike: 69500.000000
+   Expiry: 27JAN2026
+   Lot Size: 875
+
+90. IRCTC24FEB26710PE
+   Token: 106648
+   Name: IRCTC
+   Instrument: OPTSTK
+   Strike: 71000.000000
+   Expiry: 24FEB2026
+   Lot Size: 875
+
+91. JINDALSTEL27JAN26840CE
+   Token: 106842
+   Name: JINDALSTEL
+   Instrument: OPTSTK
+   Strike: 84000.000000
+   Expiry: 27JAN2026
+   Lot Size: 625
+
+92. IREDA27JAN26147.5PE
+   Token: 106909
+   Name: IREDA
+   Instrument: OPTSTK
+   Strike: 14750.000000
+   Expiry: 27JAN2026
+   Lot Size: 3450
+
+93. JINDALSTEL27JAN261160PE
+   Token: 106933
+   Name: JINDALSTEL
+   Instrument: OPTSTK
+   Strike: 116000.000000
+   Expiry: 27JAN2026
+   Lot Size: 625
+
+94. IREDA24FEB26150PE
+   Token: 107065
+   Name: IREDA
+   Instrument: OPTSTK
+   Strike: 15000.000000
+   Expiry: 24FEB2026
+   Lot Size: 3450
+
+95. IRFC27JAN26137PE
+   Token: 107317
+   Name: IRFC
+   Instrument: OPTSTK
+   Strike: 13700.000000
+   Expiry: 27JAN2026
+   Lot Size: 4250
+
+96. IRFC27JAN26139CE
+   Token: 107319
+   Name: IRFC
+   Instrument: OPTSTK
+   Strike: 13900.000000
+   Expiry: 27JAN2026
+   Lot Size: 4250
+
+97. IRFC24FEB26104PE
+   Token: 107427
+   Name: IRFC
+   Instrument: OPTSTK
+   Strike: 10400.000000
+   Expiry: 24FEB2026
+   Lot Size: 4250
+
+98. IRFC24FEB26108CE
+   Token: 107430
+   Name: IRFC
+   Instrument: OPTSTK
+   Strike: 10800.000000
+   Expiry: 24FEB2026
+   Lot Size: 4250
+
+99. IRFC24FEB26132PE
+   Token: 107456
+   Name: IRFC
+   Instrument: OPTSTK
+   Strike: 13200.000000
+   Expiry: 24FEB2026
+   Lot Size: 4250
+
+100. JSWENERGY27JAN26580CE
+   Token: 107617
+   Name: JSWENERGY
+   Instrument: OPTSTK
+   Strike: 58000.000000
+   Expiry: 27JAN2026
+   Lot Size: 1000
+
+... and 37807 more instruments in NFO
+
+
+========================================================================================================================
+EXCHANGE: CDS (10123 instruments)
+========================================================================================================================
+
+1. EURINR26MAR104.75PE
+   Token: 10006
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1047500000.000000
+   Expiry: 27MAR2026
+   Lot Size: 1
+
+2. GBPINR26JAN121PE
+   Token: 10010
+   Name: GBPINR
+   Instrument: OPTCUR
+   Strike: 1210000000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+3. ONMIBOR26JUNFUT
+   Token: 1008
+   Name: ONMIBOR
+   Instrument: FUTIRC
+   Strike: -1.000000
+   Expiry: 30JUN2026
+   Lot Size: 1
+
+4. GBPINR26JAN121.25CE
+   Token: 10012
+   Name: GBPINR
+   Instrument: OPTCUR
+   Strike: 1212500000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+5. 710GS203426JAN103.25CE
+   Token: 10057
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1032500000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1
+
+6. GBPINR26JAN123CE
+   Token: 10100
+   Name: GBPINR
+   Instrument: OPTCUR
+   Strike: 1230000000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+7. GBPUSD26JAN1.24CE
+   Token: 10198
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 12400000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+8. EURINR26227107.25CE
+   Token: 10123
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1072500000.000000
+   Expiry: 27FEB2026
+   Lot Size: 1
+
+9. EURINR26227108.75CE
+   Token: 10137
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1087500000.000000
+   Expiry: 27FEB2026
+   Lot Size: 1
+
+10. USDINR2612394PE
+   Token: 10185
+   Name: USDINR
+   Instrument: OPTCUR
+   Strike: 940000000.000000
+   Expiry: 23JAN2026
+   Lot Size: 1
+
+11. GBPUSD26JAN1.245PE
+   Token: 10203
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 12450000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+12. GBPUSD26JAN1.265CE
+   Token: 10210
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 12650000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+13. GBPUSD26JAN1.265PE
+   Token: 10211
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 12650000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+14. 679GS203426MAR98.5PE
+   Token: 10236
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 985000000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+15. 679GS203426MAR100CE
+   Token: 10247
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1000000000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+16. 679GS203426MAR100.25PE
+   Token: 10250
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1002500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+17. 679GS203426MAR100.5CE
+   Token: 10251
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1005000000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+18. 679GS203426MAR100.75PE
+   Token: 10254
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1007500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+19. 679GS203426MAR101CE
+   Token: 10255
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1010000000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+20. 679GS203426MAR101.75PE
+   Token: 10262
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1017500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+21. 679GS203426MAR103.75PE
+   Token: 10285
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1037500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+22. 679GS203426MAR104.75PE
+   Token: 10297
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1047500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+23. GBPINR26116FUT
+   Token: 1030
+   Name: GBPINR
+   Instrument: FUTCUR
+   Strike: -1.000000
+   Expiry: 16JAN2026
+   Lot Size: 1
+
+24. JPYINR26116FUT
+   Token: 1031
+   Name: JPYINR
+   Instrument: FUTCUR
+   Strike: -1.000000
+   Expiry: 16JAN2026
+   Lot Size: 1
+
+25. 710GS203426MAR100.25CE
+   Token: 10327
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1002500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+26. 710GS203426MAR101.75CE
+   Token: 10339
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1017500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+27. R-GOI6.68%2040
+   Token: 104
+   Name: R668GS2040
+   Instrument: UNDIRC
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+28. 710GS203426MAR102.25PE
+   Token: 10344
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1022500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+29. JPYINR25DEC52.25PE
+   Token: 10368
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 522500000.000000
+   Expiry: 29DEC2025
+   Lot Size: 1
+
+30. GBPUSD26JAN1.31CE
+   Token: 10387
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13100000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+31. GBPUSD26JAN1.335PE
+   Token: 10423
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13350000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+32. GBPUSD26JAN1.34PE
+   Token: 10425
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13400000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+33. GBPUSD26JAN1.35CE
+   Token: 10428
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13500000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+34. GBPUSD26JAN1.35PE
+   Token: 10429
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13500000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+35. GBPUSD26JAN1.355CE
+   Token: 10430
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13550000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+36. GBPUSD26FEB1.265PE
+   Token: 10436
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 12650000.000000
+   Expiry: 25FEB2026
+   Lot Size: 1
+
+37. GBPUSD26JAN1.375CE
+   Token: 10441
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13750000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+38. R-GOI6.68%2031
+   Token: 10
+   Name: R668GS2031
+   Instrument: UNDIRC
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+39. EURINR26109108.25PE
+   Token: 1006
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1082500000.000000
+   Expiry: 09JAN2026
+   Lot Size: 1
+
+40. 710GS203426JAN103PE
+   Token: 10054
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1030000000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1
+
+41. GBPINR26JAN122.75CE
+   Token: 10098
+   Name: GBPINR
+   Instrument: OPTCUR
+   Strike: 1227500000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+42. EURINR26109108PE
+   Token: 10105
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1080000000.000000
+   Expiry: 09JAN2026
+   Lot Size: 1
+
+43. EURINR26227109CE
+   Token: 10139
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1090000000.000000
+   Expiry: 27FEB2026
+   Lot Size: 1
+
+44. EURINR26227109.5PE
+   Token: 10144
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1095000000.000000
+   Expiry: 27FEB2026
+   Lot Size: 1
+
+45. GBPUSD26JAN1.235PE
+   Token: 10197
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 12350000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+46. R-GOI6.01%2030
+   Token: 102
+   Name: R601GS2030
+   Instrument: UNDIRC
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+47. USDJPY26MAR162.5CE
+   Token: 10221
+   Name: USDJPY
+   Instrument: OPTCUR
+   Strike: 1625000000.000000
+   Expiry: 27MAR2026
+   Lot Size: 1
+
+48. USDJPY26MAR163PE
+   Token: 10224
+   Name: USDJPY
+   Instrument: OPTCUR
+   Strike: 1630000000.000000
+   Expiry: 27MAR2026
+   Lot Size: 1
+
+49. 679GS203426MAR99CE
+   Token: 10239
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 990000000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+50. 679GS203426MAR99.25PE
+   Token: 10242
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 992500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+51. 679GS203426MAR99.5CE
+   Token: 10243
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 995000000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+52. 679GS203426MAR99.75CE
+   Token: 10245
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 997500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+53. 679GS203426MAR102PE
+   Token: 10264
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1020000000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+54. EURINR26109108.5CE
+   Token: 1034
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1085000000.000000
+   Expiry: 09JAN2026
+   Lot Size: 1
+
+55. 679GS203426MAR102.75CE
+   Token: 10269
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1027500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+56. 679GS203426MAR103CE
+   Token: 10271
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1030000000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+57. 679GS203426MAR104.25PE
+   Token: 10289
+   Name: 679GS2034
+   Instrument: OPTIRC
+   Strike: 1042500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+58. 710GS203426MAR102.25CE
+   Token: 10343
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1022500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+59. 710GS203426MAR104.25CE
+   Token: 10359
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1042500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+60. 710GS203426MAR104.25PE
+   Token: 10360
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1042500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+61. 710GS203426MAR104.5PE
+   Token: 10362
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1045000000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+62. GBPUSD26JAN1.29PE
+   Token: 10363
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 12900000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+63. GBPUSD26JAN1.295CE
+   Token: 10364
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 12950000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+64. JPYINR25DEC52.75PE
+   Token: 10380
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 527500000.000000
+   Expiry: 29DEC2025
+   Lot Size: 1
+
+65. GBPUSD26JAN1.315CE
+   Token: 10390
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13150000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+66. USDINR25D2690.875CE
+   Token: 10416
+   Name: USDINR
+   Instrument: OPTCUR
+   Strike: 908750000.000000
+   Expiry: 26DEC2025
+   Lot Size: 1
+
+67. 710GS203426JAN103.75CE
+   Token: 10433
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1037500000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1
+
+68. GBPUSD26JAN1.38PE
+   Token: 10444
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13800000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+69. GBPUSD26JAN1.39CE
+   Token: 10447
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13900000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+70. 648GS203526FEB99PE
+   Token: 10483
+   Name: 648GS2035
+   Instrument: OPTIRC
+   Strike: 990000000.000000
+   Expiry: 26FEB2026
+   Lot Size: 1
+
+71. 648GS203526FEB99.25CE
+   Token: 10484
+   Name: 648GS2035
+   Instrument: OPTIRC
+   Strike: 992500000.000000
+   Expiry: 26FEB2026
+   Lot Size: 1
+
+72. GBPUSD26FEB1.27CE
+   Token: 10487
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 12700000.000000
+   Expiry: 25FEB2026
+   Lot Size: 1
+
+73. GBPUSD26FEB1.28CE
+   Token: 10499
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 12800000.000000
+   Expiry: 25FEB2026
+   Lot Size: 1
+
+74. 710GS203426JAN103.75PE
+   Token: 10513
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1037500000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1
+
+75. 710GS203426MAR106PE
+   Token: 10567
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1060000000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+76. GOI6.48%2035
+   Token: 106
+   Name: R648GS2035
+   Instrument: UNDIRC
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+77. 710GS203426MAR106.25CE
+   Token: 10568
+   Name: 710GS2034
+   Instrument: OPTIRC
+   Strike: 1062500000.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+78. JPYINR26JAN53.25CE
+   Token: 10576
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 532500000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+79. JPYINR26JAN56CE
+   Token: 10598
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 560000000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+80. EURINR26206108.5PE
+   Token: 1063
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1085000000.000000
+   Expiry: 06FEB2026
+   Lot Size: 1
+
+81. JPYINR26JAN56.25CE
+   Token: 10600
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 562500000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+82. USDINR2611690.875PE
+   Token: 10617
+   Name: USDINR
+   Instrument: OPTCUR
+   Strike: 908750000.000000
+   Expiry: 16JAN2026
+   Lot Size: 1
+
+83. JPYINR26JAN59PE
+   Token: 10627
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 590000000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+84. JPYINR26JAN59.5CE
+   Token: 10630
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 595000000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+85. JPYINR26JAN59.75CE
+   Token: 10632
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 597500000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+86. USDINR2613090.875CE
+   Token: 10638
+   Name: USDINR
+   Instrument: OPTCUR
+   Strike: 908750000.000000
+   Expiry: 30JAN2026
+   Lot Size: 1
+
+87. JPYINR26JAN59.75PE
+   Token: 10641
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 597500000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+88. JPYINR26JAN60.25CE
+   Token: 10646
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 602500000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+89. JPYINR26JAN61.25PE
+   Token: 10659
+   Name: JPYINR
+   Instrument: OPTCUR
+   Strike: 612500000.000000
+   Expiry: 28JAN2026
+   Lot Size: 1
+
+90. GBPINR26213FUT
+   Token: 1075
+   Name: GBPINR
+   Instrument: FUTCUR
+   Strike: -1.000000
+   Expiry: 13FEB2026
+   Lot Size: 1
+
+91. USDINR26JUN93.75CE
+   Token: 10713
+   Name: USDINR
+   Instrument: OPTCUR
+   Strike: 937500000.000000
+   Expiry: 26JUN2026
+   Lot Size: 1
+
+92. USDJPY26JUN162.5PE
+   Token: 10736
+   Name: USDJPY
+   Instrument: OPTCUR
+   Strike: 1625000000.000000
+   Expiry: 26JUN2026
+   Lot Size: 1
+
+93. GBPUSD26FEB1.305CE
+   Token: 10745
+   Name: GBPUSD
+   Instrument: OPTCUR
+   Strike: 13050000.000000
+   Expiry: 25FEB2026
+   Lot Size: 1
+
+94. GBPINR26130112.75CE
+   Token: 10805
+   Name: GBPINR
+   Instrument: OPTCUR
+   Strike: 1127500000.000000
+   Expiry: 30JAN2026
+   Lot Size: 1
+
+95. GBPINR26130113CE
+   Token: 10808
+   Name: GBPINR
+   Instrument: OPTCUR
+   Strike: 1130000000.000000
+   Expiry: 30JAN2026
+   Lot Size: 1
+
+96. GBPINR26130115CE
+   Token: 10828
+   Name: GBPINR
+   Instrument: OPTCUR
+   Strike: 1150000000.000000
+   Expiry: 30JAN2026
+   Lot Size: 1
+
+97. GBPINR26130117.25PE
+   Token: 10854
+   Name: GBPINR
+   Instrument: OPTCUR
+   Strike: 1172500000.000000
+   Expiry: 30JAN2026
+   Lot Size: 1
+
+98. GBPINR26130117.5CE
+   Token: 10855
+   Name: GBPINR
+   Instrument: OPTCUR
+   Strike: 1175000000.000000
+   Expiry: 30JAN2026
+   Lot Size: 1
+
+99. EURINR26220102.5PE
+   Token: 10865
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1025000000.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+100. EURINR26220103PE
+   Token: 10878
+   Name: EURINR
+   Instrument: OPTCUR
+   Strike: 1030000000.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+... and 10023 more instruments in CDS
+
+
+========================================================================================================================
+EXCHANGE: MCX (35711 instruments)
+========================================================================================================================
+
+1. MCXCRUDEX
+   Token: 99920000
+   Name: MCXCRUDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+2. MCXCOPRDEX
+   Token: 99920001
+   Name: MCXCOPRDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+3. MCXSILVDEX
+   Token: 99920002
+   Name: MCXSILVDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+4. MCXGOLDEX
+   Token: 99920003
+   Name: MCXGOLDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+5. MCXMETLDEX
+   Token: 99920004
+   Name: MCXMETLDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+6. MCXBULLDEX
+   Token: 99920005
+   Name: MCXBULLDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+7. MCXCOMPDEX
+   Token: 99920006
+   Name: MCXCOMPDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+8. MFGLOBALCI
+   Token: 99920007
+   Name: MFGLOBALCI
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+9. MCXSAGRI
+   Token: 99920008
+   Name: MCXSAGRI
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+10. MCXSENERGY
+   Token: 99920009
+   Name: MCXSENERGY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+11. MCXSMETAL
+   Token: 99920010
+   Name: MCXSMETAL
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+12. MCXSCOMDEX
+   Token: 99920011
+   Name: MCXSCOMDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+13. MCXCOMPOSITE
+   Token: 99920012
+   Name: MCXCOMPOSITE
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+14. MCXCOMDEX
+   Token: 99920013
+   Name: MCXCOMDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+15. MCXAGRI
+   Token: 99920014
+   Name: MCXAGRI
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+16. MCXENERGY
+   Token: 99920015
+   Name: MCXENERGY
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+17. MCXMETAL
+   Token: 99920016
+   Name: MCXMETAL
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+18. CASTORSD5TCOM
+   Token: 121
+   Name: CASTORSD5T
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 5000
+
+19. RBDPMOLEINCOM
+   Token: 123
+   Name: RBDPMOLEIN
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10
+
+20. SOYSEEDCOM
+   Token: 128
+   Name: SOYSEED
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+21. STEELFLATCOM
+   Token: 130
+   Name: STEELFLAT
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 25
+
+22. NYGOLDJUNECOM
+   Token: 134
+   Name: NYGOLDJUNE
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+23. STLLONGMUMCOM
+   Token: 149
+   Name: STLLONGMUM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 25000
+
+24. SOYOILJUNECOM
+   Token: 151
+   Name: SOYOILJUNE
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+25. LMETINSPOTCOM
+   Token: 160
+   Name: LMETINSPOT
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 500
+
+26. SOYOILJULYCOM
+   Token: 162
+   Name: SOYOILJULY
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+27. CHANACOM
+   Token: 164
+   Name: CHANA
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10
+
+28. YPEASCANMSCOM
+   Token: 171
+   Name: YPEASCANMS
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10000
+
+29. MEDCOTSPTCOM
+   Token: 178
+   Name: MEDCOTSPT
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 26
+
+30. SOYOILSEPTCOM
+   Token: 180
+   Name: SOYOILSEPT
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+31. PEPSPTKOCICOM
+   Token: 185
+   Name: PEPSPTKOCI
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+32. RBDPALMMUMCOM
+   Token: 191
+   Name: RBDPALMMUM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+33. MUSTROILHACOM
+   Token: 194
+   Name: MUSTROILHA
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+34. MUSTRSDHAPCOM
+   Token: 195
+   Name: MUSTRSDHAP
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10000
+
+35. CASTRSDKADCOM
+   Token: 200
+   Name: CASTRSDKAD
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+36. SOYBEANNOVCOM
+   Token: 204
+   Name: SOYBEANNOV
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+37. SILVERHNICOM
+   Token: 207
+   Name: SILVERHNI
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 30
+
+38. RDCHILISPTCOM
+   Token: 214
+   Name: RDCHILISPT
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+39. GRSDSPTGNRCOM
+   Token: 222
+   Name: GRSDSPTGNR
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 5000
+
+40. REFSOYFEBCOM
+   Token: 227
+   Name: REFSOYFEB
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+41. SOYMEALIDRCOM
+   Token: 238
+   Name: SOYMEALIDR
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10000
+
+42. SGOLDMUMCOM
+   Token: 239
+   Name: SGOLDMUM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+43. SCHANADLHCOM
+   Token: 248
+   Name: SCHANADLH
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10000
+
+44. STRMRCNZMCOM
+   Token: 253
+   Name: STRMRCNZM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 5000
+
+45. SGRDOILRJKCOM
+   Token: 278
+   Name: SGRDOILRJK
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+46. SLVERDELHICOM
+   Token: 287
+   Name: SLVERDELHI
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 5
+
+47. SSUGARMMZNCOM
+   Token: 292
+   Name: SSUGARMMZN
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10000
+
+48. COTTONSEEDCOM
+   Token: 299
+   Name: COTTONSEED
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10
+
+49. SSRRICEASRCOM
+   Token: 301
+   Name: SSRRICEASR
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10000
+
+50. RFNDSOYOILCOM
+   Token: 307
+   Name: RFNDSOYOIL
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10000
+
+51. COTTONLONGCOM
+   Token: 310
+   Name: COTTONLONG
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 26
+
+52. STEELLGBVNCOM
+   Token: 315
+   Name: STEELLGBVN
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 15
+
+53. NYCRDOLSEPCOM
+   Token: 335
+   Name: NYCRDOLSEP
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 100
+
+54. BRCRUDEOILCOM
+   Token: 336
+   Name: BRCRUDEOIL
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 100
+
+55. SBCRDOLINTCOM
+   Token: 338
+   Name: SBCRDOLINT
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 100
+
+56. GOLDMUMCOM
+   Token: 342
+   Name: GOLDMUM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+57. SGOLDDLHCOM
+   Token: 351
+   Name: SGOLDDLH
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+58. FURNACEOILCOM
+   Token: 357
+   Name: FURNACEOIL
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10
+
+59. SSPGIRONRPCOM
+   Token: 362
+   Name: SSPGIRONRP
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 15
+
+60. CARDAMOMCOM
+   Token: 374
+   Name: CARDAMOM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 100
+
+61. SPVCDELCOM
+   Token: 380
+   Name: SPVCDEL
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 2
+
+62. SPOTATOTKRCOM
+   Token: 407
+   Name: SPOTATOTKR
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 30
+
+63. SRICEBRRPRCOM
+   Token: 413
+   Name: SRICEBRRPR
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 50
+
+64. CORIANDERCOM
+   Token: 434
+   Name: CORIANDER
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 5
+
+65. RUBBERCOM
+   Token: 118
+   Name: RUBBER
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+66. CASTOROILCOM
+   Token: 126
+   Name: CASTOROIL
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+67. NYSLVMAYCOM
+   Token: 135
+   Name: NYSLVMAY
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 30
+
+68. YELLOWPEASCOM
+   Token: 166
+   Name: YELLOWPEAS
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10
+
+69. TURCOM
+   Token: 167
+   Name: TUR
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10
+
+70. MEDCOTTONCOM
+   Token: 175
+   Name: MEDCOTTON
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 26
+
+71. COMXGLDSEPCOM
+   Token: 179
+   Name: COMXGLDSEP
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+72. COMXSLVDECCOM
+   Token: 199
+   Name: COMXSLVDEC
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 30
+
+73. REFSOYNOVCOM
+   Token: 203
+   Name: REFSOYNOV
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+74. CASHEWKERNCOM
+   Token: 212
+   Name: CASHEWKERN
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1130
+
+75. GUAGUMBNSPCOM
+   Token: 213
+   Name: GUAGUMBNSP
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 5000
+
+76. TURMERICCOM
+   Token: 236
+   Name: TURMERIC
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10
+
+77. SGUARSDJDPCOM
+   Token: 268
+   Name: SGUARSDJDP
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 5000
+
+78. SSOYOILNDRCOM
+   Token: 273
+   Name: SSOYOILNDR
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10000
+
+79. SRBBRKCHCOM
+   Token: 275
+   Name: SRBBRKCH
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+80. JEERACOM
+   Token: 281
+   Name: JEERA
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 2
+
+81. NYMXCOPFUTCOM
+   Token: 283
+   Name: NYMXCOPFUT
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+82. NYMXCOPSPTCOM
+   Token: 284
+   Name: NYMXCOPSPT
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1000
+
+83. SESAMESEEDCOM
+   Token: 302
+   Name: SESAMESEED
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 5
+
+84. SSESM99RJKCOM
+   Token: 303
+   Name: SSESM99RJK
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 5
+
+85. NYCRDOLJUNCOM
+   Token: 309
+   Name: NYCRDOLJUN
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 100
+
+86. COTTONMEDCOM
+   Token: 311
+   Name: COTTONMED
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 250
+
+87. SMASURNDRCOM
+   Token: 333
+   Name: SMASURNDR
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10000
+
+88. GOLDAHMCOM
+   Token: 343
+   Name: GOLDAHM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+89. SGOLDKTACOM
+   Token: 350
+   Name: SGOLDKTA
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10
+
+90. HDPEHMCOM
+   Token: 354
+   Name: HDPEHM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 2
+
+91. SHDPEHMUMCOM
+   Token: 356
+   Name: SHDPEHMUM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 2
+
+92. ALUMINIUMCOM
+   Token: 358
+   Name: ALUMINIUM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 5
+
+93. MGGURCHAKUCOM
+   Token: 400
+   Name: MGGURCHAKU
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10
+
+94. SNATGASINTCOM
+   Token: 402
+   Name: SNATGASINT
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 500
+
+95. SURADJLNCOM
+   Token: 403
+   Name: SURADJLN
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 100
+
+96. SSUGARSKLPCOM
+   Token: 411
+   Name: SSUGARSKLP
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 10
+
+97. SCARCRDMUMCOM
+   Token: 424
+   Name: SCARCRDMUM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 200
+
+98. ELECTMTHCOM
+   Token: 445
+   Name: ELECTMTH
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 24
+
+99. ELECTWKCOM
+   Token: 446
+   Name: ELECTWK
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 24
+
+100. GOLDMCOM
+   Token: 117
+   Name: GOLDM
+   Instrument: COMDTY
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 100
+
+... and 35611 more instruments in MCX
+
+
+========================================================================================================================
+EXCHANGE: NCDEX (1520 instruments)
+========================================================================================================================
+
+1. AGRIDEX
+   Token: 99918001
+   Name: AGRIDEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+2. NKRISHI
+   Token: 99918002
+   Name: NKRISHI
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+3. FREIGHTEX
+   Token: 99918003
+   Name: FREIGHTEX
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+4. NCDEXRAIN
+   Token: 99918004
+   Name: NCDEXRAIN
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+5. NCDEXAGRI
+   Token: 99918005
+   Name: NCDEXAGRI
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+6. FUTEXAGRI
+   Token: 99918006
+   Name: FUTEXAGRI
+   Instrument: AMXIDX
+   Strike: 0.000000
+   Expiry: N/A
+   Lot Size: 1
+
+7. AGRIDEX
+   Token: AGRIDEX
+   Name: AGRIDEX
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+8. GUAR1MT
+   Token: GUAR1MT
+   Name: GUAR1MT
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+9. GUAREX
+   Token: GUAREX
+   Name: GUAREX
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+10. CRUDEOIL
+   Token: CRUDEOIL
+   Name: CRUDEOIL
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+11. DHANIYAKOT
+   Token: DHANIYAKOT
+   Name: DHANIYAKOT
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+12. GOLD100
+   Token: GOLD100
+   Name: GOLD100
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+13. GUAR2MT
+   Token: GUAR2MT
+   Name: GUAR2MT
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+14. BAJRAJPR
+   Token: BAJRAJPR
+   Name: BAJRAJPR
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+15. CHAMPKIDR
+   Token: CHAMPKIDR
+   Name: CHAMPKIDR
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+16. CHARJDDEL
+   Token: CHARJDDEL
+   Name: CHARJDDEL
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+17. COCUDCKDI
+   Token: COCUDCKDI
+   Name: COCUDCKDI
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+18. CRDPOLKAK
+   Token: CRDPOLKAK
+   Name: CRDPOLKAK
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+19. DHANIYAJPR
+   Token: DHANIYAJPR
+   Name: DHANIYAJPR
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+20. BRLYJPR
+   Token: BRLYJPR
+   Name: BRLYJPR
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+21. CHANA2MT
+   Token: CHANA2MT
+   Name: CHANA2MT
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+22. GLDPURMUMK
+   Token: GLDPURMUMK
+   Name: GLDPURMUMK
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+23. GOLDINTL
+   Token: GOLDINTL
+   Name: GOLDINTL
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+24. JEERAUNJHA09APR26CE20000FAPR26
+   Token: JEERAUNJHA09APR26CE20000FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2000000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+25. JEERAUNJHA09APR26PE17200FAPR26
+   Token: JEERAUNJHA09APR26PE17200FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1720000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+26. JEERAUNJHA09APR26PE18000FAPR26
+   Token: JEERAUNJHA09APR26PE18000FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1800000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+27. JEERAUNJHA09APR26PE21200FAPR26
+   Token: JEERAUNJHA09APR26PE21200FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2120000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+28. JEERAUNJHA09APR26PE25600FAPR26
+   Token: JEERAUNJHA09APR26PE25600FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2560000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+29. JEERAUNJHA09APR26PE27200FAPR26
+   Token: JEERAUNJHA09APR26PE27200FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2720000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+30. JEERAUNJHA09APR26PE27600FAPR26
+   Token: JEERAUNJHA09APR26PE27600FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2760000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+31. JEERAUNJHA12JAN26CE15600FJAN26
+   Token: JEERAUNJHA12JAN26CE15600FJAN26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1560000.000000
+   Expiry: 12JAN2026
+   Lot Size: 3
+
+32. JEERAUNJHA12JAN26CE17200FJAN26
+   Token: JEERAUNJHA12JAN26CE17200FJAN26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1720000.000000
+   Expiry: 12JAN2026
+   Lot Size: 3
+
+33. JEERAUNJHA12JAN26PE24800FJAN26
+   Token: JEERAUNJHA12JAN26PE24800FJAN26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2480000.000000
+   Expiry: 12JAN2026
+   Lot Size: 3
+
+34. JEERAUNJHA12MAR26CE18400FMAR26
+   Token: JEERAUNJHA12MAR26CE18400FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1840000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+35. JEERAUNJHA12MAR26CE19600FMAR26
+   Token: JEERAUNJHA12MAR26CE19600FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1960000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+36. JEERAUNJHA12MAR26PE18800FMAR26
+   Token: JEERAUNJHA12MAR26PE18800FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1880000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+37. JEERAUNJHA12MAR26PE21200FMAR26
+   Token: JEERAUNJHA12MAR26PE21200FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2120000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+38. JEERAUNJHA12MAR26PE22000FMAR26
+   Token: JEERAUNJHA12MAR26PE22000FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2200000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+39. JEERAUNJHA12MAR26PE22400FMAR26
+   Token: JEERAUNJHA12MAR26PE22400FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2240000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+40. JEERAUNJHA12MAR26PE24400FMAR26
+   Token: JEERAUNJHA12MAR26PE24400FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2440000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+41. LEAD
+   Token: LEAD
+   Name: LEAD
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+42. MAIZEJGN
+   Token: MAIZEJGN
+   Name: MAIZEJGN
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+43. MAIZEKHRF
+   Token: MAIZEKHRF
+   Name: MAIZEKHRF
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+44. SUGARMDEL
+   Token: SUGARMDEL
+   Name: SUGARMDEL
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+45. SUGARMERD
+   Token: SUGARMERD
+   Name: SUGARMERD
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+46. SYBEAN2MT
+   Token: SYBEAN2MT
+   Name: SYBEAN2MT
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+47. TMCFGRNZM09APR26CE10600FAPR26
+   Token: TMCFGRNZM09APR26CE10600FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1060000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+48. TMCFGRNZM09APR26PE10800FAPR26
+   Token: TMCFGRNZM09APR26PE10800FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1080000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+49. TMCFGRNZM09APR26CE13600FAPR26
+   Token: TMCFGRNZM09APR26CE13600FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1360000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+50. TMCFGRNZM09APR26CE16600FAPR26
+   Token: TMCFGRNZM09APR26CE16600FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1660000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+51. TMCFGRNZM09APR26CE16800FAPR26
+   Token: TMCFGRNZM09APR26CE16800FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1680000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+52. TMCFGRNZM09APR26PE14400FAPR26
+   Token: TMCFGRNZM09APR26PE14400FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1440000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+53. TMCFGRNZM09APR26PE12200FAPR26
+   Token: TMCFGRNZM09APR26PE12200FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1220000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+54. TMCFGRNZM09APR26PE12600FAPR26
+   Token: TMCFGRNZM09APR26PE12600FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1260000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+55. TMCFGRNZM09APR26PE12800FAPR26
+   Token: TMCFGRNZM09APR26PE12800FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1280000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+56. TMCFGRNZM09APR26PE15600FAPR26
+   Token: TMCFGRNZM09APR26PE15600FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1560000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+57. TMCFGRNZM09APR26PE15800FAPR26
+   Token: TMCFGRNZM09APR26PE15800FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1580000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+58. TMCFGRNZM11JUN26CE13200FJUN26
+   Token: TMCFGRNZM11JUN26CE13200FJUN26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1320000.000000
+   Expiry: 11JUN2026
+   Lot Size: 5
+
+59. TMCFGRNZM11JUN26CE13600FJUN26
+   Token: TMCFGRNZM11JUN26CE13600FJUN26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1360000.000000
+   Expiry: 11JUN2026
+   Lot Size: 5
+
+60. TMCFGRNZM11JUN26CE15800FJUN26
+   Token: TMCFGRNZM11JUN26CE15800FJUN26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1580000.000000
+   Expiry: 11JUN2026
+   Lot Size: 5
+
+61. TMCFGRNZM11JUN26PE14800FJUN26
+   Token: TMCFGRNZM11JUN26PE14800FJUN26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1480000.000000
+   Expiry: 11JUN2026
+   Lot Size: 5
+
+62. TMCFGRNZM12MAY26CE10800FMAY26
+   Token: TMCFGRNZM12MAY26CE10800FMAY26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1080000.000000
+   Expiry: 12MAY2026
+   Lot Size: 5
+
+63. TMCFGRNZM12MAY26CE14000FMAY26
+   Token: TMCFGRNZM12MAY26CE14000FMAY26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1400000.000000
+   Expiry: 12MAY2026
+   Lot Size: 5
+
+64. TMCFGRNZM12MAY26CE14200FMAY26
+   Token: TMCFGRNZM12MAY26CE14200FMAY26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1420000.000000
+   Expiry: 12MAY2026
+   Lot Size: 5
+
+65. TMCFGRNZM12MAY26CE14400FMAY26
+   Token: TMCFGRNZM12MAY26CE14400FMAY26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1440000.000000
+   Expiry: 12MAY2026
+   Lot Size: 5
+
+66. TMCFGRNZM12MAY26CE15400FMAY26
+   Token: TMCFGRNZM12MAY26CE15400FMAY26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1540000.000000
+   Expiry: 12MAY2026
+   Lot Size: 5
+
+67. TMCFGRNZM12MAY26CE17600FMAY26
+   Token: TMCFGRNZM12MAY26CE17600FMAY26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1760000.000000
+   Expiry: 12MAY2026
+   Lot Size: 5
+
+68. TMCFGRNZM12MAY26CE17800FMAY26
+   Token: TMCFGRNZM12MAY26CE17800FMAY26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1780000.000000
+   Expiry: 12MAY2026
+   Lot Size: 5
+
+69. TMCFGRNZM12MAY26PE10800FMAY26
+   Token: TMCFGRNZM12MAY26PE10800FMAY26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1080000.000000
+   Expiry: 12MAY2026
+   Lot Size: 5
+
+70. TMCFGRNZM12MAY26PE14000FMAY26
+   Token: TMCFGRNZM12MAY26PE14000FMAY26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1400000.000000
+   Expiry: 12MAY2026
+   Lot Size: 5
+
+71. TMCFGRNZM12MAY26PE16800FMAY26
+   Token: TMCFGRNZM12MAY26PE16800FMAY26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1680000.000000
+   Expiry: 12MAY2026
+   Lot Size: 5
+
+72. TMCFUPNZM
+   Token: TMCFUPNZM
+   Name: TMCFUPNZM
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+73. YPECANMUM
+   Token: YPECANMUM
+   Name: YPECANMUM
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+74. GUARSEDBKN
+   Token: GUARSEDBKN
+   Name: GUARSEDBKN
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+75. JEERAUNJHA09APR26CE21600FAPR26
+   Token: JEERAUNJHA09APR26CE21600FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2160000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+76. JEERAUNJHA09APR26CE22000FAPR26
+   Token: JEERAUNJHA09APR26CE22000FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2200000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+77. JEERAUNJHA09APR26CE26400FAPR26
+   Token: JEERAUNJHA09APR26CE26400FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2640000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+78. JEERAUNJHA09APR26PE18800FAPR26
+   Token: JEERAUNJHA09APR26PE18800FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1880000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+79. JEERAUNJHA09APR26PE22400FAPR26
+   Token: JEERAUNJHA09APR26PE22400FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2240000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+80. JEERAUNJHA09APR26PE26000FAPR26
+   Token: JEERAUNJHA09APR26PE26000FAPR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2600000.000000
+   Expiry: 09APR2026
+   Lot Size: 3
+
+81. JEERAUNJHA12JAN26CE16800FJAN26
+   Token: JEERAUNJHA12JAN26CE16800FJAN26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1680000.000000
+   Expiry: 12JAN2026
+   Lot Size: 3
+
+82. JEERAUNJHA12JAN26CE18400FJAN26
+   Token: JEERAUNJHA12JAN26CE18400FJAN26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1840000.000000
+   Expiry: 12JAN2026
+   Lot Size: 3
+
+83. JEERAUNJHA12JAN26CE20000FJAN26
+   Token: JEERAUNJHA12JAN26CE20000FJAN26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2000000.000000
+   Expiry: 12JAN2026
+   Lot Size: 3
+
+84. JEERAUNJHA12JAN26CE20800FJAN26
+   Token: JEERAUNJHA12JAN26CE20800FJAN26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2080000.000000
+   Expiry: 12JAN2026
+   Lot Size: 3
+
+85. JEERAUNJHA12JAN26CE24800FJAN26
+   Token: JEERAUNJHA12JAN26CE24800FJAN26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2480000.000000
+   Expiry: 12JAN2026
+   Lot Size: 3
+
+86. JEERAUNJHA12JAN26CE26400FJAN26
+   Token: JEERAUNJHA12JAN26CE26400FJAN26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2640000.000000
+   Expiry: 12JAN2026
+   Lot Size: 3
+
+87. JEERAUNJHA12JAN26PE18800FJAN26
+   Token: JEERAUNJHA12JAN26PE18800FJAN26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1880000.000000
+   Expiry: 12JAN2026
+   Lot Size: 3
+
+88. JEERAUNJHA12MAR26CE18000FMAR26
+   Token: JEERAUNJHA12MAR26CE18000FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1800000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+89. JEERAUNJHA12MAR26CE26400FMAR26
+   Token: JEERAUNJHA12MAR26CE26400FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2640000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+90. JEERAUNJHA12MAR26PE18400FMAR26
+   Token: JEERAUNJHA12MAR26PE18400FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 1840000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+91. JEERAUNJHA12MAR26PE25600FMAR26
+   Token: JEERAUNJHA12MAR26PE25600FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2560000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+92. JEERAUNJHA12MAR26PE27600FMAR26
+   Token: JEERAUNJHA12MAR26PE27600FMAR26
+   Name: JEERAUNJHA
+   Instrument: OPTFUT
+   Strike: 2760000.000000
+   Expiry: 12MAR2026
+   Lot Size: 3
+
+93. MAIZEKHRIF
+   Token: MAIZEKHRIF
+   Name: MAIZEKHRIF
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+94. SILVER
+   Token: SILVER
+   Name: SILVER
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+95. SILVERHEDG
+   Token: SILVERHEDG
+   Name: SILVERHEDG
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+96. SOYDEXNEAR
+   Token: SOYDEXNEAR
+   Name: SOYDEXNEAR
+   Instrument: COMDTY
+   Strike: -1.000000
+   Expiry: N/A
+   Lot Size: 1
+
+97. TMCFGRNZM09APR26CE11000FAPR26
+   Token: TMCFGRNZM09APR26CE11000FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1100000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+98. TMCFGRNZM09APR26CE12200FAPR26
+   Token: TMCFGRNZM09APR26CE12200FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1220000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+99. TMCFGRNZM09APR26CE17600FAPR26
+   Token: TMCFGRNZM09APR26CE17600FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1760000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+100. TMCFGRNZM09APR26PE11400FAPR26
+   Token: TMCFGRNZM09APR26PE11400FAPR26
+   Name: TMCFGRNZM
+   Instrument: OPTFUT
+   Strike: 1140000.000000
+   Expiry: 09APR2026
+   Lot Size: 5
+
+... and 1420 more instruments in NCDEX
+
+
+========================================================================================================================
+EXCHANGE: BFO (31506 instruments)
+========================================================================================================================
+
+1. SENSEX26MAR77000CE
+   Token: 1100882
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 7700000.000000
+   Expiry: 25MAR2026
+   Lot Size: 20
+
+2. SENSEX26SEP83000PE
+   Token: 1105670
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 8300000.000000
+   Expiry: 24SEP2026
+   Lot Size: 20
+
+3. SENSEX26SEP81000CE
+   Token: 1115554
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 8100000.000000
+   Expiry: 24SEP2026
+   Lot Size: 20
+
+4. BSE25DECFUT
+   Token: 1126847
+   Name: BSE
+   Instrument: FUTSTK
+   Strike: 0.000000
+   Expiry: 30DEC2025
+   Lot Size: 375
+
+5. BSE25DEC2300PE
+   Token: 1126936
+   Name: BSE
+   Instrument: OPTSTK
+   Strike: 230000.000000
+   Expiry: 30DEC2025
+   Lot Size: 375
+
+6. BSE25DEC2500PE
+   Token: 1126950
+   Name: BSE
+   Instrument: OPTSTK
+   Strike: 250000.000000
+   Expiry: 30DEC2025
+   Lot Size: 375
+
+7. CDSL25DEC1200CE
+   Token: 1127132
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 120000.000000
+   Expiry: 30DEC2025
+   Lot Size: 475
+
+8. CDSL25DEC1280CE
+   Token: 1127143
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 128000.000000
+   Expiry: 30DEC2025
+   Lot Size: 475
+
+9. CDSL25DEC1800PE
+   Token: 1127208
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 180000.000000
+   Expiry: 30DEC2025
+   Lot Size: 475
+
+10. CDSL25DEC1880PE
+   Token: 1127214
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 188000.000000
+   Expiry: 30DEC2025
+   Lot Size: 475
+
+11. CDSL25DEC2000PE
+   Token: 1127226
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 200000.000000
+   Expiry: 30DEC2025
+   Lot Size: 475
+
+12. SENSEX26MAR84000CE
+   Token: 1127655
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 8400000.000000
+   Expiry: 25MAR2026
+   Lot Size: 20
+
+13. SENSEX26MAR84000PE
+   Token: 1127978
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 8400000.000000
+   Expiry: 25MAR2026
+   Lot Size: 20
+
+14. CDSL25DEC2240CE
+   Token: 1129327
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 224000.000000
+   Expiry: 30DEC2025
+   Lot Size: 475
+
+15. CDSL25DEC2120CE
+   Token: 1132414
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 212000.000000
+   Expiry: 30DEC2025
+   Lot Size: 475
+
+16. SENSEX26SEP89000CE
+   Token: 1133257
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 8900000.000000
+   Expiry: 24SEP2026
+   Lot Size: 20
+
+17. SENSEX27JUN90000PE
+   Token: 1134206
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 9000000.000000
+   Expiry: 24JUN2027
+   Lot Size: 20
+
+18. SENSEX30JUN90000CE
+   Token: 1134713
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 9000000.000000
+   Expiry: 27JUN2030
+   Lot Size: 20
+
+19. SENSEX28JUN90000PE
+   Token: 1134765
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 9000000.000000
+   Expiry: 29JUN2028
+   Lot Size: 20
+
+20. BSE25DEC3050CE
+   Token: 1136037
+   Name: BSE
+   Instrument: OPTSTK
+   Strike: 305000.000000
+   Expiry: 30DEC2025
+   Lot Size: 375
+
+21. BSE26JAN1900CE
+   Token: 1136060
+   Name: BSE
+   Instrument: OPTSTK
+   Strike: 190000.000000
+   Expiry: 27JAN2026
+   Lot Size: 375
+
+22. BSE26JAN2300PE
+   Token: 1136079
+   Name: BSE
+   Instrument: OPTSTK
+   Strike: 230000.000000
+   Expiry: 27JAN2026
+   Lot Size: 375
+
+23. BSE26JAN3100PE
+   Token: 1136104
+   Name: BSE
+   Instrument: OPTSTK
+   Strike: 310000.000000
+   Expiry: 27JAN2026
+   Lot Size: 375
+
+24. BSE26JAN3300CE
+   Token: 1136109
+   Name: BSE
+   Instrument: OPTSTK
+   Strike: 330000.000000
+   Expiry: 27JAN2026
+   Lot Size: 375
+
+25. BSE26JAN3600CE
+   Token: 1136115
+   Name: BSE
+   Instrument: OPTSTK
+   Strike: 360000.000000
+   Expiry: 27JAN2026
+   Lot Size: 375
+
+26. CDSL25DEC1420CE
+   Token: 1136142
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 142000.000000
+   Expiry: 30DEC2025
+   Lot Size: 475
+
+27. CDSL25DEC1460CE
+   Token: 1136146
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 146000.000000
+   Expiry: 30DEC2025
+   Lot Size: 475
+
+28. CDSL26JAN960PE
+   Token: 1136201
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 96000.000000
+   Expiry: 27JAN2026
+   Lot Size: 475
+
+29. CDSL26JAN1240CE
+   Token: 1136214
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 124000.000000
+   Expiry: 27JAN2026
+   Lot Size: 475
+
+30. CDSL26JAN1280CE
+   Token: 1136216
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 128000.000000
+   Expiry: 27JAN2026
+   Lot Size: 475
+
+31. CDSL26JAN1320PE
+   Token: 1136219
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 132000.000000
+   Expiry: 27JAN2026
+   Lot Size: 475
+
+32. CDSL26JAN1440CE
+   Token: 1136228
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 144000.000000
+   Expiry: 27JAN2026
+   Lot Size: 475
+
+33. CDSL26JAN1800PE
+   Token: 1136264
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 180000.000000
+   Expiry: 27JAN2026
+   Lot Size: 475
+
+34. CDSL26JAN2240CE
+   Token: 1136300
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 224000.000000
+   Expiry: 27JAN2026
+   Lot Size: 475
+
+35. SENSEX26MAR85000PE
+   Token: 1136509
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 8500000.000000
+   Expiry: 25MAR2026
+   Lot Size: 20
+
+36. CDSL25DEC1140PE
+   Token: 1137132
+   Name: CDSL
+   Instrument: OPTSTK
+   Strike: 114000.000000
+   Expiry: 30DEC2025
+   Lot Size: 475
+
+37. TATAELXSI26JAN5500PE
+   Token: 1137137
+   Name: TATAELXSI
+   Instrument: OPTSTK
+   Strike: 550000.000000
+   Expiry: 29JAN2026
+   Lot Size: 100
+
+38. ICICIPRULI26JAN585CE
+   Token: 1137138
+   Name: ICICIPRULI
+   Instrument: OPTSTK
+   Strike: 58500.000000
+   Expiry: 29JAN2026
+   Lot Size: 925
+
+39. SENSEX26JAN84100CE
+   Token: 1137139
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 8410000.000000
+   Expiry: 29JAN2026
+   Lot Size: 20
+
+40. HCLTECH26JAN1480CE
+   Token: 1137188
+   Name: HCLTECH
+   Instrument: OPTSTK
+   Strike: 148000.000000
+   Expiry: 29JAN2026
+   Lot Size: 350
+
+41. PHOENIXLTD26JAN1580PE
+   Token: 1137194
+   Name: PHOENIXLTD
+   Instrument: OPTSTK
+   Strike: 158000.000000
+   Expiry: 29JAN2026
+   Lot Size: 350
+
+42. HINDPETRO26JAN450PE
+   Token: 1137204
+   Name: HINDPETRO
+   Instrument: OPTSTK
+   Strike: 45000.000000
+   Expiry: 29JAN2026
+   Lot Size: 2025
+
+43. SENSEX26JAN80400CE
+   Token: 1137243
+   Name: SENSEX
+   Instrument: OPTIDX
+   Strike: 8040000.000000
+   Expiry: 29JAN2026
+   Lot Size: 20
+
+44. DIVISLAB26JAN6900CE
+   Token: 1137256
+   Name: DIVISLAB
+   Instrument: OPTSTK
+   Strike: 690000.000000
+   Expiry: 29JAN2026
+   Lot Size: 100
+
+45. SBIN26JAN915PE
+   Token: 1137258
+   Name: SBIN
+   Instrument: OPTSTK
+   Strike: 91500.000000
+   Expiry: 29JAN2026
+   Lot Size: 750
+
+46. ABB26JAN5200PE
+   Token: 1137511
+   Name: ABB
+   Instrument: OPTSTK
+   Strike: 520000.000000
+   Expiry: 29JAN2026
+   Lot Size: 125
+
+47. POWERINDIA26JAN17250CE
+   Token: 1137364
+   Name: POWERINDIA
+   Instrument: OPTSTK
+   Strike: 1725000.000000
+   Expiry: 29JAN2026
+   Lot Size: 50
+
+48. MOTHERSON26JAN105PE
+   Token: 1137420
+   Name: MOTHERSON
+   Instrument: OPTSTK
+   Strike: 10500.000000
+   Expiry: 29JAN2026
+   Lot Size: 6150
+
+49. BAJFINANCE26JAN1030PE
+   Token: 1137469
+   Name: BAJFINANCE
+   Instrument: OPTSTK
+   Strike: 103000.000000
+   Expiry: 29JAN2026
+   Lot Size: 750
+
+50. KALYANKJIL26JAN460PE
+   Token: 1137522
+   Name: KALYANKJIL
+   Instrument: OPTSTK
+   Strike: 46000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1175
+
+51. BAJFINANCE26JAN1020CE
+   Token: 1137523
+   Name: BAJFINANCE
+   Instrument: OPTSTK
+   Strike: 102000.000000
+   Expiry: 29JAN2026
+   Lot Size: 750
+
+52. PRESTIGE26JAN1740CE
+   Token: 1137542
+   Name: PRESTIGE
+   Instrument: OPTSTK
+   Strike: 174000.000000
+   Expiry: 29JAN2026
+   Lot Size: 450
+
+53. BANKEX26JAN65100PE
+   Token: 1137562
+   Name: BANKEX
+   Instrument: OPTIDX
+   Strike: 6510000.000000
+   Expiry: 29JAN2026
+   Lot Size: 30
+
+54. VBL26JAN475PE
+   Token: 1137580
+   Name: VBL
+   Instrument: OPTSTK
+   Strike: 47500.000000
+   Expiry: 29JAN2026
+   Lot Size: 1125
+
+55. GAIL26JAN165PE
+   Token: 1137600
+   Name: GAIL
+   Instrument: OPTSTK
+   Strike: 16500.000000
+   Expiry: 29JAN2026
+   Lot Size: 3150
+
+56. UPL26JAN760PE
+   Token: 1137610
+   Name: UPL
+   Instrument: OPTSTK
+   Strike: 76000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1355
+
+57. 360ONE26JAN1160PE
+   Token: 1137616
+   Name: N/A
+   Instrument: OPTSTK
+   Strike: 116000.000000
+   Expiry: 29JAN2026
+   Lot Size: 500
+
+58. UNITDSPR26JAN1380PE
+   Token: 1137644
+   Name: UNITDSPR
+   Instrument: OPTSTK
+   Strike: 138000.000000
+   Expiry: 29JAN2026
+   Lot Size: 400
+
+59. PIIND26JAN3950CE
+   Token: 1137663
+   Name: PIIND
+   Instrument: OPTSTK
+   Strike: 395000.000000
+   Expiry: 29JAN2026
+   Lot Size: 175
+
+60. ULTRACEMCO26JAN11900PE
+   Token: 1137723
+   Name: ULTRACEMCO
+   Instrument: OPTSTK
+   Strike: 1190000.000000
+   Expiry: 29JAN2026
+   Lot Size: 50
+
+61. HEROMOTOCO26JAN5800CE
+   Token: 1137741
+   Name: HEROMOTOCO
+   Instrument: OPTSTK
+   Strike: 580000.000000
+   Expiry: 29JAN2026
+   Lot Size: 150
+
+62. SUNPHARMA26JAN1780PE
+   Token: 1137748
+   Name: SUNPHARMA
+   Instrument: OPTSTK
+   Strike: 178000.000000
+   Expiry: 29JAN2026
+   Lot Size: 350
+
+63. SIEMENS26JAN3300PE
+   Token: 1137760
+   Name: SIEMENS
+   Instrument: OPTSTK
+   Strike: 330000.000000
+   Expiry: 29JAN2026
+   Lot Size: 175
+
+64. TATAPOWER26JAN430PE
+   Token: 1137789
+   Name: TATAPOWER
+   Instrument: OPTSTK
+   Strike: 43000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1450
+
+65. CGPOWER26JAN680CE
+   Token: 1137790
+   Name: CGPOWER
+   Instrument: OPTSTK
+   Strike: 68000.000000
+   Expiry: 29JAN2026
+   Lot Size: 850
+
+66. CIPLA26JAN1470CE
+   Token: 1137794
+   Name: CIPLA
+   Instrument: OPTSTK
+   Strike: 147000.000000
+   Expiry: 29JAN2026
+   Lot Size: 375
+
+67. SBIN26JAN950PE
+   Token: 1137807
+   Name: SBIN
+   Instrument: OPTSTK
+   Strike: 95000.000000
+   Expiry: 29JAN2026
+   Lot Size: 750
+
+68. SONACOMS26JAN480PE
+   Token: 1137841
+   Name: SONACOMS
+   Instrument: OPTSTK
+   Strike: 48000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1225
+
+69. GODREJPROP26JAN2440PE
+   Token: 1137845
+   Name: GODREJPROP
+   Instrument: OPTSTK
+   Strike: 244000.000000
+   Expiry: 29JAN2026
+   Lot Size: 275
+
+70. NATIONALUM26JAN237.5CE
+   Token: 1137875
+   Name: NATIONALUM
+   Instrument: OPTSTK
+   Strike: 23750.000000
+   Expiry: 29JAN2026
+   Lot Size: 3750
+
+71. JUBLFOOD26JAN580CE
+   Token: 1137895
+   Name: JUBLFOOD
+   Instrument: OPTSTK
+   Strike: 58000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1250
+
+72. CGPOWER26JAN750CE
+   Token: 1137936
+   Name: CGPOWER
+   Instrument: OPTSTK
+   Strike: 75000.000000
+   Expiry: 29JAN2026
+   Lot Size: 850
+
+73. CIPLA26JAN1540CE
+   Token: 1137943
+   Name: CIPLA
+   Instrument: OPTSTK
+   Strike: 154000.000000
+   Expiry: 29JAN2026
+   Lot Size: 375
+
+74. SUNPHARMA26JAN1840CE
+   Token: 1137965
+   Name: SUNPHARMA
+   Instrument: OPTSTK
+   Strike: 184000.000000
+   Expiry: 29JAN2026
+   Lot Size: 350
+
+75. PNB26JAN115PE
+   Token: 1138021
+   Name: PNB
+   Instrument: OPTSTK
+   Strike: 11500.000000
+   Expiry: 29JAN2026
+   Lot Size: 8000
+
+76. LUPIN26JAN1920CE
+   Token: 1138046
+   Name: LUPIN
+   Instrument: OPTSTK
+   Strike: 192000.000000
+   Expiry: 29JAN2026
+   Lot Size: 425
+
+77. IOC26JAN165CE
+   Token: 1138085
+   Name: IOC
+   Instrument: OPTSTK
+   Strike: 16500.000000
+   Expiry: 29JAN2026
+   Lot Size: 4875
+
+78. GODREJPROP26JAN2180CE
+   Token: 1138078
+   Name: GODREJPROP
+   Instrument: OPTSTK
+   Strike: 218000.000000
+   Expiry: 29JAN2026
+   Lot Size: 275
+
+79. EXIDEIND26JAN355CE
+   Token: 1138079
+   Name: EXIDEIND
+   Instrument: OPTSTK
+   Strike: 35500.000000
+   Expiry: 29JAN2026
+   Lot Size: 1800
+
+80. LTIM26JAN5350PE
+   Token: 1138089
+   Name: LTIM
+   Instrument: OPTSTK
+   Strike: 535000.000000
+   Expiry: 29JAN2026
+   Lot Size: 150
+
+81. NHPC26JAN92CE
+   Token: 1138092
+   Name: NHPC
+   Instrument: OPTSTK
+   Strike: 9200.000000
+   Expiry: 29JAN2026
+   Lot Size: 6400
+
+82. MARICO26JAN720CE
+   Token: 1138099
+   Name: MARICO
+   Instrument: OPTSTK
+   Strike: 72000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1200
+
+83. AUBANK26JAN950CE
+   Token: 1138103
+   Name: AUBANK
+   Instrument: OPTSTK
+   Strike: 95000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1000
+
+84. OIL26JAN405PE
+   Token: 1138126
+   Name: OIL
+   Instrument: OPTSTK
+   Strike: 40500.000000
+   Expiry: 29JAN2026
+   Lot Size: 1400
+
+85. ADANIPORTS26JAN1340CE
+   Token: 1138149
+   Name: ADANIPORTS
+   Instrument: OPTSTK
+   Strike: 134000.000000
+   Expiry: 29JAN2026
+   Lot Size: 475
+
+86. SBICARD26JAN880CE
+   Token: 1138199
+   Name: SBICARD
+   Instrument: OPTSTK
+   Strike: 88000.000000
+   Expiry: 29JAN2026
+   Lot Size: 800
+
+87. BANDHANBNK26JAN185CE
+   Token: 1138202
+   Name: BANDHANBNK
+   Instrument: OPTSTK
+   Strike: 18500.000000
+   Expiry: 29JAN2026
+   Lot Size: 3600
+
+88. INDIGO26JAN5550CE
+   Token: 1138222
+   Name: INDIGO
+   Instrument: OPTSTK
+   Strike: 555000.000000
+   Expiry: 29JAN2026
+   Lot Size: 150
+
+89. APLAPOLLO26JAN1900PE
+   Token: 1138226
+   Name: APLAPOLLO
+   Instrument: OPTSTK
+   Strike: 190000.000000
+   Expiry: 29JAN2026
+   Lot Size: 350
+
+90. SENSEX5026JAN27000PE
+   Token: 1138287
+   Name: SENSEX50
+   Instrument: OPTIDX
+   Strike: 2700000.000000
+   Expiry: 29JAN2026
+   Lot Size: 75
+
+91. OBEROIRLTY26JAN1600CE
+   Token: 1138302
+   Name: OBEROIRLTY
+   Instrument: OPTSTK
+   Strike: 160000.000000
+   Expiry: 29JAN2026
+   Lot Size: 350
+
+92. JINDALSTEL26JAN1020CE
+   Token: 1138322
+   Name: JINDALSTEL
+   Instrument: OPTSTK
+   Strike: 102000.000000
+   Expiry: 29JAN2026
+   Lot Size: 625
+
+93. JUBLFOOD26JAN650PE
+   Token: 1138345
+   Name: JUBLFOOD
+   Instrument: OPTSTK
+   Strike: 65000.000000
+   Expiry: 29JAN2026
+   Lot Size: 1250
+
+94. PNB26JAN116CE
+   Token: 1138349
+   Name: PNB
+   Instrument: OPTSTK
+   Strike: 11600.000000
+   Expiry: 29JAN2026
+   Lot Size: 8000
+
+95. PIIND26JAN3250CE
+   Token: 1138392
+   Name: PIIND
+   Instrument: OPTSTK
+   Strike: 325000.000000
+   Expiry: 29JAN2026
+   Lot Size: 175
+
+96. NHPC26JAN80CE
+   Token: 1138401
+   Name: NHPC
+   Instrument: OPTSTK
+   Strike: 8000.000000
+   Expiry: 29JAN2026
+   Lot Size: 6400
+
+97. TVSMOTOR26JAN3600PE
+   Token: 1138421
+   Name: TVSMOTOR
+   Instrument: OPTSTK
+   Strike: 360000.000000
+   Expiry: 29JAN2026
+   Lot Size: 175
+
+98. EXIDEIND26JAN355PE
+   Token: 1138437
+   Name: EXIDEIND
+   Instrument: OPTSTK
+   Strike: 35500.000000
+   Expiry: 29JAN2026
+   Lot Size: 1800
+
+99. PIDILITIND26JAN1380PE
+   Token: 1138464
+   Name: PIDILITIND
+   Instrument: OPTSTK
+   Strike: 138000.000000
+   Expiry: 29JAN2026
+   Lot Size: 500
+
+100. TRENT26JAN4100CE
+   Token: 1138477
+   Name: TRENT
+   Instrument: OPTSTK
+   Strike: 410000.000000
+   Expiry: 29JAN2026
+   Lot Size: 100
+
+... and 31406 more instruments in BFO
+
+
+========================================================================================================================
+EXCHANGE: NCO (22637 instruments)
+========================================================================================================================
+
+1. CRUDEOIL26MARFUT
+   Token: 121609
+   Name: CRUDEOIL
+   Instrument: FUTENR
+   Strike: -1.000000
+   Expiry: 19MAR2026
+   Lot Size: 1
+
+2. GOLD26JUL102800CE
+   Token: 121615
+   Name: GOLD
+   Instrument: OPTFUT
+   Strike: 10280000.000000
+   Expiry: 29JUL2026
+   Lot Size: 1
+
+3. SILVER26MAR185500CE
+   Token: 121618
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 18550000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+4. SILVER26MAR185500PE
+   Token: 121619
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 18550000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+5. SILVER26MAR217000PE
+   Token: 121624
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21700000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+6. GOLD26JUL102900CE
+   Token: 121630
+   Name: GOLD
+   Instrument: OPTFUT
+   Strike: 10290000.000000
+   Expiry: 29JUL2026
+   Lot Size: 1
+
+7. NATURALGAS26FEB345CE
+   Token: 121648
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 34500.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+8. COPPER26JAN1075CE
+   Token: 121662
+   Name: COPPER
+   Instrument: OPTFUT
+   Strike: 107500.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+9. CRUDEOIL26FEB4100PE
+   Token: 121668
+   Name: CRUDEOIL
+   Instrument: OPTFUT
+   Strike: 410000.000000
+   Expiry: 10FEB2026
+   Lot Size: 1
+
+10. SILVER26APR181500PE
+   Token: 121670
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 18150000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+11. SILVER26APR181750CE
+   Token: 121671
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 18175000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+12. CRUDEOIL26FEB4300CE
+   Token: 121679
+   Name: CRUDEOIL
+   Instrument: OPTFUT
+   Strike: 430000.000000
+   Expiry: 10FEB2026
+   Lot Size: 1
+
+13. NATURALGAS26FEB390PE
+   Token: 121704
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 39000.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+14. SILVER26MAR217750PE
+   Token: 121707
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21775000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+15. NATURALGAS26FEB395PE
+   Token: 121709
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 39500.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+16. COPPER26JAN1070PE
+   Token: 121726
+   Name: COPPER
+   Instrument: OPTFUT
+   Strike: 107000.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+17. SILVER26APR182000PE
+   Token: 121730
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 18200000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+18. NATURALGAS26FEB425CE
+   Token: 121733
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 42500.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+19. NATURALGAS26FEB430CE
+   Token: 121735
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 43000.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+20. SILVER26MAR218750PE
+   Token: 121744
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21875000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+21. NATURALGAS26FEB460CE
+   Token: 121759
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 46000.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+22. NATURALGAS26JAN235CE
+   Token: 121765
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 23500.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+23. SILVERM26FEB106500CE
+   Token: 121780
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 10650000.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+24. SILVERM26FEB106750PE
+   Token: 121802
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 10675000.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+25. NATURALGAS26JAN265CE
+   Token: 121806
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 26500.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+26. NATURALGAS26JAN270PE
+   Token: 121822
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 27000.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+27. SILVER26MAR219000CE
+   Token: 121823
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21900000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+28. LEAD26APRFUT
+   Token: 121824
+   Name: LEAD
+   Instrument: FUTBAS
+   Strike: -1.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+29. LEADMINI26APRFUT
+   Token: 121825
+   Name: LEADMINI
+   Instrument: FUTBAS
+   Strike: -1.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+30. ZINC26APRFUT
+   Token: 121827
+   Name: ZINC
+   Instrument: FUTBAS
+   Strike: -1.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+31. GOLD26JULFUT
+   Token: 121830
+   Name: GOLD
+   Instrument: FUTBLN
+   Strike: -1.000000
+   Expiry: 03JUL2026
+   Lot Size: 1
+
+32. NATURALGAS26JAN275PE
+   Token: 121835
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 27500.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+33. ZINCMINI25DECFUT
+   Token: 121845
+   Name: ZINCMINI
+   Instrument: FUTBAS
+   Strike: -1.000000
+   Expiry: 31DEC2025
+   Lot Size: 1
+
+34. SILVERMIC26JULFUT
+   Token: 121850
+   Name: SILVERMIC
+   Instrument: FUTBLN
+   Strike: -1.000000
+   Expiry: 31JUL2026
+   Lot Size: 1
+
+35. CRUDEOIL26FEB4500CE
+   Token: 121870
+   Name: CRUDEOIL
+   Instrument: OPTFUT
+   Strike: 450000.000000
+   Expiry: 10FEB2026
+   Lot Size: 1
+
+36. NATGASMINI26MARFUT
+   Token: 121874
+   Name: NATGASMINI
+   Instrument: FUTENR
+   Strike: -1.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+37. NATURALGAS26MARFUT
+   Token: 121875
+   Name: NATURALGAS
+   Instrument: FUTENR
+   Strike: -1.000000
+   Expiry: 26MAR2026
+   Lot Size: 1
+
+38. SILVERM26JAN147000CE
+   Token: 121876
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 14700000.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+39. NATURALGAS26JAN315CE
+   Token: 121891
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 31500.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+40. SILVER26APR184000CE
+   Token: 121892
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 18400000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+41. SILVER26APR184250CE
+   Token: 121897
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 18425000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+42. NATURALGAS26JAN320CE
+   Token: 121898
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 32000.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+43. NATURALGAS26JAN330CE
+   Token: 121902
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 33000.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+44. SILVER26APR184250PE
+   Token: 121904
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 18425000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+45. SILVER26MAR186750PE
+   Token: 121914
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 18675000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+46. SILVER26MAR187000CE
+   Token: 121915
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 18700000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+47. NATURALGAS26JAN335PE
+   Token: 121923
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 33500.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+48. NATURALGAS26JAN340PE
+   Token: 121925
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 34000.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+49. CRUDEOIL26FEB4650CE
+   Token: 121929
+   Name: CRUDEOIL
+   Instrument: OPTFUT
+   Strike: 465000.000000
+   Expiry: 10FEB2026
+   Lot Size: 1
+
+50. SILVER26MAR220250PE
+   Token: 121941
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22025000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+51. SILVER26MAR142500CE
+   Token: 121965
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 14250000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+52. SILVER26MAR142750CE
+   Token: 121967
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 14275000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+53. SILVER26MAR143000PE
+   Token: 121974
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 14300000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+54. SILVERM26SEP143250PE
+   Token: 121988
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 14325000.000000
+   Expiry: 23SEP2026
+   Lot Size: 1
+
+55. COPPER26MAR1055CE
+   Token: 122017
+   Name: COPPER
+   Instrument: OPTFUT
+   Strike: 105500.000000
+   Expiry: 24MAR2026
+   Lot Size: 1
+
+56. COPPER26MAR1060PE
+   Token: 122024
+   Name: COPPER
+   Instrument: OPTFUT
+   Strike: 106000.000000
+   Expiry: 24MAR2026
+   Lot Size: 1
+
+57. SILVER26MAR221750CE
+   Token: 122044
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22175000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+58. SILVERM26APR148750PE
+   Token: 122051
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 14875000.000000
+   Expiry: 23APR2026
+   Lot Size: 1
+
+59. SILVER26MAR222000CE
+   Token: 122053
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22200000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+60. SILVER26MAR222500CE
+   Token: 122057
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22250000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+61. SILVER26MAR223500CE
+   Token: 122076
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22350000.000000
+   Expiry: 02MAR2026
+   Lot Size: 1
+
+62. COPPER26FEB1110CE
+   Token: 122077
+   Name: COPPER
+   Instrument: OPTFUT
+   Strike: 111000.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+63. CRUDEOIL26FEB4900CE
+   Token: 122085
+   Name: CRUDEOIL
+   Instrument: OPTFUT
+   Strike: 490000.000000
+   Expiry: 10FEB2026
+   Lot Size: 1
+
+64. CRUDEOIL26FEB4900PE
+   Token: 122106
+   Name: CRUDEOIL
+   Instrument: OPTFUT
+   Strike: 490000.000000
+   Expiry: 10FEB2026
+   Lot Size: 1
+
+65. CRUDEOIL26FEB4950CE
+   Token: 122107
+   Name: CRUDEOIL
+   Instrument: OPTFUT
+   Strike: 495000.000000
+   Expiry: 10FEB2026
+   Lot Size: 1
+
+66. SILVERM26NOV169000CE
+   Token: 122116
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 16900000.000000
+   Expiry: 23NOV2026
+   Lot Size: 1
+
+67. SILVERM26NOV170500CE
+   Token: 122133
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 17050000.000000
+   Expiry: 23NOV2026
+   Lot Size: 1
+
+68. COPPER26FEB1120PE
+   Token: 122159
+   Name: COPPER
+   Instrument: OPTFUT
+   Strike: 112000.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+69. COPPER26JANFUT
+   Token: 122166
+   Name: COPPER
+   Instrument: FUTBAS
+   Strike: -1.000000
+   Expiry: 30JAN2026
+   Lot Size: 1
+
+70. LEAD26JANFUT
+   Token: 122174
+   Name: LEAD
+   Instrument: FUTBAS
+   Strike: -1.000000
+   Expiry: 30JAN2026
+   Lot Size: 1
+
+71. SILVER26APR217000PE
+   Token: 122180
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21700000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+72. SILVER26APR217500CE
+   Token: 122183
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21750000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+73. SILVERM26NOV174250CE
+   Token: 122215
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 17425000.000000
+   Expiry: 23NOV2026
+   Lot Size: 1
+
+74. SILVER26APR217750PE
+   Token: 122217
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21775000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+75. SILVERM26NOV175000CE
+   Token: 122223
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 17500000.000000
+   Expiry: 23NOV2026
+   Lot Size: 1
+
+76. SILVERM26NOV175250PE
+   Token: 122249
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 17525000.000000
+   Expiry: 23NOV2026
+   Lot Size: 1
+
+77. SILVER26APR218000CE
+   Token: 122227
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21800000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+78. SILVER26APR218250CE
+   Token: 122233
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21825000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+79. SILVER26APR218250PE
+   Token: 122234
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21825000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+80. SILVERM26NOV175500PE
+   Token: 122253
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 17550000.000000
+   Expiry: 23NOV2026
+   Lot Size: 1
+
+81. SILVER26APR219750CE
+   Token: 122258
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 21975000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+82. SILVER26APR220000CE
+   Token: 122260
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22000000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+83. SILVER26APR220750CE
+   Token: 122270
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22075000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+84. SILVER26APR221000PE
+   Token: 122273
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22100000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+85. SILVER26APR221500CE
+   Token: 122283
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22150000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+86. NATURALGAS26JAN385PE
+   Token: 122289
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 38500.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+87. SILVER26APR222000CE
+   Token: 122292
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22200000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+88. SILVER26APR222000PE
+   Token: 122293
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22200000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+89. SILVER26APR222750CE
+   Token: 122298
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22275000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+90. SILVER26APR223000CE
+   Token: 122302
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22300000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+91. SILVER26APR223750PE
+   Token: 122311
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22375000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+92. SILVER26APR224000CE
+   Token: 122312
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22400000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+93. SILVER26APR225250CE
+   Token: 122335
+   Name: SILVER
+   Instrument: OPTBLN
+   Strike: 22525000.000000
+   Expiry: 30APR2026
+   Lot Size: 1
+
+94. NATURALGAS26JAN390PE
+   Token: 122338
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 39000.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+95. COPPER26MAR1130CE
+   Token: 122342
+   Name: COPPER
+   Instrument: OPTFUT
+   Strike: 113000.000000
+   Expiry: 24MAR2026
+   Lot Size: 1
+
+96. CRUDEOIL26FEB5050CE
+   Token: 122346
+   Name: CRUDEOIL
+   Instrument: OPTFUT
+   Strike: 505000.000000
+   Expiry: 10FEB2026
+   Lot Size: 1
+
+97. NATURALGAS26JAN520CE
+   Token: 122355
+   Name: NATURALGAS
+   Instrument: OPTFUT
+   Strike: 52000.000000
+   Expiry: 22JAN2026
+   Lot Size: 1
+
+98. COPPER26FEB1200PE
+   Token: 122371
+   Name: COPPER
+   Instrument: OPTFUT
+   Strike: 120000.000000
+   Expiry: 20FEB2026
+   Lot Size: 1
+
+99. SILVERM26OCT192500CE
+   Token: 122377
+   Name: SILVERM
+   Instrument: OPTFUT
+   Strike: 19250000.000000
+   Expiry: 23OCT2026
+   Lot Size: 1
+
+100. COPPER26MAR1210CE
+   Token: 122384
+   Name: COPPER
+   Instrument: OPTFUT
+   Strike: 121000.000000
+   Expiry: 24MAR2026
+   Lot Size: 1
+
+... and 22537 more instruments in NCO
