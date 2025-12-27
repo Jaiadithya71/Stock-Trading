@@ -1,12 +1,11 @@
-// frontend/js/app.js - COMPLETE WITH OPTION CHAIN
+// frontend/js/app.js - COMPLETE WITH NSE OPTION CHAIN
 const App = {
     state: {
         currentUsername: '',
         bankNiftyData: null,
         indicesData: null,
         currencyData: null,
-        optionChainData: null,
-        optionExpiries: null,
+        nseOptionChainData: null,
         bankNiftyTimestamp: null,
         indicesTimestamp: null,
         currencyTimestamp: null,
@@ -14,8 +13,8 @@ const App = {
         refreshIntervalTime: 60000,
         autoRefreshEnabled: true,
         selectedInterval: 'ONE_MINUTE',
-        selectedOptionSymbol: 'BANKNIFTY',
-        selectedOptionExpiry: null,
+        selectedNSESymbol: 'BANKNIFTY',
+        selectedNSEExpiry: null,
         showCurrency: true,
         showOptionChain: false,
         filters: {
@@ -43,10 +42,10 @@ const App = {
         EventHandler.on('refresh-currency', () => this.refreshCurrency());
         EventHandler.on('refresh-all', () => this.loadAllData());
         
-        // Option Chain handlers
-        EventHandler.on('refresh-option-chain', () => this.refreshOptionChain());
-        EventHandler.on('select-option-symbol', (e, target) => this.selectOptionSymbol(target.dataset.symbol));
-        EventHandler.on('change-option-expiry', (e, target) => this.changeOptionExpiry(target.value));
+        // NSE Option Chain handlers
+        EventHandler.on('refresh-nse-option-chain', () => this.refreshNSEOptionChain());
+        EventHandler.on('select-nse-symbol', (e, target) => this.selectNSESymbol(target.dataset.symbol));
+        EventHandler.on('change-nse-expiry', (e, target) => this.changeNSEExpiry(target.value));
         EventHandler.on('toggle-option-chain', (e, target) => this.toggleOptionChain(target));
         
         // Toggle handlers
@@ -165,7 +164,7 @@ const App = {
         }
 
         if (this.state.showOptionChain) {
-            promises.push(this.fetchOptionChain());
+            promises.push(this.fetchNSEOptionChain());
         }
         
         await Promise.all(promises);
@@ -209,60 +208,51 @@ const App = {
         }
     },
 
-    async fetchOptionExpiries(symbol) {
+    async fetchNSEOptionChain() {
         try {
-            const result = await ApiService.getOptionExpiries(this.state.currentUsername, symbol);
-            if (result.success) {
-                this.state.optionExpiries = result.data.expiries;
-                if (result.data.expiries.length > 0) {
-                    this.state.selectedOptionExpiry = result.data.expiries[0].date;
-                }
-                Helpers.log(`Option expiries fetched: ${result.data.expiries.length}`);
-            }
-        } catch (error) {
-            Helpers.log('Error fetching option expiries: ' + error.message, 'error');
-        }
-    },
-
-    async fetchOptionChain() {
-        if (!this.state.selectedOptionExpiry) {
-            await this.fetchOptionExpiries(this.state.selectedOptionSymbol);
-        }
-
-        try {
-            const result = await ApiService.getOptionChain(
-                this.state.currentUsername,
-                this.state.selectedOptionSymbol,
-                this.state.selectedOptionExpiry
+            Helpers.log('Fetching NSE option chain for ' + this.state.selectedNSESymbol + '...');
+            const result = await ApiService.getNSEOptionChain(
+                this.state.selectedNSESymbol,
+                this.state.selectedNSEExpiry
             );
             
             if (result.success) {
-                this.state.optionChainData = result.data;
-                Helpers.log(`Option chain fetched: ${result.data.optionChain.length} strikes`);
+                this.state.nseOptionChainData = result.data;
+                
+                // Set default expiry if not set
+                if (!this.state.selectedNSEExpiry && result.data.expiryDates?.length > 0) {
+                    this.state.selectedNSEExpiry = result.data.expiryDates[0];
+                }
+                
+                Helpers.log(`NSE option chain fetched: ${result.data.optionChain.length} strikes`);
+            } else {
+                Helpers.log('Failed to fetch NSE option chain: ' + result.message, 'error');
             }
         } catch (error) {
-            Helpers.log('Error fetching option chain: ' + error.message, 'error');
+            Helpers.log('Error fetching NSE option chain: ' + error.message, 'error');
         }
     },
 
-    async refreshOptionChain() {
-        Helpers.log('Refreshing option chain...');
-        await this.fetchOptionChain();
+    async refreshNSEOptionChain() {
+        Helpers.log('Refreshing NSE option chain...');
+        await this.fetchNSEOptionChain();
         this.updateDashboard();
     },
 
-    async selectOptionSymbol(symbol) {
-        this.state.selectedOptionSymbol = symbol;
-        this.state.selectedOptionExpiry = null;
-        this.state.optionExpiries = null;
-        await this.fetchOptionExpiries(symbol);
-        await this.fetchOptionChain();
+    async selectNSESymbol(symbol) {
+        this.state.selectedNSESymbol = symbol;
+        this.state.selectedNSEExpiry = null;
+        this.state.nseOptionChainData = null;
+        
+        Helpers.log('Selected NSE symbol: ' + symbol);
+        await this.fetchNSEOptionChain();
         this.updateDashboard();
     },
 
-    async changeOptionExpiry(expiryDate) {
-        this.state.selectedOptionExpiry = expiryDate;
-        await this.fetchOptionChain();
+    async changeNSEExpiry(expiry) {
+        this.state.selectedNSEExpiry = expiry;
+        Helpers.log('Changed NSE expiry to: ' + expiry);
+        await this.fetchNSEOptionChain();
         this.updateDashboard();
     },
 
@@ -270,10 +260,8 @@ const App = {
         this.state.showOptionChain = target.checked;
         Helpers.log('Option chain: ' + (this.state.showOptionChain ? 'enabled' : 'disabled'));
         
-        if (this.state.showOptionChain && !this.state.optionChainData) {
-            this.fetchOptionExpiries(this.state.selectedOptionSymbol)
-                .then(() => this.fetchOptionChain())
-                .then(() => this.updateDashboard());
+        if (this.state.showOptionChain && !this.state.nseOptionChainData) {
+            this.fetchNSEOptionChain().then(() => this.updateDashboard());
         } else {
             this.updateDashboard();
         }
@@ -291,11 +279,10 @@ const App = {
                 html += CurrencyWidget.render(this.state.currencyData, this.state.currencyTimestamp);
             }
 
-            if (this.state.showOptionChain && this.state.optionChainData) {
+            if (this.state.showOptionChain && this.state.nseOptionChainData) {
                 html += OptionChain.render(
-                    this.state.optionChainData, 
-                    this.state.optionExpiries,
-                    this.state.selectedOptionSymbol
+                    this.state.nseOptionChainData,
+                    this.state.selectedNSESymbol
                 );
             }
             
@@ -453,7 +440,7 @@ const App = {
             bankNifty: this.getCompleteBankNiftyData(),
             indices: this.state.indicesData,
             currency: this.state.currencyData,
-            optionChain: this.state.optionChainData,
+            nseOptionChain: this.state.nseOptionChainData,
             timestamp: new Date().toISOString()
         };
         

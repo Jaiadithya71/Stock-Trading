@@ -1,13 +1,13 @@
-// frontend/js/api/apiService.js - COMPLETE VERSION
+// frontend/js/api/apiService.js - UPDATED
 const ApiService = {
-    async request(endpoint, data = null) {
+    async request(endpoint, data = null, method = 'POST') {
         try {
             const options = {
-                method: 'POST',
+                method: method,
                 headers: { 'Content-Type': 'application/json' }
             };
             
-            if (data) {
+            if (data && method === 'POST') {
                 options.body = JSON.stringify(data);
             }
 
@@ -58,20 +58,20 @@ const ApiService = {
         return await this.request('/currency-cache-stats', { username });
     },
 
-    // Option Chain API methods
-    async getOptionExpiries(username, symbol) {
-        return await this.request('/option-expiries', { username, symbol });
+    // NSE Option Chain API methods (NO AUTH REQUIRED)
+    async getNSESymbols() {
+        return await this.request('/nse-symbols', null, 'GET');
     },
 
-    async getOptionChain(username, symbol, expiryDate) {
-        return await this.request('/option-chain', { username, symbol, expiryDate });
+    async getNSEOptionChain(symbol, expiry = null) {
+        let endpoint = `/nse-option-chain?symbol=${symbol}`;
+        if (expiry) {
+            endpoint += `&expiry=${encodeURIComponent(expiry)}`;
+        }
+        return await this.request(endpoint, null, 'GET');
     },
 
-    async getOptionSpotPrice(username, symbol) {
-        return await this.request('/option-spot-price', { username, symbol });
-    },
-
-    async clearOptionCache(username) {
-        return await this.request('/option-clear-cache', { username });
+    async getNSEExpiryDates(symbol) {
+        return await this.request(`/nse-expiry-dates?symbol=${symbol}`, null, 'GET');
     }
 };

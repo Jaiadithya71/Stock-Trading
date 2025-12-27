@@ -404,3 +404,28 @@
     padding: 8px 4px;
   }
 }
+/* Data source badge */
+.data-source-badge {
+    display: inline-block;
+    margin-left: 15px;
+    padding: 4px 12px;
+    background: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.data-source-info {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}

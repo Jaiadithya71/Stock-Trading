@@ -1,30 +1,31 @@
-// frontend/js/components/OptionChain.js
+// frontend/js/components/OptionChain.js - NSE VERSION
 const OptionChain = {
-    render(data, expiries, selectedSymbol) {
+    render(data, selectedSymbol = 'BANKNIFTY') {
         if (!data || !data.optionChain) {
-            return LoadingSpinner.render('Loading option chain...');
+            return LoadingSpinner.render('Loading NSE option chain...');
         }
 
-        const { symbol, displayName, spotPrice, optionChain, timestamp, lotSize } = data;
+        const { symbol, displayName, spotPrice, optionChain, timestamp, expiryDates, selectedExpiry, atmStrike, dataSource } = data;
 
         // Calculate statistics
         const stats = this.calculateStatistics(optionChain);
 
         return `
             <div class="card option-chain-container" style="grid-column: span 2;">
-                ${this.renderHeader(displayName, spotPrice, expiries, selectedSymbol)}
-                ${this.renderStats(stats, lotSize)}
-                ${this.renderTable(optionChain, spotPrice)}
+                ${this.renderHeader(displayName, spotPrice, expiryDates, selectedExpiry, selectedSymbol, dataSource)}
+                ${this.renderStats(stats)}
+                ${this.renderTable(optionChain, atmStrike)}
                 <div class="timestamp" style="text-align: center; margin-top: 15px;">
-                    Last updated: ${new Date(timestamp).toLocaleTimeString()}
+                    Last updated: ${new Date(timestamp).toLocaleString()}
+                    <span class="data-source-badge">Data Source: ${dataSource}</span>
                 </div>
             </div>
         `;
     },
 
-    renderHeader(displayName, spotPrice, expiries, selectedSymbol) {
-        const expiryOptions = expiries ? expiries.map(exp => `
-            <option value="${exp.date}">${exp.formatted} (${exp.type})</option>
+    renderHeader(displayName, spotPrice, expiryDates, selectedExpiry, selectedSymbol, dataSource) {
+        const expiryOptions = expiryDates ? expiryDates.map(exp => `
+            <option value="${exp}" ${exp === selectedExpiry ? 'selected' : ''}>${exp}</option>
         `).join('') : '';
 
         return `
@@ -32,26 +33,29 @@ const OptionChain = {
                 <div class="symbol-info">
                     <h2>📊 ${displayName} Option Chain</h2>
                     <div class="spot-price">Spot: ₹${spotPrice.toFixed(2)}</div>
+                    <div class="data-source-info" style="font-size: 12px; color: #4ade80; margin-top: 5px;">
+                        🌐 Live data from NSE
+                    </div>
                 </div>
                 
                 <div class="symbol-selector">
                     <button 
                         class="symbol-btn ${selectedSymbol === 'NIFTY' ? 'active' : ''}"
-                        data-action="select-option-symbol"
+                        data-action="select-nse-symbol"
                         data-symbol="NIFTY"
                     >
                         NIFTY
                     </button>
                     <button 
                         class="symbol-btn ${selectedSymbol === 'BANKNIFTY' ? 'active' : ''}"
-                        data-action="select-option-symbol"
+                        data-action="select-nse-symbol"
                         data-symbol="BANKNIFTY"
                     >
                         BANK NIFTY
                     </button>
                     <button 
                         class="symbol-btn ${selectedSymbol === 'FINNIFTY' ? 'active' : ''}"
-                        data-action="select-option-symbol"
+                        data-action="select-nse-symbol"
                         data-symbol="FINNIFTY"
                     >
                         FIN NIFTY
@@ -60,19 +64,19 @@ const OptionChain = {
                 
                 <div class="expiry-selector">
                     <label>Expiry:</label>
-                    <select data-change-action="change-option-expiry">
+                    <select data-change-action="change-nse-expiry">
                         ${expiryOptions}
                     </select>
                 </div>
                 
-                <button class="refresh-btn" data-action="refresh-option-chain">
+                <button class="refresh-btn" data-action="refresh-nse-option-chain">
                     🔄 Refresh
                 </button>
             </div>
         `;
     },
 
-    renderStats(stats, lotSize) {
+    renderStats(stats) {
         return `
             <div class="option-chain-stats">
                 <div class="stat-box">
@@ -96,31 +100,33 @@ const OptionChain = {
                     <div class="stat-value">${stats.maxPutOIStrike}</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Lot Size</div>
-                    <div class="stat-value">${lotSize}</div>
+                    <div class="stat-label">Call Vol</div>
+                    <div class="stat-value">${Formatters.formatNumber(stats.totalCallVolume)}</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Put Vol</div>
+                    <div class="stat-value">${Formatters.formatNumber(stats.totalPutVolume)}</div>
                 </div>
             </div>
         `;
     },
 
-    renderTable(optionChain, spotPrice) {
+    renderTable(optionChain, atmStrike) {
         const rows = optionChain.map(row => {
             const { strike, isATM, call, put } = row;
-            const isCallITM = strike < spotPrice;
-            const isPutITM = strike > spotPrice;
 
             return `
-                <tr class="${isATM ? 'atm-strike' : ''} ${isCallITM ? 'itm-call' : ''} ${isPutITM ? 'itm-put' : ''}">
+                <tr class="${isATM ? 'atm-strike' : ''}">
                     <!-- CALLS Section -->
-                    <td class="oi-cell">${this.formatOI(call.oi)}</td>
-                    <td class="change-oi-cell ${this.getChangeClass(call.changeInOI)}">${this.formatChange(call.changeInOI)}</td>
-                    <td class="volume-cell">${this.formatVolume(call.volume)}</td>
-                    <td class="iv-cell">${this.formatIV(call.iv)}</td>
-                    <td class="ltp-cell ${this.getChangeClass(call.change)}">${this.formatLTP(call.ltp)}</td>
-                    <td class="change-cell ${this.getChangeClass(call.changePercent)}">${this.formatPercentChange(call.changePercent)}</td>
+                    <td class="oi-cell">${this.formatOI(call?.openInterest)}</td>
+                    <td class="change-oi-cell ${this.getChangeClass(call?.changeinOpenInterest)}">${this.formatChange(call?.changeinOpenInterest)}</td>
+                    <td class="volume-cell">${this.formatVolume(call?.totalTradedVolume)}</td>
+                    <td class="iv-cell">${this.formatIV(call?.impliedVolatility)}</td>
+                    <td class="ltp-cell ${this.getChangeClass(call?.change)}">${this.formatLTP(call?.lastPrice)}</td>
+                    <td class="change-cell ${this.getChangeClass(call?.pChange)}">${this.formatPercentChange(call?.pChange)}</td>
                     <td class="bid-ask-cell">
-                        <span class="bid">${this.formatPrice(call.bidPrice)}</span> / 
-                        <span class="ask">${this.formatPrice(call.askPrice)}</span>
+                        <span class="bid">${this.formatPrice(call?.bidprice)}</span> / 
+                        <span class="ask">${this.formatPrice(call?.askPrice)}</span>
                     </td>
                     
                     <!-- STRIKE -->
@@ -128,15 +134,15 @@ const OptionChain = {
                     
                     <!-- PUTS Section -->
                     <td class="bid-ask-cell">
-                        <span class="bid">${this.formatPrice(put.bidPrice)}</span> / 
-                        <span class="ask">${this.formatPrice(put.askPrice)}</span>
+                        <span class="bid">${this.formatPrice(put?.bidprice)}</span> / 
+                        <span class="ask">${this.formatPrice(put?.askPrice)}</span>
                     </td>
-                    <td class="change-cell ${this.getChangeClass(put.changePercent)}">${this.formatPercentChange(put.changePercent)}</td>
-                    <td class="ltp-cell ${this.getChangeClass(put.change)}">${this.formatLTP(put.ltp)}</td>
-                    <td class="iv-cell">${this.formatIV(put.iv)}</td>
-                    <td class="volume-cell">${this.formatVolume(put.volume)}</td>
-                    <td class="change-oi-cell ${this.getChangeClass(put.changeInOI)}">${this.formatChange(put.changeInOI)}</td>
-                    <td class="oi-cell">${this.formatOI(put.oi)}</td>
+                    <td class="change-cell ${this.getChangeClass(put?.pChange)}">${this.formatPercentChange(put?.pChange)}</td>
+                    <td class="ltp-cell ${this.getChangeClass(put?.change)}">${this.formatLTP(put?.lastPrice)}</td>
+                    <td class="iv-cell">${this.formatIV(put?.impliedVolatility)}</td>
+                    <td class="volume-cell">${this.formatVolume(put?.totalTradedVolume)}</td>
+                    <td class="change-oi-cell ${this.getChangeClass(put?.changeinOpenInterest)}">${this.formatChange(put?.changeinOpenInterest)}</td>
+                    <td class="oi-cell">${this.formatOI(put?.openInterest)}</td>
                 </tr>
             `;
         }).join('');
@@ -179,17 +185,23 @@ const OptionChain = {
     calculateStatistics(optionChain) {
         let totalCallOI = 0;
         let totalPutOI = 0;
+        let totalCallVolume = 0;
+        let totalPutVolume = 0;
         let maxCallOI = 0;
         let maxPutOI = 0;
         let maxCallOIStrike = 0;
         let maxPutOIStrike = 0;
 
         optionChain.forEach(row => {
-            const callOI = row.call.oi || 0;
-            const putOI = row.put.oi || 0;
+            const callOI = row.call?.openInterest || 0;
+            const putOI = row.put?.openInterest || 0;
+            const callVol = row.call?.totalTradedVolume || 0;
+            const putVol = row.put?.totalTradedVolume || 0;
 
             totalCallOI += callOI;
             totalPutOI += putOI;
+            totalCallVolume += callVol;
+            totalPutVolume += putVol;
 
             if (callOI > maxCallOI) {
                 maxCallOI = callOI;
@@ -207,6 +219,8 @@ const OptionChain = {
         return {
             totalCallOI,
             totalPutOI,
+            totalCallVolume,
+            totalPutVolume,
             pcr,
             maxCallOIStrike,
             maxPutOIStrike
