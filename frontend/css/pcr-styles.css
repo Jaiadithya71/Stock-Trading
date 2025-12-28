@@ -1,4 +1,4 @@
-/* frontend/css/pcr-styles.css */
+/* frontend/css/pcr-styles.css - ENHANCED */
 
 /* PCR Widget Container */
 .pcr-widget-container {
@@ -228,39 +228,98 @@
     border-radius: 4px;
 }
 
-/* No Data State */
+/* No Data State - ENHANCED */
 .pcr-no-data {
     text-align: center;
     padding: 60px 20px;
+    background: linear-gradient(135deg, rgba(102, 190, 234, 0.05), rgba(102, 190, 234, 0.02));
+    border-radius: 10px;
+    margin: 20px;
 }
 
 .pcr-no-data-icon {
-    font-size: 64px;
+    font-size: 72px;
     margin-bottom: 20px;
+    animation: pulse-icon 2s ease-in-out infinite;
+}
+
+@keyframes pulse-icon {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
 }
 
 .pcr-no-data-title {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
-    color: #fbbf24;
-    margin-bottom: 15px;
+    color: #66beea;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #66beea, #4a9eff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .pcr-no-data-message {
-    font-size: 14px;
-    color: #888;
+    font-size: 15px;
+    color: #b0b0b0;
     line-height: 1.8;
-    max-width: 600px;
+    max-width: 650px;
     margin: 0 auto;
 }
 
+.pcr-no-data-message p {
+    margin: 12px 0;
+}
+
+.pcr-no-data-message strong {
+    color: #e0e0e0;
+    font-weight: 600;
+}
+
+.pcr-no-data-message ul {
+    list-style: none;
+    padding: 0;
+    margin: 15px auto;
+}
+
+.pcr-no-data-message li {
+    padding: 8px 0;
+    font-size: 14px;
+    color: #a0a0a0;
+}
+
 .pcr-no-data-message code {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 4px 8px;
+    background: rgba(102, 190, 234, 0.15);
+    padding: 4px 10px;
     border-radius: 4px;
     color: #66beea;
     font-family: 'Courier New', monospace;
     font-size: 13px;
+    border: 1px solid rgba(102, 190, 234, 0.3);
+}
+
+/* Refresh button in no-data state */
+.pcr-no-data .refresh-btn {
+    background: linear-gradient(135deg, #66beea 0%, #4a9eff 100%);
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 190, 234, 0.3);
+}
+
+.pcr-no-data .refresh-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 190, 234, 0.4);
 }
 
 /* Responsive Design */
@@ -302,5 +361,21 @@
     .pcr-legend {
         flex-direction: column;
         gap: 10px;
+    }
+    
+    .pcr-no-data {
+        padding: 40px 15px;
+    }
+    
+    .pcr-no-data-icon {
+        font-size: 56px;
+    }
+    
+    .pcr-no-data-title {
+        font-size: 22px;
+    }
+    
+    .pcr-no-data-message {
+        font-size: 14px;
     }
 }

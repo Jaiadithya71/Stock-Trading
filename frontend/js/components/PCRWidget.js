@@ -1,14 +1,14 @@
-// frontend/js/components/PCRWidget.js
+// frontend/js/components/PCRWidget.js - ENHANCED with better no-data handling
 const PCRWidget = {
     render(data, timestamp) {
         if (!data || !data.intervals) {
-            return LoadingSpinner.render('Loading PCR data...');
+            return this.renderNoData();
         }
 
         const { symbol, intervals, totalSnapshots } = data;
 
         // Check if we have enough data
-        if (totalSnapshots === 0) {
+        if (totalSnapshots === 0 || Object.keys(intervals).length === 0) {
             return this.renderNoData();
         }
 
@@ -28,17 +28,28 @@ const PCRWidget = {
                     <div class="card-title">📊 Put-Call Ratio (PCR) Analysis</div>
                 </div>
                 <div class="pcr-no-data">
-                    <div class="pcr-no-data-icon">⚠️</div>
-                    <div class="pcr-no-data-title">No PCR Data Available</div>
+                    <div class="pcr-no-data-icon">⏳</div>
+                    <div class="pcr-no-data-title">PCR Data Collecting...</div>
                     <div class="pcr-no-data-message">
-                        The PCR background collector needs to be running to collect data.
-                        <br><br>
-                        <strong>To start collecting:</strong>
-                        <br>
-                        Run: <code>node backend/services/startPCRCollector.js &lt;username&gt;</code>
-                        <br><br>
-                        Data will appear here after 1-2 minutes of collection.
+                        <p>The PCR collector is gathering data in the background.</p>
+                        <p><strong>What's happening:</strong></p>
+                        <ul style="text-align: left; display: inline-block; margin: 15px 0;">
+                            <li>✅ Background collector is running</li>
+                            <li>⏰ Collects data every 1 minute</li>
+                            <li>📊 Data will appear after 2-3 snapshots</li>
+                        </ul>
+                        <p style="margin-top: 15px;">
+                            <strong>Expected wait time:</strong> 2-3 minutes
+                        </p>
+                        <p style="font-size: 12px; color: #666; margin-top: 10px;">
+                            The dashboard will continue to load and refresh normally.
+                            <br>
+                            PCR data will appear automatically when ready.
+                        </p>
                     </div>
+                    <button class="refresh-btn" data-action="refresh-pcr" style="margin-top: 20px;">
+                        🔄 Check for Data
+                    </button>
                 </div>
             </div>
         `;

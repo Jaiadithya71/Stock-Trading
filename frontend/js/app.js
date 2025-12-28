@@ -1,4 +1,4 @@
-// frontend/js/app.js - COMPLETE WITH PCR
+// frontend/js/app.js - FIXED VERSION (Non-blocking PCR)
 const App = {
     state: {
         currentUsername: '',
@@ -6,11 +6,11 @@ const App = {
         indicesData: null,
         currencyData: null,
         nseOptionChainData: null,
-        pcrData: null, // NEW
+        pcrData: null,
         bankNiftyTimestamp: null,
         indicesTimestamp: null,
         currencyTimestamp: null,
-        pcrTimestamp: null, // NEW
+        pcrTimestamp: null,
         refreshIntervalId: null,
         refreshIntervalTime: 60000,
         autoRefreshEnabled: true,
@@ -19,7 +19,7 @@ const App = {
         selectedNSEExpiry: null,
         showCurrency: true,
         showOptionChain: false,
-        showPCR: true, // NEW - default enabled
+        showPCR: true,
         filters: {
             showBuying: true,
             showSelling: true,
@@ -43,7 +43,7 @@ const App = {
         EventHandler.on('refresh-banknifty', () => this.refreshBankNifty());
         EventHandler.on('refresh-indices', () => this.refreshIndices());
         EventHandler.on('refresh-currency', () => this.refreshCurrency());
-        EventHandler.on('refresh-pcr', () => this.refreshPCR()); // NEW
+        EventHandler.on('refresh-pcr', () => this.refreshPCR());
         EventHandler.on('refresh-all', () => this.loadAllData());
         
         // NSE Option Chain handlers
@@ -56,7 +56,7 @@ const App = {
         EventHandler.on('toggle-autorefresh', (e, target) => this.toggleAutoRefresh(target));
         EventHandler.on('toggle-filter', (e, target) => this.toggleFilter(target));
         EventHandler.on('toggle-currency', (e, target) => this.toggleCurrency(target));
-        EventHandler.on('toggle-pcr', (e, target) => this.togglePCR(target)); // NEW
+        EventHandler.on('toggle-pcr', (e, target) => this.togglePCR(target));
         
         // Interval selectors
         EventHandler.on('change-interval', (e, target) => this.changeInterval(target));
@@ -135,18 +135,22 @@ const App = {
                 LoginModal.hide();
                 CredentialsModal.hide();
                 
-                // START PCR COLLECTOR AUTOMATICALLY
-                console.log('🚀 Starting PCR Collector...');
-                try {
-                    const pcrResult = await ApiService.startPCRCollector(this.state.currentUsername);
-                    if (pcrResult.success) {
-                        console.log('✅ PCR Collector started:', pcrResult.status);
-                    }
-                } catch (error) {
-                    console.error('⚠️ PCR Collector failed to start:', error);
-                }
-                
+                // Render dashboard immediately
                 this.renderDashboard();
+                
+                // START PCR COLLECTOR IN BACKGROUND (non-blocking, no await)
+                console.log('🚀 Starting PCR Collector in background...');
+                ApiService.startPCRCollector(this.state.currentUsername)
+                    .then(pcrResult => {
+                        if (pcrResult.success) {
+                            console.log('✅ PCR Collector request sent');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('⚠️ PCR Collector start failed:', error);
+                    });
+                
+                // Load dashboard data (don't wait for PCR)
                 await this.loadAllData();
                 this.startAutoRefresh();
             } else {
@@ -171,6 +175,7 @@ const App = {
     },
 
     async loadAllData() {
+        // Load data in parallel (don't wait for PCR if it's not ready)
         const promises = [
             this.fetchBankNiftyData(),
             this.fetchIndicesData()
@@ -184,8 +189,13 @@ const App = {
             promises.push(this.fetchNSEOptionChain());
         }
 
+        // PCR is fetched separately - don't block if no data
         if (this.state.showPCR) {
-            promises.push(this.fetchPCRData());
+            promises.push(this.fetchPCRData().catch(err => {
+                console.log('PCR data not ready yet:', err.message);
+                // Set to null - will show "no data" message
+                this.state.pcrData = null;
+            }));
         }
         
         await Promise.all(promises);
@@ -258,12 +268,12 @@ const App = {
             Helpers.log('Fetching PCR historical data...');
             const result = await ApiService.getPCRHistorical(this.state.currentUsername);
             
-            if (result.success) {
+            if (result.success && result.data) {
                 this.state.pcrData = result.data;
                 this.state.pcrTimestamp = Helpers.getCurrentTime();
                 Helpers.log('PCR data fetched successfully');
             } else {
-                Helpers.log('PCR data not available: ' + result.message, 'error');
+                Helpers.log('PCR data not available yet: ' + (result.message || 'No data'), 'warning');
                 this.state.pcrData = null;
             }
         } catch (error) {
