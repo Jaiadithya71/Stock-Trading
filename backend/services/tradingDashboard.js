@@ -1,6 +1,6 @@
-// backend/services/tradingDashboard.js - ENHANCED VERSION
+// backend/services/tradingDashboard.js - FIXED VERSION WITH TIMEOUTS
 const { SmartAPI } = require("smartapi-javascript");
-const { getDateRange } = require("../utils/dateHelpers");
+const { getDateRange, isMarketOpen } = require("../utils/dateHelpers");
 const { generateTOTP } = require("./authService");
 
 class TradingDashboard {
@@ -15,7 +15,20 @@ class TradingDashboard {
     
     // Cache for reducing API calls
     this.cache = new Map();
-    this.CACHE_DURATION = 10000; // 10 seconds - longer cache for better performance
+    this.CACHE_DURATION = 10000; // 10 seconds
+    this.API_TIMEOUT = 5000; // 5 second timeout for all API calls
+  }
+
+  /**
+   * Wrapper for API calls with timeout protection
+   */
+  async callWithTimeout(apiCall, timeoutMs = this.API_TIMEOUT) {
+    return Promise.race([
+      apiCall,
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('API call timeout')), timeoutMs)
+      )
+    ]);
   }
 
   async authenticate() {
@@ -24,15 +37,15 @@ class TradingDashboard {
       
       console.log("🔐 Attempting authentication...");
       console.log("Client ID:", this.credentials.client_id);
-      console.log("TOTP:", totp);
       
-      const sessionData = await this.smart_api.generateSession(
-        this.credentials.client_id,
-        this.credentials.password,
-        totp
+      const sessionData = await this.callWithTimeout(
+        this.smart_api.generateSession(
+          this.credentials.client_id,
+          this.credentials.password,
+          totp
+        ),
+        10000 // 10 second timeout for auth
       );
-      
-      console.log("Session response:", sessionData);
       
       if (sessionData && sessionData.status === true && sessionData.data) {
         this.authToken = sessionData.data.jwtToken;
@@ -43,8 +56,9 @@ class TradingDashboard {
           token: this.refreshToken
         });
         
-        const profile = await this.smart_api.getProfile(this.refreshToken);
-        console.log("Profile:", profile);
+        const profile = await this.callWithTimeout(
+          this.smart_api.getProfile(this.refreshToken)
+        );
         
         this.authenticated = true;
         console.log("✅ Authentication successful");
@@ -62,7 +76,7 @@ class TradingDashboard {
         throw new Error(errorMsg);
       }
     } catch (error) {
-      console.error("❌ Authentication error:", error);
+      console.error("❌ Authentication error:", error.message);
       return { 
         success: false, 
         message: error.message || "Authentication failed"
@@ -71,7 +85,7 @@ class TradingDashboard {
   }
 
   /**
-   * Get candle data - basic method
+   * Get candle data with timeout protection
    */
   async getCandleData(exchange, symboltoken, interval) {
     // Check cache first
@@ -93,7 +107,10 @@ class TradingDashboard {
     };
     
     try {
-      const response = await this.smart_api.getCandleData(params);
+      // Add timeout to API call
+      const response = await this.callWithTimeout(
+        this.smart_api.getCandleData(params)
+      );
       
       // Cache successful responses
       if (response.status && response.data && response.data.length > 0) {
@@ -105,39 +122,59 @@ class TradingDashboard {
       
       return response;
     } catch (error) {
-      console.error(`Error fetching candle data:`, error);
-      return { status: false, data: null };
+      if (error.message === 'API call timeout') {
+        console.error(`⏱️  Timeout fetching ${exchange}:${symboltoken}`);
+      } else {
+        console.error(`❌ Error fetching candle data:`, error.message);
+      }
+      return { status: false, data: null, error: error.message };
     }
   }
 
   /**
-   * Get candle data with automatic fallback to reliable intervals
-   * This ensures we almost always get data
+   * Get candle data with smart fallback based on market status
+   * NEW: Uses market-aware interval selection
    */
   async getCandleDataWithFallback(exchange, symboltoken, preferredInterval) {
-    // Priority order based on your diagnostic results
-    // ONE_MINUTE has issues (THREE_MINUTE failed), so we start with reliable ones
-    const intervals = [
-      preferredInterval,
-      "FIVE_MINUTE",      // Most reliable based on your results
-      "FIFTEEN_MINUTE",   // Second most reliable
-      "ONE_HOUR",         // Good reliability
-      "THIRTY_MINUTE",    // Backup
-      "ONE_MINUTE"        // Last resort
-    ];
+    const marketOpenNow = isMarketOpen();
+    
+    // SMART INTERVAL SELECTION based on market status
+    let intervals;
+    
+    if (marketOpenNow) {
+      // Market OPEN: Try real-time intervals first
+      intervals = [
+        preferredInterval,
+        "ONE_MINUTE",
+        "FIVE_MINUTE",
+        "FIFTEEN_MINUTE"
+      ];
+    } else {
+      // Market CLOSED: Skip real-time, use session intervals
+      intervals = [
+        "ONE_HOUR",        // Most reliable for closed market
+        "FIFTEEN_MINUTE",  // Backup
+        "FIVE_MINUTE"      // Last resort
+      ];
+    }
     
     // Remove duplicates while preserving order
     const uniqueIntervals = [...new Set(intervals)];
     
     for (const interval of uniqueIntervals) {
-      const response = await this.getCandleData(exchange, symboltoken, interval);
-      
-      if (response.status && response.data && response.data.length > 0) {
-        return response;
+      try {
+        const response = await this.getCandleData(exchange, symboltoken, interval);
+        
+        if (response.status && response.data && response.data.length > 0) {
+          return response;
+        }
+      } catch (error) {
+        // Continue to next interval
+        continue;
       }
       
       // Small delay before trying next interval
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 50));
     }
     
     return { status: false, data: null };
@@ -145,7 +182,6 @@ class TradingDashboard {
 
   /**
    * Get latest candle with smart retry and fallback
-   * Returns: { candle: {...}, interval: "...", success: true } or null
    */
   async getLatestCandleRobust(exchange, symboltoken, preferredInterval = "ONE_MINUTE") {
     const response = await this.getCandleDataWithFallback(exchange, symboltoken, preferredInterval);
@@ -171,64 +207,60 @@ class TradingDashboard {
   }
 
   /**
-   * Get multiple candles for a symbol with fallback
-   */
-  async getRecentCandles(exchange, symboltoken, interval, count = 50) {
-    const response = await this.getCandleDataWithFallback(exchange, symboltoken, interval);
-    
-    if (response.status && response.data && response.data.length > 0) {
-      const candles = response.data.slice(-count).map(c => ({
-        timestamp: c[0],
-        open: c[1],
-        high: c[2],
-        low: c[3],
-        close: c[4],
-        volume: c[5]
-      }));
-      return candles;
-    }
-    
-    return [];
-  }
-
-  /**
-   * Batch fetch multiple symbols efficiently with caching
+   * Batch fetch multiple symbols efficiently
+   * NEW: Uses Promise.all for parallel fetching
    */
   async batchFetchSymbols(symbols, interval = "ONE_MINUTE") {
     const results = {};
     
-    for (const { symbol, exchange, token } of symbols) {
-      const response = await this.getCandleDataWithFallback(exchange, token, interval);
-      
-      if (response.status && response.data && response.data.length > 0) {
-        const candle = response.data[response.data.length - 1];
-        results[symbol] = {
-          ltp: candle[4].toFixed(2),
-          open: candle[1].toFixed(2),
-          high: candle[2].toFixed(2),
-          low: candle[3].toFixed(2),
-          volume: candle[5],
-          timestamp: candle[0],
-          changePercent: (((candle[4] - candle[1]) / candle[1]) * 100).toFixed(2),
-          status: this.getStatus(symbol, candle[4])
-        };
-      } else {
+    // Fetch all symbols in PARALLEL (not sequential!)
+    const promises = symbols.map(async ({ symbol, exchange, token }) => {
+      try {
+        const response = await this.getCandleDataWithFallback(exchange, token, interval);
+        
+        if (response.status && response.data && response.data.length > 0) {
+          const candle = response.data[response.data.length - 1];
+          results[symbol] = {
+            ltp: candle[4].toFixed(2),
+            open: candle[1].toFixed(2),
+            high: candle[2].toFixed(2),
+            low: candle[3].toFixed(2),
+            volume: candle[5],
+            timestamp: candle[0],
+            changePercent: (((candle[4] - candle[1]) / candle[1]) * 100).toFixed(2),
+            status: this.getStatus(symbol, candle[4])
+          };
+        } else {
+          results[symbol] = {
+            ltp: null,
+            status: "No Data",
+            error: "Unable to fetch data"
+          };
+        }
+      } catch (error) {
         results[symbol] = {
           ltp: null,
-          status: "No Data",
-          error: "Unable to fetch data"
+          status: "Error",
+          error: error.message
         };
       }
-      
-      // Small delay to avoid rate limiting
-      await new Promise(resolve => setTimeout(resolve, 150));
-    }
+    });
+    
+    // Wait for all to complete (with timeout protection)
+    await Promise.race([
+      Promise.all(promises),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Batch fetch timeout')), 30000)
+      )
+    ]).catch(error => {
+      console.error('❌ Batch fetch error:', error.message);
+    });
     
     return results;
   }
 
   /**
-   * Clear cache - useful for manual refresh
+   * Clear cache
    */
   clearCache() {
     const size = this.cache.size;

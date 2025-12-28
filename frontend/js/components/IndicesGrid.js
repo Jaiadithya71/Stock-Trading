@@ -1,3 +1,4 @@
+// frontend/js/components/IndicesGrid.js - FIXED VERSION
 const IndicesGrid = {
     render(data, timestamp) {
         if (!data || Object.keys(data).length === 0) {
@@ -36,7 +37,21 @@ const IndicesGrid = {
         const rows = indices.map((index, idx) => {
             const label = String.fromCharCode(65 + idx); // A, B, C, D, E
             const indexData = index.key && data[index.key];
-            const ltpValue = indexData?.ltp || '--';
+            
+            // FIXED: Better LTP value extraction with fallback
+            let ltpValue = '--';
+            if (indexData && indexData.ltp) {
+                ltpValue = indexData.ltp;
+            } else if (indexData) {
+                // Try to extract from any interval data
+                const intervals = ['ONE_HOUR', 'FIFTEEN_MINUTE', 'FIVE_MINUTE', 'ONE_MINUTE'];
+                for (const interval of intervals) {
+                    if (indexData[interval] && typeof indexData[interval] === 'object' && indexData[interval].ltp) {
+                        ltpValue = indexData[interval].ltp;
+                        break;
+                    }
+                }
+            }
             
             // Get data age if available
             let dataAge = '';
@@ -44,6 +59,9 @@ const IndicesGrid = {
             if (indexData?.ltpTimestamp) {
                 dataAge = Formatters.formatDataAge(indexData.ltpTimestamp);
                 ageClass = Formatters.getDataAgeClass(indexData.ltpTimestamp);
+            } else if (indexData?.fetchedAt) {
+                dataAge = Formatters.formatDataAge(indexData.fetchedAt);
+                ageClass = Formatters.getDataAgeClass(indexData.fetchedAt);
             }
             
             return `
@@ -74,7 +92,7 @@ const IndicesGrid = {
                         <div class="card-title">Market Indices</div>
                         <div class="timestamp">Last updated: ${timestamp || '--'}</div>
                     </div>
-                    <button class="refresh-btn" onclick="App.refreshIndices()">🔄 Refresh</button>
+                    <button class="refresh-btn" data-action="refresh-indices">🔄 Refresh</button>
                 </div>
                 
                 <div class="indices-table-wrapper">
@@ -90,12 +108,7 @@ const IndicesGrid = {
                             </tr>
                             <tr>
                                 ${timeIntervals.map(interval => {
-                                    const minutes = parseInt(interval.key.split('_')[0]) || 
-                                                  (interval.key === 'ONE_MINUTE' ? 1 :
-                                                   interval.key === 'THREE_MINUTE' ? 3 :
-                                                   interval.key === 'FIVE_MINUTE' ? 5 :
-                                                   interval.key === 'FIFTEEN_MINUTE' ? 15 :
-                                                   interval.key === 'THIRTY_MINUTE' ? 30 : 60);
+                                    const minutes = this.getIntervalMinutes(interval.key);
                                     return `<th class="time-range-col">${getTimeRange(minutes)}</th>`;
                                 }).join('')}
                             </tr>
@@ -107,5 +120,20 @@ const IndicesGrid = {
                 </div>
             </div>
         `;
+    },
+
+    /**
+     * Helper to get minutes from interval key
+     */
+    getIntervalMinutes(intervalKey) {
+        const map = {
+            'ONE_MINUTE': 1,
+            'THREE_MINUTE': 3,
+            'FIVE_MINUTE': 5,
+            'FIFTEEN_MINUTE': 15,
+            'THIRTY_MINUTE': 30,
+            'ONE_HOUR': 60
+        };
+        return map[intervalKey] || 1;
     }
 };

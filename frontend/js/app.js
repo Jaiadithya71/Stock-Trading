@@ -1,4 +1,4 @@
-// frontend/js/app.js - FIXED VERSION (Non-blocking PCR)
+// frontend/js/app.js - ENHANCED WITH DEBUG LOGGING
 const App = {
     state: {
         currentUsername: '',
@@ -20,6 +20,7 @@ const App = {
         showCurrency: true,
         showOptionChain: false,
         showPCR: true,
+        isLoading: false,
         filters: {
             showBuying: true,
             showSelling: true,
@@ -28,7 +29,7 @@ const App = {
     },
 
     async init() {
-        Helpers.log('Initializing app...');
+        Helpers.log('🚀 Initializing app...');
         EventHandler.init();
         this.registerEventHandlers();
         this.renderModals();
@@ -65,10 +66,6 @@ const App = {
         // Export handlers
         EventHandler.on('export-csv', () => this.exportToCSV());
         EventHandler.on('export-json', () => this.exportToJSON());
-        
-        // Settings
-        EventHandler.on('open-settings', () => this.openSettings());
-        EventHandler.on('save-settings', () => this.saveSettings());
     },
 
     renderModals() {
@@ -138,19 +135,19 @@ const App = {
                 // Render dashboard immediately
                 this.renderDashboard();
                 
-                // START PCR COLLECTOR IN BACKGROUND (non-blocking, no await)
+                // START PCR COLLECTOR IN BACKGROUND (non-blocking)
                 console.log('🚀 Starting PCR Collector in background...');
                 ApiService.startPCRCollector(this.state.currentUsername)
                     .then(pcrResult => {
                         if (pcrResult.success) {
-                            console.log('✅ PCR Collector request sent');
+                            console.log('✅ PCR Collector started');
                         }
                     })
                     .catch(error => {
-                        console.error('⚠️ PCR Collector start failed:', error);
+                        console.warn('⚠️ PCR Collector failed to start:', error.message);
                     });
                 
-                // Load dashboard data (don't wait for PCR)
+                // Load dashboard data (fast!)
                 await this.loadAllData();
                 this.startAutoRefresh();
             } else {
@@ -159,7 +156,7 @@ const App = {
                 CredentialsModal.hide();
             }
         } catch (error) {
-            Helpers.showError('loginError', 'Authentication failed');
+            Helpers.showError('loginError', 'Authentication failed: ' + error.message);
         }
     },
 
@@ -169,37 +166,76 @@ const App = {
             ${Header.render(this.state.currentUsername)}
             ${Toolbar.render(this.state)}
             <div class="dashboard-container" id="dashboardContent">
-                ${LoadingSpinner.render('Loading dashboard...')}
+                ${LoadingSpinner.render('Loading dashboard data...')}
             </div>
         `;
     },
 
     async loadAllData() {
-        // Load data in parallel (don't wait for PCR if it's not ready)
-        const promises = [
-            this.fetchBankNiftyData(),
-            this.fetchIndicesData()
-        ];
-        
-        if (this.state.showCurrency) {
-            promises.push(this.fetchCurrencyData());
-        }
-
-        if (this.state.showOptionChain) {
-            promises.push(this.fetchNSEOptionChain());
-        }
-
-        // PCR is fetched separately - don't block if no data
-        if (this.state.showPCR) {
-            promises.push(this.fetchPCRData().catch(err => {
-                console.log('PCR data not ready yet:', err.message);
-                // Set to null - will show "no data" message
-                this.state.pcrData = null;
-            }));
+        if (this.state.isLoading) {
+            console.log('⏳ Already loading data, skipping...');
+            return;
         }
         
-        await Promise.all(promises);
-        this.updateDashboard();
+        this.state.isLoading = true;
+        const startTime = Date.now();
+        console.log('🔄 Loading dashboard data...');
+        
+        try {
+            // Load critical data first (parallel)
+            const criticalPromises = [
+                this.fetchBankNiftyData().catch(err => {
+                    console.error('Bank Nifty fetch failed:', err.message);
+                }),
+                this.fetchIndicesData().catch(err => {
+                    console.error('Indices fetch failed:', err.message);
+                })
+            ];
+            
+            // Load optional data
+            if (this.state.showCurrency) {
+                criticalPromises.push(
+                    this.fetchCurrencyData().catch(err => {
+                        console.warn('Currency fetch failed:', err.message);
+                    })
+                );
+            }
+
+            if (this.state.showOptionChain) {
+                criticalPromises.push(
+                    this.fetchNSEOptionChain().catch(err => {
+                        console.warn('Option chain fetch failed:', err.message);
+                    })
+                );
+            }
+
+            // PCR is fetched separately - non-blocking
+            if (this.state.showPCR) {
+                criticalPromises.push(
+                    this.fetchPCRData().catch(err => {
+                        console.log('PCR data not ready yet:', err.message);
+                        this.state.pcrData = null;
+                    })
+                );
+            }
+            
+            // Wait for all with timeout
+            await Promise.race([
+                Promise.all(criticalPromises),
+                new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('Data fetch timeout')), 20000)
+                )
+            ]);
+            
+            const loadTime = Date.now() - startTime;
+            console.log(`✅ Dashboard loaded in ${(loadTime / 1000).toFixed(2)}s`);
+            
+        } catch (error) {
+            console.error('❌ Error loading dashboard:', error.message);
+        } finally {
+            this.state.isLoading = false;
+            this.updateDashboard();
+        }
     },
 
     async fetchBankNiftyData() {
@@ -208,9 +244,11 @@ const App = {
             if (result.success) {
                 this.state.bankNiftyData = result.data;
                 this.state.bankNiftyTimestamp = Helpers.getCurrentTime();
+                console.log('✅ Bank Nifty data loaded');
             }
         } catch (error) {
-            Helpers.log('Error fetching Bank Nifty data: ' + error.message, 'error');
+            console.error('Error fetching Bank Nifty:', error.message);
+            throw error;
         }
     },
 
@@ -220,9 +258,21 @@ const App = {
             if (result.success) {
                 this.state.indicesData = result.data;
                 this.state.indicesTimestamp = Helpers.getCurrentTime();
+                
+                // DEBUG: Log the actual data structure received
+                console.log('✅ Indices data loaded');
+                console.log('📊 DEBUG - Indices Data Structure:');
+                console.log(JSON.stringify(result.data, null, 2));
+                
+                // Check if BANKNIFTY has LTP
+                if (result.data.BANKNIFTY) {
+                    console.log('🔍 BANKNIFTY data:', result.data.BANKNIFTY);
+                    console.log('🔍 BANKNIFTY LTP:', result.data.BANKNIFTY.ltp || 'NOT FOUND');
+                }
             }
         } catch (error) {
-            Helpers.log('Error fetching indices data: ' + error.message, 'error');
+            console.error('Error fetching indices:', error.message);
+            throw error;
         }
     },
 
@@ -232,16 +282,16 @@ const App = {
             if (result.success) {
                 this.state.currencyData = result;
                 this.state.currencyTimestamp = Helpers.getCurrentTime();
-                Helpers.log('Currency rates fetched: ' + result.currencies.length + ' currencies');
+                console.log('✅ Currency data loaded');
             }
         } catch (error) {
-            Helpers.log('Error fetching currency data: ' + error.message, 'error');
+            console.error('Error fetching currency:', error.message);
+            throw error;
         }
     },
 
     async fetchNSEOptionChain() {
         try {
-            Helpers.log('Fetching NSE option chain for ' + this.state.selectedNSESymbol + '...');
             const result = await ApiService.getNSEOptionChain(
                 this.state.selectedNSESymbol,
                 this.state.selectedNSEExpiry
@@ -254,43 +304,40 @@ const App = {
                     this.state.selectedNSEExpiry = result.data.expiryDates[0];
                 }
                 
-                Helpers.log(`NSE option chain fetched: ${result.data.optionChain.length} strikes`);
-            } else {
-                Helpers.log('Failed to fetch NSE option chain: ' + result.message, 'error');
+                console.log('✅ Option chain loaded');
             }
         } catch (error) {
-            Helpers.log('Error fetching NSE option chain: ' + error.message, 'error');
+            console.error('Error fetching option chain:', error.message);
+            throw error;
         }
     },
 
     async fetchPCRData() {
         try {
-            Helpers.log('Fetching PCR historical data...');
             const result = await ApiService.getPCRHistorical(this.state.currentUsername);
             
             if (result.success && result.data) {
                 this.state.pcrData = result.data;
                 this.state.pcrTimestamp = Helpers.getCurrentTime();
-                Helpers.log('PCR data fetched successfully');
+                console.log('✅ PCR data loaded');
             } else {
-                Helpers.log('PCR data not available yet: ' + (result.message || 'No data'), 'warning');
                 this.state.pcrData = null;
             }
         } catch (error) {
-            Helpers.log('Error fetching PCR data: ' + error.message, 'error');
             this.state.pcrData = null;
+            throw error;
         }
     },
 
     async refreshPCR() {
-        Helpers.log('Refreshing PCR data...');
-        await this.fetchPCRData();
+        console.log('🔄 Refreshing PCR...');
+        await this.fetchPCRData().catch(() => {});
         this.updateDashboard();
     },
 
     async refreshNSEOptionChain() {
-        Helpers.log('Refreshing NSE option chain...');
-        await this.fetchNSEOptionChain();
+        console.log('🔄 Refreshing option chain...');
+        await this.fetchNSEOptionChain().catch(() => {});
         this.updateDashboard();
     },
 
@@ -299,24 +346,21 @@ const App = {
         this.state.selectedNSEExpiry = null;
         this.state.nseOptionChainData = null;
         
-        Helpers.log('Selected NSE symbol: ' + symbol);
-        await this.fetchNSEOptionChain();
+        await this.fetchNSEOptionChain().catch(() => {});
         this.updateDashboard();
     },
 
     async changeNSEExpiry(expiry) {
         this.state.selectedNSEExpiry = expiry;
-        Helpers.log('Changed NSE expiry to: ' + expiry);
-        await this.fetchNSEOptionChain();
+        await this.fetchNSEOptionChain().catch(() => {});
         this.updateDashboard();
     },
 
     toggleOptionChain(target) {
         this.state.showOptionChain = target.checked;
-        Helpers.log('Option chain: ' + (this.state.showOptionChain ? 'enabled' : 'disabled'));
         
         if (this.state.showOptionChain && !this.state.nseOptionChainData) {
-            this.fetchNSEOptionChain().then(() => this.updateDashboard());
+            this.fetchNSEOptionChain().then(() => this.updateDashboard()).catch(() => {});
         } else {
             this.updateDashboard();
         }
@@ -324,10 +368,9 @@ const App = {
 
     togglePCR(target) {
         this.state.showPCR = target.checked;
-        Helpers.log('PCR widget: ' + (this.state.showPCR ? 'enabled' : 'disabled'));
         
         if (this.state.showPCR && !this.state.pcrData) {
-            this.fetchPCRData().then(() => this.updateDashboard());
+            this.fetchPCRData().then(() => this.updateDashboard()).catch(() => {});
         } else {
             this.updateDashboard();
         }
@@ -403,18 +446,17 @@ const App = {
     },
 
     async refreshBankNifty() {
-        await this.fetchBankNiftyData();
+        await this.fetchBankNiftyData().catch(() => {});
         this.updateDashboard();
     },
 
     async refreshIndices() {
-        await this.fetchIndicesData();
+        await this.fetchIndicesData().catch(() => {});
         this.updateDashboard();
     },
 
     async refreshCurrency() {
-        Helpers.log('Refreshing currency data...');
-        await this.fetchCurrencyData();
+        await this.fetchCurrencyData().catch(() => {});
         this.updateDashboard();
     },
 
@@ -428,19 +470,16 @@ const App = {
         
         if (this.state.autoRefreshEnabled) {
             this.startAutoRefresh();
-            Helpers.log('Auto-refresh enabled with interval: ' + this.state.refreshIntervalTime + 'ms');
         } else {
             this.stopAutoRefresh();
-            Helpers.log('Auto-refresh disabled');
         }
     },
 
     toggleCurrency(target) {
         this.state.showCurrency = target.checked;
-        Helpers.log('Currency widget: ' + (this.state.showCurrency ? 'enabled' : 'disabled'));
         
         if (this.state.showCurrency && !this.state.currencyData) {
-            this.fetchCurrencyData().then(() => this.updateDashboard());
+            this.fetchCurrencyData().then(() => this.updateDashboard()).catch(() => {});
         } else {
             this.updateDashboard();
         }
@@ -448,7 +487,6 @@ const App = {
 
     changeRefreshInterval(target) {
         this.state.refreshIntervalTime = parseInt(target.value);
-        Helpers.log('Refresh interval changed to: ' + this.state.refreshIntervalTime + 'ms');
         
         if (this.state.autoRefreshEnabled) {
             this.stopAutoRefresh();
@@ -464,14 +502,14 @@ const App = {
 
     changeInterval(target) {
         this.state.selectedInterval = target.value;
-        Helpers.log('Interval changed to: ' + target.value);
     },
 
     startAutoRefresh() {
         if (this.state.autoRefreshEnabled && !this.state.refreshIntervalId) {
             this.state.refreshIntervalId = setInterval(() => {
-                Helpers.log('Auto-refreshing data...');
-                this.loadAllData();
+                if (!this.state.isLoading) {
+                    this.loadAllData();
+                }
             }, this.state.refreshIntervalTime);
         }
     },
@@ -527,14 +565,6 @@ const App = {
         link.download = filename;
         link.click();
         URL.revokeObjectURL(url);
-    },
-
-    openSettings() {
-        Helpers.log('Opening settings...');
-    },
-
-    saveSettings() {
-        Helpers.log('Saving settings...');
     }
 };
 

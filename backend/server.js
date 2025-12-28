@@ -1,4 +1,4 @@
-// backend/server.js - FIXED VERSION (Non-blocking PCR collector)
+// backend/server.js - FIXED VERSION (PCR collector starts after auth)
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
@@ -24,41 +24,36 @@ app.get("/", (req, res) => {
 // Global PCR collector instance
 let pcrCollector = null;
 let pcrCollectorUsername = null;
+let pcrCollectorDashboard = null;
 
 /**
- * Start PCR Collector in background (non-blocking)
+ * Start PCR Collector ONLY after successful authentication
+ * FIXED: Now receives authenticated dashboard instance
  */
-async function startPCRCollectorBackground(username) {
+async function startPCRCollectorBackground(username, authenticatedDashboard) {
   try {
-    // Don't start if already running
-    if (pcrCollector && pcrCollector.isRunning) {
-      console.log('✅ PCR Collector already running');
+    // Don't start if already running for this user
+    if (pcrCollector && pcrCollector.isRunning && pcrCollectorUsername === username) {
+      console.log('✅ PCR Collector already running for this user');
       return { success: true, alreadyRunning: true };
     }
     
-    console.log(`\n🚀 Starting PCR Collector for ${username} (background)...`);
-    
-    // Load credentials and authenticate
-    const credentials = loadCredentials(username);
-    if (!credentials) {
-      console.error('❌ PCR Collector: User not found');
-      return { success: false, message: "User not found" };
+    // Stop existing collector if running for different user
+    if (pcrCollector && pcrCollector.isRunning) {
+      console.log(`⚠️  Stopping PCR Collector for ${pcrCollectorUsername}...`);
+      pcrCollector.stop();
     }
     
-    const dashboard = new TradingDashboard(credentials);
-    const authResult = await dashboard.authenticate();
+    console.log(`\n🚀 Starting PCR Collector for ${username}...`);
     
-    if (!authResult.success) {
-      console.error('❌ PCR Collector: Authentication failed');
-      return { success: false, message: authResult.message };
-    }
-    
-    // Start collector
-    pcrCollector = new PCRCollectorService(dashboard.smart_api, 1);
+    // Use the ALREADY AUTHENTICATED dashboard instance
+    pcrCollector = new PCRCollectorService(authenticatedDashboard.smart_api, 1);
     pcrCollectorUsername = username;
+    pcrCollectorDashboard = authenticatedDashboard;
+    
     pcrCollector.start();
     
-    console.log(`✅ PCR Collector started successfully (background)\n`);
+    console.log(`✅ PCR Collector started successfully\n`);
     
     return { success: true, alreadyRunning: false };
     
@@ -69,15 +64,35 @@ async function startPCRCollectorBackground(username) {
 }
 
 /**
- * Start PCR Collector (non-blocking endpoint)
+ * Start PCR Collector endpoint
+ * FIXED: Now waits for authenticated dashboard from frontend
  */
 app.post("/api/start-pcr-collector", async (req, res) => {
   const { username } = req.body;
   
+  if (!username) {
+    return res.status(400).json({ 
+      success: false, 
+      message: "Username required" 
+    });
+  }
+  
+  // Check if user has authenticated dashboard in active sessions
+  const { getActiveDashboards } = require("./middleware/authMiddleware");
+  const activeDashboards = getActiveDashboards();
+  const userDashboard = activeDashboards[username];
+  
+  if (!userDashboard || !userDashboard.authenticated) {
+    return res.status(401).json({ 
+      success: false, 
+      message: "User not authenticated. Please login first." 
+    });
+  }
+  
   // Return immediately, start in background
   res.json({ 
     success: true, 
-    message: "PCR Collector starting in background...",
+    message: "PCR Collector starting...",
     status: {
       isRunning: false,
       starting: true
@@ -85,7 +100,7 @@ app.post("/api/start-pcr-collector", async (req, res) => {
   });
   
   // Start in background (don't await)
-  startPCRCollectorBackground(username).then(result => {
+  startPCRCollectorBackground(username, userDashboard).then(result => {
     if (result.success) {
       console.log('✅ PCR Collector background start completed');
     } else {
@@ -129,6 +144,7 @@ app.post("/api/stop-pcr-collector", (req, res) => {
   pcrCollector.stop();
   pcrCollector = null;
   pcrCollectorUsername = null;
+  pcrCollectorDashboard = null;
   
   res.json({ 
     success: true, 
@@ -139,18 +155,29 @@ app.post("/api/stop-pcr-collector", (req, res) => {
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Trading Dashboard API running on port ${PORT}`);
-  console.log(`📊 Access the dashboard at http://localhost:${PORT}`);
-  console.log(`\n💡 PCR Collector will start automatically when you authenticate`);
-  console.log(`   (Running in background - won't block dashboard loading)\n`);
+  console.log('\n' + '='.repeat(60));
+  console.log('🚀 Trading Dashboard API Server');
+  console.log('='.repeat(60));
+  console.log(`📊 Dashboard URL: http://localhost:${PORT}`);
+  console.log(`🔧 API Base URL: http://localhost:${PORT}/api`);
+  console.log('='.repeat(60));
+  console.log('\n💡 Server Features:');
+  console.log('   ✅ Fast parallel data fetching');
+  console.log('   ✅ 5-second API timeout protection');
+  console.log('   ✅ Smart market-aware intervals');
+  console.log('   ✅ PCR collector (starts after login)');
+  console.log('   ✅ Automatic cache management');
+  console.log('\n🔄 Ready to accept connections!\n');
 });
 
 // Cleanup on exit
 process.on('SIGINT', () => {
   console.log('\n\n🛑 Shutting down server...');
   if (pcrCollector) {
+    console.log('   Stopping PCR Collector...');
     pcrCollector.stop();
   }
+  console.log('✅ Cleanup complete. Goodbye!\n');
   process.exit(0);
 });
 

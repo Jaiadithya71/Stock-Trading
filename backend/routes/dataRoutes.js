@@ -1,79 +1,105 @@
-// backend/routes/dataRoutes.js - ENHANCED VERSION WITH TIMESTAMPS
+// backend/routes/dataRoutes.js - OPTIMIZED VERSION WITH PARALLEL FETCHING
 const express = require("express");
 const router = express.Router();
 const { requireAuth } = require("../middleware/authMiddleware");
 const { SYMBOL_TOKEN_MAP, INDICES_INSTRUMENTS, TIME_INTERVALS } = require("../config/constants");
+const { isMarketOpen } = require("../utils/dateHelpers");
 
 /**
- * Get Bank Nifty data with intelligent fallbacks and timestamps
+ * Get Bank Nifty data with PARALLEL fetching
+ * FIXED: Uses Promise.all instead of sequential loops
  */
 router.post("/banknifty-data", requireAuth, async (req, res) => {
   const dashboard = req.dashboard;
-  const results = [];
   const fetchTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
   
   console.log("\n========================================");
   console.log(`📊 FETCHING BANK NIFTY DATA at ${fetchTime}`);
+  console.log(`🔄 Mode: PARALLEL (fast)`);
   console.log("========================================");
   
-  const fallbackIntervals = ["ONE_MINUTE", "FIVE_MINUTE", "FIFTEEN_MINUTE", "ONE_HOUR"];
+  const marketOpenNow = isMarketOpen();
+  const preferredInterval = marketOpenNow ? "ONE_MINUTE" : "ONE_HOUR";
   
-  for (const [symbol, token] of Object.entries(SYMBOL_TOKEN_MAP)) {
-    console.log(`\n🏦 Fetching ${symbol} (Token: ${token})...`);
-    
-    let successfulData = null;
-    let usedInterval = null;
-    let dataTimestamp = null;
-    
-    for (const interval of fallbackIntervals) {
-      const response = await dashboard.getCandleData("NSE", token, interval);
+  console.log(`📊 Market Status: ${marketOpenNow ? '🟢 OPEN' : '🔴 CLOSED'}`);
+  console.log(`⏱️  Using interval: ${preferredInterval}`);
+  
+  // PARALLEL FETCH: All banks at once
+  const bankPromises = Object.entries(SYMBOL_TOKEN_MAP).map(async ([symbol, token]) => {
+    try {
+      const response = await dashboard.getCandleDataWithFallback("NSE", token, preferredInterval);
       
       if (response.status && response.data && response.data.length > 0) {
-        successfulData = response.data[response.data.length - 1];
-        usedInterval = interval;
-        dataTimestamp = successfulData[0]; // Candle timestamp
-        break;
+        const latestCandle = response.data[response.data.length - 1];
+        const ltp = latestCandle[4];
+        const volume = latestCandle[5];
+        const changePercent = ((latestCandle[4] - latestCandle[1]) / latestCandle[1]) * 100;
+        const status = dashboard.getStatus(symbol, latestCandle[4]);
+        
+        console.log(`   ✅ ${symbol}: ₹${ltp.toFixed(2)}`);
+        
+        return {
+          bank: symbol,
+          ltp: ltp.toFixed(2),
+          volume,
+          changePercent: changePercent.toFixed(2),
+          status,
+          interval: preferredInterval,
+          timestamp: latestCandle[0],
+          fetchedAt: new Date().toISOString()
+        };
+      } else {
+        console.log(`   ❌ ${symbol}: No data`);
+        return {
+          bank: symbol,
+          ltp: null,
+          volume: null,
+          changePercent: null,
+          status: "No Data",
+          interval: null,
+          timestamp: null,
+          fetchedAt: new Date().toISOString()
+        };
       }
-      
-      await new Promise(resolve => setTimeout(resolve, 50));
-    }
-    
-    if (successfulData) {
-      const ltp = successfulData[4];
-      const volume = successfulData[5];
-      const changePercent = ((successfulData[4] - successfulData[1]) / successfulData[1]) * 100;
-      const status = dashboard.getStatus(symbol, successfulData[4]);
-      
-      console.log(`   ✅ ${symbol}: LTP=₹${ltp.toFixed(2)}, Volume=${volume}, Change=${changePercent.toFixed(2)}%, Status=${status} [${usedInterval}]`);
-      
-      results.push({
-        bank: symbol,
-        ltp: ltp.toFixed(2),
-        volume,
-        changePercent: changePercent.toFixed(2),
-        status,
-        interval: usedInterval,
-        timestamp: dataTimestamp, // Add data timestamp
-        fetchedAt: new Date().toISOString() // Add fetch timestamp
-      });
-    } else {
-      console.log(`   ❌ ${symbol}: No data available (tried all intervals)`);
-      results.push({
+    } catch (error) {
+      console.log(`   ⚠️  ${symbol}: ${error.message}`);
+      return {
         bank: symbol,
         ltp: null,
         volume: null,
         changePercent: null,
-        status: "No Data",
+        status: "Error",
         interval: null,
         timestamp: null,
-        fetchedAt: new Date().toISOString()
-      });
+        fetchedAt: new Date().toISOString(),
+        error: error.message
+      };
     }
-  }
+  });
   
-  console.log("\n========================================");
+  // Wait for all banks (with timeout)
+  const results = await Promise.race([
+    Promise.all(bankPromises),
+    new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Batch fetch timeout')), 15000)
+    )
+  ]).catch(error => {
+    console.error('❌ Batch fetch failed:', error.message);
+    // Return partial results
+    return Object.keys(SYMBOL_TOKEN_MAP).map(symbol => ({
+      bank: symbol,
+      ltp: null,
+      volume: null,
+      changePercent: null,
+      status: "Timeout",
+      interval: null,
+      timestamp: null,
+      fetchedAt: new Date().toISOString()
+    }));
+  });
+  
   const successCount = results.filter(r => r.ltp !== null).length;
-  console.log(`✅ COMPLETED: ${successCount}/${results.length} banks have data (${((successCount/results.length)*100).toFixed(1)}%)`);
+  console.log(`✅ COMPLETED: ${successCount}/${results.length} banks (${((successCount/results.length)*100).toFixed(1)}%)`);
   console.log("========================================\n");
   
   res.json({ 
@@ -83,85 +109,92 @@ router.post("/banknifty-data", requireAuth, async (req, res) => {
       totalBanks: results.length,
       banksWithData: successCount,
       successRate: ((successCount/results.length)*100).toFixed(1) + '%',
-      fetchedAt: new Date().toISOString()
+      fetchedAt: new Date().toISOString(),
+      marketStatus: marketOpenNow ? 'OPEN' : 'CLOSED',
+      intervalUsed: preferredInterval
     }
   });
 });
 
 /**
- * Get indices data with timestamps
+ * Get indices data with PARALLEL fetching and smart intervals
+ * FIXED: Skips unnecessary fallback attempts
  */
 router.post("/indices-data", requireAuth, async (req, res) => {
   const dashboard = req.dashboard;
-  const results = {};
   const fetchTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
   
   console.log("\n========================================");
   console.log(`📈 FETCHING INDICES DATA at ${fetchTime}`);
   console.log("========================================");
   
-  for (const [symbol, info] of Object.entries(INDICES_INSTRUMENTS)) {
-    console.log(`\n📊 Fetching ${symbol} (Token: ${info.token})...`);
-    results[symbol] = {};
+  const marketOpenNow = isMarketOpen();
+  const results = {};
+  
+  // PARALLEL FETCH: All indices at once
+  const indicesPromises = Object.entries(INDICES_INSTRUMENTS).map(async ([symbol, info]) => {
+    console.log(`\n📊 Fetching ${symbol}...`);
+    const indexResults = { ltp: null, ltpInterval: null, ltpTimestamp: null };
     
-    // Get LTP with fallback strategy
-    let ltpFound = false;
-    let ltpTimestamp = null;
-    const ltpFallbacks = ["ONE_MINUTE", "FIVE_MINUTE", "FIFTEEN_MINUTE"];
+    // Get LTP with smart fallback
+    const ltpInterval = marketOpenNow ? "ONE_MINUTE" : "ONE_HOUR";
+    const ltpResponse = await dashboard.getCandleDataWithFallback(info.exchange, info.token, ltpInterval);
     
-    for (const interval of ltpFallbacks) {
-      const ltpResponse = await dashboard.getCandleData(info.exchange, info.token, interval);
-      
-      if (ltpResponse.status && ltpResponse.data && ltpResponse.data.length > 0) {
-        const latestCandle = ltpResponse.data[ltpResponse.data.length - 1];
-        results[symbol].ltp = latestCandle[4].toFixed(2);
-        results[symbol].ltpInterval = interval;
-        results[symbol].ltpTimestamp = latestCandle[0]; // Add timestamp
-        console.log(`   LTP: ₹${results[symbol].ltp} [${interval}] at ${latestCandle[0]}`);
-        ltpFound = true;
-        break;
-      }
-      
-      await new Promise(resolve => setTimeout(resolve, 50));
-    }
-    
-    if (!ltpFound) {
-      results[symbol].ltp = null;
-      results[symbol].ltpInterval = null;
-      results[symbol].ltpTimestamp = null;
+    if (ltpResponse.status && ltpResponse.data && ltpResponse.data.length > 0) {
+      const latestCandle = ltpResponse.data[ltpResponse.data.length - 1];
+      indexResults.ltp = latestCandle[4].toFixed(2);
+      indexResults.ltpInterval = ltpInterval;
+      indexResults.ltpTimestamp = latestCandle[0];
+      console.log(`   LTP: ₹${indexResults.ltp} [${ltpInterval}]`);
+    } else {
       console.log(`   LTP: No data`);
     }
     
-    // Get sentiment for each time interval
-    for (const interval of TIME_INTERVALS) {
-      let response = await dashboard.getCandleData(info.exchange, info.token, interval);
-      
-      if (!response.status || !response.data || response.data.length === 0) {
-        const fallback = getFallbackInterval(interval);
-        if (fallback) {
-          console.log(`   ⚠️  ${interval}: No data, trying ${fallback}...`);
-          response = await dashboard.getCandleData(info.exchange, info.token, fallback);
-        }
-      }
+    // Get sentiment for ONLY essential intervals (not all 6!)
+    const essentialIntervals = marketOpenNow 
+      ? ["ONE_MINUTE", "FIVE_MINUTE", "FIFTEEN_MINUTE", "ONE_HOUR"]
+      : ["FIFTEEN_MINUTE", "ONE_HOUR"];
+    
+    // Fetch sentiments in parallel
+    const sentimentPromises = essentialIntervals.map(async (interval) => {
+      const response = await dashboard.getCandleData(info.exchange, info.token, interval);
       
       if (response.status && response.data && response.data.length > 0) {
         const candle = response.data[response.data.length - 1];
         const sentiment = dashboard.getSentiment(symbol + "_" + interval, candle[4]);
-        results[symbol][interval] = sentiment;
-        results[symbol][interval + '_timestamp'] = candle[0]; // Add timestamp for each interval
-        console.log(`   ${interval}: ${sentiment} at ${candle[0]}`);
-      } else {
-        results[symbol][interval] = "Neutral";
-        results[symbol][interval + '_timestamp'] = null;
-        console.log(`   ${interval}: Neutral (no data, using default)`);
+        return { interval, sentiment, timestamp: candle[0] };
       }
-      
-      await new Promise(resolve => setTimeout(resolve, 50));
-    }
+      return { interval, sentiment: "Neutral", timestamp: null };
+    });
     
-    // Add overall fetch timestamp
-    results[symbol].fetchedAt = new Date().toISOString();
-  }
+    const sentiments = await Promise.all(sentimentPromises);
+    
+    // Map sentiments to result
+    sentiments.forEach(({ interval, sentiment, timestamp }) => {
+      indexResults[interval] = sentiment;
+      indexResults[interval + '_timestamp'] = timestamp;
+    });
+    
+    // Fill missing intervals with "Neutral"
+    TIME_INTERVALS.forEach(interval => {
+      if (!indexResults[interval]) {
+        indexResults[interval] = "Neutral";
+        indexResults[interval + '_timestamp'] = null;
+      }
+    });
+    
+    indexResults.fetchedAt = new Date().toISOString();
+    
+    return { symbol, data: indexResults };
+  });
+  
+  // Wait for all indices
+  const indicesData = await Promise.all(indicesPromises);
+  
+  // Convert to object format
+  indicesData.forEach(({ symbol, data }) => {
+    results[symbol] = data;
+  });
   
   console.log("\n========================================");
   console.log(`✅ COMPLETED: Fetched indices data`);
@@ -171,24 +204,10 @@ router.post("/indices-data", requireAuth, async (req, res) => {
     success: true, 
     data: results,
     meta: {
-      fetchedAt: new Date().toISOString()
+      fetchedAt: new Date().toISOString(),
+      marketStatus: marketOpenNow ? 'OPEN' : 'CLOSED'
     }
   });
 });
-
-/**
- * Get fallback interval for a given interval
- */
-function getFallbackInterval(interval) {
-  const fallbackMap = {
-    "ONE_MINUTE": "FIVE_MINUTE",
-    "THREE_MINUTE": "FIVE_MINUTE",
-    "FIVE_MINUTE": "FIFTEEN_MINUTE",
-    "FIFTEEN_MINUTE": "ONE_HOUR",
-    "THIRTY_MINUTE": "ONE_HOUR",
-    "ONE_HOUR": "FIFTEEN_MINUTE"
-  };
-  return fallbackMap[interval] || null;
-}
 
 module.exports = router;
