@@ -1,4 +1,4 @@
-// frontend/js/api/apiService.js - UPDATED
+// frontend/js/api/apiService.js - UPDATED WITH PCR
 const ApiService = {
     async request(endpoint, data = null, method = 'POST') {
         try {
@@ -73,5 +73,34 @@ const ApiService = {
 
     async getNSEExpiryDates(symbol) {
         return await this.request(`/nse-expiry-dates?symbol=${symbol}`, null, 'GET');
+    },
+
+    // PCR API methods
+    async getPCRHistorical(username) {
+        return await this.request('/pcr-historical', { username });
+    },
+
+    async getPCRCurrent(username) {
+        return await this.request('/pcr-current', { username });
+    },
+
+    async getPCRStats(username) {
+        return await this.request('/pcr-stats', { username });
+    },
+
+    async clearPCRData(username, symbol = null) {
+        return await this.request('/pcr-clear', { username, symbol });
+    },
+
+    async startPCRCollector(username) {
+        return await this.request('/start-pcr-collector', { username });
+    },
+
+    async getPCRCollectorStatus() {
+        return await this.request('/pcr-collector-status', null, 'GET');
+    },
+
+    async stopPCRCollector() {
+        return await this.request('/stop-pcr-collector', {});
     }
 };

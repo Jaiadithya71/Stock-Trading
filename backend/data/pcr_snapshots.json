@@ -11,8 +11,8 @@
       "putVolume": null,
       "sentiment": "Neutral",
       "source": "putCallRatio_api",
-      "timestamp": "2025-12-27T10:44:31.140Z",
-      "timestampMs": 1766832271140
+      "timestamp": "2025-12-28T15:20:08.069Z",
+      "timestampMs": 1766935208069
     },
     {
       "symbol": "BANKNIFTY",
@@ -25,64 +25,8 @@
       "putVolume": null,
       "sentiment": "Neutral",
       "source": "putCallRatio_api",
-      "timestamp": "2025-12-27T10:45:34.299Z",
-      "timestampMs": 1766832334299
-    },
-    {
-      "symbol": "BANKNIFTY",
-      "pcr": 0.960474,
-      "expiry": "30DEC25",
-      "tradingSymbol": "BANKNIFTY30DEC25FUT",
-      "callOI": null,
-      "putOI": null,
-      "callVolume": null,
-      "putVolume": null,
-      "sentiment": "Neutral",
-      "source": "putCallRatio_api",
-      "timestamp": "2025-12-27T10:46:31.143Z",
-      "timestampMs": 1766832391143
-    },
-    {
-      "symbol": "BANKNIFTY",
-      "pcr": 0.960474,
-      "expiry": "30DEC25",
-      "tradingSymbol": "BANKNIFTY30DEC25FUT",
-      "callOI": null,
-      "putOI": null,
-      "callVolume": null,
-      "putVolume": null,
-      "sentiment": "Neutral",
-      "source": "putCallRatio_api",
-      "timestamp": "2025-12-27T10:47:31.136Z",
-      "timestampMs": 1766832451136
-    },
-    {
-      "symbol": "BANKNIFTY",
-      "pcr": 0.960474,
-      "expiry": "30DEC25",
-      "tradingSymbol": "BANKNIFTY30DEC25FUT",
-      "callOI": null,
-      "putOI": null,
-      "callVolume": null,
-      "putVolume": null,
-      "sentiment": "Neutral",
-      "source": "putCallRatio_api",
-      "timestamp": "2025-12-27T10:48:31.140Z",
-      "timestampMs": 1766832511140
-    },
-    {
-      "symbol": "BANKNIFTY",
-      "pcr": 0.960474,
-      "expiry": "30DEC25",
-      "tradingSymbol": "BANKNIFTY30DEC25FUT",
-      "callOI": null,
-      "putOI": null,
-      "callVolume": null,
-      "putVolume": null,
-      "sentiment": "Neutral",
-      "source": "putCallRatio_api",
-      "timestamp": "2025-12-27T10:49:31.202Z",
-      "timestampMs": 1766832571202
+      "timestamp": "2025-12-28T15:28:35.007Z",
+      "timestampMs": 1766935715007
     }
   ]
 }

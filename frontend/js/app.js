@@ -1,4 +1,4 @@
-// frontend/js/app.js - COMPLETE WITH NSE OPTION CHAIN
+// frontend/js/app.js - COMPLETE WITH PCR
 const App = {
     state: {
         currentUsername: '',
@@ -6,9 +6,11 @@ const App = {
         indicesData: null,
         currencyData: null,
         nseOptionChainData: null,
+        pcrData: null, // NEW
         bankNiftyTimestamp: null,
         indicesTimestamp: null,
         currencyTimestamp: null,
+        pcrTimestamp: null, // NEW
         refreshIntervalId: null,
         refreshIntervalTime: 60000,
         autoRefreshEnabled: true,
@@ -17,6 +19,7 @@ const App = {
         selectedNSEExpiry: null,
         showCurrency: true,
         showOptionChain: false,
+        showPCR: true, // NEW - default enabled
         filters: {
             showBuying: true,
             showSelling: true,
@@ -40,6 +43,7 @@ const App = {
         EventHandler.on('refresh-banknifty', () => this.refreshBankNifty());
         EventHandler.on('refresh-indices', () => this.refreshIndices());
         EventHandler.on('refresh-currency', () => this.refreshCurrency());
+        EventHandler.on('refresh-pcr', () => this.refreshPCR()); // NEW
         EventHandler.on('refresh-all', () => this.loadAllData());
         
         // NSE Option Chain handlers
@@ -52,6 +56,7 @@ const App = {
         EventHandler.on('toggle-autorefresh', (e, target) => this.toggleAutoRefresh(target));
         EventHandler.on('toggle-filter', (e, target) => this.toggleFilter(target));
         EventHandler.on('toggle-currency', (e, target) => this.toggleCurrency(target));
+        EventHandler.on('toggle-pcr', (e, target) => this.togglePCR(target)); // NEW
         
         // Interval selectors
         EventHandler.on('change-interval', (e, target) => this.changeInterval(target));
@@ -129,6 +134,18 @@ const App = {
             if (result.success) {
                 LoginModal.hide();
                 CredentialsModal.hide();
+                
+                // START PCR COLLECTOR AUTOMATICALLY
+                console.log('🚀 Starting PCR Collector...');
+                try {
+                    const pcrResult = await ApiService.startPCRCollector(this.state.currentUsername);
+                    if (pcrResult.success) {
+                        console.log('✅ PCR Collector started:', pcrResult.status);
+                    }
+                } catch (error) {
+                    console.error('⚠️ PCR Collector failed to start:', error);
+                }
+                
                 this.renderDashboard();
                 await this.loadAllData();
                 this.startAutoRefresh();
@@ -165,6 +182,10 @@ const App = {
 
         if (this.state.showOptionChain) {
             promises.push(this.fetchNSEOptionChain());
+        }
+
+        if (this.state.showPCR) {
+            promises.push(this.fetchPCRData());
         }
         
         await Promise.all(promises);
@@ -219,7 +240,6 @@ const App = {
             if (result.success) {
                 this.state.nseOptionChainData = result.data;
                 
-                // Set default expiry if not set
                 if (!this.state.selectedNSEExpiry && result.data.expiryDates?.length > 0) {
                     this.state.selectedNSEExpiry = result.data.expiryDates[0];
                 }
@@ -231,6 +251,31 @@ const App = {
         } catch (error) {
             Helpers.log('Error fetching NSE option chain: ' + error.message, 'error');
         }
+    },
+
+    async fetchPCRData() {
+        try {
+            Helpers.log('Fetching PCR historical data...');
+            const result = await ApiService.getPCRHistorical(this.state.currentUsername);
+            
+            if (result.success) {
+                this.state.pcrData = result.data;
+                this.state.pcrTimestamp = Helpers.getCurrentTime();
+                Helpers.log('PCR data fetched successfully');
+            } else {
+                Helpers.log('PCR data not available: ' + result.message, 'error');
+                this.state.pcrData = null;
+            }
+        } catch (error) {
+            Helpers.log('Error fetching PCR data: ' + error.message, 'error');
+            this.state.pcrData = null;
+        }
+    },
+
+    async refreshPCR() {
+        Helpers.log('Refreshing PCR data...');
+        await this.fetchPCRData();
+        this.updateDashboard();
     },
 
     async refreshNSEOptionChain() {
@@ -267,6 +312,17 @@ const App = {
         }
     },
 
+    togglePCR(target) {
+        this.state.showPCR = target.checked;
+        Helpers.log('PCR widget: ' + (this.state.showPCR ? 'enabled' : 'disabled'));
+        
+        if (this.state.showPCR && !this.state.pcrData) {
+            this.fetchPCRData().then(() => this.updateDashboard());
+        } else {
+            this.updateDashboard();
+        }
+    },
+
     updateDashboard() {
         const dashboard = document.getElementById('dashboardContent');
         if (dashboard) {
@@ -274,6 +330,10 @@ const App = {
             const filteredData = this.filterBankNiftyData(completeData);
             
             let html = `${IndicesGrid.render(this.state.indicesData, this.state.indicesTimestamp)}`;
+            
+            if (this.state.showPCR) {
+                html += PCRWidget.render(this.state.pcrData, this.state.pcrTimestamp);
+            }
             
             if (this.state.showCurrency && this.state.currencyData) {
                 html += CurrencyWidget.render(this.state.currencyData, this.state.currencyTimestamp);
@@ -440,6 +500,7 @@ const App = {
             bankNifty: this.getCompleteBankNiftyData(),
             indices: this.state.indicesData,
             currency: this.state.currencyData,
+            pcr: this.state.pcrData,
             nseOptionChain: this.state.nseOptionChainData,
             timestamp: new Date().toISOString()
         };

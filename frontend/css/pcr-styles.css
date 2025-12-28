@@ -1,0 +1,306 @@
+/* frontend/css/pcr-styles.css */
+
+/* PCR Widget Container */
+.pcr-widget-container {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* PCR Table Wrapper */
+.pcr-table-wrapper {
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+/* PCR Table */
+.pcr-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Table Headers */
+.pcr-table thead th {
+    background: linear-gradient(135deg, rgba(102, 190, 234, 0.3), rgba(102, 190, 234, 0.15));
+    padding: 14px 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #66beea;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(102, 190, 234, 0.2);
+}
+
+.pcr-table thead th.pcr-metric-col {
+    width: 140px;
+    text-align: left;
+}
+
+.pcr-table thead th.pcr-label-col {
+    width: 100px;
+}
+
+.pcr-table thead th.pcr-interval-col {
+    min-width: 120px;
+}
+
+.pcr-table thead th.pcr-grand-col {
+    min-width: 100px;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(251, 191, 36, 0.15));
+    color: #fbbf24;
+}
+
+/* Table Body */
+.pcr-table tbody tr {
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pcr-table tbody tr:hover {
+    background: rgba(102, 190, 234, 0.05);
+}
+
+.pcr-table tbody td {
+    padding: 12px;
+    text-align: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 13px;
+    color: #e0e0e0;
+}
+
+.pcr-table tbody td:last-child {
+    border-right: none;
+}
+
+/* Metric Column */
+.pcr-metric-cell {
+    text-align: left !important;
+    font-weight: 600;
+    color: #66beea;
+    background: rgba(102, 190, 234, 0.08);
+    border-right: 2px solid rgba(102, 190, 234, 0.3) !important;
+}
+
+/* Label Column */
+.pcr-label-cell {
+    font-size: 12px;
+    color: #888;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Value Cells */
+.pcr-value-cell {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* Sentiment Cells */
+.pcr-sentiment-cell {
+    font-weight: 700;
+    font-size: 13px;
+    padding: 8px 12px !important;
+}
+
+.pcr-sentiment-cell.sentiment-buying {
+    background: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.pcr-sentiment-cell.sentiment-selling {
+    background: rgba(248, 113, 113, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.pcr-sentiment-cell.sentiment-neutral {
+    background: rgba(148, 163, 184, 0.2);
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+/* Change Cells */
+.pcr-change-cell {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.pcr-change-cell.change-positive {
+    color: #4ade80;
+}
+
+.pcr-change-cell.change-negative {
+    color: #f87171;
+}
+
+/* Volume Cell */
+.pcr-volume-cell {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #a78bfa;
+}
+
+/* Grand Column Cells */
+.pcr-grand-cell,
+.pcr-trend-cell,
+.pcr-total-cell {
+    background: rgba(251, 191, 36, 0.1);
+    border-left: 2px solid rgba(251, 191, 36, 0.3) !important;
+    font-weight: 600;
+}
+
+.pcr-grand-sentiment {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.pcr-grand-sentiment.sentiment-buying {
+    background: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+}
+
+.pcr-grand-sentiment.sentiment-selling {
+    background: rgba(248, 113, 113, 0.2);
+    color: #f87171;
+}
+
+.pcr-grand-sentiment.sentiment-neutral {
+    background: rgba(148, 163, 184, 0.2);
+    color: #94a3b8;
+}
+
+/* Trend Display */
+.pcr-trend {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.pcr-trend.rising {
+    color: #f87171;
+}
+
+.pcr-trend.falling {
+    color: #4ade80;
+}
+
+.pcr-trend.neutral {
+    color: #94a3b8;
+}
+
+/* PCR Footer */
+.pcr-footer {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pcr-legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.pcr-legend-item {
+    font-size: 13px;
+    color: #888;
+}
+
+.pcr-legend-item .sentiment-buying,
+.pcr-legend-item .sentiment-selling,
+.pcr-legend-item .sentiment-neutral {
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* No Data State */
+.pcr-no-data {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.pcr-no-data-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.pcr-no-data-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fbbf24;
+    margin-bottom: 15px;
+}
+
+.pcr-no-data-message {
+    font-size: 14px;
+    color: #888;
+    line-height: 1.8;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.pcr-no-data-message code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #66beea;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .pcr-table {
+        font-size: 12px;
+    }
+    
+    .pcr-table thead th {
+        padding: 10px 8px;
+        font-size: 11px;
+    }
+    
+    .pcr-table tbody td {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pcr-table-wrapper {
+        margin: 10px 0;
+    }
+    
+    .pcr-table {
+        font-size: 10px;
+    }
+    
+    .pcr-table thead th {
+        padding: 8px 4px;
+        font-size: 10px;
+    }
+    
+    .pcr-table tbody td {
+        padding: 8px 4px;
+        font-size: 11px;
+    }
+    
+    .pcr-legend {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

@@ -1,4 +1,4 @@
-// frontend/js/components/Toolbar.js - COMPLETE WITH OPTION CHAIN
+// frontend/js/components/Toolbar.js - COMPLETE WITH PCR TOGGLE
 const Toolbar = {
     render(state) {
         return `
@@ -43,6 +43,16 @@ const Toolbar = {
                         <label class="toggle">
                             <input 
                                 type="checkbox" 
+                                id="pcrToggle"
+                                data-change-action="toggle-pcr" 
+                                ${state.showPCR ? 'checked' : ''}
+                            >
+                            <span class="toggle-label">📊 Show PCR Analysis</span>
+                        </label>
+                        
+                        <label class="toggle">
+                            <input 
+                                type="checkbox" 
                                 id="currencyToggle"
                                 data-change-action="toggle-currency" 
                                 ${state.showCurrency ? 'checked' : ''}
@@ -57,7 +67,7 @@ const Toolbar = {
                                 data-change-action="toggle-option-chain" 
                                 ${state.showOptionChain ? 'checked' : ''}
                             >
-                            <span class="toggle-label">📊 Show Option Chain</span>
+                            <span class="toggle-label">📈 Show Option Chain</span>
                         </label>
                     </div>
                 </div>
