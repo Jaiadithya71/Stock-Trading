@@ -1,12 +1,4 @@
-// ============================================================================
-// FILE: backend/services/pcrStorageService.js
-// PCR Storage Service - Stores PCR snapshots and calculates historical intervals
-// - Stores data in JSON file (can switch to SQLite later)
-// - Auto-cleanup of old data
-// - Atomic writes to prevent corruption
-// - Calculates 1min, 3min, 5min, 15min, 30min intervals from stored data
-// ============================================================================
-
+// backend/services/pcrStorageService.js - SMART VERSION (Market-aware)
 const fs = require('fs').promises;
 const fsSync = require('fs');
 const path = require('path');
@@ -30,8 +22,32 @@ class PCRStorageService {
   }
 
   /**
+   * Check if market is currently open
+   * Market hours: Mon-Fri, 9:15 AM - 3:30 PM IST
+   */
+  isMarketOpen() {
+    const now = new Date();
+    
+    // Convert to IST
+    const istTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+    
+    const dayOfWeek = istTime.getDay(); // 0 = Sunday, 6 = Saturday
+    const hours = istTime.getHours();
+    const minutes = istTime.getMinutes();
+    const currentMinutes = hours * 60 + minutes;
+    
+    // Market hours: 9:15 AM (555 min) to 3:30 PM (930 min)
+    const marketOpen = 9 * 60 + 15;  // 555
+    const marketClose = 15 * 60 + 30; // 930
+    
+    const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
+    const inTradingHours = currentMinutes >= marketOpen && currentMinutes <= marketClose;
+    
+    return isWeekday && inTradingHours;
+  }
+
+  /**
    * Store a PCR snapshot
-   * @param {Object} snapshot - { symbol, pcr, callOI, putOI, callVolume, putVolume, sentiment }
    */
   async storeSnapshot(snapshot) {
     console.log(`\n💾 Storing PCR snapshot for ${snapshot.symbol}...`);
@@ -77,15 +93,13 @@ class PCRStorageService {
 
   /**
    * Get historical PCR for different time intervals
-   * @param {string} symbol - Symbol (e.g., 'BANKNIFTY')
-   * @param {Array} intervals - Intervals in minutes (e.g., [1, 3, 5, 15, 30])
+   * SMART VERSION: Uses "now" during market hours, "latest snapshot" when closed
    */
   async getHistoricalPCR(symbol, intervals = [1, 3, 5, 15, 30]) {
     console.log(`\n📊 Calculating historical PCR for ${symbol}...`);
     
     try {
       const data = await this.loadData();
-      const now = Date.now();
       const results = {};
       
       // Filter snapshots for this symbol
@@ -98,21 +112,58 @@ class PCRStorageService {
       
       console.log(`   Found ${symbolSnapshots.length} snapshots`);
       
+      // Sort by timestamp (oldest to newest)
+      symbolSnapshots.sort((a, b) => a.timestampMs - b.timestampMs);
+      
+      // Determine reference time based on market status
+      const marketOpen = this.isMarketOpen();
+      let referenceTime;
+      let referenceMode;
+      
+      if (marketOpen) {
+        // Market is OPEN - use current time for real-time data
+        referenceTime = Date.now();
+        referenceMode = 'REAL-TIME (Market Open)';
+        console.log(`   🟢 Market is OPEN - Using current time as reference`);
+      } else {
+        // Market is CLOSED - use latest snapshot for historical analysis
+        referenceTime = symbolSnapshots[symbolSnapshots.length - 1].timestampMs;
+        referenceMode = 'HISTORICAL (Market Closed)';
+        console.log(`   🔴 Market is CLOSED - Using latest snapshot as reference`);
+      }
+      
+      console.log(`   Reference time: ${new Date(referenceTime).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+      console.log(`   Mode: ${referenceMode}`);
+      
+      const oldestSnapshotTime = symbolSnapshots[0].timestampMs;
+      const latestSnapshotTime = symbolSnapshots[symbolSnapshots.length - 1].timestampMs;
+      const totalSpanMinutes = (latestSnapshotTime - oldestSnapshotTime) / (60 * 1000);
+      
+      console.log(`   Latest snapshot: ${new Date(latestSnapshotTime).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+      console.log(`   Oldest snapshot: ${new Date(oldestSnapshotTime).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
+      console.log(`   Total span: ${totalSpanMinutes.toFixed(1)} minutes`);
+      
       // Calculate for each interval
       for (const intervalMinutes of intervals) {
         const intervalMs = intervalMinutes * 60 * 1000;
-        const cutoffTime = now - intervalMs;
+        
+        // Calculate cutoff time from reference time
+        const cutoffTime = referenceTime - intervalMs;
         
         // Get snapshots within this interval
         const intervalSnapshots = symbolSnapshots.filter(s => 
-          s.timestampMs >= cutoffTime
+          s.timestampMs >= cutoffTime && s.timestampMs <= referenceTime
         );
         
         if (intervalSnapshots.length === 0) {
-          console.log(`   ⚠️  ${intervalMinutes}min: No data`);
+          const mode = marketOpen ? 'current time' : 'latest snapshot';
+          console.log(`   ⚠️  ${intervalMinutes}min: No data (need snapshots within last ${intervalMinutes} min from ${mode})`);
           results[`${intervalMinutes}min`] = {
             pcr: null,
             sentiment: 'No Data',
+            trend: 'No Data',
+            change: null,
+            changePercent: null,
             dataPoints: 0
           };
           continue;
@@ -125,11 +176,11 @@ class PCRStorageService {
         const firstPCR = intervalSnapshots[0].pcr;
         const lastPCR = intervalSnapshots[intervalSnapshots.length - 1].pcr;
         const change = lastPCR - firstPCR;
-        const changePercent = (change / firstPCR) * 100;
+        const changePercent = firstPCR !== 0 ? (change / firstPCR) * 100 : 0;
         
         // Determine sentiment
         const sentiment = this.determineSentiment(avgPCR);
-        const trend = change > 0 ? 'Rising' : change < 0 ? 'Falling' : 'Stable';
+        const trend = change > 0.01 ? 'Rising' : change < -0.01 ? 'Falling' : 'Stable';
         
         results[`${intervalMinutes}min`] = {
           pcr: avgPCR.toFixed(4),
@@ -150,6 +201,8 @@ class PCRStorageService {
         timestamp: new Date().toISOString(),
         intervals: results,
         totalSnapshots: symbolSnapshots.length,
+        marketStatus: marketOpen ? 'OPEN' : 'CLOSED',
+        referenceMode: referenceMode,
         dataRange: {
           from: symbolSnapshots[0].timestamp,
           to: symbolSnapshots[symbolSnapshots.length - 1].timestamp
@@ -208,7 +261,8 @@ class PCRStorageService {
       oldestSnapshot: oldestSnapshot?.timestamp,
       newestSnapshot: newestSnapshot?.timestamp,
       dataSpanHours: oldestSnapshot && newestSnapshot ? 
-        ((newestSnapshot.timestampMs - oldestSnapshot.timestampMs) / (1000 * 60 * 60)).toFixed(2) : 0
+        ((newestSnapshot.timestampMs - oldestSnapshot.timestampMs) / (1000 * 60 * 60)).toFixed(2) : 0,
+      marketStatus: this.isMarketOpen() ? 'OPEN' : 'CLOSED'
     };
   }
 
