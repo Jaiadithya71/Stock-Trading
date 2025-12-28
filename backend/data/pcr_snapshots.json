@@ -27,6 +27,48 @@
       "source": "putCallRatio_api",
       "timestamp": "2025-12-28T15:28:35.007Z",
       "timestampMs": 1766935715007
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.960474,
+      "expiry": "30DEC25",
+      "tradingSymbol": "BANKNIFTY30DEC25FUT",
+      "callOI": null,
+      "putOI": null,
+      "callVolume": null,
+      "putVolume": null,
+      "sentiment": "Neutral",
+      "source": "putCallRatio_api",
+      "timestamp": "2025-12-28T17:17:07.619Z",
+      "timestampMs": 1766942227619
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.960474,
+      "expiry": "30DEC25",
+      "tradingSymbol": "BANKNIFTY30DEC25FUT",
+      "callOI": null,
+      "putOI": null,
+      "callVolume": null,
+      "putVolume": null,
+      "sentiment": "Neutral",
+      "source": "putCallRatio_api",
+      "timestamp": "2025-12-28T17:33:23.903Z",
+      "timestampMs": 1766943203903
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.960474,
+      "expiry": "30DEC25",
+      "tradingSymbol": "BANKNIFTY30DEC25FUT",
+      "callOI": null,
+      "putOI": null,
+      "callVolume": null,
+      "putVolume": null,
+      "sentiment": "Neutral",
+      "source": "putCallRatio_api",
+      "timestamp": "2025-12-28T17:34:35.687Z",
+      "timestampMs": 1766943275687
     }
   ]
 }

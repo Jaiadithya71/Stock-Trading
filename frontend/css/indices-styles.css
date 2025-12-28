@@ -1,72 +1,72 @@
-/* Indices Table Wrapper */
+/* Indices Table - ULTRA COMPACT */
 .indices-table-wrapper {
     overflow-x: auto;
-    padding: 16px;
+    padding: 0;
 }
 
-/* Indices Table */
 .indices-table {
     width: 100%;
     border-collapse: collapse;
-    background: #1a1f35;
-    border-radius: 8px;
-    overflow: hidden;
+    background: transparent;
+    font-size: 9px;
+    min-width: 900px;
 }
 
 .indices-table thead th {
-    background: #1e2438;
-    padding: 14px 12px;
+    background: rgba(30, 36, 56, 0.6);
+    padding: 5px 6px;
     text-align: center;
-    font-size: 13px;
+    font-size: 8px;
     font-weight: 600;
     color: #8b95a8;
-    border: 1px solid #2d3548;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     white-space: nowrap;
+    line-height: 1.2;
 }
 
 .indices-table thead .interval-col {
-    font-size: 14px;
+    font-size: 9px;
     font-weight: 700;
     color: #e0e6ed;
-    padding-bottom: 8px;
+    padding-bottom: 4px;
 }
 
 .indices-table thead .time-range-col {
-    font-size: 11px;
+    font-size: 8px;
     color: #6b7280;
     padding-top: 0;
-    padding-bottom: 12px;
+    padding-bottom: 5px;
 }
 
 /* Column widths */
 .indices-table .label-col {
-    width: 50px;
-    background: #151929;
+    width: 35px;
+    background: rgba(21, 25, 41, 0.5);
 }
 
 .indices-table .name-col {
-    width: 180px;
+    width: 140px;
     text-align: left !important;
-    background: #151929;
+    background: rgba(21, 25, 41, 0.5);
 }
 
 .indices-table .ltp-col {
-    width: 120px;
-    background: #151929;
+    width: 90px;
+    background: rgba(21, 25, 41, 0.5);
 }
 
 .indices-table .interval-col {
-    min-width: 100px;
+    min-width: 70px;
 }
 
 /* Table Body */
 .indices-table tbody tr {
-    border-bottom: 1px solid #2d3548;
-    transition: background 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    transition: background 0.15s ease;
 }
 
 .indices-table tbody tr:hover {
-    background: rgba(74, 158, 255, 0.03);
+    background: rgba(74, 158, 255, 0.02);
 }
 
 .indices-table tbody tr:last-child {
@@ -74,35 +74,36 @@
 }
 
 .indices-table tbody td {
-    padding: 16px 12px;
+    padding: 5px 6px;
     text-align: center;
-    font-size: 14px;
-    border-right: 1px solid #2d3548;
+    font-size: 9px;
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
+    line-height: 1.2;
 }
 
 .indices-table tbody td:last-child {
     border-right: none;
 }
 
-/* Index Label Column */
+/* Index Label */
 .indices-table .index-label {
-    font-size: 18px;
+    font-size: 12px;
     font-weight: bold;
     color: #4a9eff;
-    background: rgba(74, 158, 255, 0.08);
+    background: rgba(74, 158, 255, 0.06);
 }
 
-/* Index Name Column */
+/* Index Name */
 .indices-table .index-name {
-    font-size: 15px;
+    font-size: 10px;
     font-weight: 600;
     color: #e0e6ed;
     text-align: left !important;
 }
 
-/* LTP Column */
+/* LTP */
 .indices-table .index-ltp {
-    font-size: 16px;
+    font-size: 11px;
     font-weight: 700;
     color: #4a9eff;
     font-family: 'Courier New', monospace;
@@ -111,102 +112,132 @@
 /* Sentiment Cells */
 .indices-table .sentiment-cell {
     font-weight: 600;
-    transition: all 0.3s ease;
+    font-size: 9px;
+    transition: all 0.2s ease;
 }
 
 .indices-table .sentiment-cell:hover {
-    transform: scale(1.05);
-    box-shadow: inset 0 0 10px rgba(74, 158, 255, 0.2);
+    transform: scale(1.03);
 }
 
 .indices-table .sentiment-cell.sentiment-bullish {
-    background: rgba(16, 185, 129, 0.12);
+    background: rgba(16, 185, 129, 0.1);
     color: #10b981;
-    border-left: 3px solid #10b981;
+    border-left: 2px solid #10b981;
 }
 
 .indices-table .sentiment-cell.sentiment-bearish {
-    background: rgba(239, 68, 68, 0.12);
+    background: rgba(239, 68, 68, 0.1);
     color: #ef4444;
-    border-left: 3px solid #ef4444;
+    border-left: 2px solid #ef4444;
 }
 
 .indices-table .sentiment-cell.sentiment-neutral {
-    background: rgba(107, 114, 128, 0.12);
+    background: rgba(107, 114, 128, 0.1);
     color: #9ca3af;
-    border-left: 3px solid #6b7280;
+    border-left: 2px solid #6b7280;
 }
 
-.indices-table .sentiment-cell.sentiment-no.data {
-    background: rgba(75, 85, 99, 0.08);
+.indices-table .sentiment-cell.sentiment-no-data {
+    background: rgba(75, 85, 99, 0.06);
     color: #6b7280;
     font-style: italic;
-    font-size: 12px;
+    font-size: 8px;
 }
 
-/* Coming Soon Cell */
+/* Coming Soon */
 .indices-table .coming-soon-cell {
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.1));
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(245, 158, 11, 0.08));
     color: #fbbf24;
     font-weight: 600;
-    font-size: 12px;
+    font-size: 8px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
+/* Data age indicators */
+.data-age {
+    display: inline-block;
+    font-size: 7px;
+    padding: 1px 3px;
+    border-radius: 2px;
+    margin-left: 3px;
+}
+
+.age-fresh {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+}
+
+.age-recent {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+}
+
+.age-stale {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
     .indices-table {
-        font-size: 12px;
+        font-size: 8px;
+        min-width: 800px;
     }
     
     .indices-table thead th {
-        padding: 10px 8px;
-        font-size: 11px;
+        padding: 4px 5px;
+        font-size: 7px;
     }
     
     .indices-table tbody td {
-        padding: 12px 8px;
-        font-size: 12px;
+        padding: 4px 5px;
+        font-size: 8px;
     }
     
     .indices-table .index-name {
-        font-size: 13px;
+        font-size: 9px;
     }
     
     .indices-table .index-ltp {
-        font-size: 14px;
+        font-size: 10px;
+    }
+    
+    .indices-table .interval-col {
+        min-width: 60px;
     }
 }
 
 @media (max-width: 768px) {
     .indices-table-wrapper {
-        padding: 8px;
+        padding: 0;
     }
     
     .indices-table {
-        font-size: 10px;
+        font-size: 7px;
+        min-width: 700px;
     }
     
     .indices-table thead th {
-        padding: 8px 4px;
-        font-size: 10px;
+        padding: 3px 3px;
+        font-size: 6px;
     }
     
     .indices-table tbody td {
-        padding: 10px 6px;
-        font-size: 11px;
+        padding: 3px 3px;
+        font-size: 7px;
     }
     
     .indices-table .name-col {
-        width: 120px;
+        width: 100px;
     }
     
     .indices-table .ltp-col {
-        width: 80px;
+        width: 70px;
     }
     
     .indices-table .interval-col {
-        min-width: 70px;
+        min-width: 50px;
     }
 }
