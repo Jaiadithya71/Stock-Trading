@@ -1,269 +1,224 @@
-// backend/routes/nseOptionRoutes.js - NON-BLOCKING VERSION
+// backend/routes/dataRoutes.js - UPDATED WITH LTP INTERVAL TRACKING
 const express = require("express");
 const router = express.Router();
-const NSEApiFetcher = require("../services/nseApiFetcher");
-const InstrumentFetcher = require("../services/instrumentFetcher");
-
-// Create singleton instances
-const nseApiFetcher = new NSEApiFetcher();
-const instrumentFetcher = new InstrumentFetcher();
-
-// Cache for option chain data (prevents repeated NSE calls)
-const optionChainCache = new Map();
-const CACHE_DURATION = 60000; // 1 minute cache
+const { requireAuth } = require("../middleware/authMiddleware");
+const { SYMBOL_TOKEN_MAP, INDICES_INSTRUMENTS, TIME_INTERVALS } = require("../config/constants");
+const { isMarketOpen } = require("../utils/dateHelpers");
 
 /**
- * GET available symbols
+ * Get Bank Nifty data with PARALLEL fetching
+ * FIXED: Uses Promise.all instead of sequential loops
  */
-router.get("/nse-symbols", (req, res) => {
-  try {
-    const symbols = ['NIFTY', 'BANKNIFTY', 'FINNIFTY', 'MIDCPNIFTY'];
-    res.json({
-      success: true,
-      data: symbols
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-});
-
-/**
- * GET expiry dates for a symbol from Angel One instruments
- */
-router.get("/nse-expiry-dates", async (req, res) => {
-  try {
-    const { symbol = 'BANKNIFTY' } = req.query;
-    
-    console.log(`\n📅 Fetching expiry dates for ${symbol}...`);
-    
-    // Set timeout for this operation
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Expiry fetch timeout')), 5000)
-    );
-    
-    const fetchPromise = instrumentFetcher.getExpiryDates(symbol);
-    
-    const expiryDates = await Promise.race([fetchPromise, timeoutPromise]);
-    
-    console.log(`✅ Returning ${expiryDates.length} expiry dates`);
-    
-    res.json({
-      success: true,
-      data: {
-        symbol,
-        expiryDates: expiryDates,
-        timestamp: new Date().toISOString()
-      }
-    });
-    
-  } catch (error) {
-    console.error("❌ Error fetching expiry dates:", error.message);
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-});
-
-/**
- * GET option chain data from NSE
- * NON-BLOCKING: Uses proper async/await with timeout
- */
-router.get("/nse-option-chain", async (req, res) => {
-  const startTime = Date.now();
+router.post("/banknifty-data", requireAuth, async (req, res) => {
+  const dashboard = req.dashboard;
+  const fetchTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
   
-  try {
-    const { symbol = 'BANKNIFTY', expiry } = req.query;
+  console.log("\n========================================");
+  console.log(`📊 FETCHING BANK NIFTY DATA at ${fetchTime}`);
+  console.log(`🔄 Mode: PARALLEL (fast)`);
+  console.log("========================================");
+  
+  const marketOpenNow = isMarketOpen();
+  const preferredInterval = marketOpenNow ? "ONE_MINUTE" : "ONE_HOUR";
+  
+  console.log(`📊 Market Status: ${marketOpenNow ? 'OPEN' : 'CLOSED'}`);
+  console.log(`📈 Preferred Interval: ${preferredInterval}`);
+  console.log("========================================\n");
+  
+  // PARALLEL FETCH: All symbols at once
+  const symbolPromises = Object.entries(SYMBOL_TOKEN_MAP).map(async ([symbol, token]) => {
+    console.log(`   Fetching ${symbol}...`);
     
-    console.log(`\n📊 NSE Option Chain Request:`);
-    console.log(`   Symbol: ${symbol}`);
-    console.log(`   Expiry: ${expiry || 'not specified'}`);
-    
-    // Check cache first
-    const cacheKey = `${symbol}_${expiry}`;
-    const cached = optionChainCache.get(cacheKey);
-    
-    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-      console.log(`✅ Returning cached option chain (${Date.now() - startTime}ms)`);
-      return res.json({
-        success: true,
-        data: {
-          ...cached.data,
-          cached: true
-        }
-      });
-    }
-    
-    // Get expiry if not specified
-    let selectedExpiry = expiry;
-    let allExpiryDates = [];
-    
-    if (!selectedExpiry) {
-      console.log('⚠️  No expiry specified, fetching expiry dates...');
+    try {
+      const response = await dashboard.getCandleDataWithFallback("NSE", token, preferredInterval);
       
-      // Fetch expiries with timeout
-      const expiryPromise = instrumentFetcher.getExpiryDates(symbol);
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Expiry fetch timeout')), 5000)
-      );
-      
-      allExpiryDates = await Promise.race([expiryPromise, timeoutPromise]);
-      
-      if (allExpiryDates.length === 0) {
-        return res.status(500).json({
-          success: false,
-          message: "No expiry dates available for this symbol"
-        });
+      if (response.status && response.data && response.data.length > 0) {
+        const latestCandle = response.data[response.data.length - 1];
+        
+        const stockData = {
+          ltp: latestCandle[4].toFixed(2),
+          change: (latestCandle[4] - latestCandle[1]).toFixed(2),
+          changePercent: (((latestCandle[4] - latestCandle[1]) / latestCandle[1]) * 100).toFixed(2),
+          volume: latestCandle[5],
+          timestamp: latestCandle[0]
+        };
+        
+        console.log(`   ✅ ${symbol}: ₹${stockData.ltp} (${stockData.changePercent > 0 ? '+' : ''}${stockData.changePercent}%)`);
+        return { symbol, data: stockData };
       }
-      
-      selectedExpiry = allExpiryDates[0];
-      console.log(`✅ Using nearest expiry: ${selectedExpiry}`);
-    } else {
-      // Still fetch all expiries for dropdown
-      allExpiryDates = await instrumentFetcher.getExpiryDates(symbol)
-        .catch(() => [selectedExpiry]); // Fallback to just the selected expiry
+    } catch (error) {
+      console.log(`   ❌ ${symbol}: Failed`);
     }
     
-    // Fetch option chain from NSE with timeout
-    console.log(`⏳ Fetching option chain (timeout: 20s)...`);
-    
-    const fetchPromise = nseApiFetcher.getOptionChain(symbol, selectedExpiry);
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Option chain fetch timeout (20s)')), 20000)
-    );
-    
-    const optionChain = await Promise.race([fetchPromise, timeoutPromise]);
-    
-    if (!optionChain) {
-      return res.status(500).json({
-        success: false,
-        message: "Failed to fetch option chain from NSE"
-      });
+    return { symbol, data: null };
+  });
+  
+  const results = await Promise.all(symbolPromises);
+  
+  // Convert to object
+  const bankNiftyData = {};
+  results.forEach(({ symbol, data }) => {
+    bankNiftyData[symbol] = data;
+  });
+  
+  console.log("\n========================================");
+  console.log(`✅ COMPLETED: Fetched ${results.length} symbols`);
+  console.log("========================================\n");
+  
+  res.json({ 
+    success: true, 
+    data: bankNiftyData,
+    meta: {
+      fetchedAt: new Date().toISOString(),
+      marketStatus: marketOpenNow ? 'OPEN' : 'CLOSED',
+      intervalUsed: preferredInterval
     }
-    
-    // Calculate ATM strike
-    const atmStrike = Math.round(optionChain.underlyingValue / 100) * 100;
-    
-    // Convert strikes object to array and sort
-    const strikesArray = Object.keys(optionChain.strikes)
-      .map(Number)
-      .sort((a, b) => a - b)
-      .map(strike => ({
-        strike,
-        isATM: strike === atmStrike,
-        call: optionChain.strikes[strike].CE || null,
-        put: optionChain.strikes[strike].PE || null
-      }));
-    
-    const responseData = {
-      symbol: optionChain.symbol,
-      displayName: symbol,
-      spotPrice: optionChain.underlyingValue,
-      timestamp: optionChain.timestamp,
-      expiryDates: allExpiryDates,
-      selectedExpiry: selectedExpiry,
-      optionChain: strikesArray,
-      atmStrike,
-      dataSource: 'NSE',
-      fetchTime: Date.now() - startTime
+  });
+});
+
+/**
+ * Get indices data with PARALLEL fetching and LTP interval tracking
+ * UPDATED: Returns LTP values for each time interval with comparison logic
+ */
+router.post("/indices-data", requireAuth, async (req, res) => {
+  const dashboard = req.dashboard;
+  const fetchTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+  
+  console.log("\n========================================");
+  console.log(`📈 FETCHING INDICES DATA at ${fetchTime}`);
+  console.log("========================================");
+  
+  const marketOpenNow = isMarketOpen();
+  const results = {};
+  
+  // PARALLEL FETCH: All indices at once
+  const indicesPromises = Object.entries(INDICES_INSTRUMENTS).map(async ([symbol, info]) => {
+    console.log(`\n📊 Fetching ${symbol}...`);
+    const indexResults = { 
+      ltp: null, 
+      ltpInterval: null, 
+      ltpTimestamp: null,
+      intervals: {} // Store LTP for each interval
     };
     
-    // Cache the result
-    optionChainCache.set(cacheKey, {
-      data: responseData,
-      timestamp: Date.now()
-    });
+    // Get current LTP with smart fallback
+    const ltpInterval = marketOpenNow ? "ONE_MINUTE" : "ONE_HOUR";
+    const ltpResponse = await dashboard.getCandleDataWithFallback(info.exchange, info.token, ltpInterval);
     
-    console.log(`✅ Option chain processed successfully (${Date.now() - startTime}ms)`);
-    console.log(`   Strikes: ${strikesArray.length}`);
-    console.log(`   Expiry Dates: ${allExpiryDates.length}`);
-    console.log(`   Selected Expiry: ${selectedExpiry}`);
-    
-    res.json({
-      success: true,
-      data: responseData
-    });
-    
-  } catch (error) {
-    const elapsed = Date.now() - startTime;
-    
-    if (error.message.includes('timeout')) {
-      console.error(`⏱️  Option chain request timed out after ${elapsed}ms`);
-      return res.status(504).json({
-        success: false,
-        message: "Request timed out. NSE server is slow or unresponsive.",
-        timeout: true,
-        elapsed
-      });
+    if (ltpResponse.status && ltpResponse.data && ltpResponse.data.length > 0) {
+      const latestCandle = ltpResponse.data[ltpResponse.data.length - 1];
+      indexResults.ltp = parseFloat(latestCandle[4].toFixed(2));
+      indexResults.ltpInterval = ltpInterval;
+      indexResults.ltpTimestamp = latestCandle[0];
+      console.log(`   Current LTP: ₹${indexResults.ltp} [${ltpInterval}]`);
+    } else {
+      console.log(`   Current LTP: No data`);
     }
     
-    console.error("❌ Error in NSE option chain route:", error.message);
-    console.error("Stack trace:", error.stack);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      elapsed
-    });
-  }
-});
-
-/**
- * Clear option chain cache
- */
-router.post("/nse-clear-cache", (req, res) => {
-  try {
-    const size = optionChainCache.size;
-    optionChainCache.clear();
-    nseApiFetcher.clearSession();
+    // Get LTP for each time interval
+    const essentialIntervals = marketOpenNow 
+      ? ["ONE_MINUTE", "THREE_MINUTE", "FIVE_MINUTE", "FIFTEEN_MINUTE", "THIRTY_MINUTE", "ONE_HOUR"]
+      : ["FIFTEEN_MINUTE", "THIRTY_MINUTE", "ONE_HOUR"];
     
-    res.json({
-      success: true,
-      message: `Cache cleared (${size} entries removed)`
+    // Fetch all intervals in parallel
+    const intervalPromises = essentialIntervals.map(async (interval) => {
+      const response = await dashboard.getCandleData(info.exchange, info.token, interval);
+      
+      if (response.status && response.data && response.data.length > 0) {
+        const candle = response.data[response.data.length - 1];
+        const intervalLTP = parseFloat(candle[4].toFixed(2));
+        
+        // Calculate change and direction
+        let change = null;
+        let changePercent = null;
+        let direction = 'neutral';
+        
+        if (indexResults.ltp !== null) {
+          change = (indexResults.ltp - intervalLTP).toFixed(2);
+          changePercent = (((indexResults.ltp - intervalLTP) / intervalLTP) * 100).toFixed(2);
+          
+          // Determine direction
+          if (indexResults.ltp > intervalLTP) {
+            direction = 'up'; // Price has gone UP since then
+          } else if (indexResults.ltp < intervalLTP) {
+            direction = 'down'; // Price has gone DOWN since then
+          }
+        }
+        
+        return { 
+          interval, 
+          ltp: intervalLTP,
+          change: change,
+          changePercent: changePercent,
+          direction: direction,
+          timestamp: candle[0] 
+        };
+      }
+      return { 
+        interval, 
+        ltp: null,
+        change: null,
+        changePercent: null,
+        direction: 'neutral',
+        timestamp: null 
+      };
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
+    
+    const intervalsData = await Promise.all(intervalPromises);
+    
+    // Map intervals to result
+    intervalsData.forEach(({ interval, ltp, change, changePercent, direction, timestamp }) => {
+      indexResults.intervals[interval] = {
+        ltp: ltp,
+        change: change,
+        changePercent: changePercent,
+        direction: direction,
+        timestamp: timestamp
+      };
+      
+      if (ltp !== null) {
+        console.log(`   ${interval}: ₹${ltp} (${direction === 'up' ? '↑' : direction === 'down' ? '↓' : '→'} ${change || '0.00'})`);
+      }
     });
-  }
-});
-
-/**
- * Clear instruments cache
- */
-router.post("/nse-clear-instruments-cache", (req, res) => {
-  try {
-    instrumentFetcher.clearCache();
-    res.json({
-      success: true,
-      message: "Instruments cache cleared"
+    
+    // Fill missing intervals with null data
+    TIME_INTERVALS.forEach(interval => {
+      if (!indexResults.intervals[interval]) {
+        indexResults.intervals[interval] = {
+          ltp: null,
+          change: null,
+          changePercent: null,
+          direction: 'neutral',
+          timestamp: null
+        };
+      }
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-});
-
-// Clean up cache periodically (every 5 minutes)
-setInterval(() => {
-  const now = Date.now();
-  let cleaned = 0;
+    
+    indexResults.fetchedAt = new Date().toISOString();
+    
+    return { symbol, data: indexResults };
+  });
   
-  for (const [key, value] of optionChainCache.entries()) {
-    if (now - value.timestamp > CACHE_DURATION) {
-      optionChainCache.delete(key);
-      cleaned++;
+  // Wait for all indices
+  const indicesData = await Promise.all(indicesPromises);
+  
+  // Convert to object format
+  indicesData.forEach(({ symbol, data }) => {
+    results[symbol] = data;
+  });
+  
+  console.log("\n========================================");
+  console.log(`✅ COMPLETED: Fetched indices data with interval tracking`);
+  console.log("========================================\n");
+  
+  res.json({ 
+    success: true, 
+    data: results,
+    meta: {
+      fetchedAt: new Date().toISOString(),
+      marketStatus: marketOpenNow ? 'OPEN' : 'CLOSED'
     }
-  }
-  
-  if (cleaned > 0) {
-    console.log(`🗑️  Cleaned ${cleaned} expired option chain cache entries`);
-  }
-}, 5 * 60 * 1000);
+  });
+});
 
 module.exports = router;
