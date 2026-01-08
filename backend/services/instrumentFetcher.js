@@ -178,6 +178,75 @@ class InstrumentFetcher {
   }
 
   /**
+   * Get the nearest (current month) futures contract for a symbol
+   * @param {string} symbol - Symbol name (e.g., 'BANKNIFTY', 'NIFTY')
+   * @returns {Object|null} - Futures instrument with token, symbol, expiry, exchange
+   */
+  async getNearestFutures(symbol = 'BANKNIFTY') {
+    console.log(`\n🔍 Finding nearest futures contract for ${symbol}...`);
+
+    const instruments = await this.getInstruments();
+
+    // Filter for futures contracts of this symbol
+    const futures = instruments.filter(inst => {
+      return inst.exch_seg === 'NFO' &&
+             inst.instrumenttype === 'FUTIDX' &&
+             inst.name === symbol;
+    });
+
+    if (futures.length === 0) {
+      console.log(`❌ No futures contracts found for ${symbol}`);
+      return null;
+    }
+
+    console.log(`📋 Found ${futures.length} futures contracts for ${symbol}`);
+
+    // Parse expiry dates and find the nearest one that hasn't expired
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const parseExpiry = (dateStr) => {
+      // Format: "27JAN2026"
+      const day = parseInt(dateStr.substring(0, 2));
+      const monthStr = dateStr.substring(2, 5);
+      const year = parseInt(dateStr.substring(5, 9));
+      const monthMap = {
+        'JAN': 0, 'FEB': 1, 'MAR': 2, 'APR': 3,
+        'MAY': 4, 'JUN': 5, 'JUL': 6, 'AUG': 7,
+        'SEP': 8, 'OCT': 9, 'NOV': 10, 'DEC': 11
+      };
+      return new Date(year, monthMap[monthStr], day);
+    };
+
+    // Filter for future expiries and sort by date
+    const validFutures = futures
+      .map(f => ({
+        ...f,
+        expiryDate: parseExpiry(f.expiry)
+      }))
+      .filter(f => f.expiryDate >= today)
+      .sort((a, b) => a.expiryDate - b.expiryDate);
+
+    if (validFutures.length === 0) {
+      console.log(`❌ No valid (non-expired) futures contracts found for ${symbol}`);
+      return null;
+    }
+
+    const nearest = validFutures[0];
+    console.log(`✅ Nearest ${symbol} futures: ${nearest.symbol} (expires: ${nearest.expiry}, token: ${nearest.token})`);
+
+    return {
+      token: nearest.token,
+      symbol: nearest.symbol,
+      name: nearest.name,
+      expiry: nearest.expiry,
+      expiryDate: nearest.expiryDate,
+      exchange: 'NFO',
+      lotsize: nearest.lotsize
+    };
+  }
+
+  /**
    * Clear cache
    */
   clearCache() {

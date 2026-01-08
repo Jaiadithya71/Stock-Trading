@@ -1,222 +1,272 @@
-// backend/routes/dataRoutes.js - UPDATED WITH LTP INTERVAL TRACKING
+// backend/routes/nseOptionRoutes.js - NSE Option Chain Routes with SmartAPI Expiry Dates
 const express = require("express");
 const router = express.Router();
-const { requireAuth } = require("../middleware/authMiddleware");
-const { SYMBOL_TOKEN_MAP, INDICES_INSTRUMENTS, TIME_INTERVALS } = require("../config/constants");
-const { isMarketOpen } = require("../utils/dateHelpers");
+const NSEApiFetcher = require("../services/nseApiFetcher");
+const InstrumentFetcher = require("../services/instrumentFetcher");
+
+// Create shared instances
+const nseFetcher = new NSEApiFetcher();
+const instrumentFetcher = new InstrumentFetcher();
+
+// Cache for expiry dates (to avoid repeated API calls)
+const expiryCache = {
+  data: {},
+  lastFetched: null,
+  CACHE_DURATION: 60 * 60 * 1000 // 1 hour cache
+};
+
+// Supported indices
+const SUPPORTED_INDICES = [
+  { symbol: "BANKNIFTY", name: "Bank Nifty", nseSymbol: "BANKNIFTY" },
+  { symbol: "NIFTY", name: "Nifty 50", nseSymbol: "NIFTY" },
+  { symbol: "FINNIFTY", name: "Fin Nifty", nseSymbol: "FINNIFTY" },
+  { symbol: "MIDCPNIFTY", name: "Midcap Nifty", nseSymbol: "MIDCPNIFTY" }
+];
 
 /**
- * Get Bank Nifty data with PARALLEL fetching
- * FIXED: Uses Promise.all instead of sequential loops
+ * Get available symbols for option chain
  */
-router.post("/banknifty-data", requireAuth, async (req, res) => {
-  const dashboard = req.dashboard;
-  const fetchTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-  
-  console.log("\n========================================");
-  console.log(`📊 FETCHING BANK NIFTY DATA at ${fetchTime}`);
-  console.log(`🔄 Mode: PARALLEL (fast)`);
-  console.log("========================================");
-  
-  const marketOpenNow = isMarketOpen();
-  const preferredInterval = marketOpenNow ? "ONE_MINUTE" : "ONE_HOUR";
-  
-  console.log(`📊 Market Status: ${marketOpenNow ? 'OPEN' : 'CLOSED'}`);
-  console.log(`📈 Preferred Interval: ${preferredInterval}`);
-  console.log("========================================\n");
-  
-  // PARALLEL FETCH: All symbols at once
-  const symbolPromises = Object.entries(SYMBOL_TOKEN_MAP).map(async ([symbol, token]) => {
-    console.log(`   Fetching ${symbol}...`);
-    
-    try {
-      const response = await dashboard.getCandleDataWithFallback("NSE", token, preferredInterval);
-      
-      if (response.status && response.data && response.data.length > 0) {
-        const latestCandle = response.data[response.data.length - 1];
-        
-        const stockData = {
-          ltp: latestCandle[4].toFixed(2),
-          change: (latestCandle[4] - latestCandle[1]).toFixed(2),
-          changePercent: (((latestCandle[4] - latestCandle[1]) / latestCandle[1]) * 100).toFixed(2),
-          volume: latestCandle[5],
-          timestamp: latestCandle[0]
-        };
-        
-        console.log(`   ✅ ${symbol}: ₹${stockData.ltp} (${stockData.changePercent > 0 ? '+' : ''}${stockData.changePercent}%)`);
-        return { symbol, data: stockData };
-      }
-    } catch (error) {
-      console.log(`   ❌ ${symbol}: Failed`);
-    }
-    
-    return { symbol, data: null };
-  });
-  
-  const results = await Promise.all(symbolPromises);
-  
-  // Convert to object
-  const bankNiftyData = {};
-  results.forEach(({ symbol, data }) => {
-    bankNiftyData[symbol] = data;
-  });
-  
-  console.log("\n========================================");
-  console.log(`✅ COMPLETED: Fetched ${results.length} symbols`);
-  console.log("========================================\n");
-  
-  res.json({ 
-    success: true, 
-    data: bankNiftyData,
-    meta: {
-      fetchedAt: new Date().toISOString(),
-      marketStatus: marketOpenNow ? 'OPEN' : 'CLOSED',
-      intervalUsed: preferredInterval
-    }
+router.get("/nse-symbols", (req, res) => {
+  res.json({
+    success: true,
+    data: SUPPORTED_INDICES.map(i => ({
+      symbol: i.symbol,
+      name: i.name
+    }))
   });
 });
 
 /**
- * Get indices data with PARALLEL fetching and LTP interval tracking
- * UPDATED: Returns LTP values for each time interval with comparison logic
+ * Get expiry dates for a symbol from Angel One's OpenAPIScripMaster
  */
-router.post("/indices-data", requireAuth, async (req, res) => {
-  const dashboard = req.dashboard;
-  const fetchTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-  
-  console.log("\n========================================");
-  console.log(`📈 FETCHING INDICES DATA at ${fetchTime}`);
-  console.log("========================================");
-  
-  const marketOpenNow = isMarketOpen();
-  const results = {};
-  
-  // PARALLEL FETCH: All indices at once
-  const indicesPromises = Object.entries(INDICES_INSTRUMENTS).map(async ([symbol, info]) => {
-    console.log(`\n📊 Fetching ${symbol}...`);
-    const indexResults = { 
-      ltp: null, 
-      ltpInterval: null, 
-      ltpTimestamp: null,
-      intervals: {} // Store LTP for each interval
-    };
-    
-    // Get current LTP with smart fallback
-    const ltpInterval = marketOpenNow ? "ONE_MINUTE" : "ONE_HOUR";
-    const ltpResponse = await dashboard.getCandleDataWithFallback(info.exchange, info.token, ltpInterval);
-    
-    if (ltpResponse.status && ltpResponse.data && ltpResponse.data.length > 0) {
-      const latestCandle = ltpResponse.data[ltpResponse.data.length - 1];
-      indexResults.ltp = parseFloat(latestCandle[4].toFixed(2));
-      indexResults.ltpInterval = ltpInterval;
-      indexResults.ltpTimestamp = latestCandle[0];
-      console.log(`   Current LTP: ₹${indexResults.ltp} [${ltpInterval}]`);
-    } else {
-      console.log(`   Current LTP: No data`);
+router.get("/nse-expiry-dates", async (req, res) => {
+  const { symbol } = req.query;
+  const targetSymbol = symbol || "BANKNIFTY";
+
+  console.log(`\n📅 Fetching expiry dates for ${targetSymbol} from SmartAPI...`);
+
+  try {
+    // Check cache first
+    const now = Date.now();
+    if (expiryCache.data[targetSymbol] &&
+        expiryCache.lastFetched &&
+        (now - expiryCache.lastFetched) < expiryCache.CACHE_DURATION) {
+      console.log(`✅ Using cached expiry dates for ${targetSymbol}`);
+      return res.json({
+        success: true,
+        symbol: targetSymbol,
+        data: expiryCache.data[targetSymbol],
+        source: "cache"
+      });
     }
-    
-    // Get LTP for each time interval
-    const essentialIntervals = marketOpenNow 
-      ? ["ONE_MINUTE", "THREE_MINUTE", "FIVE_MINUTE", "FIFTEEN_MINUTE", "THIRTY_MINUTE", "ONE_HOUR"]
-      : ["FIFTEEN_MINUTE", "THIRTY_MINUTE", "ONE_HOUR"];
-    
-    // Fetch all intervals in parallel
-    const intervalPromises = essentialIntervals.map(async (interval) => {
-      const response = await dashboard.getCandleData(info.exchange, info.token, interval);
-      
-      if (response.status && response.data && response.data.length > 0) {
-        const candle = response.data[response.data.length - 1];
-        const intervalLTP = parseFloat(candle[4].toFixed(2));
-        
-        // Calculate change and direction
-        let change = null;
-        let changePercent = null;
-        let direction = 'neutral';
-        
-        if (indexResults.ltp !== null) {
-          change = (indexResults.ltp - intervalLTP).toFixed(2);
-          changePercent = (((indexResults.ltp - intervalLTP) / intervalLTP) * 100).toFixed(2);
-          
-          // Determine direction
-          if (indexResults.ltp > intervalLTP) {
-            direction = 'up'; // Price has gone UP since then
-          } else if (indexResults.ltp < intervalLTP) {
-            direction = 'down'; // Price has gone DOWN since then
-          }
-        }
-        
-        return { 
-          interval, 
-          ltp: intervalLTP,
-          change: change,
-          changePercent: changePercent,
-          direction: direction,
-          timestamp: candle[0] 
+
+    // Fetch from Angel One's OpenAPIScripMaster
+    const expiryDates = await instrumentFetcher.getExpiryDates(targetSymbol);
+
+    if (expiryDates && expiryDates.length > 0) {
+      // Update cache
+      expiryCache.data[targetSymbol] = expiryDates;
+      expiryCache.lastFetched = now;
+
+      console.log(`✅ Found ${expiryDates.length} expiry dates for ${targetSymbol}`);
+      console.log(`   First 5: ${expiryDates.slice(0, 5).join(", ")}`);
+
+      res.json({
+        success: true,
+        symbol: targetSymbol,
+        data: expiryDates,
+        source: "smartapi"
+      });
+    } else {
+      throw new Error("No expiry dates found");
+    }
+  } catch (error) {
+    console.error(`❌ Error fetching expiry dates: ${error.message}`);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+/**
+ * Get all expiry dates for all supported indices
+ */
+router.get("/nse-all-expiries", async (req, res) => {
+  console.log(`\n📅 Fetching expiry dates for ALL indices...`);
+
+  try {
+    const allExpiries = {};
+
+    for (const index of SUPPORTED_INDICES) {
+      try {
+        const expiries = await instrumentFetcher.getExpiryDates(index.symbol);
+        allExpiries[index.symbol] = {
+          name: index.name,
+          expiries: expiries || []
+        };
+        console.log(`   ✅ ${index.symbol}: ${expiries?.length || 0} expiries`);
+      } catch (err) {
+        console.log(`   ❌ ${index.symbol}: Failed`);
+        allExpiries[index.symbol] = {
+          name: index.name,
+          expiries: [],
+          error: err.message
         };
       }
-      return { 
-        interval, 
-        ltp: null,
-        change: null,
-        changePercent: null,
-        direction: 'neutral',
-        timestamp: null 
-      };
+    }
+
+    res.json({
+      success: true,
+      data: allExpiries
     });
-    
-    const intervalsData = await Promise.all(intervalPromises);
-    
-    // Map intervals to result
-    intervalsData.forEach(({ interval, ltp, change, changePercent, direction, timestamp }) => {
-      indexResults.intervals[interval] = {
-        ltp: ltp,
-        change: change,
-        changePercent: changePercent,
-        direction: direction,
-        timestamp: timestamp
-      };
-      
-      if (ltp !== null) {
-        console.log(`   ${interval}: ₹${ltp} (${direction === 'up' ? '↑' : direction === 'down' ? '↓' : '→'} ${change || '0.00'})`);
-      }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
     });
-    
-    // Fill missing intervals with null data
-    TIME_INTERVALS.forEach(interval => {
-      if (!indexResults.intervals[interval]) {
-        indexResults.intervals[interval] = {
-          ltp: null,
-          change: null,
-          changePercent: null,
-          direction: 'neutral',
-          timestamp: null
-        };
-      }
-    });
-    
-    indexResults.fetchedAt = new Date().toISOString();
-    
-    return { symbol, data: indexResults };
-  });
-  
-  // Wait for all indices
-  const indicesData = await Promise.all(indicesPromises);
-  
-  // Convert to object format
-  indicesData.forEach(({ symbol, data }) => {
-    results[symbol] = data;
-  });
-  
+  }
+});
+
+/**
+ * Get option chain data from NSE
+ */
+router.get("/nse-option-chain", async (req, res) => {
+  const { symbol, expiry } = req.query;
+  const targetSymbol = symbol || "BANKNIFTY";
+
   console.log("\n========================================");
-  console.log(`✅ COMPLETED: Fetched indices data with interval tracking`);
-  console.log("========================================\n");
-  
-  res.json({ 
-    success: true, 
-    data: results,
-    meta: {
-      fetchedAt: new Date().toISOString(),
-      marketStatus: marketOpenNow ? 'OPEN' : 'CLOSED'
+  console.log(`📊 NSE OPTION CHAIN REQUEST`);
+  console.log(`   Symbol: ${targetSymbol}`);
+  console.log(`   Expiry: ${expiry || 'Not specified'}`);
+  console.log("========================================");
+
+  try {
+    // Get expiry dates from SmartAPI if not provided
+    let targetExpiry = expiry;
+    let expiryDates = [];
+
+    if (!targetExpiry) {
+      console.log(`   Fetching expiry dates from SmartAPI...`);
+      expiryDates = await instrumentFetcher.getExpiryDates(targetSymbol);
+
+      if (expiryDates && expiryDates.length > 0) {
+        targetExpiry = expiryDates[0]; // Use nearest expiry
+        console.log(`   Using nearest expiry: ${targetExpiry}`);
+      } else {
+        throw new Error("No expiry dates available");
+      }
+    } else {
+      // Still fetch expiry dates for the dropdown
+      expiryDates = await instrumentFetcher.getExpiryDates(targetSymbol);
+    }
+
+    // Fetch option chain from NSE
+    console.log(`   Fetching option chain from NSE...`);
+    const optionChain = await nseFetcher.getOptionChain(targetSymbol, targetExpiry);
+
+    if (!optionChain) {
+      throw new Error("Failed to fetch option chain from NSE");
+    }
+
+    // Format response
+    const response = {
+      success: true,
+      data: {
+        symbol: targetSymbol,
+        expiry: targetExpiry,
+        underlyingValue: optionChain.underlyingValue,
+        timestamp: optionChain.timestamp,
+        expiryDates: expiryDates,
+        strikes: optionChain.strikes,
+        strikeCount: Object.keys(optionChain.strikes).length
+      }
+    };
+
+    console.log(`✅ Returning ${response.data.strikeCount} strikes`);
+    console.log(`   Underlying: ₹${optionChain.underlyingValue}`);
+    console.log("========================================\n");
+
+    res.json(response);
+
+  } catch (error) {
+    console.error(`❌ NSE Option Chain Error: ${error.message}`);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch option chain"
+    });
+  }
+});
+
+/**
+ * Refresh instruments cache (force download from Angel One)
+ */
+router.post("/nse-refresh-instruments", async (req, res) => {
+  console.log("🔄 Refreshing instruments cache...");
+
+  try {
+    // Clear cache
+    instrumentFetcher.clearCache();
+    expiryCache.data = {};
+    expiryCache.lastFetched = null;
+
+    // Download fresh instruments
+    await instrumentFetcher.downloadInstruments();
+
+    res.json({
+      success: true,
+      message: "Instruments cache refreshed"
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
+/**
+ * Clear all caches
+ */
+router.post("/nse-clear-cache", (req, res) => {
+  nseFetcher.clearSession();
+  instrumentFetcher.clearCache();
+  expiryCache.data = {};
+  expiryCache.lastFetched = null;
+
+  console.log("🗑️  All NSE caches cleared");
+
+  res.json({
+    success: true,
+    message: "All caches cleared"
+  });
+});
+
+/**
+ * Get cache status
+ */
+router.get("/nse-cache-status", (req, res) => {
+  const instrumentsCacheValid = instrumentFetcher.isCacheValid();
+  const expiryCacheAge = expiryCache.lastFetched
+    ? Math.round((Date.now() - expiryCache.lastFetched) / 1000 / 60)
+    : null;
+
+  res.json({
+    success: true,
+    data: {
+      instrumentsCache: {
+        valid: instrumentsCacheValid,
+        file: instrumentFetcher.instrumentsFile
+      },
+      expiryCache: {
+        symbols: Object.keys(expiryCache.data),
+        ageMinutes: expiryCacheAge,
+        maxAgeMinutes: expiryCache.CACHE_DURATION / 1000 / 60
+      },
+      nseSession: {
+        initialized: nseFetcher.sessionInitialized,
+        hasCookies: !!nseFetcher.cookies
+      }
     }
   });
 });

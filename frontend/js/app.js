@@ -39,7 +39,10 @@ const App = {
         // Authentication handlers
         EventHandler.on('check-user', () => this.checkUser());
         EventHandler.on('save-credentials', () => this.saveAndAuthenticate());
-        
+
+        // Session recovery handler
+        document.addEventListener('session-expired', () => this.handleSessionExpired());
+
         // Dashboard handlers
         EventHandler.on('refresh-banknifty', () => this.refreshBankNifty());
         EventHandler.on('refresh-indices', () => this.refreshIndices());
@@ -185,10 +188,12 @@ const App = {
             // Load critical data first (parallel)
             const criticalPromises = [
                 this.fetchBankNiftyData().catch(err => {
-                    console.error('Bank Nifty fetch failed:', err.message);
+                    console.error('❌ Bank Nifty fetch failed:', err);
+                    throw err; // Re-throw to see full error
                 }),
                 this.fetchIndicesData().catch(err => {
-                    console.error('Indices fetch failed:', err.message);
+                    console.error('❌ Indices fetch failed:', err);
+                    throw err; // Re-throw to see full error
                 })
             ];
             
@@ -254,24 +259,31 @@ const App = {
 
     async fetchIndicesData() {
         try {
+            console.log('🔄 Fetching indices data for user:', this.state.currentUsername);
             const result = await ApiService.getIndicesData(this.state.currentUsername);
+            console.log('📨 Indices API response:', result);
+
             if (result.success) {
                 this.state.indicesData = result.data;
                 this.state.indicesTimestamp = Helpers.getCurrentTime();
-                
+
                 // DEBUG: Log the actual data structure received
-                console.log('✅ Indices data loaded');
+                console.log('✅ Indices data loaded successfully');
                 console.log('📊 DEBUG - Indices Data Structure:');
                 console.log(JSON.stringify(result.data, null, 2));
-                
+
                 // Check if BANKNIFTY has LTP
                 if (result.data.BANKNIFTY) {
                     console.log('🔍 BANKNIFTY data:', result.data.BANKNIFTY);
                     console.log('🔍 BANKNIFTY LTP:', result.data.BANKNIFTY.ltp || 'NOT FOUND');
+                    console.log('🔍 BANKNIFTY intervals:', Object.keys(result.data.BANKNIFTY.intervals || {}));
                 }
+            } else {
+                console.error('❌ Indices API returned success=false:', result.message || result);
             }
         } catch (error) {
-            console.error('Error fetching indices:', error.message);
+            console.error('❌ Error fetching indices:', error);
+            console.error('Error details:', error.message, error.stack);
             throw error;
         }
     },
@@ -291,25 +303,88 @@ const App = {
     },
 
     async fetchNSEOptionChain() {
+        console.log('🔄 Fetching option chain for:', this.state.selectedNSESymbol, 'expiry:', this.state.selectedNSEExpiry);
+
         try {
             const result = await ApiService.getNSEOptionChain(
                 this.state.selectedNSESymbol,
                 this.state.selectedNSEExpiry
             );
-            
-            if (result.success) {
-                this.state.nseOptionChainData = result.data;
-                
+
+            console.log('📨 Option chain API response:', result);
+
+            if (result.success && result.data) {
+                // Transform API response to component format
+                const transformedData = this.transformOptionChainData(result.data);
+                this.state.nseOptionChainData = transformedData;
+
                 if (!this.state.selectedNSEExpiry && result.data.expiryDates?.length > 0) {
                     this.state.selectedNSEExpiry = result.data.expiryDates[0];
                 }
-                
-                console.log('✅ Option chain loaded');
+
+                console.log('✅ Option chain loaded:', transformedData.strikeCount, 'strikes');
+            } else {
+                console.error('❌ Option chain API returned failure:', result.message);
+                // Set error state so component can show error
+                this.state.nseOptionChainData = {
+                    error: result.message || 'Failed to load option chain',
+                    optionChain: []
+                };
             }
         } catch (error) {
-            console.error('Error fetching option chain:', error.message);
-            throw error;
+            console.error('❌ Error fetching option chain:', error.message);
+            // Set error state so component shows error instead of infinite loading
+            this.state.nseOptionChainData = {
+                error: error.message,
+                optionChain: []
+            };
+            // Don't rethrow - we've handled the error by setting error state
         }
+    },
+
+    /**
+     * Transform API response to OptionChain component format
+     */
+    transformOptionChainData(apiData) {
+        const { symbol, expiry, underlyingValue, timestamp, expiryDates, strikes } = apiData;
+
+        // Get spot price
+        const spotPrice = underlyingValue || 0;
+
+        // Calculate ATM strike (nearest to spot price)
+        const strikeKeys = Object.keys(strikes || {}).map(Number).sort((a, b) => a - b);
+        const atmStrike = strikeKeys.reduce((prev, curr) =>
+            Math.abs(curr - spotPrice) < Math.abs(prev - spotPrice) ? curr : prev
+        , strikeKeys[0] || 0);
+
+        // Transform strikes object to array format expected by component
+        const optionChain = strikeKeys.map(strike => ({
+            strike: strike,
+            isATM: strike === atmStrike,
+            call: strikes[strike]?.CE || null,
+            put: strikes[strike]?.PE || null
+        }));
+
+        // Get display name
+        const displayNames = {
+            'BANKNIFTY': 'Bank Nifty',
+            'NIFTY': 'Nifty 50',
+            'FINNIFTY': 'Fin Nifty',
+            'MIDCPNIFTY': 'Midcap Nifty'
+        };
+
+        return {
+            symbol: symbol,
+            displayName: displayNames[symbol] || symbol,
+            spotPrice: spotPrice,
+            optionChain: optionChain,
+            timestamp: timestamp || new Date().toISOString(),
+            expiryDates: expiryDates || [],
+            selectedExpiry: expiry,
+            atmStrike: atmStrike,
+            dataSource: 'NSE India',
+            strikeCount: optionChain.length
+        };
     },
 
     async fetchPCRData() {
@@ -331,13 +406,21 @@ const App = {
 
     async refreshPCR() {
         console.log('🔄 Refreshing PCR...');
-        await this.fetchPCRData().catch(() => {});
+        try {
+            await this.fetchPCRData();
+        } catch (error) {
+            console.warn('PCR refresh failed:', error.message);
+        }
         this.updateDashboard();
     },
 
     async refreshNSEOptionChain() {
         console.log('🔄 Refreshing option chain...');
-        await this.fetchNSEOptionChain().catch(() => {});
+        // Clear previous data/error to show loading state
+        this.state.nseOptionChainData = null;
+        this.updateDashboard();
+
+        await this.fetchNSEOptionChain();
         this.updateDashboard();
     },
 
@@ -345,32 +428,52 @@ const App = {
         this.state.selectedNSESymbol = symbol;
         this.state.selectedNSEExpiry = null;
         this.state.nseOptionChainData = null;
-        
-        await this.fetchNSEOptionChain().catch(() => {});
+
+        // Show loading state immediately
+        this.updateDashboard();
+
+        await this.fetchNSEOptionChain();
         this.updateDashboard();
     },
 
     async changeNSEExpiry(expiry) {
         this.state.selectedNSEExpiry = expiry;
-        await this.fetchNSEOptionChain().catch(() => {});
+        this.state.nseOptionChainData = null;
+
+        // Show loading state immediately
+        this.updateDashboard();
+
+        await this.fetchNSEOptionChain();
         this.updateDashboard();
     },
 
     toggleOptionChain(target) {
         this.state.showOptionChain = target.checked;
-        
-        if (this.state.showOptionChain && !this.state.nseOptionChainData) {
-            this.fetchNSEOptionChain().then(() => this.updateDashboard()).catch(() => {});
-        } else {
+
+        // Always update immediately to show loading spinner or hide section
+        this.updateDashboard();
+
+        // Fetch if no data, or if previous fetch had an error
+        const needsFetch = !this.state.nseOptionChainData || this.state.nseOptionChainData.error;
+
+        if (this.state.showOptionChain && needsFetch) {
+            // Clear any error state to show loading spinner
+            this.state.nseOptionChainData = null;
             this.updateDashboard();
+
+            // Fetch data, then update dashboard to show results or error
+            this.fetchNSEOptionChain()
+                .then(() => this.updateDashboard());
         }
     },
 
     togglePCR(target) {
         this.state.showPCR = target.checked;
-        
+
         if (this.state.showPCR && !this.state.pcrData) {
-            this.fetchPCRData().then(() => this.updateDashboard()).catch(() => {});
+            this.fetchPCRData()
+                .then(() => this.updateDashboard())
+                .catch(err => console.warn('PCR fetch failed:', err.message));
         } else {
             this.updateDashboard();
         }
@@ -392,7 +495,8 @@ const App = {
                 html += CurrencyWidget.render(this.state.currencyData, this.state.currencyTimestamp);
             }
 
-            if (this.state.showOptionChain && this.state.nseOptionChainData) {
+            if (this.state.showOptionChain) {
+                // Always render when checkbox is checked - component handles loading state
                 html += OptionChain.render(
                     this.state.nseOptionChainData,
                     this.state.selectedNSESymbol
@@ -446,18 +550,64 @@ const App = {
     },
 
     async refreshBankNifty() {
-        await this.fetchBankNiftyData().catch(() => {});
+        try {
+            await this.fetchBankNiftyData();
+        } catch (error) {
+            this.showError('Failed to refresh Bank Nifty: ' + error.message);
+        }
         this.updateDashboard();
     },
 
     async refreshIndices() {
-        await this.fetchIndicesData().catch(() => {});
+        try {
+            await this.fetchIndicesData();
+        } catch (error) {
+            this.showError('Failed to refresh indices: ' + error.message);
+        }
         this.updateDashboard();
     },
 
     async refreshCurrency() {
-        await this.fetchCurrencyData().catch(() => {});
+        try {
+            await this.fetchCurrencyData();
+        } catch (error) {
+            this.showError('Failed to refresh currency: ' + error.message);
+        }
         this.updateDashboard();
+    },
+
+    // Handle session expiry - prompt user to re-login
+    handleSessionExpired() {
+        console.log('Session expired, showing login...');
+        this.stopAutoRefresh();
+        this.state.isLoading = false;
+        alert('Your session has expired. Please log in again.');
+        this.renderModals();
+        LoginModal.show();
+    },
+
+    // Show error notification
+    showError(message) {
+        console.error(message);
+        // Show a temporary error notification
+        const notification = document.createElement('div');
+        notification.className = 'error-notification';
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            z-index: 10000;
+            font-size: 14px;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        `;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 5000);
     },
 
     toggleAutoRefresh(target) {
@@ -477,9 +627,11 @@ const App = {
 
     toggleCurrency(target) {
         this.state.showCurrency = target.checked;
-        
+
         if (this.state.showCurrency && !this.state.currencyData) {
-            this.fetchCurrencyData().then(() => this.updateDashboard()).catch(() => {});
+            this.fetchCurrencyData()
+                .then(() => this.updateDashboard())
+                .catch(err => console.warn('Currency fetch failed:', err.message));
         } else {
             this.updateDashboard();
         }

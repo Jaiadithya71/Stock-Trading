@@ -1,23 +1,79 @@
-// frontend/js/api/apiService.js - UPDATED WITH PCR
+// frontend/js/api/apiService.js - UPDATED WITH SESSION RECOVERY
 const ApiService = {
-    async request(endpoint, data = null, method = 'POST') {
+    // Track if we're currently re-authenticating to prevent loops
+    _isReauthenticating: false,
+
+    async request(endpoint, data = null, method = 'POST', skipAuthRetry = false) {
         try {
             const options = {
                 method: method,
                 headers: { 'Content-Type': 'application/json' }
             };
-            
+
             if (data && method === 'POST') {
                 options.body = JSON.stringify(data);
             }
 
             const response = await fetch(`${AppConfig.API_BASE_URL}${endpoint}`, options);
             const result = await response.json();
-            
+
+            // Check for authentication failure (401 or success:false with auth message)
+            const isAuthError = response.status === 401 ||
+                (!result.success && result.message &&
+                 (result.message.includes('Not authenticated') ||
+                  result.message.includes('not authenticated')));
+
+            // If auth error and we have a username, try to re-authenticate
+            if (isAuthError && !skipAuthRetry && !this._isReauthenticating) {
+                const username = this._getCurrentUsername();
+                if (username) {
+                    console.log('Session expired, attempting re-authentication...');
+                    const reAuthSuccess = await this._reAuthenticate(username);
+
+                    if (reAuthSuccess) {
+                        console.log('Re-authentication successful, retrying request...');
+                        // Retry the original request (with skipAuthRetry to prevent infinite loop)
+                        return await this.request(endpoint, data, method, true);
+                    } else {
+                        // Re-auth failed, trigger login prompt
+                        this._triggerLoginRequired();
+                        throw new Error('Session expired. Please log in again.');
+                    }
+                }
+            }
+
             return result;
         } catch (error) {
             Helpers.log('API Request Error: ' + error.message, 'error');
             throw error;
+        }
+    },
+
+    // Get current username from App state
+    _getCurrentUsername() {
+        return typeof App !== 'undefined' && App.state ? App.state.currentUsername : null;
+    },
+
+    // Attempt to re-authenticate
+    async _reAuthenticate(username) {
+        if (this._isReauthenticating) return false;
+
+        this._isReauthenticating = true;
+        try {
+            const result = await this.authenticate(username);
+            return result.success === true;
+        } catch (error) {
+            console.error('Re-authentication failed:', error.message);
+            return false;
+        } finally {
+            this._isReauthenticating = false;
+        }
+    },
+
+    // Trigger login required event
+    _triggerLoginRequired() {
+        if (typeof EventHandler !== 'undefined') {
+            EventHandler.trigger('session-expired');
         }
     },
 

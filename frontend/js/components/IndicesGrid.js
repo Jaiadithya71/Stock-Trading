@@ -1,4 +1,4 @@
-// frontend/js/components/IndicesGrid.js - FIXED VERSION
+// frontend/js/components/IndicesGrid.js - UPDATED WITH LTP VALUE DISPLAY
 const IndicesGrid = {
     render(data, timestamp) {
         if (!data || Object.keys(data).length === 0) {
@@ -28,9 +28,9 @@ const IndicesGrid = {
 
         const indices = [
             { name: 'Bank Nifty', key: 'BANKNIFTY' },
-            { name: 'Bank Nifty Future', key: 'BANKNIFTY' },
+            { name: 'Bank Nifty Future', key: 'BANKNIFTY_FUT' },
             { name: 'Nifty', key: 'NIFTY' },
-            { name: 'Gift Nifty', key: null },
+            { name: 'Nifty Future', key: 'NIFTY_FUT' },
             { name: 'India VIX', key: 'INDIA VIX' }
         ];
 
@@ -38,19 +38,10 @@ const IndicesGrid = {
             const label = String.fromCharCode(65 + idx); // A, B, C, D, E
             const indexData = index.key && data[index.key];
             
-            // FIXED: Better LTP value extraction with fallback
+            // Get current LTP value
             let ltpValue = '--';
             if (indexData && indexData.ltp) {
                 ltpValue = indexData.ltp;
-            } else if (indexData) {
-                // Try to extract from any interval data
-                const intervals = ['ONE_HOUR', 'FIFTEEN_MINUTE', 'FIVE_MINUTE', 'ONE_MINUTE'];
-                for (const interval of intervals) {
-                    if (indexData[interval] && typeof indexData[interval] === 'object' && indexData[interval].ltp) {
-                        ltpValue = indexData[interval].ltp;
-                        break;
-                    }
-                }
             }
             
             // Get data age if available
@@ -76,10 +67,38 @@ const IndicesGrid = {
                     </td>
                     ${timeIntervals.map(interval => {
                         if (!index.key) {
-                            return `<td class="sentiment-cell coming-soon-cell">Coming Soon</td>`;
+                            return `<td class="interval-value-cell coming-soon-cell">Coming Soon</td>`;
                         }
-                        const sentiment = indexData?.[interval.key] || 'No Data';
-                        return `<td class="sentiment-cell ${Formatters.getSentimentClass(sentiment)}">${sentiment}</td>`;
+
+                        // Get interval data
+                        const intervalData = indexData?.intervals?.[interval.key];
+
+                        if (!intervalData || intervalData.open === null) {
+                            // Show tooltip with reason why data is unavailable
+                            const reason = intervalData?.unavailableReason || 'Data not available for this interval';
+                            const shortReason = reason.length > 50 ? reason.substring(0, 47) + '...' : reason;
+                            return `<td class="interval-value-cell value-no-data" title="${reason}">
+                                <span class="no-data-icon">--</span>
+                            </td>`;
+                        }
+
+                        // Determine color class based on direction
+                        const valueClass = Formatters.getValueDirectionClass(intervalData.direction);
+
+                        // Parse change to number for proper comparison
+                        const changeNum = intervalData.change !== null ? parseFloat(intervalData.change) : null;
+                        const changeText = changeNum !== null
+                            ? `${changeNum >= 0 ? '+' : ''}${changeNum.toFixed(2)}`
+                            : '';
+
+                        // Show OPEN price of interval (where candle started)
+                        // Change shows: currentLTP - open (how much price moved)
+                        return `
+                            <td class="interval-value-cell ${valueClass}" title="Current: ${intervalData.ltp}">
+                                <div class="interval-ltp-value">${intervalData.open}</div>
+                                ${changeText ? `<div class="interval-change">${changeText}</div>` : ''}
+                            </td>
+                        `;
                     }).join('')}
                 </tr>
             `;
@@ -101,7 +120,7 @@ const IndicesGrid = {
                             <tr>
                                 <th rowspan="2" class="label-col"></th>
                                 <th rowspan="2" class="name-col">Index</th>
-                                <th rowspan="2" class="ltp-col">LTP & Age</th>
+                                <th rowspan="2" class="ltp-col">Current LTP</th>
                                 ${timeIntervals.map(interval => 
                                     `<th class="interval-col">${interval.label}</th>`
                                 ).join('')}
@@ -117,6 +136,21 @@ const IndicesGrid = {
                             ${rows}
                         </tbody>
                     </table>
+                </div>
+                
+                <div class="indices-legend">
+                    <div class="legend-item">
+                        <span class="legend-color value-positive">Green</span> = Price UP from interval open
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color value-negative">Red</span> = Price DOWN from interval open
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color value-neutral">Gray</span> = No change
+                    </div>
+                    <div class="legend-item" style="margin-left: 20px; color: #888;">
+                        (Values show interval OPEN price, change shows movement to current LTP)
+                    </div>
                 </div>
             </div>
         `;

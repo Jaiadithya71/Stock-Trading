@@ -70,8 +70,9 @@ const PCRWidget = {
     },
 
     renderTable(intervals) {
-        // Time intervals to display
+        // Time intervals to display (0min = Current/Latest)
         const timeIntervals = [
+            { key: '0min', label: 'Now' },
             { key: '1min', label: '1min' },
             { key: '3min', label: '3min' },
             { key: '5min', label: '5min' },

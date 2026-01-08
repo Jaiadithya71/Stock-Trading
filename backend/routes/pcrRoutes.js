@@ -17,8 +17,8 @@ router.post("/pcr-historical", requireAuth, async (req, res) => {
     
     console.log(`\n📊 Fetching historical PCR for ${symbol}...`);
     
-    // Get historical data for intervals: 1min, 3min, 5min, 15min
-    const historicalData = await pcrStorage.getHistoricalPCR(symbol, [1, 3, 5, 15]);
+    // Get historical data for intervals: 0min (current), 1min, 3min, 5min, 15min
+    const historicalData = await pcrStorage.getHistoricalPCR(symbol, [0, 1, 3, 5, 15]);
     
     if (!historicalData) {
       return res.json({

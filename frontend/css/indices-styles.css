@@ -1,72 +1,81 @@
-/* Indices Table - ULTRA COMPACT */
+/* frontend/css/indices-styles.css - UPDATED WITH VALUE DIRECTION COLORS */
+
+/* Indices Table Container */
 .indices-table-wrapper {
+    margin: 10px 0;
     overflow-x: auto;
-    padding: 0;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
 }
 
+/* Main Table */
 .indices-table {
     width: 100%;
     border-collapse: collapse;
-    background: transparent;
     font-size: 9px;
-    min-width: 900px;
+    background: transparent;
+}
+
+/* Table Headers */
+.indices-table thead {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(37, 99, 235, 0.05));
+    border-bottom: 2px solid rgba(59, 130, 246, 0.2);
 }
 
 .indices-table thead th {
-    background: rgba(30, 36, 56, 0.6);
-    padding: 5px 6px;
+    padding: 6px 8px;
     text-align: center;
-    font-size: 8px;
     font-weight: 600;
-    color: #8b95a8;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #66beea;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
     white-space: nowrap;
+    font-size: 8px;
     line-height: 1.2;
 }
 
-.indices-table thead .interval-col {
-    font-size: 9px;
-    font-weight: 700;
-    color: #e0e6ed;
-    padding-bottom: 4px;
+.indices-table thead th:last-child {
+    border-right: none;
 }
 
-.indices-table thead .time-range-col {
-    font-size: 8px;
-    color: #6b7280;
-    padding-top: 0;
-    padding-bottom: 5px;
-}
-
-/* Column widths */
+/* Column Specific Headers */
 .indices-table .label-col {
     width: 35px;
-    background: rgba(21, 25, 41, 0.5);
+    font-size: 9px;
 }
 
 .indices-table .name-col {
     width: 140px;
     text-align: left !important;
-    background: rgba(21, 25, 41, 0.5);
+    padding-left: 12px !important;
 }
 
 .indices-table .ltp-col {
-    width: 90px;
-    background: rgba(21, 25, 41, 0.5);
+    width: 100px;
+    background: rgba(74, 158, 255, 0.06);
 }
 
 .indices-table .interval-col {
-    min-width: 70px;
+    width: 90px;
+    font-size: 9px;
+}
+
+.indices-table .time-range-col {
+    font-size: 7px;
+    color: #888;
+    font-weight: 400;
+    padding: 3px 6px !important;
 }
 
 /* Table Body */
 .indices-table tbody tr {
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    transition: background 0.15s ease;
+    transition: background-color 0.2s ease;
 }
 
 .indices-table tbody tr:hover {
-    background: rgba(74, 158, 255, 0.02);
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .indices-table tbody tr:last-child {
@@ -74,9 +83,8 @@
 }
 
 .indices-table tbody td {
-    padding: 5px 6px;
+    padding: 6px 8px;
     text-align: center;
-    font-size: 9px;
     border-right: 1px solid rgba(255, 255, 255, 0.03);
     line-height: 1.2;
 }
@@ -101,7 +109,14 @@
     text-align: left !important;
 }
 
-/* LTP */
+/* Current LTP Column */
+.indices-table .index-ltp-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
 .indices-table .index-ltp {
     font-size: 11px;
     font-weight: 700;
@@ -109,40 +124,95 @@
     font-family: 'Courier New', monospace;
 }
 
-/* Sentiment Cells */
-.indices-table .sentiment-cell {
+/* Interval Value Cells - UPDATED WITH NEW CLASSES */
+.indices-table .interval-value-cell {
     font-weight: 600;
     font-size: 9px;
     transition: all 0.2s ease;
+    padding: 8px 6px !important;
 }
 
-.indices-table .sentiment-cell:hover {
+.indices-table .interval-value-cell:hover {
     transform: scale(1.03);
 }
 
-.indices-table .sentiment-cell.sentiment-bullish {
-    background: rgba(16, 185, 129, 0.1);
+/* NEW: Value Direction Colors */
+.indices-table .interval-value-cell.value-positive {
+    background: rgba(16, 185, 129, 0.12);
     color: #10b981;
     border-left: 2px solid #10b981;
 }
 
-.indices-table .sentiment-cell.sentiment-bearish {
-    background: rgba(239, 68, 68, 0.1);
+.indices-table .interval-value-cell.value-positive .interval-ltp-value {
+    color: #10b981;
+}
+
+.indices-table .interval-value-cell.value-positive .interval-change {
+    color: #10b981;
+}
+
+.indices-table .interval-value-cell.value-negative {
+    background: rgba(239, 68, 68, 0.12);
     color: #ef4444;
     border-left: 2px solid #ef4444;
 }
 
-.indices-table .sentiment-cell.sentiment-neutral {
-    background: rgba(107, 114, 128, 0.1);
+.indices-table .interval-value-cell.value-negative .interval-ltp-value {
+    color: #ef4444;
+}
+
+.indices-table .interval-value-cell.value-negative .interval-change {
+    color: #ef4444;
+}
+
+.indices-table .interval-value-cell.value-neutral {
+    background: rgba(156, 163, 175, 0.08);
     color: #9ca3af;
     border-left: 2px solid #6b7280;
 }
 
-.indices-table .sentiment-cell.sentiment-no-data {
+.indices-table .interval-value-cell.value-neutral .interval-ltp-value {
+    color: #9ca3af;
+}
+
+.indices-table .interval-value-cell.value-neutral .interval-change {
+    color: #9ca3af;
+}
+
+/* No Data State */
+.indices-table .interval-value-cell.value-no-data {
     background: rgba(75, 85, 99, 0.06);
     color: #6b7280;
     font-style: italic;
     font-size: 8px;
+    cursor: help;
+}
+
+.indices-table .interval-value-cell.value-no-data .no-data-icon {
+    opacity: 0.6;
+}
+
+.indices-table .interval-value-cell.value-no-data:hover {
+    background: rgba(75, 85, 99, 0.12);
+}
+
+.indices-table .interval-value-cell.value-no-data:hover .no-data-icon {
+    opacity: 1;
+}
+
+/* Interval LTP Value Display */
+.interval-ltp-value {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.interval-change {
+    font-size: 7px;
+    font-weight: 600;
+    opacity: 0.8;
+    margin-top: 2px;
 }
 
 /* Coming Soon */
@@ -151,93 +221,149 @@
     color: #fbbf24;
     font-weight: 600;
     font-size: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
+    font-style: italic;
+    border-left: 2px solid #f59e0b;
 }
 
-/* Data age indicators */
+/* Data Age Indicators */
 .data-age {
-    display: inline-block;
     font-size: 7px;
-    padding: 1px 3px;
-    border-radius: 2px;
-    margin-left: 3px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 2px;
 }
 
-.age-fresh {
-    background: rgba(74, 222, 128, 0.15);
-    color: #4ade80;
+.data-age.age-fresh {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
 }
 
-.age-recent {
+.data-age.age-recent {
     background: rgba(251, 191, 36, 0.15);
     color: #fbbf24;
 }
 
-.age-stale {
-    background: rgba(248, 113, 113, 0.15);
-    color: #f87171;
+.data-age.age-stale {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
 }
 
-/* Responsive */
-@media (max-width: 1400px) {
+.data-age.age-unknown {
+    background: rgba(107, 114, 128, 0.15);
+    color: #6b7280;
+}
+
+/* Legend for Value Direction */
+.indices-legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 8px 10px;
+    margin-top: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.legend-item {
+    font-size: 8px;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-color {
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 8px;
+}
+
+.legend-color.value-positive {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.legend-color.value-negative {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.legend-color.value-neutral {
+    background: rgba(156, 163, 175, 0.15);
+    color: #9ca3af;
+}
+
+/* Responsive Design */
+@media (max-width: 1600px) {
     .indices-table {
         font-size: 8px;
-        min-width: 800px;
     }
     
     .indices-table thead th {
-        padding: 4px 5px;
+        padding: 5px 6px;
         font-size: 7px;
     }
     
     .indices-table tbody td {
-        padding: 4px 5px;
-        font-size: 8px;
+        padding: 5px 6px;
     }
     
-    .indices-table .index-name {
+    .interval-ltp-value {
         font-size: 9px;
     }
     
-    .indices-table .index-ltp {
-        font-size: 10px;
+    .interval-change {
+        font-size: 6px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .indices-table {
+        font-size: 7px;
+    }
+    
+    .indices-table .name-col {
+        width: 120px;
     }
     
     .indices-table .interval-col {
-        min-width: 60px;
+        width: 75px;
     }
 }
 
 @media (max-width: 768px) {
     .indices-table-wrapper {
-        padding: 0;
+        margin: 6px 0;
     }
     
     .indices-table {
         font-size: 7px;
-        min-width: 700px;
     }
     
     .indices-table thead th {
-        padding: 3px 3px;
+        padding: 4px 4px;
         font-size: 6px;
     }
     
     .indices-table tbody td {
-        padding: 3px 3px;
-        font-size: 7px;
+        padding: 4px 4px;
     }
     
-    .indices-table .name-col {
-        width: 100px;
+    .interval-ltp-value {
+        font-size: 8px;
     }
     
-    .indices-table .ltp-col {
-        width: 70px;
+    .interval-change {
+        font-size: 6px;
     }
     
-    .indices-table .interval-col {
-        min-width: 50px;
+    .indices-legend {
+        flex-direction: column;
+        gap: 4px;
+        padding: 6px 8px;
     }
 }

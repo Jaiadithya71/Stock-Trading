@@ -91,13 +91,13 @@ class TradingDashboard {
     // Check cache first
     const cacheKey = `${exchange}_${symboltoken}_${interval}`;
     const cached = this.cache.get(cacheKey);
-    
+
     if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
       return cached.data;
     }
-    
+
     const { fromDate, toDate } = getDateRange();
-    
+
     const params = {
       exchange,
       symboltoken,
@@ -105,13 +105,13 @@ class TradingDashboard {
       fromdate: fromDate,
       todate: toDate
     };
-    
+
     try {
       // Add timeout to API call
       const response = await this.callWithTimeout(
         this.smart_api.getCandleData(params)
       );
-      
+
       // Cache successful responses
       if (response.status && response.data && response.data.length > 0) {
         this.cache.set(cacheKey, {
@@ -133,38 +133,31 @@ class TradingDashboard {
 
   /**
    * Get candle data with smart fallback based on market status
-   * NEW: Uses market-aware interval selection
+   * Tries preferredInterval first, then falls back to appropriate intervals
    */
   async getCandleDataWithFallback(exchange, symboltoken, preferredInterval) {
     const marketOpenNow = isMarketOpen();
-    
+
     // SMART INTERVAL SELECTION based on market status
-    let intervals;
-    
+    // Start with preferredInterval, then add fallbacks
+    let fallbackIntervals;
+
     if (marketOpenNow) {
-      // Market OPEN: Try real-time intervals first
-      intervals = [
-        preferredInterval,
-        "ONE_MINUTE",
-        "FIVE_MINUTE",
-        "FIFTEEN_MINUTE"
-      ];
+      // Market OPEN: Try real-time intervals as fallback
+      fallbackIntervals = ["ONE_MINUTE", "FIVE_MINUTE", "FIFTEEN_MINUTE"];
     } else {
-      // Market CLOSED: Skip real-time, use session intervals
-      intervals = [
-        "ONE_HOUR",        // Most reliable for closed market
-        "FIFTEEN_MINUTE",  // Backup
-        "FIVE_MINUTE"      // Last resort
-      ];
+      // Market CLOSED: Skip real-time, use session intervals as fallback
+      fallbackIntervals = ["ONE_HOUR", "FIFTEEN_MINUTE", "FIVE_MINUTE"];
     }
-    
-    // Remove duplicates while preserving order
+
+    // Build intervals array: preferred first, then fallbacks (removing duplicates)
+    const intervals = [preferredInterval, ...fallbackIntervals];
     const uniqueIntervals = [...new Set(intervals)];
-    
+
     for (const interval of uniqueIntervals) {
       try {
         const response = await this.getCandleData(exchange, symboltoken, interval);
-        
+
         if (response.status && response.data && response.data.length > 0) {
           return response;
         }
@@ -172,11 +165,11 @@ class TradingDashboard {
         // Continue to next interval
         continue;
       }
-      
+
       // Small delay before trying next interval
       await new Promise(resolve => setTimeout(resolve, 50));
     }
-    
+
     return { status: false, data: null };
   }
 
@@ -204,6 +197,91 @@ class TradingDashboard {
     }
     
     return null;
+  }
+
+  /**
+   * Get real-time LTP data using marketData API
+   * This returns actual current LTP, not candle close prices
+   * @param {string} exchange - Exchange (NSE, BSE, NFO, etc.)
+   * @param {string[]} tokens - Array of symbol tokens
+   * @param {string} mode - "LTP", "OHLC", or "FULL"
+   * @returns {Object} - Map of token -> market data
+   */
+  async getLTPData(exchange, tokens, mode = "LTP") {
+    try {
+      const response = await this.callWithTimeout(
+        this.smart_api.marketData({
+          mode: mode,
+          exchangeTokens: {
+            [exchange]: tokens
+          }
+        }),
+        this.API_TIMEOUT
+      );
+
+      if (response.status && response.data && response.data.fetched) {
+        // Convert array to map by token for easy lookup
+        const dataMap = {};
+        response.data.fetched.forEach(item => {
+          dataMap[item.symbolToken] = {
+            ltp: item.ltp,
+            open: item.open,
+            high: item.high,
+            low: item.low,
+            close: item.close,
+            volume: item.tradeVolume || item.volume,
+            change: item.netChange,
+            changePercent: item.percentChange,
+            lastTradeQty: item.lastTradeQty,
+            avgPrice: item.avgPrice,
+            lowerCircuit: item.lowerCircuit,
+            upperCircuit: item.upperCircuit,
+            week52High: item['52WeekHigh'],
+            week52Low: item['52WeekLow'],
+            exchFeedTime: item.exchFeedTime,
+            exchTradeTime: item.exchTradeTime
+          };
+        });
+        return { success: true, data: dataMap };
+      }
+
+      return { success: false, data: null, error: response.message || 'No data returned' };
+    } catch (error) {
+      console.error(`❌ marketData API error:`, error.message);
+      return { success: false, data: null, error: error.message };
+    }
+  }
+
+  /**
+   * Get LTP for multiple symbols in batches (marketData API has limits)
+   * @param {Object[]} symbols - Array of {symbol, exchange, token}
+   * @returns {Object} - Map of symbol -> LTP data
+   */
+  async batchGetLTP(symbols) {
+    const results = {};
+
+    // Group by exchange
+    const byExchange = {};
+    symbols.forEach(({ symbol, exchange, token }) => {
+      if (!byExchange[exchange]) byExchange[exchange] = [];
+      byExchange[exchange].push({ symbol, token });
+    });
+
+    // Fetch each exchange (marketData supports one exchange at a time)
+    for (const [exchange, items] of Object.entries(byExchange)) {
+      const tokens = items.map(i => i.token);
+      const response = await this.getLTPData(exchange, tokens, "FULL");
+
+      if (response.success && response.data) {
+        items.forEach(({ symbol, token }) => {
+          if (response.data[token]) {
+            results[symbol] = response.data[token];
+          }
+        });
+      }
+    }
+
+    return results;
   }
 
   /**

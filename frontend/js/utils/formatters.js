@@ -1,3 +1,4 @@
+// frontend/js/utils/formatters.js - UPDATED WITH VALUE DIRECTION HELPER
 const Formatters = {
     formatNumber(num) {
         if (num >= 10000000) return (num / 10000000).toFixed(2) + 'Cr';
@@ -25,6 +26,17 @@ const Formatters = {
 
     getSentimentClass(sentiment) {
         return 'sentiment-' + sentiment.toLowerCase();
+    },
+
+    /**
+     * Get CSS class based on value direction
+     * @param {string} direction - 'up', 'down', or 'neutral'
+     * @returns {string} CSS class name
+     */
+    getValueDirectionClass(direction) {
+        if (direction === 'up') return 'value-positive';
+        if (direction === 'down') return 'value-negative';
+        return 'value-neutral';
     },
 
     formatInterval(interval) {

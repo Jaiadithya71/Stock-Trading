@@ -6,10 +6,11 @@ const BankNiftyTable = {
 
         const rows = data.map(row => {
             const isDataMissing = row.status === "Data Not Fetched" || row.status === "No Data";
-            
+
             return `
                 <tr data-action="view-details" data-bank="${row.bank}" class="${isDataMissing ? 'no-data-row' : ''}">
                     <td>${row.bank}</td>
+                    <td>${row.open ? Formatters.formatCurrency(row.open) : '<span class="no-data-text">-</span>'}</td>
                     <td>${row.ltp ? Formatters.formatCurrency(row.ltp) : '<span class="no-data-text">-</span>'}</td>
                     <td>${row.volume ? Formatters.formatNumber(row.volume) : '<span class="no-data-text">-</span>'}</td>
                     <td class="${row.changePercent ? Formatters.getChangeClass(row.changePercent) : ''}">
@@ -34,6 +35,7 @@ const BankNiftyTable = {
                     <thead>
                         <tr>
                             <th>Bank</th>
+                            <th>Open</th>
                             <th>LTP</th>
                             <th>Volume</th>
                             <th>Change %</th>

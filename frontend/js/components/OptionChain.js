@@ -1,7 +1,34 @@
 // frontend/js/components/OptionChain.js - NSE VERSION
 const OptionChain = {
     render(data, selectedSymbol = 'BANKNIFTY') {
-        if (!data || !data.optionChain) {
+        // Show loading spinner if no data
+        if (!data) {
+            return LoadingSpinner.render('Loading NSE option chain...');
+        }
+
+        // Show error message if there was an error
+        if (data.error) {
+            return `
+                <div class="card option-chain-container" style="grid-column: span 2;">
+                    <div class="option-chain-header">
+                        <div class="symbol-info">
+                            <h2>📊 Option Chain</h2>
+                        </div>
+                    </div>
+                    <div class="error-message" style="text-align: center; padding: 40px; color: #ef4444;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+                        <div style="font-size: 18px; margin-bottom: 10px;">Failed to load option chain</div>
+                        <div style="color: #888;">${data.error}</div>
+                        <button class="refresh-btn" data-action="refresh-nse-option-chain" style="margin-top: 20px;">
+                            🔄 Try Again
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Show loading if optionChain is not yet available
+        if (!data.optionChain || data.optionChain.length === 0) {
             return LoadingSpinner.render('Loading NSE option chain...');
         }
 

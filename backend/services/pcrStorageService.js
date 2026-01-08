@@ -145,16 +145,37 @@ class PCRStorageService {
       
       // Calculate for each interval
       for (const intervalMinutes of intervals) {
+        // Special case: 0 minutes = current/latest value
+        if (intervalMinutes === 0) {
+          const latestSnapshot = symbolSnapshots[symbolSnapshots.length - 1];
+          results['0min'] = {
+            pcr: latestSnapshot.pcr.toFixed(4),
+            pcrVolume: latestSnapshot.pcrVolume?.toFixed(4) || null,
+            sentiment: this.determineSentiment(latestSnapshot.pcr),
+            trend: 'Current',
+            change: null,
+            changePercent: null,
+            dataPoints: 1,
+            available: true,
+            callOI: latestSnapshot.callOI,
+            putOI: latestSnapshot.putOI,
+            underlyingValue: latestSnapshot.underlyingValue,
+            timestamp: latestSnapshot.timestamp
+          };
+          console.log(`   ✅ 0min (Current): PCR=${latestSnapshot.pcr.toFixed(4)}, Sentiment=${results['0min'].sentiment}`);
+          continue;
+        }
+
         const intervalMs = intervalMinutes * 60 * 1000;
-        
+
         // Calculate cutoff time from reference time
         const cutoffTime = referenceTime - intervalMs;
-        
+
         // Get snapshots within this interval
-        const intervalSnapshots = symbolSnapshots.filter(s => 
+        const intervalSnapshots = symbolSnapshots.filter(s =>
           s.timestampMs >= cutoffTime && s.timestampMs <= referenceTime
         );
-        
+
         if (intervalSnapshots.length === 0) {
           const mode = marketOpen ? 'current time' : 'latest snapshot';
           console.log(`   ⚠️  ${intervalMinutes}min: No data (need snapshots within last ${intervalMinutes} min from ${mode})`);
@@ -164,24 +185,57 @@ class PCRStorageService {
             trend: 'No Data',
             change: null,
             changePercent: null,
-            dataPoints: 0
+            dataPoints: 0,
+            available: false,
+            reason: 'No snapshots in this interval'
           };
           continue;
         }
-        
+
+        // Check if we have sufficient data span for this interval
+        // We need at least 50% of the interval covered with data to show meaningful results
+        const oldestInInterval = intervalSnapshots[0].timestampMs;
+        const newestInInterval = intervalSnapshots[intervalSnapshots.length - 1].timestampMs;
+        const actualSpanMs = newestInInterval - oldestInInterval;
+        const requiredSpanMs = intervalMs * 0.5; // Require at least 50% coverage
+
+        // Also check if oldest snapshot is close enough to cutoff time
+        // (i.e., we have data from the beginning of the interval, not just recent data)
+        const gapFromCutoff = oldestInInterval - cutoffTime;
+        const maxAllowedGap = intervalMs * 0.5; // Allow 50% gap from start
+
+        const hasInsufficientSpan = actualSpanMs < requiredSpanMs && intervalSnapshots.length > 1;
+        const dataStartsTooLate = gapFromCutoff > maxAllowedGap;
+
+        if (hasInsufficientSpan || dataStartsTooLate) {
+          const actualSpanMinutes = (actualSpanMs / 60000).toFixed(1);
+          console.log(`   ⚠️  ${intervalMinutes}min: Insufficient data (only ${actualSpanMinutes} min span, need ${intervalMinutes} min)`);
+          results[`${intervalMinutes}min`] = {
+            pcr: null,
+            sentiment: 'No Data',
+            trend: 'No Data',
+            change: null,
+            changePercent: null,
+            dataPoints: intervalSnapshots.length,
+            available: false,
+            reason: `Insufficient data: only ${actualSpanMinutes} min of ${intervalMinutes} min available`
+          };
+          continue;
+        }
+
         // Calculate average PCR for this interval
         const avgPCR = intervalSnapshots.reduce((sum, s) => sum + s.pcr, 0) / intervalSnapshots.length;
-        
+
         // Calculate trend (compare first vs last)
         const firstPCR = intervalSnapshots[0].pcr;
         const lastPCR = intervalSnapshots[intervalSnapshots.length - 1].pcr;
         const change = lastPCR - firstPCR;
         const changePercent = firstPCR !== 0 ? (change / firstPCR) * 100 : 0;
-        
+
         // Determine sentiment
         const sentiment = this.determineSentiment(avgPCR);
         const trend = change > 0.01 ? 'Rising' : change < -0.01 ? 'Falling' : 'Stable';
-        
+
         results[`${intervalMinutes}min`] = {
           pcr: avgPCR.toFixed(4),
           sentiment: sentiment,
@@ -189,10 +243,11 @@ class PCRStorageService {
           change: change.toFixed(4),
           changePercent: changePercent.toFixed(2),
           dataPoints: intervalSnapshots.length,
+          available: true,
           oldest: intervalSnapshots[0].timestamp,
           newest: intervalSnapshots[intervalSnapshots.length - 1].timestamp
         };
-        
+
         console.log(`   ✅ ${intervalMinutes}min: PCR=${avgPCR.toFixed(4)}, Sentiment=${sentiment}, Trend=${trend} (${intervalSnapshots.length} points)`);
       }
       
@@ -294,21 +349,72 @@ class PCRStorageService {
    * Load data from file
    */
   async loadData() {
+    const emptyData = { snapshots: [] };
+
+    // Try primary file first
     try {
-      const content = await fs.readFile(this.dataFile, 'utf8');
-      return JSON.parse(content);
-    } catch (error) {
-      // If file is corrupted, try backup
-      if (fsSync.existsSync(this.backupFile)) {
-        console.log('⚠️  Primary file corrupted, loading from backup...');
-        const backupContent = await fs.readFile(this.backupFile, 'utf8');
-        return JSON.parse(backupContent);
+      if (fsSync.existsSync(this.dataFile)) {
+        const content = await fs.readFile(this.dataFile, 'utf8');
+
+        // Handle empty file
+        if (!content || content.trim() === '') {
+          console.log('⚠️  Primary file is empty, trying backup...');
+          throw new Error('Empty file');
+        }
+
+        const data = JSON.parse(content);
+
+        // Validate structure
+        if (!data || !Array.isArray(data.snapshots)) {
+          console.log('⚠️  Primary file has invalid structure, trying backup...');
+          throw new Error('Invalid structure');
+        }
+
+        return data;
       }
-      
-      // If both failed, return empty structure
-      console.log('⚠️  No valid data found, starting fresh...');
-      return { snapshots: [] };
+    } catch (primaryError) {
+      console.log(`⚠️  Primary file issue: ${primaryError.message}`);
     }
+
+    // Try backup file
+    try {
+      if (fsSync.existsSync(this.backupFile)) {
+        console.log('📂 Attempting to load from backup...');
+        const backupContent = await fs.readFile(this.backupFile, 'utf8');
+
+        // Handle empty backup
+        if (!backupContent || backupContent.trim() === '') {
+          console.log('⚠️  Backup file is also empty');
+          throw new Error('Empty backup');
+        }
+
+        const backupData = JSON.parse(backupContent);
+
+        // Validate structure
+        if (!backupData || !Array.isArray(backupData.snapshots)) {
+          console.log('⚠️  Backup file has invalid structure');
+          throw new Error('Invalid backup structure');
+        }
+
+        console.log(`✅ Loaded ${backupData.snapshots.length} snapshots from backup`);
+
+        // Restore primary file from backup
+        await this.saveDataAtomic(backupData);
+        console.log('✅ Primary file restored from backup');
+
+        return backupData;
+      }
+    } catch (backupError) {
+      console.log(`⚠️  Backup file issue: ${backupError.message}`);
+    }
+
+    // Both files failed - start fresh
+    console.log('🆕 No valid data found, starting with empty dataset...');
+
+    // Initialize empty files
+    await this.saveDataAtomic(emptyData);
+
+    return emptyData;
   }
 
   /**

@@ -1,22 +1,30 @@
 // ============================================================================
 // FILE: backend/services/pcrCollectorService.js
 // Background PCR Collector - Runs every minute to store PCR snapshots
-// - Fetches current PCR from putCallRatio API
+// - Fetches option chain from NSE India public API
+// - Calculates PCR from Put OI / Call OI
 // - Stores snapshot in local file
 // - Auto-runs in background
 // ============================================================================
 
 const PCRStorageService = require('./pcrStorageService');
+const NSEApiFetcher = require('./nseApiFetcher');
+const InstrumentFetcher = require('./instrumentFetcher');
 
 class PCRCollectorService {
   constructor(smartAPI, intervalMinutes = 1) {
-    this.smartAPI = smartAPI;
+    this.smartAPI = smartAPI; // Keep for backwards compatibility, but not used
     this.storage = new PCRStorageService();
+    this.nseFetcher = new NSEApiFetcher();
+    this.instrumentFetcher = new InstrumentFetcher();
     this.intervalMinutes = intervalMinutes;
     this.intervalMs = intervalMinutes * 60 * 1000;
     this.isRunning = false;
     this.intervalId = null;
     this.collectCount = 0;
+    this.cachedExpiry = null;
+    this.expiryLastFetched = null;
+    this.EXPIRY_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
   }
 
   /**
@@ -68,81 +76,130 @@ class PCRCollectorService {
   }
 
   /**
+   * Get nearest expiry date (with caching)
+   */
+  async getNearestExpiry(symbol = 'BANKNIFTY') {
+    const now = Date.now();
+
+    // Use cached expiry if still valid
+    if (this.cachedExpiry &&
+        this.expiryLastFetched &&
+        (now - this.expiryLastFetched) < this.EXPIRY_CACHE_DURATION) {
+      return this.cachedExpiry;
+    }
+
+    console.log(`   📅 Fetching expiry dates for ${symbol}...`);
+    const expiries = await this.instrumentFetcher.getExpiryDates(symbol);
+
+    if (expiries && expiries.length > 0) {
+      this.cachedExpiry = expiries[0]; // Nearest expiry
+      this.expiryLastFetched = now;
+      console.log(`   📅 Using expiry: ${this.cachedExpiry}`);
+      return this.cachedExpiry;
+    }
+
+    throw new Error('No expiry dates available');
+  }
+
+  /**
+   * Calculate PCR from option chain data
+   */
+  calculatePCRFromOptionChain(optionChain) {
+    let totalCallOI = 0;
+    let totalPutOI = 0;
+    let totalCallVolume = 0;
+    let totalPutVolume = 0;
+
+    // Sum up OI and Volume from all strikes
+    Object.values(optionChain.strikes).forEach(strike => {
+      if (strike.CE) {
+        totalCallOI += strike.CE.openInterest || 0;
+        totalCallVolume += strike.CE.totalTradedVolume || 0;
+      }
+      if (strike.PE) {
+        totalPutOI += strike.PE.openInterest || 0;
+        totalPutVolume += strike.PE.totalTradedVolume || 0;
+      }
+    });
+
+    // Calculate PCR (Put/Call ratio)
+    const pcrOI = totalCallOI > 0 ? totalPutOI / totalCallOI : 0;
+    const pcrVolume = totalCallVolume > 0 ? totalPutVolume / totalCallVolume : 0;
+
+    return {
+      pcrOI: Math.round(pcrOI * 100) / 100,
+      pcrVolume: Math.round(pcrVolume * 100) / 100,
+      totalCallOI,
+      totalPutOI,
+      totalCallVolume,
+      totalPutVolume,
+      strikeCount: Object.keys(optionChain.strikes).length
+    };
+  }
+
+  /**
    * Collect current PCR and store it
    */
   async collectPCR() {
     const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-    
+
     try {
-      console.log(`\n[${ timestamp}] 📊 Collecting PCR snapshot #${this.collectCount + 1}...`);
-      
-      // Fetch current PCR from API
-      const response = await this.smartAPI.putCallRatio();
-      
-      if (!response || !response.status) {
-        throw new Error('Failed to fetch PCR data');
+      console.log(`\n[${timestamp}] 📊 Collecting PCR snapshot #${this.collectCount + 1}...`);
+
+      // Get nearest expiry
+      const expiry = await this.getNearestExpiry('BANKNIFTY');
+
+      // Fetch option chain from NSE
+      console.log(`   🌐 Fetching NSE option chain...`);
+      const optionChain = await this.nseFetcher.getOptionChain('BANKNIFTY', expiry);
+
+      if (!optionChain || !optionChain.strikes) {
+        throw new Error('Failed to fetch option chain from NSE');
       }
-      
-      // Find BANKNIFTY
-      const banknifty = response.data.find(item => 
-        (item.tradingSymbol || '').includes('BANKNIFTY')
-      );
-      
-      if (!banknifty) {
-        console.log('   ⚠️  BANKNIFTY not found, using market average');
-        
-        // Calculate market average
-        const avgPCR = response.data.reduce((sum, item) => sum + (item.pcr || 0), 0) / response.data.length;
-        
-        const snapshot = {
-          symbol: 'BANKNIFTY',
-          pcr: avgPCR,
-          callOI: null,
-          putOI: null,
-          callVolume: null,
-          putVolume: null,
-          sentiment: this.determineSentiment(avgPCR),
-          source: 'market_average'
-        };
-        
-        await this.storage.storeSnapshot(snapshot);
-        this.collectCount++;
-        
-        console.log(`   ✅ Stored: PCR=${avgPCR.toFixed(4)} (${snapshot.sentiment})`);
-        return;
-      }
-      
-      // Extract expiry
-      const expiryMatch = banknifty.tradingSymbol.match(/(\d{2}[A-Z]{3}\d{2})/);
-      const expiry = expiryMatch ? expiryMatch[1] : 'UNKNOWN';
-      
-      // Create snapshot
+
+      // Calculate PCR from OI data
+      const pcrData = this.calculatePCRFromOptionChain(optionChain);
+
+      console.log(`   📈 Call OI: ${pcrData.totalCallOI.toLocaleString()}`);
+      console.log(`   📉 Put OI: ${pcrData.totalPutOI.toLocaleString()}`);
+      console.log(`   📊 PCR (OI): ${pcrData.pcrOI}`);
+      console.log(`   📊 PCR (Vol): ${pcrData.pcrVolume}`);
+
+      // Create snapshot using OI-based PCR
       const snapshot = {
         symbol: 'BANKNIFTY',
-        pcr: banknifty.pcr,
+        pcr: pcrData.pcrOI,
+        pcrVolume: pcrData.pcrVolume,
         expiry: expiry,
-        tradingSymbol: banknifty.tradingSymbol,
-        callOI: null, // Not provided by putCallRatio
-        putOI: null,
-        callVolume: null,
-        putVolume: null,
-        sentiment: this.determineSentiment(banknifty.pcr),
-        source: 'putCallRatio_api'
+        callOI: pcrData.totalCallOI,
+        putOI: pcrData.totalPutOI,
+        callVolume: pcrData.totalCallVolume,
+        putVolume: pcrData.totalPutVolume,
+        underlyingValue: optionChain.underlyingValue,
+        strikeCount: pcrData.strikeCount,
+        sentiment: this.determineSentiment(pcrData.pcrOI),
+        source: 'nse_option_chain'
       };
-      
+
       // Store snapshot
       await this.storage.storeSnapshot(snapshot);
       this.collectCount++;
-      
-      console.log(`   ✅ Stored: PCR=${banknifty.pcr.toFixed(4)} (${snapshot.sentiment}) - Expiry: ${expiry}`);
-      
+
+      console.log(`   ✅ Stored: PCR=${pcrData.pcrOI.toFixed(2)} (${snapshot.sentiment}) - Expiry: ${expiry}`);
+
       // Show statistics every 10 snapshots
       if (this.collectCount % 10 === 0) {
         await this.showStats();
       }
-      
+
     } catch (error) {
       console.error(`   ❌ Error collecting PCR: ${error.message}`);
+
+      // If NSE fails, try to clear session and retry next time
+      if (error.message.includes('timeout') || error.message.includes('Empty response')) {
+        console.log(`   🔄 Clearing NSE session for retry...`);
+        this.nseFetcher.clearSession();
+      }
     }
   }
 

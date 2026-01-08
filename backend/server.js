@@ -154,19 +154,26 @@ app.post("/api/stop-pcr-collector", (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log('\n' + '='.repeat(60));
   console.log('🚀 Trading Dashboard API Server');
   console.log('='.repeat(60));
   console.log(`📊 Dashboard URL: http://localhost:${PORT}`);
   console.log(`🔧 API Base URL: http://localhost:${PORT}/api`);
   console.log('='.repeat(60));
+
+  // Initialize futures instruments dynamically
+  console.log('\n📦 Loading futures instruments...');
+  const { initializeFuturesInstruments } = require("./config/constants");
+  await initializeFuturesInstruments();
+
   console.log('\n💡 Server Features:');
   console.log('   ✅ Fast parallel data fetching');
   console.log('   ✅ 5-second API timeout protection');
   console.log('   ✅ Smart market-aware intervals');
   console.log('   ✅ PCR collector (starts after login)');
   console.log('   ✅ Automatic cache management');
+  console.log('   ✅ Auto-loading futures contracts');
   console.log('\n🔄 Ready to accept connections!\n');
 });
 

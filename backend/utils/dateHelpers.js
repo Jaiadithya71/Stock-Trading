@@ -83,8 +83,6 @@ function getDateRange() {
     const threeHoursAgo = new Date(istNow.getTime() - 3 * 60 * 60 * 1000);
     fromDate = threeHoursAgo > marketOpenToday ? threeHoursAgo : marketOpenToday;
     toDate = istNow;
-    
-    console.log(`📅 Market OPEN - Range: ${formatDateTime(fromDate)} to ${formatDateTime(toDate)}`);
   } else {
     // Market is CLOSED - use last trading session
     const lastTradingDay = getLastTradingDay(istNow);
@@ -94,8 +92,6 @@ function getDateRange() {
     
     toDate = new Date(lastTradingDay);
     toDate.setHours(MARKET_HOURS.CLOSE.hour, MARKET_HOURS.CLOSE.minute, 0, 0);
-    
-    console.log(`📅 Market CLOSED - Using last session: ${formatDateTime(fromDate)} to ${formatDateTime(toDate)}`);
   }
   
   return {
