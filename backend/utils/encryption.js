@@ -3,17 +3,26 @@ const fs = require("fs");
 const { IV_LENGTH, ENCRYPTION_KEY_FILE } = require("../config/constants");
 
 // Generate or load encryption key
+// Priority: 1. Environment variable, 2. File, 3. Generate new
 function getEncryptionKey() {
-  if (fs.existsSync(ENCRYPTION_KEY_FILE)) {
-    // Load existing key
-    return fs.readFileSync(ENCRYPTION_KEY_FILE);
-  } else {
-    // Generate new key and save it
-    const key = crypto.randomBytes(32);
-    fs.writeFileSync(ENCRYPTION_KEY_FILE, key);
-    console.log("🔑 New encryption key generated and saved");
-    return key;
+  // Check for environment variable first (for Render deployment)
+  if (process.env.ENCRYPTION_KEY) {
+    console.log("🔑 Using encryption key from environment variable");
+    return Buffer.from(process.env.ENCRYPTION_KEY, 'hex');
   }
+
+  // Fall back to file-based key (for local development)
+  if (fs.existsSync(ENCRYPTION_KEY_FILE)) {
+    console.log("🔑 Using encryption key from file");
+    return fs.readFileSync(ENCRYPTION_KEY_FILE);
+  }
+
+  // Generate new key and save it (local development only)
+  const key = crypto.randomBytes(32);
+  fs.writeFileSync(ENCRYPTION_KEY_FILE, key);
+  console.log("🔑 New encryption key generated and saved");
+  console.log("💡 For deployment, set ENCRYPTION_KEY env var to:", key.toString('hex'));
+  return key;
 }
 
 const ENCRYPTION_KEY = getEncryptionKey();

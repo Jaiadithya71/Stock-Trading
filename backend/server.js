@@ -1,6 +1,7 @@
 // backend/server.js - FIXED VERSION (PCR collector starts after auth)
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const path = require("path");
 const routes = require("./routes/routes");
 const PCRCollectorService = require("./services/pcrCollectorService");
@@ -10,8 +11,18 @@ const { loadCredentials } = require("./services/credentialService");
 const app = express();
 
 // Middleware
+app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
+
+// Health check endpoint (for Render)
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
 
 // API Routes
 app.use("/api", routes);
@@ -154,12 +165,17 @@ app.post("/api/stop-pcr-collector", (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, async () => {
+const HOST = process.env.RENDER ? '0.0.0.0' : 'localhost';
+
+app.listen(PORT, HOST, async () => {
   console.log('\n' + '='.repeat(60));
   console.log('🚀 Trading Dashboard API Server');
   console.log('='.repeat(60));
-  console.log(`📊 Dashboard URL: http://localhost:${PORT}`);
-  console.log(`🔧 API Base URL: http://localhost:${PORT}/api`);
+  console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔧 Port: ${PORT}`);
+  if (!process.env.RENDER) {
+    console.log(`📊 Dashboard URL: http://localhost:${PORT}`);
+  }
   console.log('='.repeat(60));
 
   // Initialize futures instruments dynamically
