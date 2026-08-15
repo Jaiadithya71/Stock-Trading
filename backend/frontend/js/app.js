@@ -34,9 +34,13 @@ const App = {
         this.registerEventHandlers();
         this.renderModals();
         
-        // Auto-authenticate for testing to bypass login screen
-        this.state.currentUsername = 'default';
-        await this.authenticate();
+        // Auto-authenticate on localhost only; require explicit login on production
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            this.state.currentUsername = 'default';
+            await this.authenticate();
+        } else {
+            this.checkUser();
+        }
     },
 
     registerEventHandlers() {
