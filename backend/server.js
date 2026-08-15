@@ -14,7 +14,29 @@ const app = express();
 // Middleware
 app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "../frontend")));
+
+// Multi-path resolution for frontend files (supports both local and Render rootDir deployments)
+function getFrontendFile(filename) {
+  const possiblePaths = [
+    path.join(__dirname, "../frontend", filename),
+    path.join(__dirname, "frontend", filename),
+    path.join(process.cwd(), "../frontend", filename),
+    path.join(process.cwd(), "frontend", filename)
+  ];
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) return p;
+  }
+  return possiblePaths[0];
+}
+
+const frontendFolder = [
+  path.join(__dirname, "../frontend"),
+  path.join(__dirname, "frontend"),
+  path.join(process.cwd(), "../frontend"),
+  path.join(process.cwd(), "frontend")
+].find(d => fs.existsSync(d)) || path.join(__dirname, "../frontend");
+
+app.use(express.static(frontendFolder));
 
 // Health check endpoint (for Render)
 app.get("/health", (req, res) => {
@@ -30,12 +52,12 @@ app.use("/api", routes);
 
 // Serve index.html
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  res.sendFile(getFrontendFile("index.html"));
 });
 
 // Serve survey.html
 app.get(["/survey", "/survey.html"], (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/survey.html"));
+  res.sendFile(getFrontendFile("survey.html"));
 });
 
 // Global PCR collector instance

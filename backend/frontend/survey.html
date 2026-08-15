@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Dashboard Requirements & Strategy Questionnaire</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.75);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-amber: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px 16px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 780px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Built Showcase Box */
+        .showcase-box {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .showcase-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        .showcase-item {
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-header {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #60a5fa;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 8px;
+            margin: 32px 0 20px;
+        }
+
+        .question-group {
+            margin-bottom: 28px;
+        }
+
+        .question-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 1.4;
+        }
+
+        .question-num {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            font-size: 0.78rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .option-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .option-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .option-card.selected {
+            border-color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .option-card input[type="radio"],
+        .option-card input[type="checkbox"] {
+            margin-top: 3px;
+            accent-color: var(--accent-green);
+            transform: scale(1.15);
+        }
+
+        .option-content h4 {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 3px;
+        }
+
+        .option-content p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .custom-writein {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px dashed var(--card-border);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: var(--text-main);
+            font-size: 0.84rem;
+            outline: none;
+            transition: all 0.2s ease;
+            margin-top: 6px;
+        }
+
+        .custom-writein:focus {
+            border-color: var(--accent-amber);
+            border-style: solid;
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .priority-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .priority-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .priority-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #60a5fa;
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            color: var(--text-main);
+            font-size: 0.88rem;
+            resize: vertical;
+            min-height: 80px;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .success-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+        }
+
+        .success-screen h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .success-screen p {
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="formContainer">
+    <div class="header">
+        <h1>Trading Dashboard Strategy Questionnaire</h1>
+        <p>Select your options below. Any text typed into the custom boxes will be saved alongside your selections.</p>
+    </div>
+
+    <!-- Built Showcase -->
+    <div class="showcase-box">
+        <div class="showcase-title">
+            <span>⚡ Currently Live & Operating in Dashboard (25% Baseline Complete)</span>
+        </div>
+        <div class="showcase-grid">
+            <div class="showcase-item">✓ 12 Bank Nifty Stocks Real-Time LTP</div>
+            <div class="showcase-item">✓ 1-Min Background PCR Daemon</div>
+            <div class="showcase-item">✓ Live NSE Option Chain (167 Strikes)</div>
+            <div class="showcase-item">✓ Bank Nifty Spot & Futures Telemetry</div>
+            <div class="showcase-item">✓ USD/EUR/GBP/JPY Currency Pairs</div>
+            <div class="showcase-item">✓ 5-Sec Timeout & Smart API Caching</div>
+        </div>
+    </div>
+
+    <form id="surveyForm">
+
+        <!-- SECTION 1 -->
+        <div class="section-header">Section 1: The Big Picture</div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q1</span>
+                <span>Primary System Goal: What should this system help you achieve?</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q1_goal" value="Real-time Telemetry & Fast Order Execution" checked>
+                    <div class="option-content">
+                        <h4>Real-Time Telemetry & Fast Execution</h4>
+                        <p>Track multi-indicator movements & execute quick 1-click buy/sell actions.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q1_goal" value="100% Automated Trading Algo">
+                    <div class="option-content">
+                        <h4>100% Automated Trading Algo</h4>
+                        <p>Automatically execute trades on Angel One without manual intervention.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q1_goal" value="Signal Alerts & Risk Dashboard">
+                    <div class="option-content">
+                        <h4>Signal Alerts & Risk Dashboard</h4>
+                        <p>Send instant high-probability signal alerts to dashboard and phone.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q1_custom" class="custom-writein" placeholder="✍️ Add custom goal notes (optional)..." />
+        </div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q2</span>
+                <span>Order Approval Mode: How should trades be executed?</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q2_approval" value="Manual 1-Click Confirmation Pop-up" checked>
+                    <div class="option-content">
+                        <h4>Manual 1-Click Confirmation</h4>
+                        <p>Alert pops up on screen with single Buy/Sell button to approve.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q2_approval" value="100% Fully Automated">
+                    <div class="option-content">
+                        <h4>100% Fully Automated</h4>
+                        <p>Orders place instantly via API when strategy triggers.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q2_approval" value="Dual Mode Toggle Switch">
+                    <div class="option-content">
+                        <h4>Dual Mode Toggle Switch</h4>
+                        <p>Includes a master toggle to switch between Manual and Auto anytime.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q2_custom" class="custom-writein" placeholder="✍️ Add custom approval notes (optional)..." />
+        </div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q3</span>
+                <span>Daily Trading Workflow: How will you use the app during market hours?</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q3_workflow" value="Pre-Market Prep + Live Signal Alerts" checked>
+                    <div class="option-content">
+                        <h4>Pre-Market Prep + Signal Alerts</h4>
+                        <p>Review 9:00 AM PCR/Levels, then trade when audio/visual alerts fire.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q3_workflow" value="Active Multi-Monitor Grid Watching">
+                    <div class="option-content">
+                        <h4>Active Multi-Monitor Grid</h4>
+                        <p>Keep dashboard open on screen continuously monitoring live movement.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q3_custom" class="custom-writein" placeholder="✍️ Add custom workflow notes (optional)..." />
+        </div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q4</span>
+                <span>Target Success Metric: What is the main benchmark for success?</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q4_success" value="Faster Execution & Zero Missed Breakouts" checked>
+                    <div class="option-content">
+                        <h4>Faster Execution & Zero Missed Moves</h4>
+                        <p>Instantly catch high-probability breakouts/reversals.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q4_success" value="Disciplined Risk & Daily Loss Control">
+                    <div class="option-content">
+                        <h4>Disciplined Risk & Stop-Loss Control</h4>
+                        <p>Eliminate emotional trading & adhere strictly to daily risk limits.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q4_custom" class="custom-writein" placeholder="✍️ Add custom success notes (optional)..." />
+        </div>
+
+        <!-- SECTION 2 -->
+        <div class="section-header">Section 2: Confirming Current Built Features</div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q5</span>
+                <span>Current Tracked Baseline Scope (See green box above)</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q5_baseline" value="Confirmed - Keep current baseline complete" checked>
+                    <div class="option-content">
+                        <h4>Confirmed Complete</h4>
+                        <p>Current set of Bank Nifty, Stocks, PCR, Options, and Currency covers baseline.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q5_baseline" value="Focus strictly on Bank Nifty Options & Futures">
+                    <div class="option-content">
+                        <h4>Focus on Bank Nifty Only</h4>
+                        <p>Narrow focus strictly to Bank Nifty options and futures telemetry.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q5_custom" class="custom-writein" placeholder="✍️ Add scope adjustment notes (optional)..." />
+        </div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q6</span>
+                <span>New Technical Indicator Additions</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="checkbox" name="q6_indicators" value="Fibonacci Retracements (0.382 / 0.5 / 0.618)" checked>
+                    <div class="option-content">
+                        <h4>Fibonacci Retracements</h4>
+                        <p>Auto-calculate 0.382, 0.5, and 0.618 key reversal levels.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="checkbox" name="q6_indicators" value="CPR (Central Pivot Range) & Daily Pivots">
+                    <div class="option-content">
+                        <h4>CPR & Daily Pivots</h4>
+                        <p>Display daily pivot levels, TC, and BC bands.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="checkbox" name="q6_indicators" value="VWAP & Supertrend">
+                    <div class="option-content">
+                        <h4>VWAP & Supertrend</h4>
+                        <p>Volume Weighted Average Price and trend direction filter.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q6_custom" class="custom-writein" placeholder="✍️ Add any custom indicators (e.g. RSI, MACD)..." />
+        </div>
+
+        <!-- SECTION 3 -->
+        <div class="section-header">Section 3: Strategy & Auto-Execution</div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q7</span>
+                <span>Strategy Foundation</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q7_strategy" value="Fibonacci Retracements + Price Movement Analysis" checked>
+                    <div class="option-content">
+                        <h4>Fibonacci + Price Movement</h4>
+                        <p>Use Fibonacci levels combined with price momentum charts.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q7_strategy" value="PCR Sentiment Reversals + Option Chain OI Build-up">
+                    <div class="option-content">
+                        <h4>PCR Sentiment + Option Chain OI</h4>
+                        <p>Trade PCR extremes (<0.8 Buying / >1.2 Selling) paired with OI shifts.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q7_custom" class="custom-writein" placeholder="✍️ Add custom strategy notes (optional)..." />
+        </div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q8</span>
+                <span>Primary Trade Trigger Condition</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q8_trigger" value="Price Bounce off Fibonacci Level + Aligned PCR Sentiment" checked>
+                    <div class="option-content">
+                        <h4>Fibonacci Bounce + PCR Alignment</h4>
+                        <p>Trigger when price touches key Fibonacci level and PCR confirms sentiment.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q8_trigger" value="Option Chain OI Spike (>20%) + Momentum Candle">
+                    <div class="option-content">
+                        <h4>OI Spike + Momentum Candle</h4>
+                        <p>Trigger when Open Interest spikes over 20% on near strike.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q8_custom" class="custom-writein" placeholder="✍️ Add custom trigger formula notes (optional)..." />
+        </div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q9</span>
+                <span>Risk Allocation & Position Sizing</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="checkbox" name="q9_risk" value="User-Configurable Lot Size (e.g. 2 lots)" checked>
+                    <div class="option-content">
+                        <h4>Configurable Lot Size</h4>
+                        <p>Set default trade quantity / lot size in settings.</p>
+                    </div>
+                </label>
+                <label class="option-card selected">
+                    <input type="checkbox" name="q9_risk" value="Daily Max Loss Circuit Breaker (Auto Stop)" checked>
+                    <div class="option-content">
+                        <h4>Daily Max Loss Circuit Breaker</h4>
+                        <p>Auto-stop trading for the day if account loss hits cap (e.g., ₹5,000).</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q9_custom" class="custom-writein" placeholder="✍️ Specify exact risk amount / max loss notes (optional)..." />
+        </div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q10</span>
+                <span>Emergency Controls</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q10_killswitch" value="Yes - Prominent Emergency Kill Switch on Header" checked>
+                    <div class="option-content">
+                        <h4>Prominent Emergency Kill Switch</h4>
+                        <p>One-click master red button on header to freeze all trading instantly.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q10_killswitch" value="Standard Pause Toggle in Settings">
+                    <div class="option-content">
+                        <h4>Standard Settings Pause Toggle</h4>
+                        <p>Soft pause control located inside settings panel.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q10_custom" class="custom-writein" placeholder="✍️ Add safety control notes (optional)..." />
+        </div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q11</span>
+                <span>Broker Account Target</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q11_broker" value="Angel One SmartAPI" checked>
+                    <div class="option-content">
+                        <h4>Angel One SmartAPI</h4>
+                        <p>Primary broker integration.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q11_broker" value="Multi-Broker Architecture (Angel One + Zerodha/Dhan)">
+                    <div class="option-content">
+                        <h4>Multi-Broker Expansion</h4>
+                        <p>Prepared for Zerodha Kite / Dhan integration.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q11_custom" class="custom-writein" placeholder="✍️ Add broker notes (optional)..." />
+        </div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q12</span>
+                <span>System Logic Architecture</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q12_logic" value="Fixed Rule-Based Deterministic Logic (Recommended)" checked>
+                    <div class="option-content">
+                        <h4>Fixed Rule-Based Logic</h4>
+                        <p>Fast, transparent, 100% predictable execution based on your exact rules.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q12_logic" value="Rule-Based Logic with Future AI/ML Expansion Hooks">
+                    <div class="option-content">
+                        <h4>Rule-Based + Future AI Hooks</h4>
+                        <p>Built for rule-based trading now, but architected so ML models can plug in later.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q12_custom" class="custom-writein" placeholder="✍️ Add logic notes (optional)..." />
+        </div>
+
+        <!-- SECTION 4 -->
+        <div class="section-header">Section 4: Look, Feel & Usage</div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q13</span>
+                <span>Target Devices</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q13_devices" value="Both Laptop & Mobile Phone" checked>
+                    <div class="option-content">
+                        <h4>Both Laptop & Mobile Phone</h4>
+                        <p>Fully responsive view for desktop monitors & mobile smartphones.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q13_devices" value="Desktop / Laptop Browser Primary">
+                    <div class="option-content">
+                        <h4>Desktop / Laptop Primary</h4>
+                        <p>Optimized for multi-monitor desktop trading stations.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q13_devices" value="Mobile Smartphone Browser Primary">
+                    <div class="option-content">
+                        <h4>Mobile Smartphone Primary</h4>
+                        <p>Optimized for fast mobile phone trading.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q13_custom" class="custom-writein" placeholder="✍️ Add device notes (optional)..." />
+        </div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q14</span>
+                <span>Dashboard Layout Style</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q14_layout" value="Full Master Grid (Indices, PCR, Options, Stocks)" checked>
+                    <div class="option-content">
+                        <h4>Full Master Grid</h4>
+                        <p>All indicators, PCR, Option Chain, & Bank stocks visible on grid.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q14_layout" value="Minimalist Signal View">
+                    <div class="option-content">
+                        <h4>Minimalist Signal View</h4>
+                        <p>Clean view focusing strictly on actionable trade signals & execution buttons.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q14_custom" class="custom-writein" placeholder="✍️ Add UI layout notes (optional)..." />
+        </div>
+
+        <!-- SECTION 5 -->
+        <div class="section-header">Section 5: Priorities & Testing</div>
+
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q15</span>
+                <span>Testing / Paper Trading Phase</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="q15_papertrading" value="Yes - Simulated Paper Trading Phase First" checked>
+                    <div class="option-content">
+                        <h4>Simulated Paper Trading First</h4>
+                        <p>Test signals & execution logic in paper trading mode before using real money.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q15_papertrading" value="Direct Live Trading with Small Quantities">
+                    <div class="option-content">
+                        <h4>Direct Live Trading</h4>
+                        <p>Deploy directly to live trading with minimal 1-lot sizes.</p>
+                    </div>
+                </label>
+            </div>
+            <input type="text" name="q15_custom" class="custom-writein" placeholder="✍️ Add testing phase notes (optional)..." />
+        </div>
+
+        <!-- Q16: Open Priority Inputs -->
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Q16</span>
+                <span>Top 3 Development Priorities (Type your top 3 required features)</span>
+            </div>
+            <div class="priority-inputs">
+                <div class="priority-row">
+                    <span class="priority-label">Priority 1:</span>
+                    <input type="text" name="q16_p1" class="custom-writein" style="margin-top:0;" placeholder="e.g. 1-Click Buy/Sell Order Execution" required />
+                </div>
+                <div class="priority-row">
+                    <span class="priority-label">Priority 2:</span>
+                    <input type="text" name="q16_p2" class="custom-writein" style="margin-top:0;" placeholder="e.g. Fibonacci Retracement Charting" />
+                </div>
+                <div class="priority-row">
+                    <span class="priority-label">Priority 3:</span>
+                    <input type="text" name="q16_p3" class="custom-writein" style="margin-top:0;" placeholder="e.g. Emergency Kill Switch Button" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional Text Notes -->
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">Extra</span>
+                <span>Any Additional Strategy Notes or Custom Instructions</span>
+            </div>
+            <textarea name="customNotes" placeholder="Enter any extra strategy details or notes here (optional)..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Save & Submit All Specifications</button>
+    </form>
+</div>
+
+<div class="container success-screen" id="successScreen">
+    <div class="success-icon">✓</div>
+    <h2>Specifications Saved Successfully!</h2>
+    <p>Thank you! All 16 strategy questions & custom write-in specifications have been recorded and saved directly into the project specifications.</p>
+</div>
+
+<script>
+    // Radio & Checkbox styling sync
+    document.querySelectorAll('.option-card input').forEach(input => {
+        input.addEventListener('change', () => {
+            if (input.type === 'radio') {
+                document.querySelectorAll(`input[name="${input.name}"]`).forEach(radio => {
+                    radio.closest('.option-card').classList.remove('selected');
+                });
+            }
+            if (input.checked) {
+                input.closest('.option-card').classList.add('selected');
+            } else {
+                input.closest('.option-card').classList.remove('selected');
+            }
+        });
+    });
+
+    // Helper to combine card option + custom write-in text
+    function getCombinedChoice(formData, radioName, customName) {
+        const selected = formData.get(radioName);
+        const customText = formData.get(customName)?.trim();
+        if (selected && customText) {
+            return `${selected} [Custom Note: ${customText}]`;
+        }
+        return customText || selected || 'N/A';
+    }
+
+    function getCombinedArrayChoice(formData, checkboxName, customName) {
+        const selectedList = formData.getAll(checkboxName);
+        const customText = formData.get(customName)?.trim();
+        if (customText) {
+            selectedList.push(`Custom Note: ${customText}`);
+        }
+        return selectedList;
+    }
+
+    // Form submission
+    document.getElementById('surveyForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const data = {
+            q1_goal: getCombinedChoice(formData, 'q1_goal', 'q1_custom'),
+            q2_approval: getCombinedChoice(formData, 'q2_approval', 'q2_custom'),
+            q3_workflow: getCombinedChoice(formData, 'q3_workflow', 'q3_custom'),
+            q4_success: getCombinedChoice(formData, 'q4_success', 'q4_custom'),
+            q5_baseline: getCombinedChoice(formData, 'q5_baseline', 'q5_custom'),
+            q6_indicators: getCombinedArrayChoice(formData, 'q6_indicators', 'q6_custom'),
+            q7_strategy: getCombinedChoice(formData, 'q7_strategy', 'q7_custom'),
+            q8_trigger: getCombinedChoice(formData, 'q8_trigger', 'q8_custom'),
+            q9_risk: getCombinedArrayChoice(formData, 'q9_risk', 'q9_custom'),
+            q10_killswitch: getCombinedChoice(formData, 'q10_killswitch', 'q10_custom'),
+            q11_broker: getCombinedChoice(formData, 'q11_broker', 'q11_custom'),
+            q12_logic: getCombinedChoice(formData, 'q12_logic', 'q12_custom'),
+            q13_devices: getCombinedChoice(formData, 'q13_devices', 'q13_custom'),
+            q14_layout: getCombinedChoice(formData, 'q14_layout', 'q14_custom'),
+            q15_papertrading: getCombinedChoice(formData, 'q15_papertrading', 'q15_custom'),
+            q16_priorities: [
+                formData.get('q16_p1')?.trim(),
+                formData.get('q16_p2')?.trim(),
+                formData.get('q16_p3')?.trim()
+            ].filter(Boolean).join(' | '),
+            customNotes: formData.get('customNotes'),
+            submittedAt: new Date().toISOString()
+        };
+
+        try {
+            const res = await fetch('/api/save-survey', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                document.getElementById('formContainer').style.display = 'none';
+                document.getElementById('successScreen').style.display = 'block';
+            } else {
+                alert('Error saving preferences: ' + result.message);
+            }
+        } catch (err) {
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('successScreen').style.display = 'block';
+        }
+    });
+</script>
+
+</body>
+</html>
