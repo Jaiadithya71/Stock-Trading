@@ -33,6 +33,11 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
+// Serve survey.html
+app.get(["/survey", "/survey.html"], (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/survey.html"));
+});
+
 // Global PCR collector instance
 let pcrCollector = null;
 let pcrCollectorUsername = null;
