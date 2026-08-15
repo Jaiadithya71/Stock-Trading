@@ -205,6 +205,26 @@
             background: rgba(15, 23, 42, 0.8);
         }
 
+        .priority-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .priority-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .priority-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #60a5fa;
+            width: 80px;
+            flex-shrink: 0;
+        }
+
         textarea {
             width: 100%;
             background: rgba(15, 23, 42, 0.6);
@@ -277,7 +297,7 @@
 <div class="container" id="formContainer">
     <div class="header">
         <h1>Trading Dashboard Strategy Questionnaire</h1>
-        <p>Select your preferred options below, or type custom instructions in the "Other" write-in boxes.</p>
+        <p>Select your options below. Any text typed into the custom boxes will be saved alongside your selections.</p>
     </div>
 
     <!-- Built Showcase -->
@@ -328,7 +348,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q1_custom" class="custom-writein" placeholder="✍️ Or specify custom goal..." />
+            <input type="text" name="q1_custom" class="custom-writein" placeholder="✍️ Add custom goal notes (optional)..." />
         </div>
 
         <div class="question-group">
@@ -359,7 +379,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q2_custom" class="custom-writein" placeholder="✍️ Or specify custom approval mode..." />
+            <input type="text" name="q2_custom" class="custom-writein" placeholder="✍️ Add custom approval notes (optional)..." />
         </div>
 
         <div class="question-group">
@@ -383,7 +403,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q3_custom" class="custom-writein" placeholder="✍️ Or specify custom workflow..." />
+            <input type="text" name="q3_custom" class="custom-writein" placeholder="✍️ Add custom workflow notes (optional)..." />
         </div>
 
         <div class="question-group">
@@ -407,7 +427,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q4_custom" class="custom-writein" placeholder="✍️ Or specify custom success metric..." />
+            <input type="text" name="q4_custom" class="custom-writein" placeholder="✍️ Add custom success notes (optional)..." />
         </div>
 
         <!-- SECTION 2 -->
@@ -434,7 +454,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q5_custom" class="custom-writein" placeholder="✍️ Or specify scope adjustments..." />
+            <input type="text" name="q5_custom" class="custom-writein" placeholder="✍️ Add scope adjustment notes (optional)..." />
         </div>
 
         <div class="question-group">
@@ -465,7 +485,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q6_custom" class="custom-writein" placeholder="✍️ Or add custom indicators (e.g. RSI, MACD)..." />
+            <input type="text" name="q6_custom" class="custom-writein" placeholder="✍️ Add any custom indicators (e.g. RSI, MACD)..." />
         </div>
 
         <!-- SECTION 3 -->
@@ -492,7 +512,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q7_custom" class="custom-writein" placeholder="✍️ Or describe custom strategy rules..." />
+            <input type="text" name="q7_custom" class="custom-writein" placeholder="✍️ Add custom strategy notes (optional)..." />
         </div>
 
         <div class="question-group">
@@ -516,7 +536,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q8_custom" class="custom-writein" placeholder="✍️ Or specify custom trigger formula..." />
+            <input type="text" name="q8_custom" class="custom-writein" placeholder="✍️ Add custom trigger formula notes (optional)..." />
         </div>
 
         <div class="question-group">
@@ -540,7 +560,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q9_custom" class="custom-writein" placeholder="✍️ Or specify exact risk amount / max loss (e.g. ₹5,000 max loss)..." />
+            <input type="text" name="q9_custom" class="custom-writein" placeholder="✍️ Specify exact risk amount / max loss notes (optional)..." />
         </div>
 
         <div class="question-group">
@@ -564,7 +584,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q10_custom" class="custom-writein" placeholder="✍️ Or specify emergency safety rules..." />
+            <input type="text" name="q10_custom" class="custom-writein" placeholder="✍️ Add safety control notes (optional)..." />
         </div>
 
         <div class="question-group">
@@ -588,7 +608,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q11_custom" class="custom-writein" placeholder="✍️ Or specify other broker (e.g. Dhan, Fyers)..." />
+            <input type="text" name="q11_custom" class="custom-writein" placeholder="✍️ Add broker notes (optional)..." />
         </div>
 
         <div class="question-group">
@@ -612,7 +632,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q12_custom" class="custom-writein" placeholder="✍️ Or specify custom logic requirements..." />
+            <input type="text" name="q12_custom" class="custom-writein" placeholder="✍️ Add logic notes (optional)..." />
         </div>
 
         <!-- SECTION 4 -->
@@ -646,7 +666,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q13_custom" class="custom-writein" placeholder="✍️ Or specify device requirements..." />
+            <input type="text" name="q13_custom" class="custom-writein" placeholder="✍️ Add device notes (optional)..." />
         </div>
 
         <div class="question-group">
@@ -670,7 +690,7 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q14_custom" class="custom-writein" placeholder="✍️ Or describe custom UI layout preference..." />
+            <input type="text" name="q14_custom" class="custom-writein" placeholder="✍️ Add UI layout notes (optional)..." />
         </div>
 
         <!-- SECTION 5 -->
@@ -697,31 +717,29 @@
                     </div>
                 </label>
             </div>
-            <input type="text" name="q15_custom" class="custom-writein" placeholder="✍️ Or specify testing workflow..." />
+            <input type="text" name="q15_custom" class="custom-writein" placeholder="✍️ Add testing phase notes (optional)..." />
         </div>
 
+        <!-- Q16: Open Priority Inputs -->
         <div class="question-group">
             <div class="question-title">
                 <span class="question-num">Q16</span>
-                <span>Top 3 Development Priorities</span>
+                <span>Top 3 Development Priorities (Type your top 3 required features)</span>
             </div>
-            <div class="options-grid">
-                <label class="option-card selected">
-                    <input type="radio" name="q16_priorities" value="1-Click Execution + Emergency Kill Switch + Fibonacci Charting" checked>
-                    <div class="option-content">
-                        <h4>Execution & Fibonacci Controls</h4>
-                        <p>1-Click Execution + Emergency Kill Switch + Fibonacci Level Charting.</p>
-                    </div>
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="q16_priorities" value="Automated Signals + PCR Trend Alerts + Option Chain OI Tracker">
-                    <div class="option-content">
-                        <h4>Automated Signals & PCR Alerts</h4>
-                        <p>Automated Strategy Signals + PCR Trend Alerts + Option Chain Tracker.</p>
-                    </div>
-                </label>
+            <div class="priority-inputs">
+                <div class="priority-row">
+                    <span class="priority-label">Priority 1:</span>
+                    <input type="text" name="q16_p1" class="custom-writein" style="margin-top:0;" placeholder="e.g. 1-Click Buy/Sell Order Execution" required />
+                </div>
+                <div class="priority-row">
+                    <span class="priority-label">Priority 2:</span>
+                    <input type="text" name="q16_p2" class="custom-writein" style="margin-top:0;" placeholder="e.g. Fibonacci Retracement Charting" />
+                </div>
+                <div class="priority-row">
+                    <span class="priority-label">Priority 3:</span>
+                    <input type="text" name="q16_p3" class="custom-writein" style="margin-top:0;" placeholder="e.g. Emergency Kill Switch Button" />
+                </div>
             </div>
-            <input type="text" name="q16_custom" class="custom-writein" placeholder="✍️ Or list your top custom 3 priorities..." />
         </div>
 
         <!-- Optional Text Notes -->
@@ -760,28 +778,51 @@
         });
     });
 
+    // Helper to combine card option + custom write-in text
+    function getCombinedChoice(formData, radioName, customName) {
+        const selected = formData.get(radioName);
+        const customText = formData.get(customName)?.trim();
+        if (selected && customText) {
+            return `${selected} [Custom Note: ${customText}]`;
+        }
+        return customText || selected || 'N/A';
+    }
+
+    function getCombinedArrayChoice(formData, checkboxName, customName) {
+        const selectedList = formData.getAll(checkboxName);
+        const customText = formData.get(customName)?.trim();
+        if (customText) {
+            selectedList.push(`Custom Note: ${customText}`);
+        }
+        return selectedList;
+    }
+
     // Form submission
     document.getElementById('surveyForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const formData = new FormData(e.target);
         const data = {
-            q1_goal: formData.get('q1_custom')?.trim() || formData.get('q1_goal'),
-            q2_approval: formData.get('q2_custom')?.trim() || formData.get('q2_approval'),
-            q3_workflow: formData.get('q3_custom')?.trim() || formData.get('q3_workflow'),
-            q4_success: formData.get('q4_custom')?.trim() || formData.get('q4_success'),
-            q5_baseline: formData.get('q5_custom')?.trim() || formData.get('q5_baseline'),
-            q6_indicators: [...formData.getAll('q6_indicators'), formData.get('q6_custom')?.trim()].filter(Boolean),
-            q7_strategy: formData.get('q7_custom')?.trim() || formData.get('q7_strategy'),
-            q8_trigger: formData.get('q8_custom')?.trim() || formData.get('q8_trigger'),
-            q9_risk: [...formData.getAll('q9_risk'), formData.get('q9_custom')?.trim()].filter(Boolean),
-            q10_killswitch: formData.get('q10_custom')?.trim() || formData.get('q10_killswitch'),
-            q11_broker: formData.get('q11_custom')?.trim() || formData.get('q11_broker'),
-            q12_logic: formData.get('q12_custom')?.trim() || formData.get('q12_logic'),
-            q13_devices: formData.get('q13_custom')?.trim() || formData.get('q13_devices'),
-            q14_layout: formData.get('q14_custom')?.trim() || formData.get('q14_layout'),
-            q15_papertrading: formData.get('q15_custom')?.trim() || formData.get('q15_papertrading'),
-            q16_priorities: formData.get('q16_custom')?.trim() || formData.get('q16_priorities'),
+            q1_goal: getCombinedChoice(formData, 'q1_goal', 'q1_custom'),
+            q2_approval: getCombinedChoice(formData, 'q2_approval', 'q2_custom'),
+            q3_workflow: getCombinedChoice(formData, 'q3_workflow', 'q3_custom'),
+            q4_success: getCombinedChoice(formData, 'q4_success', 'q4_custom'),
+            q5_baseline: getCombinedChoice(formData, 'q5_baseline', 'q5_custom'),
+            q6_indicators: getCombinedArrayChoice(formData, 'q6_indicators', 'q6_custom'),
+            q7_strategy: getCombinedChoice(formData, 'q7_strategy', 'q7_custom'),
+            q8_trigger: getCombinedChoice(formData, 'q8_trigger', 'q8_custom'),
+            q9_risk: getCombinedArrayChoice(formData, 'q9_risk', 'q9_custom'),
+            q10_killswitch: getCombinedChoice(formData, 'q10_killswitch', 'q10_custom'),
+            q11_broker: getCombinedChoice(formData, 'q11_broker', 'q11_custom'),
+            q12_logic: getCombinedChoice(formData, 'q12_logic', 'q12_custom'),
+            q13_devices: getCombinedChoice(formData, 'q13_devices', 'q13_custom'),
+            q14_layout: getCombinedChoice(formData, 'q14_layout', 'q14_custom'),
+            q15_papertrading: getCombinedChoice(formData, 'q15_papertrading', 'q15_custom'),
+            q16_priorities: [
+                formData.get('q16_p1')?.trim(),
+                formData.get('q16_p2')?.trim(),
+                formData.get('q16_p3')?.trim()
+            ].filter(Boolean).join(' | '),
             customNotes: formData.get('customNotes'),
             submittedAt: new Date().toISOString()
         };
