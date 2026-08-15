@@ -827,12 +827,29 @@
             submittedAt: new Date().toISOString()
         };
 
+        let apiEndpoint = '/api/save-survey';
+        if (location.origin.includes('localhost')) {
+            apiEndpoint = 'http://localhost:3000/api/save-survey';
+        } else if (!location.origin.includes('stock-trading-1-cquo.onrender.com')) {
+            apiEndpoint = 'https://stock-trading-1-cquo.onrender.com/api/save-survey';
+        }
+
         try {
-            const res = await fetch('/api/save-survey', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+            let res;
+            try {
+                res = await fetch(apiEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+            } catch(e) {
+                // Fallback attempt to primary backend host
+                res = await fetch('https://stock-trading-1-cquo.onrender.com/api/save-survey', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+            }
 
             const result = await res.json();
             if (result.success) {
