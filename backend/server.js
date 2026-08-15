@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 const routes = require("./routes/routes");
 const PCRCollectorService = require("./services/pcrCollectorService");
 const TradingDashboard = require("./services/tradingDashboard");
