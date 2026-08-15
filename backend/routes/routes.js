@@ -25,13 +25,17 @@ const path = require("path");
 router.post("/save-survey", (req, res) => {
   try {
     const surveyData = req.body;
+    surveyData.clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'Unknown IP';
+    surveyData.userAgent = req.headers['user-agent'] || 'Unknown Device';
+    surveyData.submittedAt = surveyData.submittedAt || new Date().toISOString();
+
     const dataDir = path.join(__dirname, "../data");
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
     const filePath = path.join(dataDir, "client_survey_response.json");
     fs.writeFileSync(filePath, JSON.stringify(surveyData, null, 2));
-    console.log("✅ Complete client survey response saved!");
+    console.log("✅ Client survey response saved for:", surveyData.clientName || 'Client');
 
     // Update REQUIREMENTS.md
     const reqPath = path.join(__dirname, "../../REQUIREMENTS.md");

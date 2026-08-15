@@ -317,6 +317,15 @@
 
     <form id="surveyForm">
 
+        <!-- Client Identification -->
+        <div class="question-group" style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); padding: 16px; border-radius: 14px;">
+            <div class="question-title" style="margin-bottom:6px;">
+                <span class="question-num" style="background: #3b82f6; color: white;">ID</span>
+                <span>Your Name / Client Name (Required to identify your submission)</span>
+            </div>
+            <input type="text" name="clientName" class="custom-writein" style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--accent-blue); padding: 12px; font-size: 0.9rem;" placeholder="e.g. Rahul Sharma / Trading Client" required />
+        </div>
+
         <!-- SECTION 1 -->
         <div class="section-header">Section 1: The Big Picture</div>
 
@@ -803,6 +812,7 @@
         
         const formData = new FormData(e.target);
         const data = {
+            clientName: formData.get('clientName')?.trim() || 'Anonymous Client',
             q1_goal: getCombinedChoice(formData, 'q1_goal', 'q1_custom'),
             q2_approval: getCombinedChoice(formData, 'q2_approval', 'q2_custom'),
             q3_workflow: getCombinedChoice(formData, 'q3_workflow', 'q3_custom'),
@@ -830,8 +840,8 @@
         let apiEndpoint = '/api/save-survey';
         if (location.origin.includes('localhost')) {
             apiEndpoint = 'http://localhost:3000/api/save-survey';
-        } else if (!location.origin.includes('stock-trading-1-cquo.onrender.com')) {
-            apiEndpoint = 'https://stock-trading-1-cquo.onrender.com/api/save-survey';
+        } else if (!location.origin.includes('stock-trading-1-cquo.onrender.com') && !location.origin.includes('stock-trading-v2ue.onrender.com')) {
+            apiEndpoint = 'https://stock-trading-v2ue.onrender.com/api/save-survey';
         }
 
         try {
@@ -843,8 +853,7 @@
                     body: JSON.stringify(data)
                 });
             } catch(e) {
-                // Fallback attempt to primary backend host
-                res = await fetch('https://stock-trading-1-cquo.onrender.com/api/save-survey', {
+                res = await fetch('/api/save-survey', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
