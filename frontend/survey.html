@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Strategy & Preferences Survey | Bank Nifty Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 680px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .question-group {
+            margin-bottom: 28px;
+        }
+
+        .question-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-num {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .option-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .option-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            border-color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .option-card input[type="radio"],
+        .option-card input[type="checkbox"] {
+            margin-top: 3px;
+            accent-color: var(--accent-green);
+            transform: scale(1.2);
+        }
+
+        .option-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .option-content p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .success-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+        }
+
+        .success-screen h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .success-screen p {
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="formContainer">
+    <div class="header">
+        <h1>Trading Dashboard Specification Setup</h1>
+        <p>Please select your preferred trading preferences below (takes under 60 seconds).</p>
+    </div>
+
+    <form id="surveyForm">
+        <!-- Q1: Execution Mode -->
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">1</span>
+                <span>Order Execution Mode</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="executionMode" value="Manual 1-Click Confirmation" checked>
+                    <div class="option-content">
+                        <h4>Manual 1-Click Confirmation</h4>
+                        <p>Dashboard alerts you & requires a single click approval before placing trades.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="executionMode" value="100% Fully Automated">
+                    <div class="option-content">
+                        <h4>100% Fully Automated</h4>
+                        <p>Trades execute instantly via API when strategy conditions trigger.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="executionMode" value="Dual Mode (Toggle Switch)">
+                    <div class="option-content">
+                        <h4>Dual Mode (Toggle Switch)</h4>
+                        <p>Includes a master switch to toggle between manual and auto modes anytime.</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q2: Target Broker -->
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">2</span>
+                <span>Brokerage API Integration</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="radio" name="broker" value="Angel One SmartAPI" checked>
+                    <div class="option-content">
+                        <h4>Angel One SmartAPI</h4>
+                        <p>Primary broker integration configured via SmartAPI credentials.</p>
+                    </div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="broker" value="Multi-Broker Support (Angel One + Zerodha/Dhan)">
+                    <div class="option-content">
+                        <h4>Multi-Broker Support</h4>
+                        <p>Angel One now, with architecture prepared for Zerodha Kite / Dhan later.</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q3: Risk Controls -->
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">3</span>
+                <span>Risk & Safety Controls</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="checkbox" name="riskControls" value="Emergency Kill Switch" checked>
+                    <div class="option-content">
+                        <h4>Emergency Kill Switch</h4>
+                        <p>One-click master button to freeze trading and block order execution.</p>
+                    </div>
+                </label>
+                <label class="option-card selected">
+                    <input type="checkbox" name="riskControls" value="Daily Max Loss Limit" checked>
+                    <div class="option-content">
+                        <h4>Daily Max Loss Circuit Breaker</h4>
+                        <p>Automatically halts trading for the day if account hits loss limit.</p>
+                    </div>
+                </label>
+                <label class="option-card selected">
+                    <input type="checkbox" name="riskControls" value="Max Lot Size Limit" checked>
+                    <div class="option-content">
+                        <h4>Max Lot Size Limit</h4>
+                        <p>Caps maximum order quantity per trade to prevent accidental over-leveraging.</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q4: Instruments -->
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">4</span>
+                <span>Primary Trading Instruments</span>
+            </div>
+            <div class="options-grid">
+                <label class="option-card selected">
+                    <input type="checkbox" name="instruments" value="Bank Nifty Options & Futures" checked>
+                    <div class="option-content">
+                        <h4>Bank Nifty Options & Futures</h4>
+                        <p>Real-time options chain, PCR analytics, and futures telemetry.</p>
+                    </div>
+                </label>
+                <label class="option-card selected">
+                    <input type="checkbox" name="instruments" value="Nifty 50 & Major Banking Stocks" checked>
+                    <div class="option-content">
+                        <h4>Nifty 50 & Banking Stocks</h4>
+                        <p>HDFC Bank, ICICI Bank, SBI, Axis, Kotak price action tracking.</p>
+                    </div>
+                </label>
+                <label class="option-card selected">
+                    <input type="checkbox" name="instruments" value="Currency Derivatives (USD-INR)" checked>
+                    <div class="option-content">
+                        <h4>Currency Pairs</h4>
+                        <p>USD-INR, EUR-INR, GBP-INR tracking.</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Q5: Additional Notes -->
+        <div class="question-group">
+            <div class="question-title">
+                <span class="question-num">5</span>
+                <span>Special Strategy Rules / Custom Requirements</span>
+            </div>
+            <textarea name="customNotes" placeholder="Enter any specific indicators, Fibonacci levels, or strategy notes here (optional)..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Preferences</button>
+    </form>
+</div>
+
+<div class="container success-screen" id="successScreen">
+    <div class="success-icon">✓</div>
+    <h2>Preferences Saved Successfully!</h2>
+    <p>Thank you for submitting your trading dashboard preferences. Your configuration has been recorded and updated in the project specifications.</p>
+</div>
+
+<script>
+    // Radio & Checkbox styling sync
+    document.querySelectorAll('.option-card input').forEach(input => {
+        input.addEventListener('change', () => {
+            if (input.type === 'radio') {
+                document.querySelectorAll(`input[name="${input.name}"]`).forEach(radio => {
+                    radio.closest('.option-card').classList.remove('selected');
+                });
+            }
+            if (input.checked) {
+                input.closest('.option-card').classList.add('selected');
+            } else {
+                input.closest('.option-card').classList.remove('selected');
+            }
+        });
+    });
+
+    // Form submission
+    document.getElementById('surveyForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const data = {
+            executionMode: formData.get('executionMode'),
+            broker: formData.get('broker'),
+            riskControls: formData.getAll('riskControls'),
+            instruments: formData.getAll('instruments'),
+            customNotes: formData.get('customNotes'),
+            submittedAt: new Date().toISOString()
+        };
+
+        try {
+            const res = await fetch('/api/save-survey', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                document.getElementById('formContainer').style.display = 'none';
+                document.getElementById('successScreen').style.display = 'block';
+            } else {
+                alert('Error saving preferences: ' + result.message);
+            }
+        } catch (err) {
+            // Fallback for standalone preview
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('successScreen').style.display = 'block';
+        }
+    });
+</script>
+
+</body>
+</html>

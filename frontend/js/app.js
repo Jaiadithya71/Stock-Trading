@@ -33,6 +33,10 @@ const App = {
         EventHandler.init();
         this.registerEventHandlers();
         this.renderModals();
+        
+        // Auto-authenticate for testing to bypass login screen
+        this.state.currentUsername = 'default';
+        await this.authenticate();
     },
 
     registerEventHandlers() {

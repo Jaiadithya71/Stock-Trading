@@ -2,7 +2,7 @@ const crypto = require("crypto");
 
 function generateTOTP(secret) {
   // Remove spaces and convert to uppercase
-  const cleanSecret = secret.replace(/s/g, "").toUpperCase();
+  const cleanSecret = secret.replace(/\s/g, "").toUpperCase();
   
   // Decode base32 secret
   const base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";

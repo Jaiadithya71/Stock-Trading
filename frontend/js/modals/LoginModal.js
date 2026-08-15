@@ -1,7 +1,7 @@
 const LoginModal = {
     render() {
         return `
-            <div id="loginModal" class="modal active">
+            <div id="loginModal" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">Bank Nifty Dashboard</div>
                     <div id="loginError"></div>

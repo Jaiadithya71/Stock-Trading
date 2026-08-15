@@ -249,3 +249,13 @@ Angel One SmartAPI has rate limits. The application implements:
 - Batch fetching to minimize round trips
 
 If hitting rate limits, increase `CACHE_DURATION` in `tradingDashboard.js` or reduce refresh frequency in frontend.
+
+## SmartAPI IP Whitelisting & Architecture
+
+Due to Angel One SmartAPI requirements regarding static IP addressing and website URLs, to allow clients to use your trading tool:
+
+**Centralized Backend / SaaS Architecture (Recommended)**:
+1. **Centralized Cloud Server**: Host your core trading logic on a centralized server (e.g., AWS EC2 with Elastic IP, or Render with a static outbound proxy like Fixie / QuotaGuard).
+2. **Whitelist IP**: Register that single static IP in the SmartAPI portal.
+3. **Client Request Proxy**: Frontend (web, desktop, or mobile) sends instructions to your central server, and your server executes trades via Angel One using the whitelisted IP.
+
