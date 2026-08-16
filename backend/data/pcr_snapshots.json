@@ -3505,6 +3505,17 @@
       "source": "angel_smartapi_native",
       "timestamp": "2026-08-16T18:31:18.849Z",
       "timestampMs": 1786905078849
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:32:18.829Z",
+      "timestampMs": 1786905138829
     }
   ]
 }

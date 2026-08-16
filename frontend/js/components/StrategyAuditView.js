@@ -3,6 +3,7 @@
 // Strategy Math, Transparency Audit & Educational Masterclass Component
 // Restores mathematical formulas, raw market feed inputs, and execution rules,
 // plus a prominent button to launch the full-screen Kindle Masterclass Reader!
+// Dynamic constituent bank stock change values for Algo 3
 // ============================================================================
 
 const StrategyAuditView = {
@@ -19,7 +20,20 @@ const StrategyAuditView = {
     const pcrZ = quantSignal?.pcrMetrics?.pcrZScore || -1.0;
     const breadthScore = quantSignal?.breadthMetrics?.weightedBreadthScore || 0.45;
     const advancingWeight = quantSignal?.breadthMetrics?.advancingWeight || 73.2;
-    const decliningWeight = quantSignal?.breadthMetrics?.decliningWeight || 11.8;
+
+    // Dynamic Constituent Stock Changes
+    const stocks = quantSignal?.stockList || quantSignal?.breadthMetrics?.stockList || [];
+    const getStockChange = (symbol, fallback) => {
+      const match = stocks.find(s => s.symbol === symbol);
+      return match ? parseFloat(match.pChange || match.change || fallback) : fallback;
+    };
+
+    const hdfcChange = getStockChange('HDFCBANK', 0.28);
+    const iciciChange = getStockChange('ICICIBANK', 0.73);
+    const sbinChange = getStockChange('SBIN', -1.41);
+
+    const fmtChange = (val) => `${val >= 0 ? '+' : ''}${val.toFixed(2)}%`;
+    const getCls = (val) => val >= 0 ? 'text-green' : 'text-red';
 
     container.innerHTML = `
       <div class="audit-page-wrapper">
@@ -149,22 +163,21 @@ const StrategyAuditView = {
             <div class="inputs-grid">
               <div class="input-item">
                 <span class="i-label">HDFCBANK (28.5% Wt)</span>
-                <span class="i-val text-green">+0.28%</span>
+                <span class="i-val ${getCls(hdfcChange)}">${fmtChange(hdfcChange)}</span>
               </div>
               <div class="input-item">
                 <span class="i-label">ICICIBANK (23.1% Wt)</span>
-                <span class="i-val text-green">+0.73%</span>
+                <span class="i-val ${getCls(iciciChange)}">${fmtChange(iciciChange)}</span>
               </div>
               <div class="input-item">
                 <span class="i-label">SBIN (10.4% Wt)</span>
-                <span class="i-val text-red">-1.41%</span>
+                <span class="i-val ${getCls(sbinChange)}">${fmtChange(sbinChange)}</span>
               </div>
               <div class="input-item">
                 <span class="i-label">Weighted Capital Score</span>
                 <span class="i-val text-green">+${breadthScore} Momentum</span>
               </div>
             </div>
-
           </div>
         ` : ''}
       </div>
