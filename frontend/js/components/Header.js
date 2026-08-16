@@ -1,7 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/components/Header.js
-// World-Class Elegant Navigation & Dynamic Telemetry Header Component
-// Includes Weekly Audit & Weekend Review Tab
+// Apple-Grade Modern Translucent Navigation & Dynamic Telemetry Header Component
+// Includes Level-1 Brand & Telemetry Bar + Level-2 Segmented Navigation Control
 // ============================================================================
 
 const Header = {
@@ -24,16 +24,14 @@ const Header = {
     render(username, activeTab = 'signals', indicesTimestamp = null) {
         const marketOpen = this.isMarketOpenNow();
         const marketStatusBadge = marketOpen ? 
-            '<span class="badge badge-bullish" style="font-size: 11px; padding: 3px 8px;">🟢 MARKET OPEN</span>' : 
-            '<span class="badge" style="background: rgba(255,255,255,0.1); color: #94a3b8; font-size: 11px; padding: 3px 8px;">🌙 MARKET CLOSED</span>';
+            '<span class="apple-status-badge open">🟢 MARKET OPEN</span>' : 
+            '<span class="apple-status-badge closed">🌙 MARKET CLOSED</span>';
 
         let telemetryBadge = '<span class="text-red">🔴 DISCONNECTED</span>';
         
         if (indicesTimestamp) {
             const ageSec = Math.floor((Date.now() - new Date(indicesTimestamp).getTime()) / 1000);
-            if (isNaN(ageSec) || ageSec < 0) {
-                telemetryBadge = '<span class="text-green">🟢 LIVE TELEMETRY</span>';
-            } else if (ageSec < 15) {
+            if (isNaN(ageSec) || ageSec < 0 || ageSec < 15) {
                 telemetryBadge = '<span class="text-green">🟢 LIVE TELEMETRY</span>';
             } else if (ageSec < 60) {
                 telemetryBadge = `<span class="text-amber" style="color: #f59e0b;">🟡 STALE (${ageSec}s ago)</span>`;
@@ -43,55 +41,63 @@ const Header = {
         }
 
         return `
-            <div class="header trader-header-bar">
-                <div class="logo-section">
-                    <div class="logo-icon">📊</div>
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <h1 class="logo-title">Bank Nifty Quant Command Center</h1>
-                            ${marketStatusBadge}
+            <div class="apple-header-wrapper trader-header-bar">
+                <!-- LEVEL 1: BRAND & TELEMETRY CONTROLS -->
+                <div class="apple-header-top">
+                    <div class="apple-brand-section">
+                        <div class="apple-logo-box">📊</div>
+                        <div>
+                            <div class="apple-title-row">
+                                <h1 class="apple-logo-title">Bank Nifty Quant Command Center</h1>
+                                ${marketStatusBadge}
+                            </div>
+                            <span class="apple-header-subtitle">Zero-Friction Algorithmic Trading Platform</span>
                         </div>
-                        <span class="header-subtitle">Zero-Friction Algorithmic Trading Platform</span>
+                    </div>
+
+                    <!-- TELEMETRY & EMERGENCY ACTIONS -->
+                    <div class="apple-header-controls">
+                        <div class="apple-telemetry-capsule">
+                            ${telemetryBadge}
+                            <span class="capsule-divider"></span>
+                            <span class="capsule-text">SIMULATION MODE</span>
+                            <span class="capsule-divider"></span>
+                            <span class="capsule-gold">RISK: ₹0 / ₹5,000</span>
+                        </div>
+
+                        <button class="apple-btn-tour" onclick="OnboardingTour.startTour()">
+                            ❓ Tour
+                        </button>
+                        
+                        <button id="header-kill-switch" class="apple-btn-kill" onclick="Header.triggerKillSwitch()">
+                            🚨 KILL SWITCH
+                        </button>
                     </div>
                 </div>
 
-                <!-- ELEGANT TOP NAVIGATION TABS -->
-                <div class="nav-tabs-container">
-                    <button class="nav-tab ${activeTab === 'signals' ? 'active' : ''}" data-tab="signals">
-                        🎯 Strategy Signals
-                    </button>
-                    <button class="nav-tab ${activeTab === 'portfolio' ? 'active' : ''}" data-tab="portfolio">
-                        💼 Portfolio OMS
-                    </button>
-                    <button class="nav-tab ${activeTab === 'weekly' ? 'active' : ''}" data-tab="weekly">
-                        📅 Weekly Audit
-                    </button>
-                    <button class="nav-tab ${activeTab === 'audit' ? 'active' : ''}" data-tab="audit">
-                        🔬 Strategy Audit
-                    </button>
-                    <button class="nav-tab ${activeTab === 'market' ? 'active' : ''}" data-tab="market">
-                        📊 Master Market Grid
-                    </button>
-                    <button class="nav-tab ${activeTab === 'settings' ? 'active' : ''}" data-tab="settings">
-                        ⚙️ Risk & Settings
-                    </button>
-                </div>
-
-                <!-- TELEMETRY & EMERGENCY CONTROLS -->
-                <div class="header-right-group">
-                    <button class="btn btn-tour-header" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #38bdf8; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer;" onclick="OnboardingTour.startTour()">
-                        ❓ Take Tour
-                    </button>
-                    <div class="telemetry-pill">
-                        ${telemetryBadge}
-                        <span class="pill-divider">|</span>
-                        <span>SIMULATION MODE</span>
-                        <span class="pill-divider">|</span>
-                        <span class="text-gold">RISK: ₹0 / ₹5,000</span>
+                <!-- LEVEL 2: APPLE SEGMENTED CONTROL NAVIGATION TABS -->
+                <div class="apple-nav-bar">
+                    <div class="apple-segmented-control">
+                        <button class="apple-nav-tab ${activeTab === 'signals' ? 'active' : ''}" data-tab="signals">
+                            🎯 Strategy Signals
+                        </button>
+                        <button class="apple-nav-tab ${activeTab === 'portfolio' ? 'active' : ''}" data-tab="portfolio">
+                            💼 Portfolio OMS
+                        </button>
+                        <button class="apple-nav-tab ${activeTab === 'weekly' ? 'active' : ''}" data-tab="weekly">
+                            📅 Weekly Audit
+                        </button>
+                        <button class="apple-nav-tab ${activeTab === 'audit' ? 'active' : ''}" data-tab="audit">
+                            🔬 Strategy Audit
+                        </button>
+                        <button class="apple-nav-tab ${activeTab === 'market' ? 'active' : ''}" data-tab="market">
+                            📊 Master Market Grid
+                        </button>
+                        <button class="apple-nav-tab ${activeTab === 'settings' ? 'active' : ''}" data-tab="settings">
+                            ⚙️ Risk & Settings
+                        </button>
                     </div>
-                    <button id="header-kill-switch" class="btn btn-kill-switch-header" onclick="Header.triggerKillSwitch()">🚨 KILL SWITCH</button>
                 </div>
-
             </div>
         `;
     },

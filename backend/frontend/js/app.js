@@ -38,12 +38,23 @@ const App = {
         this.registerEventHandlers();
         this.renderModals();
         
-        // Auto-authenticate on localhost only; require explicit login on production
+        // Auto-authenticate on localhost only; require explicit login / demo mode on production
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
             this.state.currentUsername = 'default';
             await this.authenticate();
         } else {
-            this.checkUser();
+            LoginModal.show();
+        }
+    },
+
+    async launchDemoMode() {
+        this.state.currentUsername = 'demo';
+        LoginModal.hide();
+        CredentialsModal.hide();
+        this.renderDashboard();
+        await this.loadAllData();
+        if (typeof ToastNotification !== 'undefined') {
+            ToastNotification.show('⚡ Simulation Mode Active: Running against market telemetry', 'success');
         }
     },
 
@@ -196,15 +207,16 @@ const App = {
     },
 
     bindTabEvents() {
-        document.querySelectorAll('.nav-tab').forEach(tabBtn => {
+        document.querySelectorAll('.apple-nav-tab, .nav-tab').forEach(tabBtn => {
             tabBtn.onclick = (e) => {
-                const tab = e.target.dataset.tab;
+                const tab = e.target.closest('button')?.dataset?.tab || e.target.dataset.tab;
                 if (tab) {
                     this.switchTab(tab);
                 }
             };
         });
     },
+
 
     switchTab(tabName) {
         console.log('📌 Switching active tab to:', tabName);
