@@ -18,8 +18,8 @@ const CredentialsModal = {
                         <input type="password" id="password" placeholder="Your Angel One Password" />
                     </div>
                     <div class="form-group">
-                        <label for="totpToken">TOTP Token</label>
-                        <input type="text" id="totpToken" placeholder="Your TOTP Secret Key" />
+                        <label for="totpToken">TOTP Secret Key (Base32)</label>
+                        <input type="text" id="totpToken" placeholder="Your TOTP Secret Key (e.g. JBSWY3DPEHPK3PXP)" />
                     </div>
                     <button class="btn-primary" onclick="App.saveAndAuthenticate()">Save & Login</button>
                 </div>

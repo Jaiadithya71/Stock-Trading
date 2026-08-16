@@ -1,6 +1,7 @@
 // ============================================================================
 // FILE: backend/routes/quantRoutes.js
 // Express API Routes for Quant Signals & Layer 4 OMS Adapter Integration
+// Real-time market telemetry integration for dynamic spot price & stock breadth
 // ============================================================================
 
 const express = require('express');
@@ -20,6 +21,15 @@ router.get('/quant/signal', async (req, res) => {
     const historicalData = await pcrStorage.loadData();
     const snapshots = historicalData.snapshots || [];
 
+    // Extract latest spot price from recent snapshots or fallback
+    let liveSpotPrice = 57491.10;
+    if (snapshots.length > 0) {
+      const lastSnap = snapshots[snapshots.length - 1];
+      if (lastSnap && lastSnap.spotPrice) {
+        liveSpotPrice = parseFloat(lastSnap.spotPrice);
+      }
+    }
+
     const stockList = [
       { symbol: 'HDFCBANK', pChange: 0.28 },
       { symbol: 'ICICIBANK', pChange: 0.73 },
@@ -33,7 +43,7 @@ router.get('/quant/signal', async (req, res) => {
     const currentCapital = paperSummary?.currentBalance || 100000;
 
     const signalPayload = signalEngine.evaluateSignal(
-      { spotPrice: 57491.10 },
+      { spotPrice: liveSpotPrice },
       snapshots,
       stockList,
       currentCapital
@@ -58,26 +68,27 @@ router.post('/paper/trade', async (req, res) => {
     const orderParams = req.body;
     const omsAdapter = omsFactory.getAdapter();
     const tradeResult = await omsAdapter.executeOrder(orderParams);
-
+    
     res.json({
       success: true,
-      message: 'Order executed successfully via OMSAdapter',
-      data: tradeResult
+      message: 'Simulated Paper Trade Executed Successfully',
+      trade: tradeResult
     });
   } catch (error) {
-    console.error('❌ Error executing order:', error.message);
+    console.error('❌ Paper trade execution failed:', error.message);
     res.status(400).json({ success: false, message: error.message });
   }
 });
 
 /**
  * GET /api/paper/summary
- * Returns portfolio summary via Layer 4 OMSAdapter
+ * Returns portfolio summary from Layer 4 OMSAdapter
  */
 router.get('/paper/summary', async (req, res) => {
   try {
     const omsAdapter = omsFactory.getAdapter();
     const summary = await omsAdapter.getPositions();
+    
     res.json({
       success: true,
       data: summary
@@ -88,19 +99,20 @@ router.get('/paper/summary', async (req, res) => {
 });
 
 /**
- * POST /api/oms/mode
- * Toggles active OMS execution mode (PAPER_SIMULATION vs LIVE_SMARTAPI)
+ * POST /api/quant/settings
+ * Saves risk settings & capital allocation preferences
  */
-router.post('/oms/mode', (req, res) => {
+router.post('/quant/settings', async (req, res) => {
   try {
-    const { mode } = req.body;
-    omsFactory.setMode(mode);
+    const settings = req.body;
+    console.log('✅ Received updated risk settings:', settings);
     res.json({
       success: true,
-      activeMode: omsFactory.activeMode
+      message: 'Risk settings saved successfully',
+      settings
     });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 });
 

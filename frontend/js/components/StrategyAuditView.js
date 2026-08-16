@@ -236,6 +236,8 @@ const StrategyAuditView = {
 
             </div>
           </div>
+          <!-- 📖 KINDLE-STYLE INTERACTIVE STRATEGY MASTERCLASS E-BOOK -->
+          ${KindleStrategyReader.render()}
         ` : ''}
       </div>
     `;

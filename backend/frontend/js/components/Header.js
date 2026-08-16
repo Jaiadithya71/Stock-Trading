@@ -4,7 +4,28 @@
 // ============================================================================
 
 const Header = {
+    isMarketOpenNow() {
+        const now = new Date();
+        const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const ist = new Date(utc + (3600000 * 5.5)); // IST is UTC+5.5
+        
+        const day = ist.getDay(); // 0 = Sun, 6 = Sat
+        if (day === 0 || day === 6) return false;
+        
+        const hours = ist.getHours();
+        const minutes = ist.getMinutes();
+        const timeInMinutes = hours * 60 + minutes;
+        
+        // NSE Market Hours: 9:15 AM (555 min) to 3:30 PM (930 min)
+        return timeInMinutes >= 555 && timeInMinutes <= 930;
+    },
+
     render(username, activeTab = 'signals', indicesTimestamp = null) {
+        const marketOpen = this.isMarketOpenNow();
+        const marketStatusBadge = marketOpen ? 
+            '<span class="badge badge-bullish" style="font-size: 11px; padding: 3px 8px;">🟢 MARKET OPEN</span>' : 
+            '<span class="badge" style="background: rgba(255,255,255,0.1); color: #94a3b8; font-size: 11px; padding: 3px 8px;">🌙 MARKET CLOSED</span>';
+
         let telemetryBadge = '<span class="text-red">🔴 DISCONNECTED</span>';
         
         if (indicesTimestamp) {
@@ -25,7 +46,10 @@ const Header = {
                 <div class="logo-section">
                     <div class="logo-icon">📊</div>
                     <div>
-                        <h1 class="logo-title">Bank Nifty Quant Command Center</h1>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <h1 class="logo-title">Bank Nifty Quant Command Center</h1>
+                            ${marketStatusBadge}
+                        </div>
                         <span class="header-subtitle">Zero-Friction Algorithmic Trading Platform</span>
                     </div>
                 </div>

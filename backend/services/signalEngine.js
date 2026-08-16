@@ -2,6 +2,7 @@
 // FILE: backend/services/signalEngine.js
 // Layer 3: Signal Confluence Engine
 // Decoupled quantitative signal evaluation emitting immutable signal objects
+// Dynamic ATM option strike calculation based on real-time spot price
 // ============================================================================
 
 const computationEngine = require('./computationEngine');
@@ -14,10 +15,13 @@ class SignalEngine {
         const breadthMetrics = computationEngine.calculateBankBreadth(bankStocks);
         const riskAllocation = computationEngine.calculateKellySizing(0.60, 1.5, userCapital, 280);
 
+        // Dynamic At-The-Money (ATM) Option Strike Calculation
+        const atmStrike = Math.round(spotPrice / 100) * 100;
+
         let signal = 'NEUTRAL_HOLD';
         let confidenceScore = 0.75;
         let signalTitle = '🟡 NEUTRAL / HOLD IN CASH';
-        let signalRationale = 'Price consolidating within Central Pivot Range. Awaiting Fibonacci level bounce + PCR Z-Score confirmation.';
+        let signalRationale = `Price consolidating around ₹${spotPrice.toLocaleString('en-IN')}. Awaiting Fibonacci level bounce + PCR Z-Score confirmation.`;
 
         // Bullish Confluence Condition: PCR Z-Score < -0.5 OR Fib 0.618 Support Proximity
         const nearFibGolden = Math.abs(spotPrice - techLevels.fibonacci.fib0618) / spotPrice < 0.01;
@@ -37,10 +41,12 @@ class SignalEngine {
 
         return Object.freeze({
             signal,
+            underlyingPrice: spotPrice,
+            atmStrike,
             confidenceScore: Math.round(confidenceScore * 100) + '%',
             signalTitle,
             signalRationale,
-            targetContract: signal === 'BUY_PUT_PE' ? 'BANKNIFTY 57500 PE' : 'BANKNIFTY 57500 CE',
+            targetContract: signal === 'BUY_PUT_PE' ? `BANKNIFTY ${atmStrike} PE` : `BANKNIFTY ${atmStrike} CE`,
             targetOptionPrice: 280,
             pcrMetrics,
             techLevels,

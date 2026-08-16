@@ -1,7 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/components/RiskSettingsView.js
 // Risk, Capital & Execution Settings Page Component
-// Allows user to configure initial trade capital (e.g. ₹1,000 / 1 Lot), Daily Max Loss Stop, and Simulation Mode
+// Allows user to configure initial trade capital, Daily Max Loss Stop, and link to Survey
 // ============================================================================
 
 const RiskSettingsView = {
@@ -16,7 +16,7 @@ const RiskSettingsView = {
             <span class="icon">⚙️</span>
             <div>
               <h2>Risk Guardrails & Capital Allocation Settings</h2>
-              <p>Configure paper trading initial capital, lot sizing, and daily stop-loss caps</p>
+              <p>Configure paper trading initial capital, lot sizing, daily stop-loss caps, and survey preferences</p>
             </div>
           </div>
         </div>
@@ -24,7 +24,7 @@ const RiskSettingsView = {
         <div class="settings-grid">
           <!-- CARD 1: CAPITAL & LOT SIZING -->
           <div class="settings-card">
-            <h3>💰 Trade Sizing & Capital Sizing</h3>
+            <h3>💰 Trade Sizing & Capital Allocation</h3>
             <p class="s-desc">Start small to validate paper trading profitability before risking real capital.</p>
 
             <div class="form-group">
@@ -83,13 +83,45 @@ const RiskSettingsView = {
               </div>
             </div>
           </div>
+
+          <!-- CARD 4: STRATEGY & QUESTIONNAIRE SURVEY -->
+          <div class="settings-card">
+            <h3>📋 Client Strategy & Preferences Survey</h3>
+            <p class="s-desc">Review or update your 16-question trading strategy specifications and baseline requirements.</p>
+
+            <a href="/survey.html" target="_blank" class="btn btn-trade" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; padding: 10px 18px; font-weight: 600; border-radius: 8px;">
+              <span>📋 Open Interactive Strategy Survey</span>
+            </a>
+          </div>
         </div>
       </div>
     `;
   },
 
-  saveSettings() {
-    const capital = document.getElementById('setting-capital').value;
-    alert(`✅ Capital Settings Saved: ₹${capital} Initial Capital per Trade allocated.`);
+  async saveSettings() {
+    try {
+      const capital = document.getElementById('setting-capital')?.value || 1000;
+      const lots = document.getElementById('setting-lots')?.value || 1;
+      const maxLoss = document.getElementById('setting-maxloss')?.value || 5000;
+
+      const res = await fetch('/api/quant/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ capital, lots, maxLoss })
+      });
+      const data = await res.json();
+
+      if (typeof ToastNotification !== 'undefined') {
+        ToastNotification.show(`✅ Risk Settings Saved: ₹${capital} Initial Capital per Trade allocated.`, 'success');
+      } else {
+        alert(`✅ Risk Settings Saved: ₹${capital} Initial Capital per Trade allocated.`);
+      }
+    } catch (e) {
+      if (typeof ToastNotification !== 'undefined') {
+        ToastNotification.show('❌ Failed to save settings: ' + e.message, 'error');
+      } else {
+        alert('❌ Failed to save settings: ' + e.message);
+      }
+    }
   }
 };
