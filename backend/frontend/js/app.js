@@ -17,10 +17,12 @@ const App = {
         selectedInterval: 'ONE_MINUTE',
         selectedNSESymbol: 'BANKNIFTY',
         selectedNSEExpiry: null,
+        activeTab: 'signals',
         showCurrency: true,
         showOptionChain: false,
         showPCR: true,
         showMinimalist: false,
+
         isLoading: false,
 
         filters: {
@@ -178,13 +180,67 @@ const App = {
     renderDashboard() {
         const app = document.getElementById('app');
         app.innerHTML = `
-            ${Header.render(this.state.currentUsername)}
-            ${Toolbar.render(this.state)}
+            ${Header.render(this.state.currentUsername, this.state.activeTab)}
             <div class="dashboard-container" id="dashboardContent">
                 ${LoadingSpinner.render('Loading dashboard data...')}
             </div>
         `;
+
+        // Register tab click listeners
+        document.querySelectorAll('.nav-tab').forEach(tabBtn => {
+            tabBtn.onclick = (e) => {
+                const tab = e.target.dataset.tab;
+                if (tab) {
+                    this.state.activeTab = tab;
+                    this.renderDashboard();
+                    this.updateDashboard();
+                }
+            };
+        });
     },
+
+    updateDashboard() {
+        const dashboard = document.getElementById('dashboardContent');
+        if (!dashboard) return;
+
+        window.lastQuantSignal = this.state.quantSignalData;
+        const completeData = this.getCompleteBankNiftyData();
+        const filteredData = this.filterBankNiftyData(completeData);
+
+        let html = '';
+
+        if (this.state.activeTab === 'signals') {
+            html += '<div id="minimalist-signal-view"></div>';
+            html += '<div id="trader-command-center"></div>';
+        } else if (this.state.activeTab === 'portfolio') {
+            html += '<div id="paper-trading-widget"></div>';
+        } else if (this.state.activeTab === 'audit') {
+            html += '<div id="strategy-audit-view"></div>';
+        } else if (this.state.activeTab === 'settings') {
+            html += '<div id="risk-settings-view"></div>';
+        } else if (this.state.activeTab === 'market') {
+            html += IndicesGrid.render(this.state.indicesData, this.state.indicesTimestamp);
+            if (this.state.showPCR) html += PCRWidget.render(this.state.pcrData, this.state.pcrTimestamp);
+            if (this.state.showCurrency && this.state.currencyData) html += CurrencyWidget.render(this.state.currencyData, this.state.currencyTimestamp);
+            if (this.state.showOptionChain) html += OptionChain.render(this.state.nseOptionChainData, this.state.selectedNSESymbol);
+            html += BankNiftyTable.render(filteredData, this.state.bankNiftyTimestamp);
+        }
+
+        dashboard.innerHTML = html;
+
+        // Render Active Page Component
+        if (this.state.activeTab === 'signals') {
+            MinimalistSignalView.render(this.state.quantSignalData, this.state.paperSummaryData);
+            TraderCommandCenter.render(this.state.quantSignalData, this.state.paperSummaryData, 'CLOSED');
+        } else if (this.state.activeTab === 'portfolio') {
+            PaperTradingWidget.render(this.state.paperSummaryData);
+        } else if (this.state.activeTab === 'audit') {
+            StrategyAuditView.render(this.state.quantSignalData);
+        } else if (this.state.activeTab === 'settings') {
+            RiskSettingsView.render();
+        }
+    },
+
 
     async loadAllData() {
         if (this.state.isLoading) {
