@@ -1,7 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/components/PaperTradingWidget.js
 // Paper Trading Execution & Portfolio OMS Dashboard Component
-// Dynamic ATM Strike Calculation, Glassmorphism Toast Notifications & Reload-Free Refresh
+// Dynamic ATM Strike & Live Option Premium Calculation
 // ============================================================================
 
 const PaperTradingWidget = {
@@ -22,7 +22,10 @@ const PaperTradingWidget = {
     const spotPrice = liveSpotPrice || 57491.10;
     // Calculate dynamic At-The-Money (ATM) option strike (rounded to nearest 100)
     const atmStrike = Math.round(spotPrice / 100) * 100;
+    // Calculate estimated ATM option premium (~0.5% of underlying spot price)
+    const estimatedPremium = Math.round(spotPrice * 0.005);
     this.activeAtmStrike = atmStrike;
+    this.estimatedPremium = estimatedPremium;
 
     const { currentBalance, activePositionsCount, winRatePct, totalRealizedPnL, activePositions = [] } = summaryData;
     const pnlClass = totalRealizedPnL >= 0 ? 'text-green' : 'text-red';
@@ -35,7 +38,7 @@ const PaperTradingWidget = {
             <h3>Paper Trading OMS (Forward Simulation)</h3>
           </div>
           <div class="paper-controls">
-            <button id="btn-quick-paper-trade" class="btn btn-trade">⚡ Order 1 Lot CE (${atmStrike} CE)</button>
+            <button id="btn-quick-paper-trade" class="btn btn-trade">⚡ Order 1 Lot CE (${atmStrike} CE @ ₹${estimatedPremium})</button>
             <button id="btn-kill-switch" class="btn btn-danger">🚨 KILL SWITCH</button>
           </div>
         </div>
@@ -98,7 +101,7 @@ const PaperTradingWidget = {
     // Attach event listeners
     const tradeBtn = document.getElementById('btn-quick-paper-trade');
     if (tradeBtn) {
-      tradeBtn.onclick = () => this.executeQuickTrade(atmStrike);
+      tradeBtn.onclick = () => this.executeQuickTrade(atmStrike, estimatedPremium);
     }
 
     const killBtn = document.getElementById('btn-kill-switch');
@@ -107,7 +110,7 @@ const PaperTradingWidget = {
     }
   },
 
-  async executeQuickTrade(atmStrike = 57500) {
+  async executeQuickTrade(atmStrike = 57500, entryPremium = 280) {
     try {
       const res = await fetch('/api/paper/trade', {
         method: 'POST',
@@ -116,16 +119,16 @@ const PaperTradingWidget = {
           symbol: 'BANKNIFTY',
           optionType: 'CE',
           strikePrice: atmStrike,
-          entryPrice: 320,
+          entryPrice: entryPremium,
           quantity: 15
         })
       });
       const data = await res.json();
       if (data.success) {
         if (typeof ToastNotification !== 'undefined') {
-          ToastNotification.show(`✅ Simulated Paper Trade Placed: 1 Lot ${atmStrike} CE @ ₹320`, 'success');
+          ToastNotification.show(`✅ Simulated Paper Trade Placed: 1 Lot ${atmStrike} CE @ ₹${entryPremium}`, 'success');
         } else {
-          alert(`✅ Simulated Paper Trade Placed: 1 Lot ${atmStrike} CE @ ₹320`);
+          alert(`✅ Simulated Paper Trade Placed: 1 Lot ${atmStrike} CE @ ₹${entryPremium}`);
         }
         
         // Refresh quant & paper data without full page reload

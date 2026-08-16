@@ -21,22 +21,42 @@ router.get('/quant/signal', async (req, res) => {
     const historicalData = await pcrStorage.loadData();
     const snapshots = historicalData.snapshots || [];
 
-    // Extract latest spot price from recent snapshots or fallback
     let liveSpotPrice = 57491.10;
-    if (snapshots.length > 0) {
-      const lastSnap = snapshots[snapshots.length - 1];
-      if (lastSnap && lastSnap.spotPrice) {
-        liveSpotPrice = parseFloat(lastSnap.spotPrice);
-      }
-    }
-
-    const stockList = [
+    let stockList = [
       { symbol: 'HDFCBANK', pChange: 0.28 },
       { symbol: 'ICICIBANK', pChange: 0.73 },
       { symbol: 'KOTAKBANK', pChange: -0.32 },
       { symbol: 'AXISBANK', pChange: -0.36 },
       { symbol: 'SBIN', pChange: -1.41 }
     ];
+
+    if (snapshots.length > 0) {
+      const lastSnap = snapshots[snapshots.length - 1];
+      if (lastSnap && lastSnap.spotPrice) {
+        liveSpotPrice = parseFloat(lastSnap.spotPrice);
+      }
+
+      // If telemetry snapshot contains live constituent stock prices, calculate real-time pChange
+      if (lastSnap && lastSnap.stockBreadth && Array.isArray(lastSnap.stockBreadth)) {
+        stockList = lastSnap.stockBreadth.map(stk => ({
+          symbol: stk.symbol,
+          pChange: parseFloat(stk.pChange || stk.change || 0.0)
+        }));
+      } else if (snapshots.length > 1) {
+        // Calculate spot price momentum delta between last 2 snapshots
+        const prevSnap = snapshots[snapshots.length - 2];
+        const spotDelta = ((lastSnap.spotPrice - prevSnap.spotPrice) / prevSnap.spotPrice) * 100;
+        
+        // Dynamically scale constituent bank changes based on index momentum delta
+        stockList = [
+          { symbol: 'HDFCBANK', pChange: parseFloat((spotDelta * 1.05).toFixed(2)) },
+          { symbol: 'ICICIBANK', pChange: parseFloat((spotDelta * 1.12).toFixed(2)) },
+          { symbol: 'KOTAKBANK', pChange: parseFloat((spotDelta * 0.92).toFixed(2)) },
+          { symbol: 'AXISBANK', pChange: parseFloat((spotDelta * 0.88).toFixed(2)) },
+          { symbol: 'SBIN', pChange: parseFloat((spotDelta * 0.95).toFixed(2)) }
+        ];
+      }
+    }
 
     const omsAdapter = omsFactory.getAdapter();
     const paperSummary = await omsAdapter.getPositions();
