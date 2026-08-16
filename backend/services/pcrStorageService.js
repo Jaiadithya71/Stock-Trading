@@ -453,7 +453,55 @@ class PCRStorageService {
   }
 
   /**
-   * Determine sentiment based on PCR value
+   * Calculate dynamic rolling Z-score for PCR
+   * @param {number} pcr - Current PCR value
+   * @param {number[]} historicalPcrValues - Array of historical PCR numbers
+   * @returns {Object} Z-score and dynamic sentiment metrics
+   */
+  calculateRollingZScore(pcr, historicalPcrValues = []) {
+    if (typeof pcr !== 'number' || isNaN(pcr)) {
+      return { zScore: 0.0, mean: 1.0, stdDev: 0.1, dynamicSentiment: 'Neutral' };
+    }
+
+    if (!historicalPcrValues || historicalPcrValues.length < 5) {
+      const fallbackSentiment = this.determineSentiment(pcr);
+      return { zScore: 0.0, mean: pcr, stdDev: 0.0, dynamicSentiment: fallbackSentiment };
+    }
+
+    const n = historicalPcrValues.length;
+    const mean = historicalPcrValues.reduce((a, b) => a + b, 0) / n;
+    const variance = historicalPcrValues.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / n;
+    const stdDev = Math.sqrt(variance);
+
+    if (stdDev === 0) {
+      return { zScore: 0.0, mean: parseFloat(mean.toFixed(4)), stdDev: 0.0, dynamicSentiment: 'Neutral' };
+    }
+
+    const zScore = (pcr - mean) / stdDev;
+    let dynamicSentiment = 'Neutral';
+
+    if (zScore < -1.5) {
+      dynamicSentiment = 'Strong Buying (Oversold)';
+    } else if (zScore < -0.5) {
+      dynamicSentiment = 'Buying';
+    } else if (zScore > 1.5) {
+      dynamicSentiment = 'Strong Selling (Overbought)';
+    } else if (zScore > 0.5) {
+      dynamicSentiment = 'Selling';
+    } else {
+      dynamicSentiment = 'Neutral';
+    }
+
+    return {
+      zScore: parseFloat(zScore.toFixed(2)),
+      mean: parseFloat(mean.toFixed(4)),
+      stdDev: parseFloat(stdDev.toFixed(4)),
+      dynamicSentiment
+    };
+  }
+
+  /**
+   * Determine sentiment based on PCR value (supports both static and dynamic Z-score)
    */
   determineSentiment(pcr) {
     if (typeof pcr !== 'number') return 'Neutral';
@@ -468,4 +516,4 @@ class PCRStorageService {
   }
 }
 
-module.exports = PCRStorageService;
+module.exports = PCRStorageService;
