@@ -1,7 +1,8 @@
 // ============================================================================
 // FILE: frontend/js/components/WeeklyAuditDashboard.js
 // Weekend Simulation Review Dashboard Component
-// Displays 7-day cumulative win rate, net P&L, daily breakdown, and trade-by-trade audit log
+// Displays 7-day cumulative win rate, net P&L, daily breakdown, trade-by-trade audit log,
+// and 1-click CSV & JSON audit download export triggers
 // ============================================================================
 
 const WeeklyAuditDashboard = {
@@ -30,7 +31,12 @@ const WeeklyAuditDashboard = {
                 <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 13px;">Automated 7-day telemetry log tracking signals, decisions, orders, and P&L outcomes</p>
               </div>
             </div>
-            <button class="btn btn-trade" onclick="WeeklyAuditDashboard.render()" style="padding: 8px 16px; font-size: 13px;">🔄 Refresh Audit Data</button>
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadCSV()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 8px 14px; font-size: 12px; font-weight: 700;">📥 Download CSV Report</button>
+              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadJSON()" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #38bdf8; padding: 8px 14px; font-size: 12px; font-weight: 700;">📥 Download JSON Log</button>
+              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.render()" style="padding: 8px 14px; font-size: 12px;">🔄 Refresh</button>
+            </div>
           </div>
 
           <!-- WEEKLY PERFORMANCE HERO CARDS -->
@@ -60,41 +66,41 @@ const WeeklyAuditDashboard = {
             </div>
           </div>
 
-          <!-- TRADE LOG TABLE -->
-          <div style="background: rgba(30, 41, 59, 0.75); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 20px;">
-            <h3 style="margin-top: 0; font-size: 16px; color: #f8fafc; margin-bottom: 16px;">📜 Complete Weekly Execution Audit Log</h3>
-
+          <!-- DETAILED AUDIT LOG TIMELINE -->
+          <div style="background: rgba(30, 41, 59, 0.75); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px;">
+            <h3 style="margin: 0 0 16px 0; font-size: 16px; color: #38bdf8;">📜 Complete Weekly Execution Audit Log</h3>
+            
             ${trades.length === 0 ? `
-              <p style="color: #94a3b8; font-size: 14px; text-align: center; padding: 24px 0;">No trades recorded in the weekly log yet. Automated simulation logger is active.</p>
-            ` : `
-              <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                  <thead>
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #94a3b8; text-align: left;">
-                      <th style="padding: 10px;">Timestamp</th>
-                      <th style="padding: 10px;">ID</th>
-                      <th style="padding: 10px;">Contract</th>
-                      <th style="padding: 10px;">Strike</th>
-                      <th style="padding: 10px;">Entry Price</th>
-                      <th style="padding: 10px;">P&L</th>
-                      <th style="padding: 10px;">Rationale</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${trades.map(t => `
-                      <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                        <td style="padding: 10px; color: #cbd5e1;">${new Date(t.timestamp).toLocaleString('en-IN')}</td>
-                        <td style="padding: 10px; font-family: monospace;">${t.id}</td>
-                        <td style="padding: 10px;"><span class="badge ${t.optionType === 'CE' ? 'badge-bullish' : 'badge-bearish'}">${t.optionType}</span></td>
-                        <td style="padding: 10px;">${t.strikePrice}</td>
-                        <td style="padding: 10px;">₹${t.entryPrice}</td>
-                        <td style="padding: 10px;" class="${t.pnl >= 0 ? 'text-green' : 'text-red'}">₹${t.pnl ? t.pnl.toFixed(2) : '0.00'}</td>
-                        <td style="padding: 10px; color: #94a3b8; font-size: 12px;">${t.rationale}</td>
-                      </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
+              <div style="padding: 30px; text-align: center; color: #94a3b8; font-size: 14px; border: 1px dashed rgba(255,255,255,0.15); border-radius: 12px;">
+                <span>ℹ️ No executed trades logged for the current 7-day period yet. Paper trade fills will accumulate here automatically for weekend performance reviews.</span>
               </div>
+            ` : `
+              <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                <thead>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #94a3b8; text-align: left;">
+                    <th style="padding: 10px;">Timestamp</th>
+                    <th style="padding: 10px;">Order ID</th>
+                    <th style="padding: 10px;">Contract</th>
+                    <th style="padding: 10px;">Strike</th>
+                    <th style="padding: 10px;">Entry Premium</th>
+                    <th style="padding: 10px;">Quantity</th>
+                    <th style="padding: 10px;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${trades.map(t => `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                      <td style="padding: 10px; color: #94a3b8;">${new Date(t.timestamp).toLocaleString('en-IN')}</td>
+                      <td style="padding: 10px; font-family: monospace; color: #38bdf8;">${t.id}</td>
+                      <td style="padding: 10px; font-weight: 700; color: #f8fafc;">${t.symbol}</td>
+                      <td style="padding: 10px;">₹${t.strikePrice}</td>
+                      <td style="padding: 10px;" class="text-green">₹${t.entryPrice}</td>
+                      <td style="padding: 10px;">${t.quantity} (${t.quantity / 15} Lot)</td>
+                      <td style="padding: 10px;"><span style="background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">${t.status}</span></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
             `}
           </div>
         </div>
@@ -102,5 +108,13 @@ const WeeklyAuditDashboard = {
     } catch (e) {
       container.innerHTML = `<div style="padding: 20px; color: #ef4444;">Failed to load weekly audit log: ${e.message}</div>`;
     }
+  },
+
+  downloadCSV() {
+    window.open('/api/paper/weekly-audit/download?format=csv', '_blank');
+  },
+
+  downloadJSON() {
+    window.open('/api/paper/weekly-audit/download?format=json', '_blank');
   }
 };

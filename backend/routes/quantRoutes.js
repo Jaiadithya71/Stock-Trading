@@ -3,6 +3,7 @@
 // Express API Routes for Quant Signals & Layer 4 OMS Adapter Integration
 // Real-time market telemetry integration for dynamic spot price & stock breadth
 // Persistent storage for user risk settings & weekly simulation audit logger
+// Includes CSV & JSON export functionality for weekend performance reviews
 // ============================================================================
 
 const express = require('express');
@@ -103,14 +104,13 @@ router.post('/paper/trade', async (req, res) => {
     const omsAdapter = omsFactory.getAdapter();
     const tradeResult = await omsAdapter.executeOrder(orderParams);
     
-    // Log trade to weekly audit log
     weeklyAuditLogger.logTradeEvent({
-      id: tradeResult.id,
-      symbol: orderParams.symbol || 'BANKNIFTY',
+      id: tradeResult.orderId || tradeResult.id || `PAPER-${Date.now()}`,
+      symbol: orderParams.symbol || 'BANKNIFTY 57500 CE',
       optionType: orderParams.optionType || 'CE',
-      strikePrice: orderParams.strikePrice,
-      entryPrice: orderParams.entryPrice,
-      quantity: orderParams.quantity,
+      strikePrice: orderParams.strikePrice || 57500,
+      entryPrice: orderParams.entryPrice || 280,
+      quantity: orderParams.quantity || 15,
       status: 'OPEN'
     });
 
@@ -154,6 +154,36 @@ router.get('/paper/weekly-audit', async (req, res) => {
       success: true,
       data: log
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * GET /api/paper/weekly-audit/download
+ * Exports weekly audit log as downloadable CSV or JSON file attachment
+ */
+router.get('/paper/weekly-audit/download', async (req, res) => {
+  try {
+    const format = (req.query.format || 'csv').toLowerCase();
+    const log = weeklyAuditLogger.loadLog();
+    const trades = log.trades || [];
+
+    if (format === 'json') {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', 'attachment; filename="BankNifty_Weekly_Audit_Report.json"');
+      return res.send(JSON.stringify(log, null, 2));
+    }
+
+    // Default CSV Export
+    let csv = 'Timestamp,Order_ID,Symbol,Option_Type,Strike_Price,Entry_Price,Quantity,Status\n';
+    trades.forEach(t => {
+      csv += `"${t.timestamp || ''}","${t.id || ''}","${t.symbol || ''}","${t.optionType || ''}",${t.strikePrice || 0},${t.entryPrice || 0},${t.quantity || 0},"${t.status || 'OPEN'}"\n`;
+    });
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="BankNifty_Weekly_Audit_Report.csv"');
+    return res.send(csv);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
