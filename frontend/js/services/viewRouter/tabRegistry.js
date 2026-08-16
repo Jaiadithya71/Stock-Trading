@@ -1,6 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/services/viewRouter/tabRegistry.js
 // Declarative Tab Registry Mapping Tabs to View Components
+// Includes Weekly Audit & Weekend Review Tab
 // ============================================================================
 
 const TAB_REGISTRY = {
@@ -14,6 +15,12 @@ const TAB_REGISTRY = {
     { 
       id: 'paper-trading-widget', 
       render: (state, spotPrice) => PaperTradingWidget.render(state.paperSummaryData, spotPrice) 
+    }
+  ],
+  weekly: [
+    { 
+      id: 'weekly-audit-dashboard', 
+      render: () => WeeklyAuditDashboard.render() 
     }
   ],
   audit: [
@@ -42,7 +49,3 @@ const TAB_REGISTRY = {
     }
   ]
 };
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = TAB_REGISTRY;
-}

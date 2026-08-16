@@ -1,11 +1,12 @@
 // ============================================================================
 // FILE: frontend/js/components/KindleStrategyReader.js
-// Dedicated Kindle-Style Strategy E-Book Masterclass Reader Component
-// Elegant, full-page reader experience with zero sub-tab clutter
+// Dedicated Kindle-Style Strategy E-Book Masterclass Reader Modal Component
+// Opens in a full-screen distraction-free reader window when launched
 // ============================================================================
 
 const KindleStrategyReader = {
   currentChapter: 1,
+  isOpen: false,
 
   chapters: [
     {
@@ -262,13 +263,34 @@ const KindleStrategyReader = {
     }
   ],
 
-  render() {
+  openModal() {
+    this.isOpen = true;
+    let modalEl = document.getElementById('kindle-modal-overlay');
+    if (!modalEl) {
+      modalEl = document.createElement('div');
+      modalEl.id = 'kindle-modal-overlay';
+      modalEl.className = 'kindle-modal-overlay';
+      document.body.appendChild(modalEl);
+    }
+    modalEl.innerHTML = this.renderModalHtml();
+    modalEl.style.display = 'flex';
+  },
+
+  closeModal() {
+    this.isOpen = false;
+    const modalEl = document.getElementById('kindle-modal-overlay');
+    if (modalEl) {
+      modalEl.style.display = 'none';
+    }
+  },
+
+  renderModalHtml() {
     const chapter = this.chapters.find(c => c.id === this.currentChapter) || this.chapters[0];
     const totalChapters = this.chapters.length;
     const progressPct = Math.round((this.currentChapter / totalChapters) * 100);
 
     return `
-      <div class="kindle-reader-wrapper">
+      <div class="kindle-modal-container">
         <!-- KINDLE TOP HEADER BAR -->
         <div class="kindle-header">
           <div class="kindle-brand">
@@ -279,11 +301,14 @@ const KindleStrategyReader = {
             </div>
           </div>
 
-          <div class="kindle-progress-bar-container">
-            <span class="kp-text">Progress: Chapter ${this.currentChapter} of ${totalChapters} (${progressPct}%)</span>
-            <div class="kp-bar">
-              <div class="kp-fill" style="width: ${progressPct}%;"></div>
+          <div class="kindle-header-right">
+            <div class="kindle-progress-bar-container">
+              <span class="kp-text">Progress: Chapter ${this.currentChapter} of ${totalChapters} (${progressPct}%)</span>
+              <div class="kp-bar">
+                <div class="kp-fill" style="width: ${progressPct}%;"></div>
+              </div>
             </div>
+            <button class="btn-close-kindle" onclick="KindleStrategyReader.closeModal()">✕ Close Reader</button>
           </div>
         </div>
 
@@ -331,27 +356,29 @@ const KindleStrategyReader = {
 
   goToChapter(chId) {
     this.currentChapter = chId;
-    this.reRenderInPlace();
+    if (this.isOpen) {
+      const modalEl = document.getElementById('kindle-modal-overlay');
+      if (modalEl) modalEl.innerHTML = this.renderModalHtml();
+    }
   },
 
   prevChapter() {
     if (this.currentChapter > 1) {
       this.currentChapter--;
-      this.reRenderInPlace();
+      if (this.isOpen) {
+        const modalEl = document.getElementById('kindle-modal-overlay');
+        if (modalEl) modalEl.innerHTML = this.renderModalHtml();
+      }
     }
   },
 
   nextChapter() {
     if (this.currentChapter < this.chapters.length) {
       this.currentChapter++;
-      this.reRenderInPlace();
-    }
-  },
-
-  reRenderInPlace() {
-    const container = document.getElementById('strategy-audit-view');
-    if (container) {
-      container.innerHTML = this.render();
+      if (this.isOpen) {
+        const modalEl = document.getElementById('kindle-modal-overlay');
+        if (modalEl) modalEl.innerHTML = this.renderModalHtml();
+      }
     }
   }
 };

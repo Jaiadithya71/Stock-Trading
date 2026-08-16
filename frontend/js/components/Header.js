@@ -1,6 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/components/Header.js
 // World-Class Elegant Navigation & Dynamic Telemetry Header Component
+// Includes Weekly Audit & Weekend Review Tab
 // ============================================================================
 
 const Header = {
@@ -61,6 +62,9 @@ const Header = {
                     </button>
                     <button class="nav-tab ${activeTab === 'portfolio' ? 'active' : ''}" data-tab="portfolio">
                         💼 Portfolio OMS
+                    </button>
+                    <button class="nav-tab ${activeTab === 'weekly' ? 'active' : ''}" data-tab="weekly">
+                        📅 Weekly Audit
                     </button>
                     <button class="nav-tab ${activeTab === 'audit' ? 'active' : ''}" data-tab="audit">
                         🔬 Strategy Audit

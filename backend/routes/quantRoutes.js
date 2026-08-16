@@ -2,7 +2,7 @@
 // FILE: backend/routes/quantRoutes.js
 // Express API Routes for Quant Signals & Layer 4 OMS Adapter Integration
 // Real-time market telemetry integration for dynamic spot price & stock breadth
-// Persistent storage for user risk settings & capital allocation preferences
+// Persistent storage for user risk settings & weekly simulation audit logger
 // ============================================================================
 
 const express = require('express');
@@ -11,6 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const PCRStorageService = require('../services/pcrStorageService');
 const signalEngine = require('../services/signalEngine');
+const weeklyAuditLogger = require('../services/weeklyAuditLogger');
 const { omsFactory } = require('../services/omsAdapter');
 
 const pcrStorage = new PCRStorageService();
@@ -53,14 +54,12 @@ router.get('/quant/signal', async (req, res) => {
         liveSpotPrice = parseFloat(lastSnap.spotPrice);
       }
 
-      // Extract real-time constituent stock changes from snapshot telemetry
       if (lastSnap && lastSnap.stockBreadth && Array.isArray(lastSnap.stockBreadth)) {
         stockList = lastSnap.stockBreadth.map(stk => ({
           symbol: stk.symbol,
           pChange: parseFloat(stk.pChange || stk.change || 0.0)
         }));
       } else if (snapshots.length > 1) {
-        // Calculate spot price momentum delta between recent snapshots
         const prevSnap = snapshots[snapshots.length - 2];
         const spotDelta = ((lastSnap.spotPrice - prevSnap.spotPrice) / prevSnap.spotPrice) * 100;
         
@@ -96,7 +95,7 @@ router.get('/quant/signal', async (req, res) => {
 
 /**
  * POST /api/paper/trade
- * Places order via Layer 4 OMSAdapter (PaperTradingOMS or LiveBrokerOMS)
+ * Places order via Layer 4 OMSAdapter and logs event in weekly simulation logger
  */
 router.post('/paper/trade', async (req, res) => {
   try {
@@ -104,6 +103,17 @@ router.post('/paper/trade', async (req, res) => {
     const omsAdapter = omsFactory.getAdapter();
     const tradeResult = await omsAdapter.executeOrder(orderParams);
     
+    // Log trade to weekly audit log
+    weeklyAuditLogger.logTradeEvent({
+      id: tradeResult.id,
+      symbol: orderParams.symbol || 'BANKNIFTY',
+      optionType: orderParams.optionType || 'CE',
+      strikePrice: orderParams.strikePrice,
+      entryPrice: orderParams.entryPrice,
+      quantity: orderParams.quantity,
+      status: 'OPEN'
+    });
+
     res.json({
       success: true,
       message: 'Simulated Paper Trade Executed Successfully',
@@ -127,6 +137,22 @@ router.get('/paper/summary', async (req, res) => {
     res.json({
       success: true,
       data: summary
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * GET /api/paper/weekly-audit
+ * Returns complete 7-day simulation audit log for weekend review
+ */
+router.get('/paper/weekly-audit', async (req, res) => {
+  try {
+    const log = weeklyAuditLogger.loadLog();
+    res.json({
+      success: true,
+      data: log
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
