@@ -1,6 +1,6 @@
-# Project T - Client Strategy Requirements & System Specifications
+# Project T - Assumptions & Personal Strategy Requirements
 
-**Client Name**: Jai  
+**Recorded Name**: Jai  
 **Submission Timestamp**: 2026-08-16 17:41:44 IST (2026-08-16T12:11:44.588Z)  
 **Client IP**: `183.82.176.9, 172.68.146.177, 10.25.138.98`  
 **User Agent**: `Mozilla/5.0 (Linux; Android 10; K) Mobile Safari/537.36`
