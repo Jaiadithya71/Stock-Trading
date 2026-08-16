@@ -760,7 +760,7 @@
             <textarea name="customNotes" placeholder="Enter any extra strategy details or notes here (optional)..."></textarea>
         </div>
 
-        <button type="submit" class="btn-submit">Save & Submit All Specifications</button>
+        <button type="submit" class="btn-submit" id="btnSubmit">Save & Submit All Specifications</button>
     </form>
 </div>
 
@@ -810,6 +810,10 @@
     document.getElementById('surveyForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        const btnSubmit = document.getElementById('btnSubmit');
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = 'Saving Preferences...';
+
         const formData = new FormData(e.target);
         const data = {
             clientName: formData.get('clientName')?.trim() || 'Anonymous Client',
@@ -837,39 +841,32 @@
             submittedAt: new Date().toISOString()
         };
 
-        let apiEndpoint = '/api/save-survey';
+        // Determine exact API URL for active backend Web Service
+        let primaryApi = 'https://stock-trading-1-cquo.onrender.com/api/save-survey';
         if (location.origin.includes('localhost')) {
-            apiEndpoint = 'http://localhost:3000/api/save-survey';
-        } else if (!location.origin.includes('stock-trading-1-cquo.onrender.com') && !location.origin.includes('stock-trading-v2ue.onrender.com')) {
-            apiEndpoint = 'https://stock-trading-v2ue.onrender.com/api/save-survey';
+            primaryApi = 'http://localhost:3000/api/save-survey';
         }
 
         try {
-            let res;
-            try {
-                res = await fetch(apiEndpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-            } catch(e) {
-                res = await fetch('/api/save-survey', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-            }
+            const res = await fetch(primaryApi, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
             const result = await res.json();
             if (result.success) {
                 document.getElementById('formContainer').style.display = 'none';
                 document.getElementById('successScreen').style.display = 'block';
             } else {
-                alert('Error saving preferences: ' + result.message);
+                alert('Server returned error: ' + result.message);
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = 'Save & Submit All Specifications';
             }
         } catch (err) {
-            document.getElementById('formContainer').style.display = 'none';
-            document.getElementById('successScreen').style.display = 'block';
+            alert('Failed to submit preferences to backend: ' + err.message + '\n\nPlease check connection or try again.');
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = 'Save & Submit All Specifications';
         }
     });
 </script>
