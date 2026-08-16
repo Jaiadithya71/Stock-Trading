@@ -3285,6 +3285,50 @@
       "source": "angel_smartapi_native",
       "timestamp": "2026-08-16T18:11:20.814Z",
       "timestampMs": 1786903880814
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:12:20.295Z",
+      "timestampMs": 1786903940295
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:13:20.298Z",
+      "timestampMs": 1786904000298
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:14:20.580Z",
+      "timestampMs": 1786904060580
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:15:20.386Z",
+      "timestampMs": 1786904120386
     }
   ]
 }
