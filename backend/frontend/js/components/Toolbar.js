@@ -69,8 +69,19 @@ const Toolbar = {
                             >
                             <span class="toggle-label">📈 Show Option Chain</span>
                         </label>
+                        
+                        <label class="toggle">
+                            <input 
+                                type="checkbox" 
+                                id="minimalistToggle"
+                                data-change-action="toggle-minimalist" 
+                                ${state.showMinimalist ? 'checked' : ''}
+                            >
+                            <span class="toggle-label">🎯 Minimalist Signal View</span>
+                        </label>
                     </div>
                 </div>
+
 
                 <div class="toolbar-section">
                     <h3>Filters</h3>
