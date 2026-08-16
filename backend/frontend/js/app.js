@@ -218,10 +218,12 @@ const App = {
         if (!dashboard) return;
 
         window.lastQuantSignal = this.state.quantSignalData;
+        window.lastSpotPrice = ViewRouter.extractSpotPrice(this.state);
         const completeData = this.getCompleteBankNiftyData();
         const filteredData = this.filterBankNiftyData(completeData);
 
         ViewRouter.renderActiveTab(this.state.activeTab, dashboard, this.state, filteredData);
+
     },
 
 
