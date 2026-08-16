@@ -1569,12 +1569,14 @@ tbody tr td:first-child {
 .kindle-main-layout {
     display: grid;
     grid-template-columns: 240px 1fr;
-    min-height: 480px;
+    height: calc(100% - 65px);
+    overflow: hidden;
 }
 
 @media (max-width: 900px) {
     .kindle-main-layout {
         grid-template-columns: 1fr;
+        height: auto;
     }
 }
 
@@ -1582,6 +1584,7 @@ tbody tr td:first-child {
     background: rgba(15, 23, 42, 0.9);
     border-right: 1px solid rgba(255, 255, 255, 0.08);
     padding: 14px;
+    overflow-y: auto;
 }
 
 .toc-title {
@@ -1643,6 +1646,9 @@ tbody tr td:first-child {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .kindle-page-header {
@@ -1670,7 +1676,11 @@ tbody tr td:first-child {
     font-size: 13px;
     line-height: 1.7;
     color: #cbd5e1;
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 6px;
 }
+
 
 .kindle-lead {
     font-size: 14px;
