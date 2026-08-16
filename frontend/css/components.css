@@ -1503,10 +1503,174 @@ tbody tr td:first-child {
     transition: all 0.2s ease;
 }
 
-.btn-close-kindle:hover {
-    background: #ef4444;
+/* Interactive Onboarding Tour Modal CSS */
+.onboarding-tour-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(2, 6, 23, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 10001;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.onboarding-modal-card {
+    width: 100%;
+    max-width: 580px;
+    background: #0f172a;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    border-radius: 14px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.onboarding-modal-header {
+    background: rgba(30, 41, 59, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ob-badge {
+    font-size: 11px;
+    font-weight: 800;
+    color: #38bdf8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-skip-tour {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #94a3b8;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-skip-tour:hover {
+    background: rgba(255, 255, 255, 0.2);
     color: #fff;
 }
+
+.onboarding-modal-body {
+    padding: 24px;
+}
+
+.ob-title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: #f8fafc;
+}
+
+.ob-desc {
+    margin: 0 0 16px 0;
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.6;
+}
+
+.ob-highlights-box {
+    background: rgba(15, 23, 42, 0.6);
+    border-left: 3px solid #10b981;
+    border-radius: 6px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ob-h-item {
+    font-size: 12px;
+    color: #e2e8f0;
+    line-height: 1.5;
+}
+
+.onboarding-modal-footer {
+    background: rgba(30, 41, 59, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ob-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.ob-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+}
+
+.ob-dot.active {
+    width: 20px;
+    border-radius: 4px;
+    background: #3b82f6;
+}
+
+.ob-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-ob-nav {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #cbd5e1;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-ob-nav:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-ob-next {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border: none;
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-ob-finish {
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+    border: none;
+    color: #fff;
+    padding: 6px 18px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
 
 
 .kindle-header {

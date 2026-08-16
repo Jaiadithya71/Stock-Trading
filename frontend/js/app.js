@@ -167,6 +167,12 @@ const App = {
                 // Load dashboard data (fast!)
                 await this.loadAllData();
                 this.startAutoRefresh();
+
+                // Initialize Onboarding Tour for new visitors
+                if (typeof OnboardingTour !== 'undefined') {
+                    OnboardingTour.init();
+                }
+
             } else {
                 Helpers.showError('loginError', result.message);
                 LoginModal.show();
