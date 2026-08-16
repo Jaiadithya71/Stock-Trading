@@ -91,5 +91,12 @@ module.exports = {
   MARKET_HOURS: {
     OPEN: { hour: 9, minute: 15 },
     CLOSE: { hour: 15, minute: 30 }
+  },
+
+  OPTION_SYMBOLS: {
+    "BANKNIFTY": { token: "99926009", spotExchange: "NSE", exchange: "NFO", strikeInterval: 100, lotSize: 15 },
+    "NIFTY": { token: "99926000", spotExchange: "NSE", exchange: "NFO", strikeInterval: 50, lotSize: 25 },
+    "FINNIFTY": { token: "99926037", spotExchange: "NSE", exchange: "NFO", strikeInterval: 50, lotSize: 40 },
+    "MIDCPNIFTY": { token: "99926074", spotExchange: "NSE", exchange: "NFO", strikeInterval: 25, lotSize: 50 }
   }
 };

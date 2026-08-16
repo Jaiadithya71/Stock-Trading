@@ -108,88 +108,101 @@ async function startPCRCollectorBackground(username, authenticatedDashboard) {
  * FIXED: Now waits for authenticated dashboard from frontend
  */
 app.post("/api/start-pcr-collector", async (req, res) => {
-  const { username } = req.body;
-  
-  if (!username) {
-    return res.status(400).json({ 
-      success: false, 
-      message: "Username required" 
-    });
-  }
-  
-  // Check if user has authenticated dashboard in active sessions
-  const { getActiveDashboards } = require("./middleware/authMiddleware");
-  const activeDashboards = getActiveDashboards();
-  const userDashboard = activeDashboards[username];
-  
-  if (!userDashboard || !userDashboard.authenticated) {
-    return res.status(401).json({ 
-      success: false, 
-      message: "User not authenticated. Please login first." 
-    });
-  }
-  
-  // Return immediately, start in background
-  res.json({ 
-    success: true, 
-    message: "PCR Collector starting...",
-    status: {
-      isRunning: false,
-      starting: true
+  try {
+    const { username } = req.body || {};
+    
+    if (!username) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Username required" 
+      });
     }
-  });
-  
-  // Start in background (don't await)
-  startPCRCollectorBackground(username, userDashboard).then(result => {
-    if (result.success) {
-      console.log('✅ PCR Collector background start completed');
-    } else {
-      console.error('❌ PCR Collector background start failed:', result.message);
+    
+    // Check if user has authenticated dashboard in active sessions
+    const { getActiveDashboards } = require("./middleware/authMiddleware");
+    const activeDashboards = getActiveDashboards();
+    const userDashboard = activeDashboards[username];
+    
+    if (!userDashboard || !userDashboard.authenticated) {
+      return res.status(401).json({ 
+        success: false, 
+        message: "User not authenticated. Please login first." 
+      });
     }
-  }).catch(error => {
-    console.error('❌ PCR Collector background start error:', error);
-  });
+    
+    // Return immediately, start in background
+    res.json({ 
+      success: true, 
+      message: "PCR Collector starting...",
+      status: {
+        isRunning: false,
+        starting: true
+      }
+    });
+    
+    // Start in background (don't await)
+    startPCRCollectorBackground(username, userDashboard).then(result => {
+      if (result.success) {
+        console.log('✅ PCR Collector background start completed');
+      } else {
+        console.error('❌ PCR Collector background start failed:', result.message);
+      }
+    }).catch(error => {
+      console.error('❌ PCR Collector background start error:', error);
+    });
+  } catch (error) {
+    console.error("❌ Error starting PCR collector endpoint:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 });
 
 /**
  * Get PCR Collector status
  */
 app.get("/api/pcr-collector-status", (req, res) => {
-  if (!pcrCollector) {
-    return res.json({ 
+  try {
+    if (!pcrCollector) {
+      return res.json({ 
+        success: true,
+        isRunning: false,
+        message: "PCR Collector not initialized"
+      });
+    }
+    
+    res.json({ 
       success: true,
-      isRunning: false,
-      message: "PCR Collector not initialized"
+      ...pcrCollector.getStatus(),
+      username: pcrCollectorUsername
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
-  
-  res.json({ 
-    success: true,
-    ...pcrCollector.getStatus(),
-    username: pcrCollectorUsername
-  });
 });
 
 /**
  * Stop PCR Collector
  */
 app.post("/api/stop-pcr-collector", (req, res) => {
-  if (!pcrCollector) {
-    return res.json({ 
-      success: false, 
-      message: "PCR Collector not running" 
+  try {
+    if (!pcrCollector) {
+      return res.json({ 
+        success: false, 
+        message: "PCR Collector not running" 
+      });
+    }
+    
+    pcrCollector.stop();
+    pcrCollector = null;
+    pcrCollectorUsername = null;
+    pcrCollectorDashboard = null;
+    
+    res.json({ 
+      success: true, 
+      message: "PCR Collector stopped" 
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
-  
-  pcrCollector.stop();
-  pcrCollector = null;
-  pcrCollectorUsername = null;
-  pcrCollectorDashboard = null;
-  
-  res.json({ 
-    success: true, 
-    message: "PCR Collector stopped" 
-  });
 });
 
 // Start server

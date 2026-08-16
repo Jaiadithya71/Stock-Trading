@@ -1,6 +1,9 @@
 const crypto = require("crypto");
 
 function generateTOTP(secret) {
+  if (!secret || typeof secret !== 'string') {
+    throw new Error("Invalid TOTP secret provided");
+  }
   // Remove spaces and convert to uppercase
   const cleanSecret = secret.replace(/\s/g, "").toUpperCase();
   

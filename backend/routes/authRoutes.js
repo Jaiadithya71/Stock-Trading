@@ -5,9 +5,16 @@ const TradingDashboard = require("../services/tradingDashboard");
 const { setActiveDashboard } = require("../middleware/authMiddleware");
 
 router.post("/check-user", (req, res) => {
-  const { username } = req.body;
-  const exists = userExists(username);
-  res.json({ exists });
+  try {
+    const { username } = req.body || {};
+    if (!username) {
+      return res.status(400).json({ exists: false, message: "Username required" });
+    }
+    const exists = userExists(username);
+    res.json({ exists });
+  } catch (error) {
+    res.status(500).json({ exists: false, message: error.message });
+  }
 });
 
 router.post("/save-credentials", (req, res) => {

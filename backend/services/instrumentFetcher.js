@@ -148,8 +148,9 @@ class InstrumentFetcher {
       return parseDate(a) - parseDate(b);
     });
     
-    // Filter only future expiries
+    // Filter only future expiries (including today)
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const futureExpiries = expiries.filter(exp => {
       const day = exp.substring(0, 2);
       const month = exp.substring(2, 5);
