@@ -160,10 +160,11 @@ const StrategyAuditView = {
                 <span class="i-val text-red">-1.41%</span>
               </div>
               <div class="input-item">
-                <span class="i-label">Advancing Capital Weight</span>
-                <span class="i-val text-green">${advancingWeight}%</span>
+                <span class="i-label">Weighted Capital Score</span>
+                <span class="i-val text-green">+${breadthScore} Momentum</span>
               </div>
             </div>
+
           </div>
         ` : ''}
       </div>
