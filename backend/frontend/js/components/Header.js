@@ -79,6 +79,9 @@ const Header = {
 
                 <!-- TELEMETRY & EMERGENCY CONTROLS -->
                 <div class="header-right-group">
+                    <button class="btn btn-tour-header" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #38bdf8; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer;" onclick="OnboardingTour.startTour()">
+                        ❓ Take Tour
+                    </button>
                     <div class="telemetry-pill">
                         ${telemetryBadge}
                         <span class="pill-divider">|</span>
@@ -88,6 +91,7 @@ const Header = {
                     </div>
                     <button id="header-kill-switch" class="btn btn-kill-switch-header" onclick="Header.triggerKillSwitch()">🚨 KILL SWITCH</button>
                 </div>
+
             </div>
         `;
     },
