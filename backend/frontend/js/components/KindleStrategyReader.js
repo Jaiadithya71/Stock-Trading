@@ -1,7 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/components/KindleStrategyReader.js
-// Interactive Kindle-Style Strategy Reader & Educational Masterclass Component
-// Teaches options algo trading from ground up assuming zero prior knowledge
+// Dedicated Kindle-Style Strategy E-Book Masterclass Reader Component
+// Elegant, full-page reader experience with zero sub-tab clutter
 // ============================================================================
 
 const KindleStrategyReader = {
@@ -16,13 +16,13 @@ const KindleStrategyReader = {
         <div class="kindle-chapter-body">
           <h3>Welcome to the Bank Nifty Quant Masterclass</h3>
           <p class="kindle-lead">
-            Imagine walking into a bustling financial market where thousands of people are betting on whether India's banking sector will move up or down over the next hour. That, in essence, is <strong>Bank Nifty Options Trading</strong>.
+            Imagine walking into a bustling financial market where thousands of participants are betting on whether India's banking sector will move up or down over the next hour. That, in essence, is <strong>Bank Nifty Options Trading</strong>.
           </p>
 
           <div class="kindle-callout">
             <h4>💡 What is Bank Nifty?</h4>
             <p>
-              Bank Nifty is a stock market index representing the top 12 banking stocks in India (including HDFC Bank, ICICI Bank, State Bank of India, and Axis Bank). When India's banking system grows stronger, Bank Nifty goes UP. When banks face selling pressure, Bank Nifty moves DOWN.
+              Bank Nifty is a benchmark index representing the top 12 banking stocks in India (including HDFC Bank, ICICI Bank, State Bank of India, and Axis Bank). When India's banking system grows stronger, Bank Nifty goes UP. When banks face selling pressure, Bank Nifty moves DOWN.
             </p>
           </div>
 
@@ -80,9 +80,9 @@ const KindleStrategyReader = {
           </p>
 
           <div class="kindle-callout">
-            <h4>🧠 Our Edge: The 30-Day Rolling Z-Score Model ($Z_{\\text{PCR}}$)</h4>
+            <h4>🧠 Our Edge: The 30-Day Rolling Z-Score Model (Z<sub>PCR</sub>)</h4>
             <p>
-              Our algorithm measures how far today's PCR deviates from its own 30-day average ($\mu$) in terms of standard deviations ($\sigma$):
+              Our algorithm measures how far today's PCR deviates from its own 30-day average (&mu;) in terms of standard deviations (&sigma;):
             </p>
             <div class="math-equation-display">
               <span class="eq-var">Z<sub>PCR</sub></span> = 
@@ -92,8 +92,8 @@ const KindleStrategyReader = {
               </div>
             </div>
             <ul>
-              <li>• <strong>Buy Call (CE) Trigger</strong>: $Z_{\text{PCR}} < -1.2$ (PCR is statistically oversold compared to past 30 days).</li>
-              <li>• <strong>Buy Put (PE) Trigger</strong>: $Z_{\text{PCR}} > +1.2$ (PCR is statistically overbought compared to past 30 days).</li>
+              <li>• <strong>Buy Call (CE) Trigger</strong>: <strong>Z<sub>PCR</sub> &lt; &minus;1.2</strong> (PCR is statistically oversold compared to past 30 days).</li>
+              <li>• <strong>Buy Put (PE) Trigger</strong>: <strong>Z<sub>PCR</sub> &gt; +1.2</strong> (PCR is statistically overbought compared to past 30 days).</li>
             </ul>
           </div>
         </div>
@@ -140,7 +140,7 @@ const KindleStrategyReader = {
     },
     {
       id: 4,
-      title: "Chapter 4: The Heavyweight Engine (Weighted Bank Stock Breadth)",
+      title: "Chapter 4: The Heavyweight Engine (Weighted Bank Stock Momentum)",
       subtitle: "Why HDFC & ICICI Bank Control 51% of Index Direction and How Algo 3 Prevents Traps",
       content: `
         <div class="kindle-chapter-body">
@@ -180,7 +180,7 @@ const KindleStrategyReader = {
           </div>
 
           <p>
-            <strong>Algo 3 Solution:</strong> Our Weighted Breadth Engine multiplies every stock's price momentum by its exact index weight ($\sum w_i \cdot \Delta S_i$). Signals are only approved when <strong>>60% of true weighted capital</strong> agrees with trade direction.
+            <strong>Algo 3 Solution:</strong> Our Weighted Breadth Engine multiplies every stock's price momentum by its exact index weight (&sum; w<sub>i</sub> &times; &Delta;S<sub>i</sub>). Signals are only approved when <strong>>60% of true weighted capital</strong> agrees with trade direction.
           </p>
         </div>
       `
@@ -197,9 +197,9 @@ const KindleStrategyReader = {
           </p>
 
           <div class="kindle-callout">
-            <h4>💰 Fractional Kelly Position Sizing ($0.25f^*$)</h4>
+            <h4>💰 Fractional Kelly Position Sizing (0.25f<sup>*</sup>)</h4>
             <p>
-              Instead of risking arbitrary amounts, we use the <strong>Quarter-Kelly Criterion</strong> to calculate mathematical position size based on win probability ($p$) and win/loss ratio ($b$):
+              Instead of risking arbitrary amounts, we use the <strong>Quarter-Kelly Criterion</strong> to calculate mathematical position size based on win probability (p) and win/loss ratio (b):
             </p>
             <div class="math-equation-display">
               <span class="eq-var">f<sup>*</sup></span> = 
@@ -239,10 +239,10 @@ const KindleStrategyReader = {
           <div class="kindle-callout">
             <h4>📊 The Deflated Sharpe Ratio (DSR) Test</h4>
             <p>
-              Developed by Marcos López de Prado, the <strong>Deflated Sharpe Ratio (DSR)</strong> adjusts performance for trial count ($N$), backtest duration, and non-normal return distributions (skewness and kurtosis).
+              Developed by Marcos López de Prado, the <strong>Deflated Sharpe Ratio (DSR)</strong> adjusts performance for trial count (N), backtest duration, and non-normal return distributions (skewness and kurtosis).
             </p>
             <p>
-              Our platform achieved a verified <strong>DSR of 0.96</strong> ($\ge 0.95$ threshold required for live trading authorization), proving statistical reliability at a <strong>95%+ confidence level</strong>.
+              Our platform achieved a verified <strong>DSR of 0.96</strong> (&ge; 0.95 threshold required for live trading authorization), proving statistical reliability at a <strong>95%+ confidence level</strong>.
             </p>
           </div>
 
@@ -274,8 +274,8 @@ const KindleStrategyReader = {
           <div class="kindle-brand">
             <span class="kindle-icon">📖</span>
             <div>
-              <span class="kindle-title">Bank Nifty Quant Masterclass E-Book</span>
-              <span class="kindle-meta">Interactive Learning Guide • Beginner to Advanced</span>
+              <span class="kindle-title">Bank Nifty Quant Strategy Masterclass & Audit E-Book</span>
+              <span class="kindle-meta">Ground-Up Learning Guide • Zero Prior Knowledge Required</span>
             </div>
           </div>
 
@@ -287,7 +287,7 @@ const KindleStrategyReader = {
           </div>
         </div>
 
-        <!-- MAIN KINDLE CONTAINER WITH SIDEBAR TABLE OF CONTENTS -->
+        <!-- MAIN KINDLE LAYOUT -->
         <div class="kindle-main-layout">
           <!-- CHAPTER TOC SIDEBAR -->
           <div class="kindle-toc-sidebar">
@@ -317,7 +317,7 @@ const KindleStrategyReader = {
                 ◀ Previous Chapter
               </button>
 
-              <span class="kindle-page-num">Page ${this.currentChapter} / ${totalChapters}</span>
+              <span class="kindle-page-num">Page ${this.currentChapter} of ${totalChapters}</span>
 
               <button class="btn btn-kindle-nav btn-kindle-next" ${this.currentChapter === totalChapters ? 'disabled' : ''} onclick="KindleStrategyReader.nextChapter()">
                 Next Chapter ▶
@@ -331,26 +331,27 @@ const KindleStrategyReader = {
 
   goToChapter(chId) {
     this.currentChapter = chId;
-    if (window.appInstance) {
-      window.appInstance.updateDashboard();
-    }
+    this.reRenderInPlace();
   },
 
   prevChapter() {
     if (this.currentChapter > 1) {
       this.currentChapter--;
-      if (window.appInstance) {
-        window.appInstance.updateDashboard();
-      }
+      this.reRenderInPlace();
     }
   },
 
   nextChapter() {
     if (this.currentChapter < this.chapters.length) {
       this.currentChapter++;
-      if (window.appInstance) {
-        window.appInstance.updateDashboard();
-      }
+      this.reRenderInPlace();
+    }
+  },
+
+  reRenderInPlace() {
+    const container = document.getElementById('strategy-audit-view');
+    if (container) {
+      container.innerHTML = this.render();
     }
   }
 };
