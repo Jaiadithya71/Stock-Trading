@@ -20,7 +20,9 @@ const App = {
         showCurrency: true,
         showOptionChain: false,
         showPCR: true,
+        showMinimalist: false,
         isLoading: false,
+
         filters: {
             showBuying: true,
             showSelling: true,
@@ -69,6 +71,8 @@ const App = {
         EventHandler.on('toggle-filter', (e, target) => this.toggleFilter(target));
         EventHandler.on('toggle-currency', (e, target) => this.toggleCurrency(target));
         EventHandler.on('toggle-pcr', (e, target) => this.togglePCR(target));
+        EventHandler.on('toggle-minimalist', (e, target) => this.toggleMinimalist(target));
+
         
         // Interval selectors
         EventHandler.on('change-interval', (e, target) => this.changeInterval(target));
@@ -231,6 +235,13 @@ const App = {
                     })
                 );
             }
+
+            // Quant signals and paper OMS summary
+            criticalPromises.push(
+                this.fetchQuantData().catch(err => {
+                    console.warn('Quant data fetch failed:', err.message);
+                })
+            );
             
             // Wait for all with timeout
             await Promise.race([
@@ -422,6 +433,26 @@ const App = {
         this.updateDashboard();
     },
 
+    async fetchQuantData() {
+        try {
+            const resSignal = await fetch('/api/quant/signal');
+            const dataSignal = await resSignal.json();
+            if (dataSignal.success) {
+                this.state.quantSignalData = dataSignal.data;
+            }
+
+            const resPaper = await fetch('/api/paper/summary');
+            const dataPaper = await resPaper.json();
+            if (dataPaper.success) {
+                this.state.paperSummaryData = dataPaper.data;
+            }
+            console.log('✅ Quant signal & Paper OMS data loaded');
+        } catch (err) {
+            console.warn('Quant data fetch failed:', err.message);
+        }
+    },
+
+
     async refreshNSEOptionChain() {
         console.log('🔄 Refreshing option chain...');
         // Clear previous data/error to show loading state
@@ -493,29 +524,56 @@ const App = {
             const completeData = this.getCompleteBankNiftyData();
             const filteredData = this.filterBankNiftyData(completeData);
             
-            let html = `${IndicesGrid.render(this.state.indicesData, this.state.indicesTimestamp)}`;
+            let html = '';
             
-            if (this.state.showPCR) {
-                html += PCRWidget.render(this.state.pcrData, this.state.pcrTimestamp);
-            }
-            
-            if (this.state.showCurrency && this.state.currencyData) {
-                html += CurrencyWidget.render(this.state.currencyData, this.state.currencyTimestamp);
-            }
+            if (this.state.showMinimalist) {
+                // MINIMALIST MODE: Pure signal card + Fib/CPR Pivots + Paper OMS & Kill Switch
+                html += '<div id="minimalist-signal-view"></div>';
+                html += '<div id="paper-trading-widget"></div>';
+            } else {
+                // MASTER GRID MODE: Complete baseline data (Indices, PCR, Currency, Bank Stocks, Option Chain)
+                html += '<div id="trader-command-center"></div>';
+                html += IndicesGrid.render(this.state.indicesData, this.state.indicesTimestamp);
 
-            if (this.state.showOptionChain) {
-                // Always render when checkbox is checked - component handles loading state
-                html += OptionChain.render(
-                    this.state.nseOptionChainData,
-                    this.state.selectedNSESymbol
-                );
+                if (this.state.showPCR) {
+                    html += PCRWidget.render(this.state.pcrData, this.state.pcrTimestamp);
+                }
+                
+                if (this.state.showCurrency && this.state.currencyData) {
+                    html += CurrencyWidget.render(this.state.currencyData, this.state.currencyTimestamp);
+                }
+
+                if (this.state.showOptionChain) {
+                    html += OptionChain.render(
+                        this.state.nseOptionChainData,
+                        this.state.selectedNSESymbol
+                    );
+                }
+                
+                html += BankNiftyTable.render(filteredData, this.state.bankNiftyTimestamp);
             }
-            
-            html += BankNiftyTable.render(filteredData, this.state.bankNiftyTimestamp);
             
             dashboard.innerHTML = html;
+
+            // Render Active Widgets
+            if (this.state.showMinimalist) {
+                MinimalistSignalView.render(this.state.quantSignalData, this.state.paperSummaryData);
+                PaperTradingWidget.render(this.state.paperSummaryData);
+            } else {
+                TraderCommandCenter.render(this.state.quantSignalData, this.state.paperSummaryData, 'CLOSED');
+            }
         }
     },
+
+
+
+
+    toggleMinimalist(target) {
+        this.state.showMinimalist = target.checked;
+        this.updateDashboard();
+    },
+
+
 
     getCompleteBankNiftyData() {
         const allBanks = [
