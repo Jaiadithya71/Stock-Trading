@@ -1330,6 +1330,46 @@ tbody tr td:first-child {
     display: block;
 }
 
+/* Math Equation Display CSS (UX Blueprint) */
+.math-equation-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #38bdf8;
+    background: rgba(15, 23, 42, 0.8);
+    border-left: 3px solid #38bdf8;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 8px 0;
+}
+
+.fraction {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 4px;
+}
+
+.numerator {
+    border-bottom: 1.5px solid #38bdf8;
+    padding-bottom: 2px;
+    font-size: 13px;
+}
+
+.denominator {
+    padding-top: 2px;
+    font-size: 13px;
+}
+
+.eq-var {
+    color: #fbbf24;
+}
+
+
 .inputs-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

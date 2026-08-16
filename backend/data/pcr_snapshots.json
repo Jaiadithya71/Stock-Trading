@@ -3175,6 +3175,83 @@
       "source": "angel_smartapi_native",
       "timestamp": "2026-08-16T18:01:20.224Z",
       "timestampMs": 1786903280224
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:02:20.166Z",
+      "timestampMs": 1786903340166
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:03:20.285Z",
+      "timestampMs": 1786903400285
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:04:20.827Z",
+      "timestampMs": 1786903460827
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:05:20.506Z",
+      "timestampMs": 1786903520506
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:06:20.665Z",
+      "timestampMs": 1786903580665
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:07:20.190Z",
+      "timestampMs": 1786903640190
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "25AUG2026",
+      "strikeCount": 167,
+      "sentiment": "Neutral",
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-08-16T18:08:20.255Z",
+      "timestampMs": 1786903700255
     }
   ]
 }

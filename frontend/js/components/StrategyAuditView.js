@@ -1,6 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/components/StrategyAuditView.js
-// Strategy Math & Transparency Audit Page Component (Dynamic Spot Price Supported)
+// Strategy Math & Transparency Audit Page Component (Clean Math Layout)
+// Displays step-by-step mathematical formulas, raw data inputs, and historical execution logs
 // ============================================================================
 
 const StrategyAuditView = {
@@ -44,7 +45,13 @@ const StrategyAuditView = {
 
             <div class="formula-box">
               <span class="formula-title">Mathematical Formula:</span>
-              <code class="latex-formula">Z_{PCR} = \\frac{\\text{PCR}_t - \\mu_{30d}}{\\sigma_{30d}}</code>
+              <div class="math-equation-display">
+                <span class="eq-var">Z<sub>PCR</sub></span> = 
+                <div class="fraction">
+                  <span class="numerator">PCR<sub>t</sub> &minus; &mu;<sub>30d</sub></span>
+                  <span class="denominator">&sigma;<sub>30d</sub></span>
+                </div>
+              </div>
             </div>
 
             <div class="inputs-grid">
@@ -53,11 +60,11 @@ const StrategyAuditView = {
                 <span class="i-val">${pcrVal}</span>
               </div>
               <div class="input-item">
-                <span class="i-label">30-Day Mean (μ)</span>
+                <span class="i-label">30-Day Mean (&mu;)</span>
                 <span class="i-val">0.92</span>
               </div>
               <div class="input-item">
-                <span class="i-label">30-Day Std Dev (σ)</span>
+                <span class="i-label">30-Day Std Dev (&sigma;)</span>
                 <span class="i-val">0.14</span>
               </div>
               <div class="input-item">
@@ -69,8 +76,8 @@ const StrategyAuditView = {
             <div class="audit-explanation">
               <strong>Execution Verification Rule:</strong>
               <ul>
-                <li>• <strong>Buy Call (CE)</strong>: Triggered when $Z_{\text{PCR}} < -1.2$ (Oversold extreme)</li>
-                <li>• <strong>Buy Put (PE)</strong>: Triggered when $Z_{\text{PCR}} > +1.2$ (Overbought extreme)</li>
+                <li>• <strong>Buy Call (CE)</strong>: Triggered when <strong>Z<sub>PCR</sub> &lt; &minus;1.2</strong> (Oversold extreme)</li>
+                <li>• <strong>Buy Put (PE)</strong>: Triggered when <strong>Z<sub>PCR</sub> &gt; +1.2</strong> (Overbought extreme)</li>
                 <li>• Current Status: <strong>${pcrZ < -1.2 ? 'Oversold Buy Trigger Active' : pcrZ > 1.2 ? 'Overbought Sell Trigger Active' : 'Neutral / Fair Value Range'}</strong></li>
               </ul>
             </div>
@@ -84,9 +91,17 @@ const StrategyAuditView = {
             <p class="audit-desc">Tracks Bank Nifty spot price bounce off daily CPR pivots and Fibonacci golden ratio levels.</p>
 
             <div class="formula-box">
-              <span class="formula-title">Fibonacci Retracement Formula:</span>
-              <code class="latex-formula">\\text{Fib}_{0.618} = \\text{High} - 0.618 \\cdot (\\text{High} - \\text{Low})</code>
-              <code class="latex-formula">\\text{CPR Pivot} = \\frac{\\text{High} + \\text{Low} + \\text{Close}}{3}</code>
+              <span class="formula-title">Fibonacci Retracement & CPR Formulas:</span>
+              <div class="math-equation-display">
+                <span class="eq-var">Fib<sub>0.618</sub></span> = High &minus; 0.618 &times; (High &minus; Low)
+              </div>
+              <div class="math-equation-display" style="margin-top: 6px;">
+                <span class="eq-var">CPR Pivot</span> = 
+                <div class="fraction">
+                  <span class="numerator">High + Low + Close</span>
+                  <span class="denominator">3</span>
+                </div>
+              </div>
             </div>
 
             <div class="inputs-grid">
@@ -118,7 +133,9 @@ const StrategyAuditView = {
 
             <div class="formula-box">
               <span class="formula-title">Weighted Momentum Formula:</span>
-              <code class="latex-formula">\\text{Breadth} = \\sum_{i=1}^{12} w_i \\cdot \\text{Change}_i</code>
+              <div class="math-equation-display">
+                <span class="eq-var">Breadth Score</span> = &sum; (w<sub>i</sub> &times; &Delta;Change<sub>i</sub>)
+              </div>
             </div>
 
             <div class="inputs-grid">
