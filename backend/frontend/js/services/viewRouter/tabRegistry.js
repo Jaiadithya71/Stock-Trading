@@ -1,7 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/services/viewRouter/tabRegistry.js
 // Declarative Tab Registry Mapping Tabs to View Components
-// Includes Weekly Audit & Weekend Review Tab
+// Includes Option Chain Enabled by Default on Master Market Grid Tab
 // ============================================================================
 
 const TAB_REGISTRY = {
@@ -42,7 +42,8 @@ const TAB_REGISTRY = {
         let html = IndicesGrid.render(state.indicesData, state.indicesTimestamp);
         if (state.showPCR) html += PCRWidget.render(state.pcrData, state.pcrTimestamp);
         if (state.showCurrency && state.currencyData) html += CurrencyWidget.render(state.currencyData, state.currencyTimestamp);
-        if (state.showOptionChain) html += OptionChain.render(state.nseOptionChainData, state.selectedNSESymbol);
+        // Render Option Chain by default
+        html += OptionChain.render(state.nseOptionChainData, state.selectedNSESymbol || 'BANKNIFTY');
         html += BankNiftyTable.render(filteredData, state.bankNiftyTimestamp);
         return html;
       }

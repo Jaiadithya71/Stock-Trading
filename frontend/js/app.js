@@ -19,7 +19,7 @@ const App = {
         selectedNSEExpiry: null,
         activeTab: 'signals',
         showCurrency: true,
-        showOptionChain: false,
+        showOptionChain: true,
         showPCR: true,
         showMinimalist: false,
 
