@@ -61,6 +61,16 @@ app.get(["/survey", "/survey.html"], (req, res) => {
   res.sendFile(getFrontendFile("survey.html"));
 });
 
+// Health check & keep-alive ping endpoint for uptime monitors
+app.get("/health", (req, res) => {
+  res.json({
+    status: "UP",
+    timestamp: new Date().toISOString(),
+    pcrCollectorRunning: pcrCollector ? pcrCollector.isRunning : false,
+    message: "Render keep-alive ping received"
+  });
+});
+
 // Global PCR collector instance
 let pcrCollector = null;
 let pcrCollectorUsername = null;
