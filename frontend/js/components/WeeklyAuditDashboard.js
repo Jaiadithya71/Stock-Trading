@@ -1,11 +1,29 @@
 // ============================================================================
 // FILE: frontend/js/components/WeeklyAuditDashboard.js
 // Weekend Simulation Review Dashboard Component
-// Displays 7-day cumulative win rate, net P&L, daily breakdown, trade-by-trade audit log,
-// and 1-click CSV & JSON audit download export triggers
+// Displays 7-day cumulative win rate, net P&L, daily breakdown, and trade-by-trade audit log
+// Fixed IST Timezone Formatter
 // ============================================================================
 
 const WeeklyAuditDashboard = {
+  formatIST(dateString) {
+    try {
+      const d = new Date(dateString);
+      return d.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      });
+    } catch (e) {
+      return dateString;
+    }
+  },
+
   async render() {
     const container = document.getElementById('weekly-audit-dashboard');
     if (!container) return;
@@ -15,7 +33,6 @@ const WeeklyAuditDashboard = {
       const json = await res.json();
       const auditData = json.data || {};
       const summary = auditData.weeklySummary || {};
-      const dailyLogs = auditData.dailyLogs || {};
       const trades = auditData.trades || [];
 
       const pnlClass = (summary.netRealizedPnL || 0) >= 0 ? 'text-green' : 'text-red';
@@ -23,19 +40,19 @@ const WeeklyAuditDashboard = {
       container.innerHTML = `
         <div class="weekly-audit-wrapper" style="padding: 20px; color: #f8fafc; font-family: 'Inter', sans-serif;">
           <!-- HEADER -->
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(16px); padding: 20px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.12);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(16px); padding: 20px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.12); flex-wrap: wrap; gap: 16px;">
             <div style="display: flex; align-items: center; gap: 14px;">
               <span style="font-size: 32px;">📅</span>
               <div>
                 <h2 style="margin: 0; font-size: 22px; background: linear-gradient(135deg, #60a5fa, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Weekend Simulation Audit & Performance Review</h2>
-                <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 13px;">Automated 7-day telemetry log tracking signals, decisions, orders, and P&L outcomes</p>
+                <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 13px;">Automated 7-day telemetry log tracking signals, decisions, orders, and P&L outcomes (IST Timezone)</p>
               </div>
             </div>
 
             <div style="display: flex; align-items: center; gap: 10px;">
-              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadCSV()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 8px 14px; font-size: 12px; font-weight: 700;">📥 Download CSV Report</button>
-              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadJSON()" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #38bdf8; padding: 8px 14px; font-size: 12px; font-weight: 700;">📥 Download JSON Log</button>
-              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.render()" style="padding: 8px 14px; font-size: 12px;">🔄 Refresh</button>
+              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadCSV()">📥 Download CSV</button>
+              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadJSON()">📥 Download JSON</button>
+              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.render()">🔄 Refresh</button>
             </div>
           </div>
 
@@ -66,41 +83,43 @@ const WeeklyAuditDashboard = {
             </div>
           </div>
 
-          <!-- DETAILED AUDIT LOG TIMELINE -->
-          <div style="background: rgba(30, 41, 59, 0.75); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px;">
+          <!-- TRADE LOG TABLE -->
+          <div style="background: rgba(30, 41, 59, 0.75); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 20px;">
             <h3 style="margin: 0 0 16px 0; font-size: 16px; color: #38bdf8;">📜 Complete Weekly Execution Audit Log</h3>
-            
+
             ${trades.length === 0 ? `
-              <div style="padding: 30px; text-align: center; color: #94a3b8; font-size: 14px; border: 1px dashed rgba(255,255,255,0.15); border-radius: 12px;">
+              <div style="padding: 30px; text-align: center; color: #94a3b8;">
                 <span>ℹ️ No executed trades logged for the current 7-day period yet. Paper trade fills will accumulate here automatically for weekend performance reviews.</span>
               </div>
             ` : `
-              <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                <thead>
-                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #94a3b8; text-align: left;">
-                    <th style="padding: 10px;">Timestamp</th>
-                    <th style="padding: 10px;">Order ID</th>
-                    <th style="padding: 10px;">Contract</th>
-                    <th style="padding: 10px;">Strike</th>
-                    <th style="padding: 10px;">Entry Premium</th>
-                    <th style="padding: 10px;">Quantity</th>
-                    <th style="padding: 10px;">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${trades.map(t => `
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                      <td style="padding: 10px; color: #94a3b8;">${new Date(t.timestamp).toLocaleString('en-IN')}</td>
-                      <td style="padding: 10px; font-family: monospace; color: #38bdf8;">${t.id}</td>
-                      <td style="padding: 10px; font-weight: 700; color: #f8fafc;">${t.symbol}</td>
-                      <td style="padding: 10px;">₹${t.strikePrice}</td>
-                      <td style="padding: 10px;" class="text-green">₹${t.entryPrice}</td>
-                      <td style="padding: 10px;">${t.quantity} (${t.quantity / 15} Lot)</td>
-                      <td style="padding: 10px;"><span style="background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">${t.status}</span></td>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                  <thead>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #94a3b8; text-align: left;">
+                      <th style="padding: 10px;">Timestamp (IST)</th>
+                      <th style="padding: 10px;">Order ID</th>
+                      <th style="padding: 10px;">Contract</th>
+                      <th style="padding: 10px;">Strike</th>
+                      <th style="padding: 10px;">Entry Premium</th>
+                      <th style="padding: 10px;">Quantity</th>
+                      <th style="padding: 10px;">Status</th>
                     </tr>
-                  `).join('')}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    ${trades.map(t => `
+                      <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 10px; color: #94a3b8; font-size: 12px;">${this.formatIST(t.timestamp)}</td>
+                        <td style="padding: 10px; font-family: monospace; color: #38bdf8;">${t.id}</td>
+                        <td style="padding: 10px; font-weight: 700; color: #f8fafc;">${t.symbol}</td>
+                        <td style="padding: 10px;">₹${t.strikePrice}</td>
+                        <td style="padding: 10px;" class="text-green">₹${t.entryPrice}</td>
+                        <td style="padding: 10px;">${t.quantity} (${t.quantity / 15} Lot)</td>
+                        <td style="padding: 10px;"><span style="background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">${t.status}</span></td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
             `}
           </div>
         </div>
