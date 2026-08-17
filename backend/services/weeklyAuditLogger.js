@@ -2,6 +2,7 @@
 // FILE: backend/services/weeklyAuditLogger.js
 // Automated Weekly Simulation Telemetry & Audit Logger
 // Records signals, paper orders, stop-loss/target exits, and P&L for weekend review
+// Dynamic Peak-to-Trough Max Drawdown % Calculation
 // ============================================================================
 
 const fs = require('fs');
@@ -64,7 +65,7 @@ class WeeklyAuditLogger {
   logTradeEvent(event) {
     const logData = this.loadLog();
     const now = new Date();
-    const dateKey = now.toISOString().split('T')[0]; // YYYY-MM-DD
+    const dateKey = now.toISOString().split('T')[0];
 
     const tradeEntry = {
       id: event.id || `TRADE-${Date.now()}`,
@@ -102,11 +103,22 @@ class WeeklyAuditLogger {
       else if (event.pnl < 0) dayLog.losses += 1;
     }
 
-    // Update Weekly Summary
+    // Dynamic Max Drawdown % Calculation
     const closedTrades = logData.trades.filter(t => t.status === 'CLOSED');
     const wins = closedTrades.filter(t => t.pnl > 0).length;
     const losses = closedTrades.filter(t => t.pnl < 0).length;
     const totalPnL = closedTrades.reduce((sum, t) => sum + (t.pnl || 0), 0);
+
+    let peakEquity = 100000;
+    let currentEquity = 100000;
+    let maxDD = 0.0;
+
+    closedTrades.forEach(t => {
+      currentEquity += (t.pnl || 0);
+      if (currentEquity > peakEquity) peakEquity = currentEquity;
+      const dd = ((peakEquity - currentEquity) / peakEquity) * 100;
+      if (dd > maxDD) maxDD = dd;
+    });
 
     logData.weeklySummary = {
       totalSignalsGenerated: logData.trades.length,
@@ -115,7 +127,7 @@ class WeeklyAuditLogger {
       losingTrades: losses,
       winRatePct: closedTrades.length > 0 ? parseFloat(((wins / closedTrades.length) * 100).toFixed(1)) : 0.0,
       netRealizedPnL: parseFloat(totalPnL.toFixed(2)),
-      maxDrawdownPct: 4.2
+      maxDrawdownPct: parseFloat(maxDD.toFixed(1))
     };
 
     this.saveLog(logData);

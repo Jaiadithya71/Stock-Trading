@@ -3,7 +3,7 @@
 // Express API Routes for Quant Signals & Layer 4 OMS Adapter Integration
 // Real-time market telemetry integration for dynamic spot price & stock breadth
 // Persistent storage for user risk settings & weekly simulation audit logger
-// Synced GET /api/paper/summary with Weekly Audit Logger
+// Includes /api/paper/weekly-audit/download CSV and JSON export routes
 // ============================================================================
 
 const express = require('express');
@@ -167,6 +167,36 @@ router.get('/paper/weekly-audit', async (req, res) => {
       success: true,
       data: log
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * GET /api/paper/weekly-audit/download
+ * Export weekly audit report in CSV or JSON format
+ */
+router.get('/paper/weekly-audit/download', async (req, res) => {
+  try {
+    const format = (req.query.format || 'json').toLowerCase();
+    const log = weeklyAuditLogger.loadLog();
+
+    if (format === 'csv') {
+      let csv = 'Timestamp (IST),Order ID,Contract,Option Type,Strike Price,Entry Price,Exit Price,PNL,Status,Rationale\n';
+      const trades = log.trades || [];
+      trades.forEach(t => {
+        const istDate = new Date(t.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+        csv += `"${istDate}","${t.id}","${t.symbol}","${t.optionType}","${t.strikePrice}","${t.entryPrice}","${t.exitPrice || ''}","${t.pnl || 0}","${t.status}","${(t.rationale || '').replace(/"/g, '""')}"\n`;
+      });
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="weekly_audit_report.csv"');
+      return res.send(csv);
+    }
+
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', 'attachment; filename="weekly_audit_report.json"');
+    res.send(JSON.stringify(log, null, 2));
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
