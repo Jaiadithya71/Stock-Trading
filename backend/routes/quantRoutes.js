@@ -3,7 +3,8 @@
 // Express API Routes for Quant Signals & Layer 4 OMS Adapter Integration
 // Real-time market telemetry integration for dynamic spot price & stock breadth
 // Persistent storage for user risk settings & weekly simulation audit logger
-// Route order fixed: /api/paper/weekly-audit/download placed BEFORE /api/paper/weekly-audit
+// Route order fixed & full trade closure logging (status, exitPrice, pnl, rationale)
+// Includes POST /api/oms/mode and GET /api/paper/weekly-audit/download
 // ============================================================================
 
 const express = require('express');
@@ -106,12 +107,15 @@ router.post('/paper/trade', async (req, res) => {
     
     weeklyAuditLogger.logTradeEvent({
       id: tradeResult.orderId || tradeResult.id || `PAPER-${Date.now()}`,
-      symbol: orderParams.symbol || 'BANKNIFTY 57500 CE',
+      symbol: orderParams.symbol || `BANKNIFTY ${orderParams.strikePrice || 57500} ${orderParams.optionType || 'CE'}`,
       optionType: orderParams.optionType || 'CE',
       strikePrice: orderParams.strikePrice || 57500,
-      entryPrice: orderParams.entryPrice || 280,
+      entryPrice: tradeResult.entryPrice || orderParams.entryPrice || 280,
+      exitPrice: tradeResult.exitPrice || null,
       quantity: orderParams.quantity || 15,
-      status: 'OPEN'
+      pnl: tradeResult.pnl !== undefined ? tradeResult.pnl : 0.0,
+      status: tradeResult.status || 'CLOSED',
+      rationale: orderParams.rationale || tradeResult.rationale || 'Fib 0.618 Support + PCR Z-Score Confluence'
     });
 
     res.json({
@@ -122,6 +126,24 @@ router.post('/paper/trade', async (req, res) => {
   } catch (error) {
     console.error('❌ Paper trade execution failed:', error.message);
     res.status(400).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * POST /api/oms/mode
+ * Toggles OMS adapter mode (PAPER vs LIVE)
+ */
+router.post('/oms/mode', async (req, res) => {
+  try {
+    const { mode } = req.body;
+    if (!['PAPER', 'LIVE'].includes(mode)) {
+      return res.status(400).json({ success: false, message: 'Invalid OMS mode. Use PAPER or LIVE.' });
+    }
+    omsFactory.setMode(mode);
+    console.log(`✅ OMS Mode updated to: ${mode}`);
+    res.json({ success: true, mode });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 });
 
