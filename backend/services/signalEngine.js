@@ -2,6 +2,7 @@
 // FILE: backend/services/signalEngine.js
 // Layer 3: Signal Confluence Engine
 // Decoupled quantitative signal evaluation emitting immutable signal objects
+// Hardened Z-Score Filter (Z < -1.0 or Z > +1.0) to eliminate consolidation whipsaws
 // Dynamic ATM option strike calculation based on real-time spot price
 // ============================================================================
 
@@ -23,20 +24,20 @@ class SignalEngine {
         let signalTitle = '🟡 NEUTRAL / HOLD IN CASH';
         let signalRationale = `Price consolidating around ₹${spotPrice.toLocaleString('en-IN')}. Awaiting Fibonacci level bounce + PCR Z-Score confirmation.`;
 
-        // Bullish Confluence Condition: PCR Z-Score < -0.5 OR Fib 0.618 Support Proximity
+        // Strict Confluence Gate: Require Z-Score < -1.0 for Call or Z-Score > +1.0 for Put + Fib/Breadth confirmation
         const nearFibGolden = Math.abs(spotPrice - techLevels.fibonacci.fib0618) / spotPrice < 0.01;
         const bullishBreadth = breadthMetrics.advancingWeight > 50;
 
-        if (pcrMetrics.pcrZScore < -0.8 || (nearFibGolden && bullishBreadth)) {
+        if (pcrMetrics.pcrZScore < -1.0 && (nearFibGolden || bullishBreadth)) {
             signal = 'BUY_CALL_CE';
-            confidenceScore = 0.87;
+            confidenceScore = 0.89;
             signalTitle = '🟢 HIGH CONFLUENCE CALL (CE) SIGNAL';
-            signalRationale = `Price touched 0.618 Fib Support (₹${techLevels.fibonacci.fib0618}) + PCR ${pcrMetrics.rawPcr} (Z-Score: ${pcrMetrics.pcrZScore}) + HDFC/ICICI Positive Breadth (${breadthMetrics.advancingWeight}%).`;
-        } else if (pcrMetrics.pcrZScore > 0.8 || (!bullishBreadth && breadthMetrics.decliningWeight > 60)) {
+            signalRationale = `Price touched 0.618 Fib Support (₹${techLevels.fibonacci.fib0618}) + PCR ${pcrMetrics.rawPcr} (Z-Score: ${pcrMetrics.pcrZScore.toFixed(2)}) + HDFC/ICICI Positive Breadth (${breadthMetrics.advancingWeight}%).`;
+        } else if (pcrMetrics.pcrZScore > 1.0 && (!bullishBreadth || breadthMetrics.decliningWeight > 55)) {
             signal = 'BUY_PUT_PE';
-            confidenceScore = 0.87;
+            confidenceScore = 0.89;
             signalTitle = '🔻 HIGH CONFLUENCE PUT (PE) SIGNAL';
-            signalRationale = `Price rejected at CPR Top (₹${techLevels.cpr.top}) + PCR ${pcrMetrics.rawPcr} (Z-Score: ${pcrMetrics.pcrZScore}) + Banking Breadth Negative (${breadthMetrics.decliningWeight}%).`;
+            signalRationale = `Price rejected at CPR Top (₹${techLevels.cpr.top}) + PCR ${pcrMetrics.rawPcr} (Z-Score: ${pcrMetrics.pcrZScore.toFixed(2)}) + Banking Breadth Negative (${breadthMetrics.decliningWeight}%).`;
         }
 
         return Object.freeze({

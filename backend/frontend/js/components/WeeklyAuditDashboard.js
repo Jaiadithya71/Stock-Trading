@@ -1,8 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/components/WeeklyAuditDashboard.js
 // Weekend Simulation Review Dashboard Component
-// Displays 7-day cumulative win rate, net P&L, daily breakdown, and trade-by-trade audit log
-// Fixed IST Timezone Formatter
+// Displays explicit trade actions (🟢 BUY CALL CE / 🔻 BUY PUT PE), dynamic strikes, and P&L
 // ============================================================================
 
 const WeeklyAuditDashboard = {
@@ -45,7 +44,7 @@ const WeeklyAuditDashboard = {
               <span style="font-size: 32px;">📅</span>
               <div>
                 <h2 style="margin: 0; font-size: 22px; background: linear-gradient(135deg, #60a5fa, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Weekend Simulation Audit & Performance Review</h2>
-                <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 13px;">Automated 7-day telemetry log tracking signals, decisions, orders, and P&L outcomes (IST Timezone)</p>
+                <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 13px;">Automated 7-day telemetry log tracking signals, trade actions, orders, and P&L outcomes (IST Timezone)</p>
               </div>
             </div>
 
@@ -97,26 +96,37 @@ const WeeklyAuditDashboard = {
                   <thead>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #94a3b8; text-align: left;">
                       <th style="padding: 10px;">Timestamp (IST)</th>
-                      <th style="padding: 10px;">Order ID</th>
+                      <th style="padding: 10px;">Action / Direction</th>
                       <th style="padding: 10px;">Contract</th>
-                      <th style="padding: 10px;">Strike</th>
-                      <th style="padding: 10px;">Entry Premium</th>
-                      <th style="padding: 10px;">Quantity</th>
+                      <th style="padding: 10px;">ATM Strike</th>
+                      <th style="padding: 10px;">Entry Price</th>
+                      <th style="padding: 10px;">Exit Price</th>
+                      <th style="padding: 10px;">P&L (₹)</th>
                       <th style="padding: 10px;">Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    ${trades.map(t => `
-                      <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                        <td style="padding: 10px; color: #94a3b8; font-size: 12px;">${this.formatIST(t.timestamp)}</td>
-                        <td style="padding: 10px; font-family: monospace; color: #38bdf8;">${t.id}</td>
-                        <td style="padding: 10px; font-weight: 700; color: #f8fafc;">${t.symbol}</td>
-                        <td style="padding: 10px;">₹${t.strikePrice}</td>
-                        <td style="padding: 10px;" class="text-green">₹${t.entryPrice}</td>
-                        <td style="padding: 10px;">${t.quantity} (${t.quantity / 15} Lot)</td>
-                        <td style="padding: 10px;"><span style="background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">${t.status}</span></td>
-                      </tr>
-                    `).join('')}
+                    ${trades.map(t => {
+                      const isCall = t.optionType === 'CE';
+                      const actionBadge = isCall ?
+                        '<span class="badge badge-bullish" style="padding: 4px 8px; font-weight: 700;">🟢 BUY CALL (CE)</span>' :
+                        '<span class="badge badge-bearish" style="padding: 4px 8px; font-weight: 700;">🔻 BUY PUT (PE)</span>';
+                      const pnlVal = t.pnl || 0;
+                      const tradePnlClass = pnlVal >= 0 ? 'text-green' : 'text-red';
+
+                      return `
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                          <td style="padding: 10px; color: #94a3b8; font-size: 12px;">${this.formatIST(t.timestamp)}</td>
+                          <td style="padding: 10px;">${actionBadge}</td>
+                          <td style="padding: 10px; font-weight: 700; color: #f8fafc;">${t.symbol || 'BANKNIFTY'}</td>
+                          <td style="padding: 10px; font-weight: 600;">₹${t.strikePrice}</td>
+                          <td style="padding: 10px; color: #cbd5e1;">₹${t.entryPrice}</td>
+                          <td style="padding: 10px; color: #cbd5e1;">${t.exitPrice ? '₹' + t.exitPrice : 'OPEN'}</td>
+                          <td style="padding: 10px; font-weight: 700;" class="${tradePnlClass}">₹${pnlVal.toFixed(2)}</td>
+                          <td style="padding: 10px;"><span style="background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">${t.status}</span></td>
+                        </tr>
+                      `;
+                    }).join('')}
                   </tbody>
                 </table>
               </div>

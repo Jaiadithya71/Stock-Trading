@@ -3,7 +3,7 @@
 // Express API Routes for Quant Signals & Layer 4 OMS Adapter Integration
 // Real-time market telemetry integration for dynamic spot price & stock breadth
 // Persistent storage for user risk settings & weekly simulation audit logger
-// Includes CSV & JSON export functionality for weekend performance reviews
+// Synced GET /api/paper/summary with Weekly Audit Logger
 // ============================================================================
 
 const express = require('express');
@@ -127,16 +127,29 @@ router.post('/paper/trade', async (req, res) => {
 
 /**
  * GET /api/paper/summary
- * Returns portfolio summary from Layer 4 OMSAdapter
+ * Returns portfolio summary from Layer 4 OMSAdapter merged with Weekly Audit Logger
  */
 router.get('/paper/summary', async (req, res) => {
   try {
     const omsAdapter = omsFactory.getAdapter();
     const summary = await omsAdapter.getPositions();
-    
+    const auditLog = weeklyAuditLogger.loadLog();
+    const auditSummary = auditLog.weeklySummary || {};
+
+    const mergedSummary = {
+      initialCapital: summary.initialCapital || 100000,
+      currentBalance: auditSummary.netRealizedPnL !== undefined ? (100000 + auditSummary.netRealizedPnL) : (summary.currentBalance || 100000),
+      activePositionsCount: summary.activePositionsCount || 0,
+      completedTradesCount: auditSummary.totalTradesExecuted || 0,
+      winRatePct: auditSummary.winRatePct !== undefined ? auditSummary.winRatePct : (summary.winRatePct || 0.0),
+      totalRealizedPnL: auditSummary.netRealizedPnL !== undefined ? auditSummary.netRealizedPnL : (summary.totalRealizedPnL || 0.0),
+      activePositions: summary.activePositions || [],
+      tradeHistory: auditLog.trades || []
+    };
+
     res.json({
       success: true,
-      data: summary
+      data: mergedSummary
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -154,36 +167,6 @@ router.get('/paper/weekly-audit', async (req, res) => {
       success: true,
       data: log
     });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-/**
- * GET /api/paper/weekly-audit/download
- * Exports weekly audit log as downloadable CSV or JSON file attachment
- */
-router.get('/paper/weekly-audit/download', async (req, res) => {
-  try {
-    const format = (req.query.format || 'csv').toLowerCase();
-    const log = weeklyAuditLogger.loadLog();
-    const trades = log.trades || [];
-
-    if (format === 'json') {
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Content-Disposition', 'attachment; filename="BankNifty_Weekly_Audit_Report.json"');
-      return res.send(JSON.stringify(log, null, 2));
-    }
-
-    // Default CSV Export
-    let csv = 'Timestamp,Order_ID,Symbol,Option_Type,Strike_Price,Entry_Price,Quantity,Status\n';
-    trades.forEach(t => {
-      csv += `"${t.timestamp || ''}","${t.id || ''}","${t.symbol || ''}","${t.optionType || ''}",${t.strikePrice || 0},${t.entryPrice || 0},${t.quantity || 0},"${t.status || 'OPEN'}"\n`;
-    });
-
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename="BankNifty_Weekly_Audit_Report.csv"');
-    return res.send(csv);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
