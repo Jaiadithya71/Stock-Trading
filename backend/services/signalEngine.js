@@ -4,16 +4,48 @@
 // Decoupled quantitative signal evaluation emitting immutable signal objects
 // Hardened Z-Score Filter (Z < -1.2 or Z > +1.2)
 // Strict Confluence Gate: Require Z-Score AND Fib Golden Level AND Stock Breadth
-// 15-Minute Post-Trade Cooldown & Max 5 Trades/Day Cap Enforcement
+// 15-Minute Post-Trade Cooldown & Max 5 Trades/Day Cap (Restored from Disk on Restart)
+// Restores targetOptionPrice in payload for frontend widgets
 // ============================================================================
 
 const computationEngine = require('./computationEngine');
+const weeklyAuditLogger = require('./weeklyAuditLogger');
 
 class SignalEngine {
     constructor() {
         this.lastTradeTimestamp = null;
         this.tradesTodayCount = 0;
         this.lastTradeDate = null;
+        this.loadPersistedStateOnStartup();
+    }
+
+    loadPersistedStateOnStartup() {
+        try {
+            const today = new Date().toISOString().split('T')[0];
+            this.lastTradeDate = today;
+
+            const logData = weeklyAuditLogger.loadLog();
+            const trades = logData.trades || [];
+
+            if (trades.length > 0) {
+                // Find most recent trade timestamp
+                const lastTrade = trades[trades.length - 1];
+                if (lastTrade && lastTrade.timestamp) {
+                    this.lastTradeTimestamp = new Date(lastTrade.timestamp).getTime();
+                }
+
+                // Count trades executed today
+                const tradesToday = trades.filter(t => {
+                    if (!t.timestamp) return false;
+                    return new Date(t.timestamp).toISOString().split('T')[0] === today;
+                });
+                this.tradesTodayCount = tradesToday.length;
+
+                console.log(`✅ [SignalEngine] State restored from Audit Log: Trades Today = ${this.tradesTodayCount}/5, Last Trade Time = ${this.lastTradeTimestamp ? new Date(this.lastTradeTimestamp).toLocaleTimeString('en-IN') : 'None'}`);
+            }
+        } catch (e) {
+            console.warn('⚠️ Could not restore SignalEngine state on startup:', e.message);
+        }
     }
 
     resetDailyCounterIfNeeded() {
@@ -21,6 +53,7 @@ class SignalEngine {
         if (this.lastTradeDate !== today) {
             this.lastTradeDate = today;
             this.tradesTodayCount = 0;
+            this.lastTradeTimestamp = null;
         }
     }
 
@@ -34,11 +67,21 @@ class SignalEngine {
     evaluateSignal(marketData = {}, pcrSnapshots = [], bankStocks = [], userCapital = 100000) {
         this.resetDailyCounterIfNeeded();
 
-        const spotPrice = marketData.spotPrice || 57491.10;
+        // Resolve dynamic spot price from marketData or latest PCR snapshot
+        let spotPrice = marketData.spotPrice;
+        if (!spotPrice && pcrSnapshots && pcrSnapshots.length > 0) {
+            const lastSnap = pcrSnapshots[pcrSnapshots.length - 1];
+            if (lastSnap && lastSnap.spotPrice) {
+                spotPrice = parseFloat(lastSnap.spotPrice);
+            }
+        }
+        if (!spotPrice) spotPrice = 57491.10;
+
         const pcrMetrics = computationEngine.calculatePCRMetrics(pcrSnapshots);
         const techLevels = computationEngine.calculateTechnicalLevels(spotPrice);
         const breadthMetrics = computationEngine.calculateBankBreadth(bankStocks);
         const riskAllocation = computationEngine.calculateKellySizing(0.60, 1.5, userCapital, 280);
+        const estimatedPremium = riskAllocation.estimatedPremium || Math.round(spotPrice * 0.005);
 
         // Dynamic At-The-Money (ATM) Option Strike Calculation
         const atmStrike = Math.round(spotPrice / 100) * 100;
@@ -49,6 +92,7 @@ class SignalEngine {
                 signal: 'NEUTRAL_HOLD',
                 underlyingPrice: spotPrice,
                 atmStrike,
+                targetOptionPrice: estimatedPremium,
                 confidenceScore: '100%',
                 signalTitle: '🔒 DAILY MAX TRADES CAP REACHED (5/5)',
                 signalRationale: 'Daily trade limit of 5 trades reached. Capital protected against market over-trading.',
@@ -67,6 +111,7 @@ class SignalEngine {
                 signal: 'NEUTRAL_HOLD',
                 underlyingPrice: spotPrice,
                 atmStrike,
+                targetOptionPrice: estimatedPremium,
                 confidenceScore: '90%',
                 signalTitle: '⏳ 15-MIN TRADE COOLDOWN ACTIVE',
                 signalRationale: `Waiting ${remainingSec}s post-exit to allow consolidation noise & option volatility decay to clear.`,
@@ -104,6 +149,7 @@ class SignalEngine {
             signal,
             underlyingPrice: spotPrice,
             atmStrike,
+            targetOptionPrice: estimatedPremium,
             confidenceScore: Math.round(confidenceScore * 100) + '%',
             signalTitle,
             signalRationale,
