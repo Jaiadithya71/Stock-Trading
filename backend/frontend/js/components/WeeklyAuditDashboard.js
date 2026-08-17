@@ -1,7 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/components/WeeklyAuditDashboard.js
 // Weekend Simulation Review Dashboard Component
-// Displays explicit trade actions (🟢 BUY CALL CE / 🔻 BUY PUT PE), dynamic strikes, and P&L
+// Displays explicit trade actions, dynamic strikes, P&L, and Signal Trigger Confluence Rationale
 // ============================================================================
 
 const WeeklyAuditDashboard = {
@@ -44,7 +44,7 @@ const WeeklyAuditDashboard = {
               <span style="font-size: 32px;">📅</span>
               <div>
                 <h2 style="margin: 0; font-size: 22px; background: linear-gradient(135deg, #60a5fa, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Weekend Simulation Audit & Performance Review</h2>
-                <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 13px;">Automated 7-day telemetry log tracking signals, trade actions, orders, and P&L outcomes (IST Timezone)</p>
+                <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 13px;">Automated 7-day telemetry log tracking signals, trade actions, market trigger scenarios, and P&L outcomes (IST Timezone)</p>
               </div>
             </div>
 
@@ -84,7 +84,7 @@ const WeeklyAuditDashboard = {
 
           <!-- TRADE LOG TABLE -->
           <div style="background: rgba(30, 41, 59, 0.75); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 20px;">
-            <h3 style="margin: 0 0 16px 0; font-size: 16px; color: #38bdf8;">📜 Complete Weekly Execution Audit Log</h3>
+            <h3 style="margin: 0 0 16px 0; font-size: 16px; color: #38bdf8;">📜 Complete Weekly Execution Audit & Signal Confluence Rationale Log</h3>
 
             ${trades.length === 0 ? `
               <div style="padding: 30px; text-align: center; color: #94a3b8;">
@@ -96,12 +96,12 @@ const WeeklyAuditDashboard = {
                   <thead>
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #94a3b8; text-align: left;">
                       <th style="padding: 10px;">Timestamp (IST)</th>
-                      <th style="padding: 10px;">Action / Direction</th>
-                      <th style="padding: 10px;">Contract</th>
-                      <th style="padding: 10px;">ATM Strike</th>
-                      <th style="padding: 10px;">Entry Price</th>
-                      <th style="padding: 10px;">Exit Price</th>
+                      <th style="padding: 10px;">Action</th>
+                      <th style="padding: 10px;">Strike</th>
+                      <th style="padding: 10px;">Entry</th>
+                      <th style="padding: 10px;">Exit</th>
                       <th style="padding: 10px;">P&L (₹)</th>
+                      <th style="padding: 10px; min-width: 280px;">Signal Trigger Scenario & Confluence Rationale</th>
                       <th style="padding: 10px;">Status</th>
                     </tr>
                   </thead>
@@ -109,20 +109,21 @@ const WeeklyAuditDashboard = {
                     ${trades.map(t => {
                       const isCall = t.optionType === 'CE';
                       const actionBadge = isCall ?
-                        '<span class="badge badge-bullish" style="padding: 4px 8px; font-weight: 700;">🟢 BUY CALL (CE)</span>' :
-                        '<span class="badge badge-bearish" style="padding: 4px 8px; font-weight: 700;">🔻 BUY PUT (PE)</span>';
+                        '<span class="badge badge-bullish" style="padding: 4px 8px; font-weight: 700;">🟢 BUY CE</span>' :
+                        '<span class="badge badge-bearish" style="padding: 4px 8px; font-weight: 700;">🔻 BUY PE</span>';
                       const pnlVal = t.pnl || 0;
                       const tradePnlClass = pnlVal >= 0 ? 'text-green' : 'text-red';
+                      const triggerScenario = t.rationale || 'Fib 0.618 Support + PCR Z-Score Confluence';
 
                       return `
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                          <td style="padding: 10px; color: #94a3b8; font-size: 12px;">${this.formatIST(t.timestamp)}</td>
-                          <td style="padding: 10px;">${actionBadge}</td>
-                          <td style="padding: 10px; font-weight: 700; color: #f8fafc;">${t.symbol || 'BANKNIFTY'}</td>
+                          <td style="padding: 10px; color: #94a3b8; font-size: 12px; white-space: nowrap;">${this.formatIST(t.timestamp)}</td>
+                          <td style="padding: 10px; white-space: nowrap;">${actionBadge}</td>
                           <td style="padding: 10px; font-weight: 600;">₹${t.strikePrice}</td>
                           <td style="padding: 10px; color: #cbd5e1;">₹${t.entryPrice}</td>
                           <td style="padding: 10px; color: #cbd5e1;">${t.exitPrice ? '₹' + t.exitPrice : 'OPEN'}</td>
                           <td style="padding: 10px; font-weight: 700;" class="${tradePnlClass}">₹${pnlVal.toFixed(2)}</td>
+                          <td style="padding: 10px; color: #38bdf8; font-size: 12px; line-height: 1.4;">${triggerScenario}</td>
                           <td style="padding: 10px;"><span style="background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">${t.status}</span></td>
                         </tr>
                       `;
