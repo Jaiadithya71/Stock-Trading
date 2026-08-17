@@ -105,6 +105,9 @@ router.post('/paper/trade', async (req, res) => {
     const omsAdapter = omsFactory.getAdapter();
     const tradeResult = await omsAdapter.executeOrder(orderParams);
     
+    // Trigger 15-minute cooldown & increment daily trade counter in SignalEngine
+    signalEngine.recordTradeExecuted();
+
     weeklyAuditLogger.logTradeEvent({
       id: tradeResult.orderId || tradeResult.id || `PAPER-${Date.now()}`,
       symbol: orderParams.symbol || `BANKNIFTY ${orderParams.strikePrice || 57500} ${orderParams.optionType || 'CE'}`,
