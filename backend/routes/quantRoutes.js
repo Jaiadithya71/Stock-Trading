@@ -3,7 +3,7 @@
 // Express API Routes for Quant Signals & Layer 4 OMS Adapter Integration
 // Real-time market telemetry integration for dynamic spot price & stock breadth
 // Persistent storage for user risk settings & weekly simulation audit logger
-// Includes /api/paper/weekly-audit/download CSV and JSON export routes
+// Route order fixed: /api/paper/weekly-audit/download placed BEFORE /api/paper/weekly-audit
 // ============================================================================
 
 const express = require('express');
@@ -157,24 +157,8 @@ router.get('/paper/summary', async (req, res) => {
 });
 
 /**
- * GET /api/paper/weekly-audit
- * Returns complete 7-day simulation audit log for weekend review
- */
-router.get('/paper/weekly-audit', async (req, res) => {
-  try {
-    const log = weeklyAuditLogger.loadLog();
-    res.json({
-      success: true,
-      data: log
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-/**
  * GET /api/paper/weekly-audit/download
- * Export weekly audit report in CSV or JSON format
+ * Export weekly audit report in CSV or JSON format (MUST BE BEFORE /api/paper/weekly-audit)
  */
 router.get('/paper/weekly-audit/download', async (req, res) => {
   try {
@@ -197,6 +181,22 @@ router.get('/paper/weekly-audit/download', async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Content-Disposition', 'attachment; filename="weekly_audit_report.json"');
     res.send(JSON.stringify(log, null, 2));
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * GET /api/paper/weekly-audit
+ * Returns complete 7-day simulation audit log for weekend review
+ */
+router.get('/paper/weekly-audit', async (req, res) => {
+  try {
+    const log = weeklyAuditLogger.loadLog();
+    res.json({
+      success: true,
+      data: log
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
