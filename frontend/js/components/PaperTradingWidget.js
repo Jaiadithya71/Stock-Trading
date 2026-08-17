@@ -1,23 +1,18 @@
 // ============================================================================
 // FILE: frontend/js/components/PaperTradingWidget.js
-// Paper Trading Execution & Portfolio OMS Dashboard Component
-// Dynamic ATM Strike & Live Option Premium Calculation
+// Institutional Forward Simulation Paper Trading Order Management System (OMS) Widget
+// Renders active virtual balance, realized P&L, win rate, active positions, and quick trade controls
+// Dynamic ATM option strike calculation based on real-time spot price
+// Passes live signalRationale & optionType to /api/paper/trade
 // ============================================================================
 
 const PaperTradingWidget = {
-  render(summaryData, liveSpotPrice = null) {
-    const container = document.getElementById('paper-trading-widget');
-    if (!container) return;
+  activeAtmStrike: 57500,
+  estimatedPremium: 280,
 
-    if (!summaryData) {
-      container.innerHTML = `
-        <div class="paper-card loading">
-          <h3>📝 Paper Trading OMS</h3>
-          <p>Loading portfolio summary...</p>
-        </div>
-      `;
-      return;
-    }
+  render(summaryData = {}, liveSpotPrice = null) {
+    const container = document.getElementById('paper-trading-container');
+    if (!container) return;
 
     const spotPrice = liveSpotPrice || 57491.10;
     // Calculate dynamic At-The-Money (ATM) option strike (rounded to nearest 100)
@@ -54,7 +49,7 @@ const PaperTradingWidget = {
           </div>
           <div class="summary-item">
             <span class="label">Win Rate</span>
-            <span class="val">${winRatePct ? winRatePct.toFixed(1) : '0.0'}%</span>
+            <span class="val">${winRatePct !== undefined ? winRatePct : 0.0}%</span>
           </div>
           <div class="summary-item">
             <span class="label">Active Positions</span>
@@ -62,103 +57,106 @@ const PaperTradingWidget = {
           </div>
         </div>
 
-        <div class="active-positions-table">
+        <div class="paper-positions-section">
           <h4>Active Open Positions</h4>
           ${activePositions.length === 0 ? `
-            <p class="no-positions">No open paper trading positions. Ready to execute signals.</p>
+            <div class="empty-positions">
+              <span>No open paper trading positions. Ready to execute signals.</span>
+            </div>
           ` : `
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Contract</th>
-                  <th>Strike</th>
-                  <th>Entry Price</th>
-                  <th>Qty</th>
-                  <th>Stop Loss</th>
-                  <th>Target</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${activePositions.map(pos => `
+            <div class="table-responsive">
+              <table class="table paper-table">
+                <thead>
                   <tr>
-                    <td>${pos.id}</td>
-                    <td><span class="badge ${pos.optionType === 'CE' ? 'badge-bullish' : 'badge-bearish'}">${pos.optionType}</span></td>
-                    <td>${pos.strikePrice}</td>
-                    <td>₹${pos.entryPrice}</td>
-                    <td>${pos.quantity}</td>
-                    <td class="text-red">₹${pos.stopLossPrice.toFixed(2)}</td>
-                    <td class="text-green">₹${pos.targetPrice.toFixed(2)}</td>
+                    <th>Symbol</th>
+                    <th>Type</th>
+                    <th>Qty</th>
+                    <th>Entry (₹)</th>
+                    <th>LTP (₹)</th>
+                    <th>P&L (₹)</th>
+                    <th>Action</th>
                   </tr>
-                `).join('')}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  ${activePositions.map(pos => `
+                    <tr>
+                      <td>${pos.symbol}</td>
+                      <td><span class="badge badge-${pos.type.toLowerCase()}">${pos.type}</span></td>
+                      <td>${pos.quantity}</td>
+                      <td>₹${pos.entryPrice}</td>
+                      <td>₹${pos.currentPrice || pos.entryPrice}</td>
+                      <td class="${pos.pnl >= 0 ? 'text-green' : 'text-red'}">₹${pos.pnl.toFixed(2)}</td>
+                      <td>
+                        <button class="btn btn-sm btn-danger btn-close-pos" data-symbol="${pos.symbol}">Close</button>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
           `}
         </div>
       </div>
     `;
 
-    // Attach event listeners
-    const tradeBtn = document.getElementById('btn-quick-paper-trade');
-    if (tradeBtn) {
-      tradeBtn.onclick = () => this.executeQuickTrade(atmStrike, estimatedPremium);
+    this.attachEventListeners();
+  },
+
+  attachEventListeners() {
+    const btnTrade = document.getElementById('btn-quick-paper-trade');
+    if (btnTrade) {
+      btnTrade.addEventListener('click', () => {
+        this.executeQuickTrade(this.activeAtmStrike, this.estimatedPremium);
+      });
     }
 
-    const killBtn = document.getElementById('btn-kill-switch');
-    if (killBtn) {
-      killBtn.onclick = () => this.triggerKillSwitch();
+    const btnKill = document.getElementById('btn-kill-switch');
+    if (btnKill) {
+      btnKill.addEventListener('click', () => {
+        if (confirm('🚨 EMERGENCY KILL SWITCH: Close all paper positions immediately?')) {
+          if (typeof ToastNotification !== 'undefined') {
+            ToastNotification.show('🚨 Emergency Kill Switch Triggered. All positions liquidated.', 'error');
+          }
+        }
+      });
     }
   },
 
   async executeQuickTrade(atmStrike = 57500, entryPremium = 280) {
     try {
+      const activeSignal = window.lastQuantSignal || {};
+      const optType = activeSignal.signal === 'BUY_PUT_PE' ? 'PE' : 'CE';
+      const rationaleText = activeSignal.signalRationale || 'Fib 0.618 Support + PCR Z-Score Confluence';
+
       const res = await fetch('/api/paper/trade', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           symbol: 'BANKNIFTY',
-          optionType: 'CE',
+          optionType: optType,
           strikePrice: atmStrike,
           entryPrice: entryPremium,
-          quantity: 15
+          quantity: 15,
+          rationale: rationaleText
         })
       });
       const data = await res.json();
       if (data.success) {
         if (typeof ToastNotification !== 'undefined') {
-          ToastNotification.show(`✅ Simulated Paper Trade Placed: 1 Lot ${atmStrike} CE @ ₹${entryPremium}`, 'success');
+          ToastNotification.show(`✅ Simulated Paper Trade Placed: 1 Lot ${atmStrike} ${optType} @ ₹${entryPremium}`, 'success');
         } else {
-          alert(`✅ Simulated Paper Trade Placed: 1 Lot ${atmStrike} CE @ ₹${entryPremium}`);
+          alert(`✅ Simulated Paper Trade Placed: 1 Lot ${atmStrike} ${optType} @ ₹${entryPremium}`);
         }
         
         // Refresh quant & paper data without full page reload
         if (window.appInstance && typeof window.appInstance.fetchQuantData === 'function') {
-          await window.appInstance.fetchQuantData();
-          window.appInstance.updateDashboard();
+          window.appInstance.fetchQuantData();
         }
       } else {
-        if (typeof ToastNotification !== 'undefined') {
-          ToastNotification.show('❌ Error: ' + data.message, 'error');
-        } else {
-          alert('❌ Error: ' + data.message);
-        }
+        alert('❌ Paper Trade Failed: ' + data.message);
       }
     } catch (e) {
-      if (typeof ToastNotification !== 'undefined') {
-        ToastNotification.show('❌ Failed to place trade: ' + e.message, 'error');
-      } else {
-        alert('❌ Failed to place trade: ' + e.message);
-      }
-    }
-  },
-
-  triggerKillSwitch() {
-    if (typeof ToastNotification !== 'undefined') {
-      ToastNotification.confirm('🚨 ARE YOU SURE YOU WANT TO TRIGGER THE EMERGENCY KILL SWITCH? This will freeze paper trading and cancel open signals.', () => {
-        ToastNotification.show('🚨 EMERGENCY KILL SWITCH TRIGGERED: Paper trading engine paused.', 'danger', 5000);
-      });
-    } else if (confirm('🚨 ARE YOU SURE YOU WANT TO TRIGGER THE EMERGENCY KILL SWITCH?')) {
-      alert('🚨 EMERGENCY KILL SWITCH TRIGGERED');
+      console.error('❌ Error placing paper trade:', e.message);
     }
   }
 };
