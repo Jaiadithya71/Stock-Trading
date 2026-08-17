@@ -10,6 +10,15 @@ const PCRCollectorService = require("./services/pcrCollectorService");
 const TradingDashboard = require("./services/tradingDashboard");
 const { loadCredentials } = require("./services/credentialService");
 
+// Global process safety handlers to prevent container crashes on async network timeouts
+process.on("unhandledRejection", (reason, promise) => {
+  console.warn("⚠️  [Server Safety] Unhandled Async Rejection:", reason?.message || reason);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error("❌ [Server Safety] Uncaught Exception:", error.message);
+});
+
 const app = express();
 
 // Middleware
