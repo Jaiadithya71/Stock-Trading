@@ -4,7 +4,11 @@ on:
   schedule:
     # Runs at 03:20 UTC (8:50 AM IST) Monday through Friday
     - cron: '20 3 * * 1-5'
-  workflow_dispatch: # Allows manual trigger from GitHub UI anytime
+  push:
+    branches:
+      - main
+      - render-deployment
+  workflow_dispatch: # Allows manual trigger from GitHub UI / CLI anytime
 
 jobs:
   wake-server:
@@ -13,8 +17,14 @@ jobs:
       - name: Send Warm-Up Probe to Render (90s Timeout)
         run: |
           echo "⏰ Sending pre-market warm-up request to Render..."
-          curl -s -o /dev/null -w "HTTP Status: %{http_code}\nTotal Time: %{time_total}s\n" \
+          echo "Target URL: https://stock-trading-1-cquo.onrender.com/health"
+          
+          # Run curl probe with 90s max-time and verbose timing telemetry
+          RESPONSE=$(curl -s -w "\n--- TELEMETRY ---\nHTTP_CODE: %{http_code}\nTIME_TOTAL: %{time_total}s\n" \
             --max-time 90 \
             --retry 2 \
             --retry-delay 5 \
-            https://stock-trading-1-cquo.onrender.com/health
+            https://stock-trading-1-cquo.onrender.com/health)
+          
+          echo "=== RESPONSE FROM RENDER ==="
+          echo "$RESPONSE"
