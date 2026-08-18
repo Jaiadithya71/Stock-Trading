@@ -86,7 +86,7 @@ class SignalAuditLogger {
   }
 
   /**
-   * Retrieves full daily 375-minute signal audit log
+   * Retrieves full daily 375-minute signal audit log for a single day
    */
   getDailyAuditLog(dateStr) {
     try {
@@ -99,6 +99,67 @@ class SignalAuditLogger {
       console.error('❌ Error reading daily signal audit log:', e.message);
     }
     return [];
+  }
+
+  /**
+   * Retrieves multi-day combined signal audit logs (e.g. 'today', '7d', '30d', 'all')
+   */
+  getRangeAuditLog(range = 'today', specificDate = null) {
+    try {
+      this.ensureDataDir();
+      if (specificDate) {
+        return this.getDailyAuditLog(specificDate);
+      }
+
+      if (range === 'today') {
+        const today = new Date().toISOString().split('T')[0];
+        return this.getDailyAuditLog(today);
+      }
+
+      const files = fs.readdirSync(DATA_DIR)
+        .filter(f => f.startsWith('signal_audit_') && f.endsWith('.json'))
+        .sort(); // Chronological order
+
+      let targetFiles = files;
+      if (range === '7d') {
+        const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        targetFiles = files.filter(f => {
+          const fileDate = f.replace('signal_audit_', '').replace('.json', '');
+          return fileDate >= cutoff;
+        });
+      } else if (range === '30d') {
+        const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        targetFiles = files.filter(f => {
+          const fileDate = f.replace('signal_audit_', '').replace('.json', '');
+          return fileDate >= cutoff;
+        });
+      }
+
+      let allEntries = [];
+      targetFiles.forEach(file => {
+        try {
+          const filePath = path.join(DATA_DIR, file);
+          const raw = fs.readFileSync(filePath, 'utf8');
+          const entries = JSON.parse(raw);
+          if (Array.isArray(entries)) {
+            const fileDate = file.replace('signal_audit_', '').replace('.json', '');
+            entries.forEach(e => {
+              allEntries.push({
+                date: e.date || fileDate,
+                ...e
+              });
+            });
+          }
+        } catch (err) {
+          console.warn('⚠️ Error parsing audit file:', file, err.message);
+        }
+      });
+
+      return allEntries;
+    } catch (e) {
+      console.error('❌ Error retrieving range audit log:', e.message);
+      return [];
+    }
   }
 
   /**

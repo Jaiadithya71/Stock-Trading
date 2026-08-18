@@ -102,15 +102,17 @@ router.get('/quant/signal', async (req, res) => {
 
 /**
  * GET /api/quant/signal-audit
- * Returns minute-by-minute signal telemetry log for any trading day (default today)
+ * Returns minute-by-minute signal telemetry log for single day or multi-day range ('today', '7d', 'all')
  */
 router.get('/quant/signal-audit', async (req, res) => {
   try {
-    const dateKey = req.query.date || new Date().toISOString().split('T')[0];
-    const auditEntries = signalAuditLogger.getDailyAuditLog(dateKey);
+    const range = (req.query.range || 'today').toLowerCase();
+    const dateKey = req.query.date || null;
+    const auditEntries = signalAuditLogger.getRangeAuditLog(range, dateKey);
     res.json({
       success: true,
-      date: dateKey,
+      range,
+      date: dateKey || (range === 'today' ? new Date().toISOString().split('T')[0] : 'multi-day'),
       totalEntries: auditEntries.length,
       data: auditEntries
     });
@@ -121,27 +123,37 @@ router.get('/quant/signal-audit', async (req, res) => {
 
 /**
  * GET /api/quant/signal-audit/download
- * Exports full day's 375-minute signal telemetry log as downloadable CSV or JSON
+ * Exports full 375-minute daily or multi-day (7-day / 30-day / all) signal telemetry as CSV or JSON
  */
 router.get('/quant/signal-audit/download', async (req, res) => {
   try {
-    const dateKey = req.query.date || new Date().toISOString().split('T')[0];
-    const format = (req.query.format || 'json').toLowerCase();
-    const auditEntries = signalAuditLogger.getDailyAuditLog(dateKey);
+    const range = (req.query.range || (req.query.date ? 'custom' : '7d')).toLowerCase();
+    const dateKey = req.query.date || null;
+    const format = (req.query.format || 'csv').toLowerCase();
+    const auditEntries = signalAuditLogger.getRangeAuditLog(range, dateKey);
+
+    const filenameBase = dateKey 
+      ? `signal_telemetry_${dateKey}` 
+      : range === '7d' 
+        ? `signal_telemetry_7days_weekly` 
+        : range === 'all' || range === '30d' 
+          ? `signal_telemetry_all_history_30d` 
+          : `signal_telemetry_today`;
 
     if (format === 'csv') {
-      let csv = 'Timestamp (IST),Spot Price,ATM Strike,Raw PCR,PCR Z-Score,Advancing Wt %,Declining Wt %,Signal,Confidence,Rationale\n';
+      let csv = 'Date,Timestamp (IST),Spot Price,ATM Strike,Raw PCR,PCR Z-Score,Advancing Wt %,Declining Wt %,Signal,Confidence,Rationale\n';
       auditEntries.forEach(e => {
-        csv += `"${e.timeIST || ''}",${e.spotPrice || 0},${e.atmStrike || 0},${e.rawPcr || 0},${e.pcrZScore || 0},${e.advancingWeight || 0},${e.decliningWeight || 0},"${e.signal || ''}","${e.confidenceScore || ''}","${(e.signalRationale || '').replace(/"/g, '""')}"\n`;
+        const entryDate = e.date || (e.timestamp ? new Date(e.timestamp).toISOString().split('T')[0] : '');
+        csv += `"${entryDate}","${e.timeIST || ''}",${e.spotPrice || 0},${e.atmStrike || 0},${e.rawPcr || 0},${e.pcrZScore || 0},${e.advancingWeight || 0},${e.decliningWeight || 0},"${e.signal || ''}","${e.confidenceScore || ''}","${(e.signalRationale || '').replace(/"/g, '""')}"\n`;
       });
 
       res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', `attachment; filename="signal_audit_${dateKey}.csv"`);
+      res.setHeader('Content-Disposition', `attachment; filename="${filenameBase}.csv"`);
       return res.send(csv);
     }
 
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Content-Disposition', `attachment; filename="signal_audit_${dateKey}.json"`);
+    res.setHeader('Content-Disposition', `attachment; filename="${filenameBase}.json"`);
     res.send(JSON.stringify(auditEntries, null, 2));
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

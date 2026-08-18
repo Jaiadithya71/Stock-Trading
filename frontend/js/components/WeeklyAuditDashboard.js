@@ -170,9 +170,15 @@ const WeeklyAuditDashboard = {
                 <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 12px;">Every 1-minute market snapshot evaluated today (${minuteTelemetryEntries.length} snapshots recorded)</p>
               </div>
 
-              <div>
-                <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadTelemetryCSV()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); font-weight: 700; font-size: 11px; padding: 6px 12px;">
-                  📥 Download CSV
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadTelemetry('today', 'csv')" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); font-weight: 700; font-size: 11px; padding: 6px 12px;" title="Download today's 1-minute telemetry snapshots">
+                  📥 Today (CSV)
+                </button>
+                <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadTelemetry('7d', 'csv')" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); font-weight: 700; font-size: 11px; padding: 6px 12px;" title="Download complete 7-day weekly telemetry bundle">
+                  📥 7-Day Weekly Bundle (CSV)
+                </button>
+                <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadTelemetry('all', 'csv')" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); font-weight: 700; font-size: 11px; padding: 6px 12px;" title="Download all available historical telemetry (up to 30 days)">
+                  📥 Full 30-Day Archive (CSV)
                 </button>
               </div>
             </div>
@@ -236,11 +242,15 @@ const WeeklyAuditDashboard = {
     window.open('/api/paper/weekly-audit/download?format=json', '_blank');
   },
 
+  downloadTelemetry(range = '7d', format = 'csv') {
+    window.open(`/api/quant/signal-audit/download?range=${range}&format=${format}`, '_blank');
+  },
+
   downloadTelemetryCSV() {
-    window.open('/api/quant/signal-audit/download?format=csv', '_blank');
+    this.downloadTelemetry('7d', 'csv');
   },
 
   downloadTelemetryJSON() {
-    window.open('/api/quant/signal-audit/download?format=json', '_blank');
+    this.downloadTelemetry('7d', 'json');
   }
 };
