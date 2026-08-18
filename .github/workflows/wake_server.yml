@@ -15,11 +15,18 @@ jobs:
           echo "⏰ Sending pre-market warm-up request to Render..."
           echo "Target URL: https://stock-trading-1-cquo.onrender.com/health"
           
-          RESPONSE=$(curl -s -w "\n--- TELEMETRY ---\nHTTP_CODE: %{http_code}\nTIME_TOTAL: %{time_total}s\n" \
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
             --max-time 90 \
             --retry 2 \
             --retry-delay 5 \
             https://stock-trading-1-cquo.onrender.com/health)
           
           echo "=== RESPONSE FROM RENDER ==="
-          echo "$RESPONSE"
+          echo "HTTP_CODE: $HTTP_CODE"
+          
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "❌ Pre-market warm-up probe failed! Render server returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+          
+          echo "✅ Render server is healthy, warm, and ready for market open!"

@@ -64,12 +64,6 @@ const WeeklyAuditDashboard = {
               <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadCSV()" style="background: rgba(16,185,129,0.2); border: 1px solid #10b981; color: #34d399; font-weight: 700; font-size: 12px; padding: 8px 14px;">
                 📥 Trade Actions (CSV)
               </button>
-              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadTelemetryCSV()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); font-weight: 700; font-size: 12px; padding: 8px 14px;">
-                📡 1-Min Telemetry (CSV)
-              </button>
-              <button class="btn btn-trade" onclick="WeeklyAuditDashboard.downloadTelemetryJSON()" style="background: rgba(59,130,246,0.2); border: 1px solid #3b82f6; color: #38bdf8; font-weight: 700; font-size: 12px; padding: 8px 14px;">
-                📥 1-Min Telemetry (JSON)
-              </button>
               <button class="btn btn-trade" onclick="WeeklyAuditDashboard.render()" style="font-size: 12px; padding: 8px 14px;">
                 🔄 Refresh
               </button>
@@ -190,6 +184,12 @@ const WeeklyAuditDashboard = {
                 <p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b;">Minute-by-minute market evaluation snapshots will appear here as live signal queries run.</p>
               </div>
             ` : `
+              ${minuteTelemetryEntries.length > 150 ? `
+                <div style="padding: 8px 14px; margin-bottom: 12px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 8px; font-size: 12px; color: #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                  <span>ℹ️ Showing newest <strong>150 of ${minuteTelemetryEntries.length}</strong> snapshots</span>
+                  <span style="color: #94a3b8; font-size: 11px;">Download the CSV spreadsheets above to inspect the complete 375+ minute dataset.</span>
+                </div>
+              ` : ''}
               <div style="overflow-x: auto; max-height: 420px; overflow-y: auto;">
                 <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
                   <thead>

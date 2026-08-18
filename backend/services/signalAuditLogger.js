@@ -145,8 +145,8 @@ class SignalAuditLogger {
             const fileDate = file.replace('signal_audit_', '').replace('.json', '');
             entries.forEach(e => {
               allEntries.push({
-                date: e.date || fileDate,
-                ...e
+                ...e,
+                date: fileDate || e.date
               });
             });
           }
