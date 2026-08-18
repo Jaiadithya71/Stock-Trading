@@ -3,11 +3,10 @@
 // Strategy Math, Transparency Audit & Educational Masterclass Component
 // Restores mathematical formulas, raw market feed inputs, and execution rules,
 // plus a prominent button to launch the full-screen Kindle Masterclass Reader!
-// Dynamic constituent bank stock change values for Algo 3
 // ============================================================================
 
 const StrategyAuditView = {
-  render(quantSignal, selectedAlgo = 'algo1', liveSpotPrice = null) {
+  async render(quantSignal, selectedAlgo = 'algo1', liveSpotPrice = null) {
     const container = document.getElementById('strategy-audit-view');
     if (!container) return;
 
@@ -42,7 +41,7 @@ const StrategyAuditView = {
             <span class="icon">🔬</span>
             <div>
               <h2>Quantitative Strategy Mathematics & Transparency Audit</h2>
-              <p>Step-by-step mathematical proof, raw market feed inputs, and execution verification</p>
+              <p>Step-by-step mathematical proof, raw market feed inputs, and execution rules</p>
             </div>
           </div>
 
@@ -98,9 +97,9 @@ const StrategyAuditView = {
             <div class="audit-explanation">
               <strong>Execution Verification Rule:</strong>
               <ul>
-                <li>• <strong>Buy Call (CE)</strong>: Triggered when <strong>Z<sub>PCR</sub> &lt; &minus;1.2</strong> (Oversold extreme)</li>
-                <li>• <strong>Buy Put (PE)</strong>: Triggered when <strong>Z<sub>PCR</sub> &gt; +1.2</strong> (Overbought extreme)</li>
-                <li>• Current Status: <strong>${pcrZ < -1.2 ? 'Oversold Buy Trigger Active' : pcrZ > 1.2 ? 'Overbought Sell Trigger Active' : 'Neutral / Fair Value Range'}</strong></li>
+                <li>• <strong>Buy Call (CE)</strong>: Triggered when <strong>Z<sub>PCR</sub> &le; &minus;1.2</strong> (Oversold extreme)</li>
+                <li>• <strong>Buy Put (PE)</strong>: Triggered when <strong>Z<sub>PCR</sub> &ge; +1.2</strong> (Overbought extreme)</li>
+                <li>• Current Status: <strong>${pcrZ <= -1.2 ? 'Oversold Buy Trigger Active' : pcrZ >= 1.2 ? 'Overbought Sell Trigger Active' : 'Neutral / Fair Value Range'}</strong></li>
               </ul>
             </div>
           </div>

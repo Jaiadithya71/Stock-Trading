@@ -2256,6 +2256,23 @@ tbody tr td:first-child {
     color: #94a3b8;
 }
 
+/* Sleek Dark Glass Table Row Hover Styles for Master Grid & Weekly Audit */
+table tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
+
+table tbody tr:hover {
+    background-color: rgba(51, 65, 85, 0.45) !important;
+}
+
+.weekly-audit-wrapper table tbody tr:hover,
+.master-grid-wrapper table tbody tr:hover,
+.audit-card table tbody tr:hover {
+    background-color: rgba(51, 65, 85, 0.55) !important;
+    box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.2);
+}
+
+
 
 
 

@@ -14,7 +14,9 @@ const path = require('path');
 const PCRStorageService = require('../services/pcrStorageService');
 const signalEngine = require('../services/signalEngine');
 const weeklyAuditLogger = require('../services/weeklyAuditLogger');
+const signalAuditLogger = require('../services/signalAuditLogger');
 const { omsFactory } = require('../services/omsAdapter');
+
 
 const pcrStorage = new PCRStorageService();
 const SETTINGS_FILE_PATH = path.join(__dirname, '../data/risk_settings.json');
@@ -85,6 +87,9 @@ router.get('/quant/signal', async (req, res) => {
       userCapital
     );
 
+    // Auto-log 1-minute signal telemetry for complete session auditability
+    signalAuditLogger.logMinuteSignal(signalPayload);
+
     res.json({
       success: true,
       data: signalPayload
@@ -94,6 +99,55 @@ router.get('/quant/signal', async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+
+/**
+ * GET /api/quant/signal-audit
+ * Returns minute-by-minute signal telemetry log for any trading day (default today)
+ */
+router.get('/quant/signal-audit', async (req, res) => {
+  try {
+    const dateKey = req.query.date || new Date().toISOString().split('T')[0];
+    const auditEntries = signalAuditLogger.getDailyAuditLog(dateKey);
+    res.json({
+      success: true,
+      date: dateKey,
+      totalEntries: auditEntries.length,
+      data: auditEntries
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * GET /api/quant/signal-audit/download
+ * Exports full day's 375-minute signal telemetry log as downloadable CSV or JSON
+ */
+router.get('/quant/signal-audit/download', async (req, res) => {
+  try {
+    const dateKey = req.query.date || new Date().toISOString().split('T')[0];
+    const format = (req.query.format || 'json').toLowerCase();
+    const auditEntries = signalAuditLogger.getDailyAuditLog(dateKey);
+
+    if (format === 'csv') {
+      let csv = 'Timestamp (IST),Spot Price,ATM Strike,Raw PCR,PCR Z-Score,Advancing Wt %,Declining Wt %,Signal,Confidence,Rationale\n';
+      auditEntries.forEach(e => {
+        csv += `"${e.timeIST || ''}",${e.spotPrice || 0},${e.atmStrike || 0},${e.rawPcr || 0},${e.pcrZScore || 0},${e.advancingWeight || 0},${e.decliningWeight || 0},"${e.signal || ''}","${e.confidenceScore || ''}","${(e.signalRationale || '').replace(/"/g, '""')}"\n`;
+      });
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="signal_audit_${dateKey}.csv"`);
+      return res.send(csv);
+    }
+
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="signal_audit_${dateKey}.json"`);
+    res.send(JSON.stringify(auditEntries, null, 2));
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 
 /**
  * POST /api/paper/trade
