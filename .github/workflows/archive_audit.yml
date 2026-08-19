@@ -1,0 +1,59 @@
+﻿name: Automated End-of-Day Audit Archiver
+
+on:
+  schedule:
+    # Runs at 10:05 UTC (3:35 PM IST) Monday through Friday (right after market close)
+    - cron: '05 10 * * 1-5'
+  workflow_dispatch: # Allows manual trigger anytime from GitHub Actions UI
+
+jobs:
+  archive-audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch and Archive Market Audit Telemetry from Render
+        run: |
+          # Calculate current IST date (UTC + 5:30)
+          TODAY=$(date -u -d '+5 hours 30 minutes' +'%Y-%m-%d')
+          echo "📅 Archiving Market Audit Data for Date: $TODAY"
+          
+          mkdir -p backend/data
+          mkdir -p backend/data/archive
+          
+          echo "📡 Downloading Today's 375-Minute Signal Telemetry from Render..."
+          curl -s --max-time 60 --retry 3 \
+            "https://stock-trading-1-cquo.onrender.com/api/quant/signal-audit/download?range=today&format=json" \
+            -o "backend/data/signal_audit_${TODAY}.json" || echo "⚠️ Warning: Signal telemetry fetch failed"
+          
+          echo "📜 Downloading Complete Weekly Simulation Trade Ledger from Render..."
+          curl -s --max-time 60 --retry 3 \
+            "https://stock-trading-1-cquo.onrender.com/api/paper/weekly-audit/download?format=json" \
+            -o "backend/data/weekly_simulation_log.json" || echo "⚠️ Warning: Trade ledger fetch failed"
+
+          # Copy daily snapshot into archive folder
+          if [ -f "backend/data/signal_audit_${TODAY}.json" ]; then
+            cp "backend/data/signal_audit_${TODAY}.json" "backend/data/archive/signal_audit_${TODAY}.json"
+          fi
+
+      - name: Commit and Push Archived Logs to GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add backend/data/*.json backend/data/archive/*.json
+          
+          if git diff --staged --quiet; then
+            echo "ℹ️ No new audit records to commit (working tree already up to date)."
+          else
+            TODAY=$(date -u -d '+5 hours 30 minutes' +'%Y-%m-%d')
+            git commit -m "Automated End-of-Day Audit Archive: $TODAY [skip ci]"
+            git push origin HEAD:main
+            git push origin HEAD:render-deployment
+            echo "✅ Successfully archived and committed today's 375-minute telemetry to GitHub!"
+          fi

@@ -1,0 +1,30 @@
+{
+  "clientName": "Jai",
+  "q1_goal": "100% Automated Trading Algo",
+  "q2_approval": "Dual Mode Toggle Switch",
+  "q3_workflow": "Active Multi-Monitor Grid Watching",
+  "q4_success": "Faster Execution & Zero Missed Breakouts [Custom Note: Both.]",
+  "q5_baseline": "Confirmed - Keep current baseline complete",
+  "q6_indicators": [
+    "Fibonacci Retracements (0.382 / 0.5 / 0.618)",
+    "CPR (Central Pivot Range) & Daily Pivots",
+    "VWAP & Supertrend"
+  ],
+  "q7_strategy": "Fibonacci Retracements + Price Movement Analysis [Custom Note: Based on need.]",
+  "q8_trigger": "Price Bounce off Fibonacci Level + Aligned PCR Sentiment [Custom Note: Based on need.]",
+  "q9_risk": [
+    "User-Configurable Lot Size (e.g. 2 lots)",
+    "Daily Max Loss Circuit Breaker (Auto Stop)"
+  ],
+  "q10_killswitch": "Yes - Prominent Emergency Kill Switch on Header",
+  "q11_broker": "Multi-Broker Architecture (Angel One + Zerodha/Dhan) [Custom Note: For now angle One but built to expand.]",
+  "q12_logic": "Rule-Based Logic with Future AI/ML Expansion Hooks",
+  "q13_devices": "Both Laptop & Mobile Phone",
+  "q14_layout": "Minimalist Signal View",
+  "q15_papertrading": "Yes - Simulated Paper Trading Phase First",
+  "q16_priorities": ". | . | .",
+  "customNotes": "Priorities to be confirmed later.",
+  "submittedAt": "2026-08-16T12:11:44.588Z",
+  "clientIp": "183.82.176.9, 172.68.146.177, 10.25.138.98",
+  "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Mobile Safari/537.36"
+}

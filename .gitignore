@@ -10,8 +10,7 @@ encryption.key
 credentials.enc
 credentials*.txt
 
-# Data files (ephemeral on Render)
-backend/data/*.json
+# Data cache files (ephemeral)
 backend/cache/*.json
 
 # Logs

@@ -1,0 +1,16 @@
+[
+  {
+    "timestamp": "2026-08-19T15:03:28.422Z",
+    "timeIST": "08:33:28 pm",
+    "spotPrice": 57491.1,
+    "atmStrike": 57500,
+    "rawPcr": 0.95,
+    "pcrZScore": -1,
+    "advancingWeight": 0,
+    "decliningWeight": 85,
+    "signal": "NEUTRAL_HOLD",
+    "confidenceScore": "75%",
+    "signalTitle": "🟡 NEUTRAL / HOLD IN CASH",
+    "signalRationale": "Price consolidating around ₹57,491.1. Awaiting Fibonacci level bounce + PCR Z-Score confirmation."
+  }
+]

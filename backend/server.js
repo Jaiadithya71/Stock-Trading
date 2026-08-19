@@ -9,6 +9,7 @@ const routes = require("./routes/routes");
 const PCRCollectorService = require("./services/pcrCollectorService");
 const TradingDashboard = require("./services/tradingDashboard");
 const { loadCredentials } = require("./services/credentialService");
+const signalScheduler = require("./services/signalScheduler");
 
 // Global process safety handlers to prevent container crashes on async network timeouts
 process.on("unhandledRejection", (reason, promise) => {
@@ -249,9 +250,13 @@ app.listen(PORT, HOST, async () => {
   console.log('   ✅ 5-second API timeout protection');
   console.log('   ✅ Smart market-aware intervals');
   console.log('   ✅ PCR collector (starts after login)');
+  console.log('   ✅ Autonomous 60s signal evaluation & telemetry scheduler');
   console.log('   ✅ Automatic cache management');
   console.log('   ✅ Auto-loading futures contracts');
   console.log('\n🔄 Ready to accept connections!\n');
+
+  // Start Autonomous 60-Second Signal Evaluation & Audit Scheduler
+  signalScheduler.start();
 });
 
 // Cleanup on exit
@@ -260,6 +265,9 @@ process.on('SIGINT', () => {
   if (pcrCollector) {
     console.log('   Stopping PCR Collector...');
     pcrCollector.stop();
+  }
+  if (signalScheduler) {
+    signalScheduler.stop();
   }
   console.log('✅ Cleanup complete. Goodbye!\n');
   process.exit(0);
