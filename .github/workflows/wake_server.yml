@@ -2,8 +2,8 @@ name: Wake Up Render Server for Market Hours
 
 on:
   schedule:
-    # Runs every 10 minutes from 03:20 UTC (8:50 AM IST) to 10:05 UTC (3:35 PM IST), Monday through Friday
-    - cron: '*/10 3-10 * * 1-5'
+    # Runs at 03:20 UTC (8:50 AM IST) Monday through Friday (pre-market wake-up)
+    - cron: '20 3 * * 1-5'
   workflow_dispatch: # Allows manual trigger from GitHub UI / CLI anytime
 
 jobs:
