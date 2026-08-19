@@ -5,9 +5,9 @@
     "totalTradesExecuted": 0,
     "winningTrades": 0,
     "losingTrades": 0,
-    "winRatePct": 0.0,
-    "netRealizedPnL": 0.0,
-    "maxDrawdownPct": 0.0
+    "winRatePct": 0,
+    "netRealizedPnL": 0,
+    "maxDrawdownPct": 0
   },
   "dailyLogs": {},
   "trades": []
