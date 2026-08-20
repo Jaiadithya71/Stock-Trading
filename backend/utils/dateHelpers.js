@@ -1,68 +1,38 @@
-// backend/utils/dateHelpers.js - ENHANCED VERSION
 const { MARKET_HOURS } = require("../config/constants");
+const marketCalendar = require("./marketCalendar");
 
 /**
- * Check if market is currently open
- * ENHANCED: Now exports this function for use everywhere
+ * Check if market is currently open (validates weekday, hours, and exchange holidays)
  */
 function isMarketOpen(date = new Date()) {
-  // Convert to IST
-  const istDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-  
-  const dayOfWeek = istDate.getDay();
-  const currentHour = istDate.getHours();
-  const currentMinute = istDate.getMinutes();
-  const currentTime = currentHour * 60 + currentMinute;
-  
-  const marketOpen = MARKET_HOURS.OPEN.hour * 60 + MARKET_HOURS.OPEN.minute;
-  const marketClose = MARKET_HOURS.CLOSE.hour * 60 + MARKET_HOURS.CLOSE.minute;
-  
-  const isWeekday = dayOfWeek >= 1 && dayOfWeek <= 5;
-  const inTradingHours = currentTime >= marketOpen && currentTime <= marketClose;
-  
-  return isWeekday && inTradingHours;
+  return marketCalendar.isMarketOpenNow(date);
 }
 
 /**
- * Get last trading day
+ * Get last valid trading day (skips weekends and official exchange holidays)
  */
 function getLastTradingDay(currentDate = new Date()) {
-  const istDate = new Date(currentDate.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-  let lastTradingDay = new Date(istDate);
-  const dayOfWeek = istDate.getDay();
-  
-  if (dayOfWeek === 0) { // Sunday -> Friday
-    lastTradingDay.setDate(istDate.getDate() - 2);
-  } else if (dayOfWeek === 6) { // Saturday -> Friday
-    lastTradingDay.setDate(istDate.getDate() - 1);
-  } else if (dayOfWeek === 1) { // Monday before open -> Friday
-    const currentHour = istDate.getHours();
-    const currentMinute = istDate.getMinutes();
-    const currentTime = currentHour * 60 + currentMinute;
-    const marketOpen = MARKET_HOURS.OPEN.hour * 60 + MARKET_HOURS.OPEN.minute;
-    
-    if (currentTime < marketOpen) {
-      lastTradingDay.setDate(istDate.getDate() - 3);
-    }
-  } else {
-    // Regular weekday - go back one day if before market open
-    const currentHour = istDate.getHours();
-    const currentMinute = istDate.getMinutes();
-    const currentTime = currentHour * 60 + currentMinute;
-    const marketOpen = MARKET_HOURS.OPEN.hour * 60 + MARKET_HOURS.OPEN.minute;
-    
-    if (currentTime < marketOpen) {
-      lastTradingDay.setDate(istDate.getDate() - 1);
-      // If that was a weekend, go back further
-      if (lastTradingDay.getDay() === 0) {
-        lastTradingDay.setDate(lastTradingDay.getDate() - 2);
-      } else if (lastTradingDay.getDay() === 6) {
-        lastTradingDay.setDate(lastTradingDay.getDate() - 1);
-      }
-    }
+  const istDate = marketCalendar.getISTDate(currentDate);
+  let candidate = new Date(istDate);
+
+  const hours = istDate.getHours();
+  const minutes = istDate.getMinutes();
+  const timeInMinutes = hours * 60 + minutes;
+  const marketOpenMinutes = MARKET_HOURS.OPEN.hour * 60 + MARKET_HOURS.OPEN.minute;
+
+  // If today is a trading day but market hasn't opened yet, step back 1 day first
+  if (marketCalendar.isTradingDay(istDate) && timeInMinutes < marketOpenMinutes) {
+    candidate.setDate(candidate.getDate() - 1);
+  } else if (!marketCalendar.isTradingDay(istDate)) {
+    candidate.setDate(candidate.getDate() - 1);
   }
-  
-  return lastTradingDay;
+
+  // Step backwards until we hit a valid trading day
+  while (!marketCalendar.isTradingDay(candidate)) {
+    candidate.setDate(candidate.getDate() - 1);
+  }
+
+  return candidate;
 }
 
 /**

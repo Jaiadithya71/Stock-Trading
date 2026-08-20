@@ -34,16 +34,8 @@ class SignalScheduler {
   }
 
   isMarketHours() {
-    const now = new Date();
-    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-    const ist = new Date(utc + (3600000 * 5.5)); // IST is UTC+5.5
-    
-    const day = ist.getDay(); // 0 = Sun, 6 = Sat
-    if (day === 0 || day === 6) return false;
-    
-    const minutes = ist.getHours() * 60 + ist.getMinutes();
-    // NSE Market Hours: 9:15 AM (555 min) to 3:30 PM (930 min)
-    return minutes >= 555 && minutes <= 930;
+    const marketCalendar = require('../utils/marketCalendar');
+    return marketCalendar.isMarketOpenNow();
   }
 
   async runEvaluationCycle() {
