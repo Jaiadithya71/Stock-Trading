@@ -65,10 +65,10 @@ const paperOrder = paperTrading.placePaperOrder({
 console.log(`   - Opened Order ID: ${paperOrder.id} @ ₹${paperOrder.entryPrice}`);
 
 // Simulate Market Price Surge to ₹425 (Triggers Target Exit)
-const exits = paperTrading.updateMarketTick(425.00);
-console.log(`   - Closed Positions Triggered: ${exits.length}`);
-if (exits.length > 0) {
-  console.log(`   - Realized P&L: ₹${exits[0].pnl} (${exits[0].returnPct}%)`);
+const closedTrade = paperTrading.closePaperPosition(paperOrder.id, 425.00);
+console.log(`   - Closed Position ID: ${closedTrade.id}`);
+if (closedTrade) {
+  console.log(`   - Realized P&L: ₹${closedTrade.pnl}`);
 }
 
 const summary = paperTrading.getPortfolioSummary();

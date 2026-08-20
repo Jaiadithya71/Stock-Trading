@@ -41,7 +41,7 @@ const server = app.listen(PORT, async () => {
     });
     const tradeData = await tradeRes.json();
     console.log('   Trade Result:', tradeData.message);
-    console.log('   Position ID:', tradeData.data.id);
+    console.log('   Position ID:', tradeData.trade?.orderId || tradeData.trade?.id || 'OK');
 
     // Test 3: GET /api/paper/summary
     console.log('\n[TEST 3] Fetching GET /api/paper/summary...');

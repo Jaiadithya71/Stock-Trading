@@ -171,8 +171,58 @@ function userExists(username) {
   }
 }
 
+function getAnyAvailableCredentials() {
+  // 1. Direct environment variables
+  const directEnv = getDirectEnvCredentials();
+  if (directEnv) {
+    return {
+      username: directEnv.client_id || "default",
+      credentials: {
+        api_key: directEnv.api_key,
+        client_id: directEnv.client_id,
+        password: directEnv.password,
+        totp_token: directEnv.totp_token
+      }
+    };
+  }
+
+  // 2. CREDENTIALS_JSON
+  const envCreds = loadCredentialsFromEnv();
+  if (envCreds) {
+    const keys = Object.keys(envCreds);
+    if (keys.length > 0) {
+      const username = keys[0];
+      const creds = loadCredentials(username);
+      if (creds) {
+        return { username, credentials: creds };
+      }
+    }
+  }
+
+  // 3. credentials.enc file
+  if (fs.existsSync(CREDENTIALS_FILE)) {
+    try {
+      const data = fs.readFileSync(CREDENTIALS_FILE, "utf8");
+      if (data) {
+        const allCreds = JSON.parse(data);
+        const keys = Object.keys(allCreds);
+        if (keys.length > 0) {
+          const username = keys[0];
+          const creds = loadCredentials(username);
+          if (creds) {
+            return { username, credentials: creds };
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
+  return null;
+}
+
 module.exports = {
   saveCredentials,
   loadCredentials,
-  userExists
+  userExists,
+  getAnyAvailableCredentials
 };

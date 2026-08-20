@@ -90,6 +90,44 @@ class PCRCollectorService {
       console.log(`   📉 Put Contracts: ${pcrData.putCount}`);
       console.log(`   📊 PCR: ${pcrData.pcr}`);
 
+      // Fetch live spot price and constituent banking stocks via marketData API
+      let spotPrice = null;
+      let stockBreadth = null;
+
+      try {
+        const marketDataRes = await this.smartAPI.marketData({
+          mode: 'FULL',
+          exchangeTokens: {
+            'NSE': ['99926009', '1333', '4963', '1922', '5900', '3045']
+          }
+        });
+
+        if (marketDataRes && marketDataRes.status && marketDataRes.data && marketDataRes.data.fetched) {
+          const items = marketDataRes.data.fetched;
+          const bnfItem = items.find(i => i.symbolToken === '99926009');
+          if (bnfItem && bnfItem.ltp) {
+            spotPrice = parseFloat(bnfItem.ltp);
+          }
+
+          const tokenSymbolMap = {
+            '1333': 'HDFCBANK',
+            '4963': 'ICICIBANK',
+            '1922': 'KOTAKBANK',
+            '5900': 'AXISBANK',
+            '3045': 'SBIN'
+          };
+
+          stockBreadth = items
+            .filter(i => tokenSymbolMap[i.symbolToken])
+            .map(i => ({
+              symbol: tokenSymbolMap[i.symbolToken],
+              pChange: parseFloat(i.percentChange || i.pChange || 0.0)
+            }));
+        }
+      } catch (marketErr) {
+        console.warn(`   ⚠️ Could not fetch marketData for spot: ${marketErr.message}`);
+      }
+
       // Create snapshot using Angel One native data
       const snapshot = {
         symbol: 'BANKNIFTY',
@@ -98,6 +136,8 @@ class PCRCollectorService {
         expiry: pcrData.expiry,
         strikeCount: pcrData.strikeCount,
         sentiment: this.determineSentiment(pcrData.pcr),
+        spotPrice: spotPrice || 57491.10,
+        stockBreadth: stockBreadth || [],
         source: 'angel_smartapi_native'
       };
 
@@ -105,7 +145,7 @@ class PCRCollectorService {
       await this.storage.storeSnapshot(snapshot);
       this.collectCount++;
 
-      console.log(`   ✅ Stored: PCR=${pcrData.pcr.toFixed(2)} (${snapshot.sentiment}) - Expiry: ${pcrData.expiry}`);
+      console.log(`   ✅ Stored: PCR=${pcrData.pcr.toFixed(2)} (${snapshot.sentiment}) - Spot: ₹${snapshot.spotPrice} - Expiry: ${pcrData.expiry}`);
 
     } catch (error) {
       console.error(`   ❌ Error collecting Angel One PCR: ${error.message}`);

@@ -252,8 +252,31 @@ app.listen(PORT, HOST, async () => {
   console.log('   ✅ PCR collector (starts after login)');
   console.log('   ✅ Autonomous 60s signal evaluation & telemetry scheduler');
   console.log('   ✅ Automatic cache management');
-  console.log('   ✅ Auto-loading futures contracts');
-  console.log('\n🔄 Ready to accept connections!\n');
+  // Headless Auto-Authentication for Render Deployment / Background Daemons
+  const { getAnyAvailableCredentials } = require("./services/credentialService");
+  const { setActiveDashboard } = require("./middleware/authMiddleware");
+  const autoCreds = getAnyAvailableCredentials();
+
+  if (autoCreds && autoCreds.credentials) {
+    console.log(`\n🔐 Attempting headless background authentication for '${autoCreds.username}'...`);
+    const systemDashboard = new TradingDashboard(autoCreds.credentials);
+    systemDashboard.authenticate().then(authRes => {
+      if (authRes && authRes.success) {
+        setActiveDashboard(autoCreds.username, systemDashboard);
+        setActiveDashboard('default', systemDashboard);
+        console.log(`✅ Headless background authentication successful for '${autoCreds.username}'`);
+
+        // Automatically launch PCR collector in background
+        startPCRCollectorBackground(autoCreds.username, systemDashboard);
+      } else {
+        console.warn(`⚠️ Headless background authentication failed:`, authRes?.message);
+      }
+    }).catch(err => {
+      console.warn(`⚠️ Headless background authentication error:`, err.message);
+    });
+  } else {
+    console.log('ℹ️  No background credentials detected for auto-login. Waiting for user login.');
+  }
 
   // Start Autonomous 60-Second Signal Evaluation & Audit Scheduler
   signalScheduler.start();

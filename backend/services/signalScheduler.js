@@ -1,4 +1,4 @@
-﻿// ============================================================================
+// ============================================================================
 // FILE: backend/services/signalScheduler.js
 // Autonomous 60-Second Background Signal Evaluation Engine
 // Evaluates market telemetry every minute during market hours (9:15 AM - 3:30 PM IST)
@@ -62,37 +62,84 @@ class SignalScheduler {
       const historicalData = await pcrStorage.loadData();
       const snapshots = historicalData.snapshots || [];
 
-      let liveSpotPrice = 57491.10;
-      let stockList = [
-        { symbol: 'HDFCBANK', pChange: 0.28 },
-        { symbol: 'ICICIBANK', pChange: 0.73 },
-        { symbol: 'KOTAKBANK', pChange: -0.32 },
-        { symbol: 'AXISBANK', pChange: -0.36 },
-        { symbol: 'SBIN', pChange: -1.41 }
-      ];
+      let liveSpotPrice = null;
+      let stockList = null;
 
-      if (snapshots.length > 0) {
+      // 1. Try querying real-time market data from active authenticated SmartAPI dashboard
+      try {
+        const { getActiveDashboards } = require('../middleware/authMiddleware');
+        const activeDashboards = getActiveDashboards();
+        const dashboard = Object.values(activeDashboards).find(d => d && d.authenticated);
+
+        if (dashboard && typeof dashboard.getLTPData === 'function') {
+          const ltpRes = await dashboard.getLTPData('NSE', ['99926009', '1333', '4963', '1922', '5900', '3045'], 'FULL');
+          if (ltpRes && ltpRes.success && ltpRes.data) {
+            if (ltpRes.data['99926009'] && ltpRes.data['99926009'].ltp) {
+              liveSpotPrice = parseFloat(ltpRes.data['99926009'].ltp);
+            }
+
+            const tokenSymbolMap = {
+              '1333': 'HDFCBANK',
+              '4963': 'ICICIBANK',
+              '1922': 'KOTAKBANK',
+              '5900': 'AXISBANK',
+              '3045': 'SBIN'
+            };
+
+            const extractedStocks = [];
+            for (const [t, sym] of Object.entries(tokenSymbolMap)) {
+              if (ltpRes.data[t]) {
+                const pChg = parseFloat(ltpRes.data[t].changePercent || ltpRes.data[t].percentChange || 0.0);
+                extractedStocks.push({ symbol: sym, pChange: pChg });
+              }
+            }
+
+            if (extractedStocks.length > 0) {
+              stockList = extractedStocks;
+            }
+          }
+        }
+      } catch (dashErr) {
+        console.warn(`   ⚠️ [SignalScheduler] Could not fetch live dashboard LTP: ${dashErr.message}`);
+      }
+
+      // 2. Fall back to latest PCR snapshot data if live query was not available
+      if (!liveSpotPrice && snapshots.length > 0) {
         const lastSnap = snapshots[snapshots.length - 1];
         if (lastSnap && lastSnap.spotPrice) {
           liveSpotPrice = parseFloat(lastSnap.spotPrice);
         }
 
-        if (lastSnap && lastSnap.stockBreadth && Array.isArray(lastSnap.stockBreadth)) {
+        if (!stockList && lastSnap && lastSnap.stockBreadth && Array.isArray(lastSnap.stockBreadth) && lastSnap.stockBreadth.length > 0) {
           stockList = lastSnap.stockBreadth.map(stk => ({
             symbol: stk.symbol,
             pChange: parseFloat(stk.pChange || stk.change || 0.0)
           }));
-        } else if (snapshots.length > 1) {
+        } else if (!stockList && snapshots.length > 1) {
           const prevSnap = snapshots[snapshots.length - 2];
-          const spotDelta = ((lastSnap.spotPrice - prevSnap.spotPrice) / prevSnap.spotPrice) * 100;
-          stockList = [
-            { symbol: 'HDFCBANK', pChange: parseFloat((spotDelta * 1.05).toFixed(2)) },
-            { symbol: 'ICICIBANK', pChange: parseFloat((spotDelta * 1.12).toFixed(2)) },
-            { symbol: 'KOTAKBANK', pChange: parseFloat((spotDelta * 0.92).toFixed(2)) },
-            { symbol: 'AXISBANK', pChange: parseFloat((spotDelta * 0.88).toFixed(2)) },
-            { symbol: 'SBIN', pChange: parseFloat((spotDelta * 0.95).toFixed(2)) }
-          ];
+          if (prevSnap.spotPrice && lastSnap.spotPrice) {
+            const spotDelta = ((lastSnap.spotPrice - prevSnap.spotPrice) / prevSnap.spotPrice) * 100;
+            stockList = [
+              { symbol: 'HDFCBANK', pChange: parseFloat((spotDelta * 1.05).toFixed(2)) },
+              { symbol: 'ICICIBANK', pChange: parseFloat((spotDelta * 1.12).toFixed(2)) },
+              { symbol: 'KOTAKBANK', pChange: parseFloat((spotDelta * 0.92).toFixed(2)) },
+              { symbol: 'AXISBANK', pChange: parseFloat((spotDelta * 0.88).toFixed(2)) },
+              { symbol: 'SBIN', pChange: parseFloat((spotDelta * 0.95).toFixed(2)) }
+            ];
+          }
         }
+      }
+
+      // 3. Fallback defaults if market data is completely unavailable
+      if (!liveSpotPrice) liveSpotPrice = 57491.10;
+      if (!stockList) {
+        stockList = [
+          { symbol: 'HDFCBANK', pChange: 0.28 },
+          { symbol: 'ICICIBANK', pChange: 0.73 },
+          { symbol: 'KOTAKBANK', pChange: -0.32 },
+          { symbol: 'AXISBANK', pChange: -0.36 },
+          { symbol: 'SBIN', pChange: -1.41 }
+        ];
       }
 
       const savedSettings = getPersistedSettings();
@@ -107,7 +154,7 @@ class SignalScheduler {
 
       // Log 1-minute telemetry snapshot
       signalAuditLogger.logMinuteSignal(signalPayload);
-      console.log(`⏱️ [SignalScheduler] Evaluated & Logged Snapshot for ${now.toLocaleTimeString('en-IN')}: ${signalPayload.signal} (${signalPayload.confidenceScore})`);
+      console.log(`⏱️ [SignalScheduler] Evaluated & Logged Snapshot for ${now.toLocaleTimeString('en-IN')}: Spot ₹${liveSpotPrice} | ${signalPayload.signal} (${signalPayload.confidenceScore})`);
     } catch (e) {
       console.error('❌ [SignalScheduler] Error during autonomous evaluation cycle:', e.message);
     }
