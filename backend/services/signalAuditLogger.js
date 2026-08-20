@@ -30,11 +30,33 @@ class SignalAuditLogger {
     return path.join(DATA_DIR, `signal_audit_${safeDate}.json`);
   }
 
+  isMarketHours() {
+    const now = new Date();
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const ist = new Date(utc + (3600000 * 5.5)); // IST is UTC+5.5
+
+    const day = ist.getDay(); // 0 = Sun, 6 = Sat
+    if (day === 0 || day === 6) return false;
+
+    const hours = ist.getHours();
+    const minutes = ist.getMinutes();
+    const timeInMinutes = hours * 60 + minutes;
+
+    // NSE Market Hours: 9:15 AM (555 min) to 3:30 PM (930 min)
+    return timeInMinutes >= 555 && timeInMinutes <= 930;
+  }
+
   /**
    * Appends 1-minute signal telemetry snapshot
+   * Guaranteed to only record during live market hours and exactly once per minute
    */
-  logMinuteSignal(signalPayload) {
+  logMinuteSignal(signalPayload, force = false) {
     try {
+      // Guard: strictly ignore writes when market is closed unless forced
+      if (!force && !this.isMarketHours()) {
+        return null;
+      }
+
       this.ensureDataDir();
       const now = new Date();
       const dateKey = now.toISOString().split('T')[0];
@@ -47,6 +69,15 @@ class SignalAuditLogger {
           logEntries = JSON.parse(raw);
         } catch (err) {
           logEntries = [];
+        }
+      }
+
+      // Guard: Deduplicate if an entry was already logged in this exact minute
+      const currentMinuteKey = now.toISOString().substring(0, 16); // YYYY-MM-DDTHH:MM
+      if (logEntries.length > 0) {
+        const lastEntry = logEntries[logEntries.length - 1];
+        if (lastEntry.timestamp && lastEntry.timestamp.substring(0, 16) === currentMinuteKey) {
+          return lastEntry; // Already logged for this minute
         }
       }
 

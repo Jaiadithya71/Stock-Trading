@@ -87,9 +87,7 @@ router.get('/quant/signal', async (req, res) => {
       userCapital
     );
 
-    // Auto-log 1-minute signal telemetry for complete session auditability
-    signalAuditLogger.logMinuteSignal(signalPayload);
-
+    // Note: Signal telemetry is recorded strictly by the autonomous 60s signalScheduler during live market hours
     res.json({
       success: true,
       data: signalPayload
