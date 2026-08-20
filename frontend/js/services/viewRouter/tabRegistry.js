@@ -20,13 +20,13 @@ const TAB_REGISTRY = {
   weekly: [
     { 
       id: 'weekly-audit-dashboard', 
-      render: () => WeeklyAuditDashboard.render() 
+      render: (state) => WeeklyAuditDashboard.render(state.signalAuditLog) 
     }
   ],
   audit: [
     { 
       id: 'strategy-audit-view', 
-      render: (state, spotPrice) => StrategyAuditView.render(state.quantSignalData, 'algo1', spotPrice, state.signalAuditLog) 
+      render: (state, spotPrice) => StrategyAuditView.render(state.quantSignalData, 'algo1', spotPrice) 
     }
   ],
   settings: [

@@ -183,71 +183,11 @@ const StrategyAuditView = {
             </div>
           </div>
         ` : ''}
-
-        <!-- LIVE 1-MINUTE AUDIT TELEMETRY LOG -->
-        <div style="margin-top: 24px; background: rgba(30, 41, 59, 0.75); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <h3 style="margin: 0; font-size: 16px; color: #38bdf8;">⏱️ 1-Minute Live Signal Telemetry Ledger</h3>
-              <span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">🟢 AUTO-REFRESHING (EVERY 60s)</span>
-              <span style="color: #94a3b8; font-size: 12px;">${telemetryLogs.length} Snapshots Today</span>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn btn-trade" style="padding: 6px 12px; font-size: 12px;" onclick="window.open('/api/quant/signal-audit/download?range=today&format=csv', '_blank')">📥 Export CSV</button>
-              <button class="btn btn-trade" style="padding: 6px 12px; font-size: 12px;" onclick="window.open('/api/quant/signal-audit/download?range=today&format=json', '_blank')">📥 Export JSON</button>
-            </div>
-          </div>
-
-          ${telemetryLogs.length === 0 ? `
-            <div style="padding: 24px; text-align: center; color: #94a3b8;">
-              <span>ℹ️ Telemetry ledger loading. Snapshots evaluate and stream here automatically every 60 seconds.</span>
-            </div>
-          ` : `
-            <div style="max-height: 420px; overflow-y: auto; overflow-x: auto; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
-              <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
-                <thead style="position: sticky; top: 0; background: #0f172a; z-index: 10;">
-                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.12); color: #94a3b8;">
-                    <th style="padding: 10px 12px;">Time (IST)</th>
-                    <th style="padding: 10px 12px;">Spot Price</th>
-                    <th style="padding: 10px 12px;">ATM Strike</th>
-                    <th style="padding: 10px 12px;">Raw PCR / Z-Score</th>
-                    <th style="padding: 10px 12px;">Banking Breadth</th>
-                    <th style="padding: 10px 12px;">Evaluated Signal</th>
-                    <th style="padding: 10px 12px;">Confluence Rationale</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${[...telemetryLogs].reverse().map(e => {
-                    const isBuyCE = e.signal === 'BUY_CALL_CE';
-                    const isBuyPE = e.signal === 'BUY_PUT_PE';
-                    const badge = isBuyCE ?
-                      '<span style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 8px; border-radius: 4px; font-weight: 700;">🟢 BUY CE</span>' :
-                      isBuyPE ?
-                      '<span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 2px 8px; border-radius: 4px; font-weight: 700;">🔻 BUY PE</span>' :
-                      '<span style="background: rgba(234, 179, 8, 0.15); color: #eab308; padding: 2px 8px; border-radius: 4px; font-weight: 600;">🟡 HOLD</span>';
-                    
-                    return `
-                      <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
-                        <td style="padding: 8px 12px; color: #94a3b8; white-space: nowrap;">${e.timeIST || ''}</td>
-                        <td style="padding: 8px 12px; font-weight: 600; color: #f8fafc;">₹${(e.spotPrice || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td style="padding: 8px 12px; color: #cbd5e1;">₹${e.atmStrike || 0}</td>
-                        <td style="padding: 8px 12px; color: #cbd5e1;">${e.rawPcr || 0} <span style="font-size: 11px; color: #64748b;">(Z: ${e.pcrZScore !== undefined ? e.pcrZScore : 0})</span></td>
-                        <td style="padding: 8px 12px; font-size: 11px; color: #94a3b8;">Adv ${e.advancingWeight || 0}% / Dec ${e.decliningWeight || 0}%</td>
-                        <td style="padding: 8px 12px; white-space: nowrap;">${badge} <span style="font-size: 11px; color: #64748b;">${e.confidenceScore || ''}</span></td>
-                        <td style="padding: 8px 12px; color: #38bdf8; font-size: 11px; max-width: 320px; line-height: 1.3;">${e.signalRationale || ''}</td>
-                      </tr>
-                    `;
-                  }).join('')}
-                </tbody>
-              </table>
-            </div>
-          `}
-        </div>
       </div>
     `;
   },
 
   selectAlgo(algoId) {
-    this.render(window.lastQuantSignal, algoId, window.lastSpotPrice, window.lastSignalAuditLog);
+    this.render(window.lastQuantSignal, algoId, window.lastSpotPrice);
   }
 };
