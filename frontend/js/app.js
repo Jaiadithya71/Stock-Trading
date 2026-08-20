@@ -507,6 +507,12 @@ const App = {
             if (dataPaper.success) {
                 this.state.paperSummaryData = dataPaper.data;
             }
+
+            const resAudit = await fetch('/api/quant/signal-audit?range=today');
+            const dataAudit = await resAudit.json();
+            if (dataAudit.success) {
+                this.state.signalAuditLog = dataAudit.data || [];
+            }
             console.log('✅ Quant signal & Paper OMS data loaded');
         } catch (err) {
             console.warn('Quant data fetch failed:', err.message);

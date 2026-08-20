@@ -26,7 +26,7 @@ const TAB_REGISTRY = {
   audit: [
     { 
       id: 'strategy-audit-view', 
-      render: (state, spotPrice) => StrategyAuditView.render(state.quantSignalData, 'algo1', spotPrice) 
+      render: (state, spotPrice) => StrategyAuditView.render(state.quantSignalData, 'algo1', spotPrice, state.signalAuditLog) 
     }
   ],
   settings: [
