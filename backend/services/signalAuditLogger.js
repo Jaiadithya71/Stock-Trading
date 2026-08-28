@@ -50,12 +50,23 @@ class SignalAuditLogger {
       const now = new Date();
       const dateKey = now.toISOString().split('T')[0];
       const filePath = this.getLogFilePath(dateKey);
+      const archivePath = path.join(DATA_DIR, 'archive', path.basename(filePath));
 
       let logEntries = [];
       if (fs.existsSync(filePath)) {
         try {
           const raw = fs.readFileSync(filePath, 'utf8');
           logEntries = JSON.parse(raw);
+        } catch (err) {
+          logEntries = [];
+        }
+      } else if (fs.existsSync(archivePath)) {
+        try {
+          const raw = fs.readFileSync(archivePath, 'utf8');
+          logEntries = JSON.parse(raw);
+          // Restore to primary path
+          fs.writeFileSync(filePath, JSON.stringify(logEntries, null, 2), 'utf8');
+          console.log(`💾 Restored ${logEntries.length} telemetry snapshots for ${dateKey} from archive`);
         } catch (err) {
           logEntries = [];
         }
@@ -111,8 +122,13 @@ class SignalAuditLogger {
   getDailyAuditLog(dateStr) {
     try {
       const filePath = this.getLogFilePath(dateStr);
+      const archivePath = path.join(DATA_DIR, 'archive', path.basename(filePath));
+
       if (fs.existsSync(filePath)) {
         const raw = fs.readFileSync(filePath, 'utf8');
+        return JSON.parse(raw);
+      } else if (fs.existsSync(archivePath)) {
+        const raw = fs.readFileSync(archivePath, 'utf8');
         return JSON.parse(raw);
       }
     } catch (e) {

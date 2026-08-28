@@ -240,10 +240,12 @@ app.listen(PORT, HOST, async () => {
   }
   console.log('='.repeat(60));
 
-  // Initialize futures instruments dynamically
-  console.log('\n📦 Loading futures instruments...');
+  // Initialize futures instruments dynamically in the background (non-blocking)
+  console.log('\n📦 Loading futures instruments asynchronously...');
   const { initializeFuturesInstruments } = require("./config/constants");
-  await initializeFuturesInstruments();
+  initializeFuturesInstruments().catch(err => {
+    console.warn("⚠️ Background futures loading error:", err.message);
+  });
 
   console.log('\n💡 Server Features:');
   console.log('   ✅ Fast parallel data fetching');

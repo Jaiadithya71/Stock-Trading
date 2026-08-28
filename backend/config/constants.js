@@ -1,11 +1,13 @@
 // backend/config/constants.js - UPDATED with dynamic futures loading
 const path = require("path");
 
-// Static indices (spot)
+// Static indices (spot & pre-cached futures fallbacks)
 const INDICES_INSTRUMENTS = {
   "BANKNIFTY": { token: "99926009", exchange: "NSE" },
   "NIFTY": { token: "99926000", exchange: "NSE" },
-  "INDIA VIX": { token: "99926017", exchange: "NSE" }
+  "INDIA VIX": { token: "99926017", exchange: "NSE" },
+  "BANKNIFTY_FUT": { token: "52353", exchange: "NFO", symbol: "BANKNIFTY-FUT" },
+  "NIFTY_FUT": { token: "52352", exchange: "NFO", symbol: "NIFTY-FUT" }
 };
 
 // Flag to track if futures have been loaded
