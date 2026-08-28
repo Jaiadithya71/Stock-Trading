@@ -1,15 +1,16 @@
 /* ============================================================================
-   FILE: frontend/css/option-chain.css - CREATE THIS NEW FILE
-   LOCATION: frontend/css/option-chain.css
+   FILE: frontend/css/option-chain.css
+   Institutional Option Chain Matrix - Obsidian Slate Theme
    ============================================================================ */
 
-/* Option Chain Container */
 .option-chain-container {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  padding: 20px;
-  margin: 20px 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(14, 18, 28, 0.78);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-top: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
 }
 
 /* Header Section */
@@ -17,415 +18,185 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.03);
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 10px;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 12px;
 }
 
 .symbol-info {
-  flex: 1;
-  min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .symbol-info h2 {
-  font-size: 24px;
-  margin: 0 0 10px 0;
-  color: #667eea;
+  font-size: 15px;
+  margin: 0;
+  color: #f8fafc;
   font-weight: 700;
 }
 
 .spot-price {
-  font-size: 20px;
-  font-weight: 600;
-  color: #4ade80;
-  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #38bdf8;
+  font-family: var(--font-mono);
 }
 
 .expiry-selector {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .expiry-selector label {
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 600;
-  color: #888;
+  color: #94a3b8;
+  text-transform: uppercase;
 }
 
 .expiry-selector select {
-  padding: 10px 15px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  background: rgba(10, 14, 22, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
-  color: #fff;
-  font-size: 14px;
+  color: #f8fafc;
+  font-size: 12px;
+  font-family: var(--font-mono);
   cursor: pointer;
-  min-width: 200px;
-  transition: all 0.3s ease;
-}
-
-.expiry-selector select:hover {
-  border-color: #667eea;
-  background: rgba(102, 126, 234, 0.1);
+  outline: none;
 }
 
 .expiry-selector select:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  border-color: #38bdf8;
 }
 
-/* Symbol Selector */
-.symbol-selector {
-  display: flex;
-  gap: 10px;
-}
-
-.symbol-btn {
-  padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: #888;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.symbol-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.symbol-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
-  color: #fff;
-}
-
-/* Option Table Wrapper */
-.option-table-wrapper {
-  overflow-x: auto;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-/* Option Chain Table */
-.option-chain-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-  min-width: 1400px;
-}
-
-/* Table Headers */
-.option-chain-table thead th {
-  padding: 14px 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 11px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  letter-spacing: 0.5px;
-}
-
-/* Section Headers */
-.calls-header {
-  background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(74, 222, 128, 0.1));
-  color: #4ade80;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.strike-header {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(102, 126, 234, 0.1));
-  color: #667eea;
-  font-size: 13px;
-  font-weight: 700;
-  min-width: 100px;
-}
-
-.puts-header {
-  background: linear-gradient(135deg, rgba(248, 113, 113, 0.2), rgba(248, 113, 113, 0.1));
-  color: #f87171;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-/* Column Headers */
-.option-chain-table thead tr:nth-child(2) th {
-  background: rgba(255, 255, 255, 0.05);
-  color: #aaa;
-  font-size: 10px;
-}
-
-/* Table Body */
-.option-chain-table tbody tr {
-  transition: all 0.2s ease;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.option-chain-table tbody tr:hover {
-  background: rgba(102, 126, 234, 0.08);
-  transform: scale(1.01);
-}
-
-.option-chain-table tbody td {
-  padding: 12px 8px;
-  text-align: right;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  font-family: 'Courier New', monospace;
-  font-size: 11px;
-}
-
-.option-chain-table tbody td:last-child {
-  border-right: none;
-}
-
-/* Strike Cell */
-.strike-cell {
-  text-align: center !important;
-  background: rgba(102, 126, 234, 0.08);
-  font-size: 13px;
-  font-weight: 700;
-  color: #667eea;
-  border-left: 2px solid rgba(102, 126, 234, 0.3);
-  border-right: 2px solid rgba(102, 126, 234, 0.3);
-  min-width: 100px;
-}
-
-/* ATM Strike */
-.atm-strike {
-  background: rgba(251, 191, 36, 0.1);
-}
-
-.atm-strike .strike-cell {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(251, 191, 36, 0.15));
-  color: #fbbf24;
-  font-size: 14px;
-  font-weight: 800;
-  border-left: 3px solid #fbbf24;
-  border-right: 3px solid #fbbf24;
-  animation: pulse-atm 2s ease-in-out infinite;
-}
-
-@keyframes pulse-atm {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-  }
-}
-
-/* ITM/OTM */
-.itm-call {
-  background: linear-gradient(90deg, rgba(74, 222, 128, 0.08), transparent);
-}
-
-.itm-put {
-  background: linear-gradient(270deg, rgba(248, 113, 113, 0.08), transparent);
-}
-
-.otm {
-  opacity: 0.7;
-}
-
-/* Column Styles */
-.oi-cell {
-  font-weight: 600;
-  color: #a78bfa;
-}
-
-.change-oi-cell {
-  font-weight: 500;
-}
-
-.change-oi-cell.positive {
-  color: #4ade80;
-}
-
-.change-oi-cell.negative {
-  color: #f87171;
-}
-
-.volume-cell {
-  color: #60a5fa;
-}
-
-.iv-cell {
-  color: #c084fc;
-  font-weight: 500;
-}
-
-.ltp-cell {
-  font-weight: 700;
-  font-size: 12px;
-}
-
-.ltp-cell.change-positive {
-  color: #4ade80;
-  background: rgba(74, 222, 128, 0.1);
-}
-
-.ltp-cell.change-negative {
-  color: #f87171;
-  background: rgba(248, 113, 113, 0.1);
-}
-
-.change-cell {
-  font-size: 11px;
-}
-
-.change-cell.positive {
-  color: #4ade80;
-}
-
-.change-cell.negative {
-  color: #f87171;
-}
-
-.bid-ask-cell {
-  font-size: 10px;
-  white-space: nowrap;
-}
-
-.bid {
-  color: #10b981;
-  font-weight: 600;
-}
-
-.ask {
-  color: #ef4444;
-  font-weight: 600;
-}
-
-/* Summary Stats */
+/* Statistics Bar */
 .option-chain-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin: 20px 0;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .stat-box {
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
 }
 
 .stat-label {
-  font-size: 11px;
-  color: #888;
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
 
 .stat-value {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 700;
-  color: #fff;
-  font-family: 'Courier New', monospace;
+  color: #f8fafc;
+  font-family: var(--font-mono);
 }
 
-.stat-value.positive {
-  color: #4ade80;
+/* Option Chain Table with Fixed Max-Height Scroll */
+.option-chain-table-wrapper {
+  overflow-x: auto;
+  max-height: 480px;
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 14, 22, 0.6);
 }
 
-.stat-value.negative {
-  color: #f87171;
+.option-chain-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  font-family: var(--font-mono);
 }
 
-/* Responsive */
-@media (max-width: 1600px) {
-  .option-chain-table {
-    font-size: 11px;
-  }
-  
-  .option-chain-table tbody td {
-    padding: 10px 6px;
-  }
+.option-chain-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #0f131d;
 }
 
-@media (max-width: 1200px) {
-  .option-chain-table {
-    font-size: 10px;
-  }
-  
-  .option-chain-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .expiry-selector {
-    width: 100%;
-  }
-  
-  .expiry-selector select {
-    width: 100%;
-  }
+.option-chain-table thead th {
+  padding: 8px 10px;
+  text-align: center;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-@media (max-width: 768px) {
-  .option-chain-container {
-    padding: 10px;
-  }
-  
-  .option-chain-header {
-    padding: 15px;
-  }
-  
-  .symbol-info h2 {
-    font-size: 20px;
-  }
-  
-  .spot-price {
-    font-size: 16px;
-  }
-  
-  .option-chain-table {
-    font-size: 9px;
-  }
-  
-  .option-chain-table tbody td,
-  .option-chain-table thead th {
-    padding: 8px 4px;
-  }
-}
-/* Data source badge */
-.data-source-badge {
-    display: inline-block;
-    margin-left: 15px;
-    padding: 4px 12px;
-    background: rgba(74, 222, 128, 0.2);
-    color: #4ade80;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+.option-chain-table thead th.strike-header {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  font-weight: 700;
 }
 
-.data-source-info {
-    animation: pulse-glow 2s ease-in-out infinite;
+.option-chain-table thead th.ce-header {
+  background: rgba(16, 185, 129, 0.08);
+  color: #34d399;
 }
 
-@keyframes pulse-glow {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.7;
-    }
+.option-chain-table thead th.pe-header {
+  background: rgba(244, 63, 94, 0.08);
+  color: #fb7185;
+}
+
+.option-chain-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.option-chain-table tbody tr:hover {
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.option-chain-table tbody td {
+  padding: 6px 10px;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.option-chain-table td.strike-cell {
+  background: rgba(56, 189, 248, 0.06);
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+/* ATM Row Highlight */
+.option-chain-table tr.atm-row {
+  background: rgba(245, 158, 11, 0.14) !important;
+  border-top: 1.5px solid #f59e0b !important;
+  border-bottom: 1.5px solid #f59e0b !important;
+}
+
+.option-chain-table tr.atm-row td.strike-cell {
+  background: #f59e0b;
+  color: #000;
+  font-weight: 800;
+}
+
+/* ITM Shading */
+.ce-itm {
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.pe-itm {
+  background: rgba(244, 63, 94, 0.04);
 }

@@ -8,6 +8,16 @@ const ViewRouterEngine = {
     if (state.indicesData) {
       let indices = state.indicesData;
       if (indices.data) indices = indices.data;
+
+      // Check dictionary object format
+      if (indices && typeof indices === 'object' && !Array.isArray(indices)) {
+        const bnf = indices.BANKNIFTY || indices['BANK NIFTY'] || indices['NIFTY BANK'];
+        if (bnf && (bnf.ltp || bnf.price)) {
+          return parseFloat(bnf.ltp || bnf.price);
+        }
+      }
+
+      // Check array format
       if (Array.isArray(indices)) {
         const bn = indices.find(i => i.symbol === 'BANKNIFTY' || i.symbol === 'NIFTY BANK' || i.name === 'BANKNIFTY');
         if (bn && (bn.ltp || bn.price)) {

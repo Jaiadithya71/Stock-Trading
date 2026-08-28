@@ -14,30 +14,50 @@ router.post("/banknifty-data", requireAuth, async (req, res) => {
     const dashboard = req.dashboard;
     const fetchTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
-    console.log("\n========================================");
-    console.log(`📊 FETCHING BANK NIFTY DATA at ${fetchTime}`);
-    console.log("========================================");
-
-    const marketOpenNow = isMarketOpen();
-    console.log(`📊 Market Status: ${marketOpenNow ? '🟢 OPEN' : '🔴 CLOSED'}`);
-
-    // Get all bank tokens
-    const tokens = Object.values(SYMBOL_TOKEN_MAP);
-    const symbolByToken = {};
-    Object.entries(SYMBOL_TOKEN_MAP).forEach(([symbol, token]) => {
-      symbolByToken[token] = symbol;
-    });
+    // Stage 1 Local Testing: Check Mock Exchange on Port 3001
+    const marketDataProvider = require("../services/marketDataProvider");
+    if (marketDataProvider.isLocal) {
+      const mockData = await marketDataProvider.queryMockServer();
+      if (mockData) {
+        if (mockData.outage) {
+          return res.status(503).json({ success: false, message: 'Broker Disconnected (Outage Active)' });
+        }
+        if (mockData.bankStocks && mockData.bankStocks.length > 0) {
+        const results = mockData.bankStocks.map(s => {
+          const pChange = s.pChange || 0;
+          let status = "Neutral";
+          if (pChange > 0.3) status = "Buying";
+          else if (pChange < -0.3) status = "Selling";
+          return {
+            bank: s.symbol,
+            token: s.token || SYMBOL_TOKEN_MAP[s.symbol] || "1333",
+            ltp: s.ltp || 1650,
+            changePercent: pChange,
+            status: status,
+            intervals: { "ONE_MINUTE": { change: pChange, status } },
+            dataSource: "mockExchange"
+          };
+        });
+        return res.json({
+          success: true,
+          data: results,
+          meta: {
+            timestamp: new Date().toISOString(),
+            isMarketOpen: true,
+            dataSource: 'mockExchange'
+          }
+        });
+      }
+    }
+  }
 
     let results = [];
     let dataSource = 'marketData';
 
     // STEP 1: Try real-time marketData API first
-    console.log(`🔄 Fetching real-time LTP using marketData API...`);
     const ltpResponse = await dashboard.getLTPData("NSE", tokens, "FULL");
 
     if (ltpResponse.success && ltpResponse.data) {
-      console.log(`✅ marketData API returned data`);
-
       // Process marketData response
       results = Object.entries(SYMBOL_TOKEN_MAP).map(([symbol, token]) => {
         const data = ltpResponse.data[token];
@@ -53,8 +73,6 @@ router.post("/banknifty-data", requireAuth, async (req, res) => {
           } else if (data.open && data.ltp < data.open) {
             status = "Selling";
           }
-
-          console.log(`   ✅ ${symbol}: ₹${data.ltp.toFixed(2)} (${changePercent >= 0 ? '+' : ''}${changePercent.toFixed(2)}%) [${status}]`);
 
           return {
             bank: symbol,
@@ -164,9 +182,6 @@ router.post("/banknifty-data", requireAuth, async (req, res) => {
     }
 
     const successCount = results.filter(r => r.ltp !== null).length;
-    console.log(`\n✅ COMPLETED: ${successCount}/${results.length} banks (${((successCount/results.length)*100).toFixed(1)}%)`);
-    console.log(`📡 Data source: ${dataSource}`);
-    console.log("========================================\n");
 
     res.json({
       success: true,
@@ -198,9 +213,40 @@ router.post("/indices-data", requireAuth, async (req, res) => {
     const dashboard = req.dashboard;
     const fetchTime = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
-    console.log("\n========================================");
-    console.log(`📈 FETCHING INDICES DATA at ${fetchTime}`);
-    console.log("========================================");
+    // Stage 1 Local Testing: Check Mock Exchange on Port 3001
+    const marketDataProvider = require("../services/marketDataProvider");
+    if (marketDataProvider.isLocal) {
+      const mockData = await marketDataProvider.queryMockServer();
+      if (mockData) {
+        if (mockData.outage) {
+          return res.status(503).json({ success: false, message: 'Broker Disconnected (Outage Active)' });
+        }
+        const spot = mockData.spotPrice;
+        const bnfResult = {
+          ltp: spot,
+          timestamp: new Date().toISOString(),
+          dataSource: 'mockExchange',
+          intervals: {
+            "ONE_MINUTE": { change: parseFloat(((mockData.advancingWeight - 50) / 20).toFixed(2)), status: mockData.advancingWeight > 60 ? "Bullish" : (mockData.advancingWeight < 40 ? "Bearish" : "Neutral") },
+            "FIVE_MINUTE": { change: parseFloat(((mockData.advancingWeight - 50) / 15).toFixed(2)), status: mockData.advancingWeight > 60 ? "Bullish" : (mockData.advancingWeight < 40 ? "Bearish" : "Neutral") },
+            "FIFTEEN_MINUTE": { change: parseFloat(((mockData.advancingWeight - 50) / 10).toFixed(2)), status: mockData.advancingWeight > 60 ? "Bullish" : (mockData.advancingWeight < 40 ? "Bearish" : "Neutral") }
+          }
+        };
+        return res.json({
+          success: true,
+          data: {
+            "BANKNIFTY": bnfResult,
+            "NIFTY": { ltp: Math.round(spot * 0.435), timestamp: new Date().toISOString(), dataSource: 'mockExchange', intervals: {} },
+            "INDIA VIX": { ltp: 13.85, timestamp: new Date().toISOString(), dataSource: 'mockExchange', intervals: {} }
+          },
+          meta: {
+            timestamp: new Date().toISOString(),
+            isMarketOpen: true,
+            dataSource: 'mockExchange'
+          }
+        });
+      }
+    }
 
     const marketOpenNow = isMarketOpen();
     const results = {};
@@ -215,12 +261,10 @@ router.post("/indices-data", requireAuth, async (req, res) => {
     });
 
     // STEP 1: Get real-time LTP for all indices (by exchange)
-    console.log(`🔄 Fetching real-time LTP for indices...`);
     let ltpMap = {};
 
     // Fetch LTP for each exchange in parallel
     const ltpPromises = Object.entries(tokensByExchange).map(async ([exchange, tokens]) => {
-      console.log(`   📡 Fetching ${exchange} tokens: ${tokens.join(', ')}`);
       const response = await dashboard.getLTPData(exchange, tokens, "FULL");
       if (response.success && response.data) {
         return response.data;
@@ -235,8 +279,6 @@ router.post("/indices-data", requireAuth, async (req, res) => {
 
     // PARALLEL FETCH: All indices at once
     const indicesPromises = Object.entries(INDICES_INSTRUMENTS).map(async ([symbol, info]) => {
-      console.log(`\n📊 Processing ${symbol}...`);
-
       // Get real-time LTP from marketData response
       let currentLTP = null;
       let ltpTimestamp = null;
@@ -246,7 +288,6 @@ router.post("/indices-data", requireAuth, async (req, res) => {
         currentLTP = ltpMap[info.token].ltp;
         ltpTimestamp = ltpMap[info.token].exchFeedTime;
         dataSource = 'realtime';
-        console.log(`   ✅ Real-time LTP: ₹${currentLTP.toFixed(2)}`);
       } else {
         // Fallback to candle data
         const ltpInterval = marketOpenNow ? "ONE_MINUTE" : "ONE_HOUR";
@@ -257,9 +298,6 @@ router.post("/indices-data", requireAuth, async (req, res) => {
           currentLTP = parseFloat(latestCandle[4]);
           ltpTimestamp = latestCandle[0];
           dataSource = 'candle';
-          console.log(`   ⚠️  Fallback LTP: ₹${currentLTP.toFixed(2)} [${ltpInterval}]`);
-        } else {
-          console.log(`   ❌ No LTP data available`);
         }
       }
 
@@ -374,7 +412,6 @@ router.post("/indices-data", requireAuth, async (req, res) => {
         fetchedAt: new Date().toISOString()
       };
 
-      console.log(`   ✅ ${symbol} complete (${dataSource})`);
       return { symbol, data: indexData };
     });
 
@@ -395,10 +432,6 @@ router.post("/indices-data", requireAuth, async (req, res) => {
         results[symbol] = data;
       }
     });
-
-    console.log("\n========================================");
-    console.log(`✅ COMPLETED: Fetched ${Object.keys(results).length} indices`);
-    console.log("========================================\n");
 
     res.json({
       success: true,

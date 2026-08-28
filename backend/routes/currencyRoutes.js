@@ -10,15 +10,9 @@ const currencyService = require("../services/currencyService");
  */
 router.post("/currency-rates", requireAuth, async (req, res) => {
   try {
-    console.log("\n💱 Fetching currency rates...");
-    
     const result = await currencyService.fetchCurrencyRates();
     
     if (result.success) {
-      const cacheStatus = result.cached ? "(cached)" : "(fresh)";
-      const staleStatus = result.stale ? " - STALE" : "";
-      console.log(`✅ Currency rates returned ${cacheStatus}${staleStatus}`);
-      
       res.json({
         success: true,
         ...result.data,

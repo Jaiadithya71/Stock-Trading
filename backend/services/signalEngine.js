@@ -1,47 +1,42 @@
 // ============================================================================
 // FILE: backend/services/signalEngine.js
-// Layer 3: Signal Confluence Engine
-// Decoupled quantitative signal evaluation emitting immutable signal objects
-// Hardened Z-Score Filter (Z < -1.2 or Z > +1.2)
-// Strict Confluence Gate: Require Z-Score AND Fib Golden Level AND Stock Breadth
-// 15-Minute Post-Trade Cooldown & Max 5 Trades/Day Cap (Restored from Disk on Restart)
-// Restores targetOptionPrice in payload for frontend widgets
+// Multi-Regime Quantitative Confluence Engine
+// Evaluates High-Velocity Momentum Scalps & Contrarian Mean-Reversion Signals
 // ============================================================================
 
 const computationEngine = require('./computationEngine');
-const weeklyAuditLogger = require('./weeklyAuditLogger');
+const path = require('path');
+const fs = require('fs');
 
 class SignalEngine {
     constructor() {
         this.lastTradeTimestamp = null;
         this.tradesTodayCount = 0;
-        this.lastTradeDate = null;
-        this.loadPersistedStateOnStartup();
+        this.lastTradeDate = new Date().toISOString().split('T')[0];
+        this.recentSpotHistory = [];
+        this.initPersistentState();
     }
 
-    loadPersistedStateOnStartup() {
+    initPersistentState() {
         try {
+            const auditFile = path.join(__dirname, '../data/weekly_simulation_log.json');
+            if (!fs.existsSync(auditFile)) return;
+            const raw = fs.readFileSync(auditFile, 'utf8');
+            const data = JSON.parse(raw);
+            const trades = data.trades || [];
             const today = new Date().toISOString().split('T')[0];
-            this.lastTradeDate = today;
-
-            const logData = weeklyAuditLogger.loadLog();
-            const trades = logData.trades || [];
 
             if (trades.length > 0) {
-                // Find most recent trade timestamp
                 const lastTrade = trades[trades.length - 1];
                 if (lastTrade && lastTrade.timestamp) {
                     this.lastTradeTimestamp = new Date(lastTrade.timestamp).getTime();
                 }
 
-                // Count trades executed today
                 const tradesToday = trades.filter(t => {
                     if (!t.timestamp) return false;
                     return new Date(t.timestamp).toISOString().split('T')[0] === today;
                 });
                 this.tradesTodayCount = tradesToday.length;
-
-                console.log(`✅ [SignalEngine] State restored from Audit Log: Trades Today = ${this.tradesTodayCount}/5, Last Trade Time = ${this.lastTradeTimestamp ? new Date(this.lastTradeTimestamp).toLocaleTimeString('en-IN') : 'None'}`);
             }
         } catch (e) {
             console.warn('⚠️ Could not restore SignalEngine state on startup:', e.message);
@@ -54,6 +49,7 @@ class SignalEngine {
             this.lastTradeDate = today;
             this.tradesTodayCount = 0;
             this.lastTradeTimestamp = null;
+            this.recentSpotHistory = [];
         }
     }
 
@@ -76,6 +72,15 @@ class SignalEngine {
             }
         }
         if (!spotPrice) spotPrice = 57491.10;
+
+        // Record rolling spot history
+        this.recentSpotHistory.push({ price: spotPrice, time: Date.now() });
+        if (this.recentSpotHistory.length > 30) this.recentSpotHistory.shift();
+
+        let spotVelocity = 0;
+        if (this.recentSpotHistory.length > 1) {
+            spotVelocity = spotPrice - this.recentSpotHistory[0].price;
+        }
 
         const pcrMetrics = computationEngine.calculatePCRMetrics(pcrSnapshots);
         const techLevels = computationEngine.calculateTechnicalLevels(spotPrice);
@@ -104,45 +109,44 @@ class SignalEngine {
             });
         }
 
-        // CHECK 2: 15-Minute Trade Cooldown Filter (900,000 ms)
-        if (this.lastTradeTimestamp && (Date.now() - this.lastTradeTimestamp < 15 * 60 * 1000)) {
-            const remainingSec = Math.ceil((15 * 60 * 1000 - (Date.now() - this.lastTradeTimestamp)) / 1000);
-            return Object.freeze({
-                signal: 'NEUTRAL_HOLD',
-                underlyingPrice: spotPrice,
-                atmStrike,
-                targetOptionPrice: estimatedPremium,
-                confidenceScore: '90%',
-                signalTitle: '⏳ 15-MIN TRADE COOLDOWN ACTIVE',
-                signalRationale: `Waiting ${remainingSec}s post-exit to allow consolidation noise & option volatility decay to clear.`,
-                targetContract: `BANKNIFTY ${atmStrike} CE`,
-                pcrMetrics,
-                techLevels,
-                breadthMetrics,
-                riskAllocation
-            });
-        }
-
         let signal = 'NEUTRAL_HOLD';
         let confidenceScore = 0.75;
         let signalTitle = '🟡 NEUTRAL / HOLD IN CASH';
-        let signalRationale = `Price consolidating around ₹${spotPrice.toLocaleString('en-IN')}. Awaiting Fibonacci level bounce + PCR Z-Score confirmation.`;
+        let signalRationale = `Price consolidating around ₹${spotPrice.toLocaleString('en-IN')}. Awaiting Fibonacci level bounce or Momentum breakout.`;
 
-        // Strict Confluence Gate: Require Z-Score extreme (|Z| > 1.2) AND Fib Golden Level AND Stock Breadth alignment
         const nearFibGolden = Math.abs(spotPrice - techLevels.fibonacci.fib0618) / spotPrice < 0.015;
-        const bullishBreadth = breadthMetrics.advancingWeight >= 50;
-        const bearishBreadth = breadthMetrics.decliningWeight >= 50;
+        const bullishBreadth = breadthMetrics.advancingWeight >= 65;
+        const bearishBreadth = breadthMetrics.decliningWeight >= 65;
 
-        if (pcrMetrics.pcrZScore <= -1.2 && nearFibGolden && bullishBreadth) {
+        // 1. MOMENTUM SCALPING / BREAKOUT REGIME
+        if (bullishBreadth && (spotVelocity >= 20 || spotPrice >= techLevels.cpr.pivot)) {
+            signal = 'BUY_CALL_CE';
+            confidenceScore = 0.88;
+            signalTitle = '🟢 HIGH CONFLUENCE CALL (CE) MOMENTUM BREAKOUT';
+            signalRationale = `Bullish Momentum surge + HDFC/ICICI Positive Breadth (${breadthMetrics.advancingWeight}% advancing) + Above CPR Pivot.`;
+        } else if (bearishBreadth && (spotVelocity <= -20 || spotPrice <= techLevels.cpr.pivot)) {
+            signal = 'BUY_PUT_PE';
+            confidenceScore = 0.88;
+            signalTitle = '🔻 HIGH CONFLUENCE PUT (PE) WATERFALL BREAKDOWN';
+            signalRationale = `Bearish Momentum plunge + Heavy Declining Breadth (${breadthMetrics.decliningWeight}% declining) + Below CPR Pivot.`;
+        }
+        // 2. CONTRARIAN REVERSAL REGIME (Extreme PCR Z-Scores)
+        else if (pcrMetrics.pcrZScore <= -1.2 && nearFibGolden && breadthMetrics.advancingWeight >= 50) {
             signal = 'BUY_CALL_CE';
             confidenceScore = 0.92;
-            signalTitle = '🟢 HIGH CONFLUENCE CALL (CE) SIGNAL';
-            signalRationale = `Price touched 0.618 Fib Support (₹${techLevels.fibonacci.fib0618}) + PCR ${pcrMetrics.rawPcr} (Z-Score: ${pcrMetrics.pcrZScore.toFixed(2)}) + HDFC/ICICI Positive Breadth (${breadthMetrics.advancingWeight}%).`;
-        } else if (pcrMetrics.pcrZScore >= 1.2 && (!bullishBreadth || bearishBreadth)) {
+            signalTitle = '🟢 OVERSOLD CALL (CE) REVERSAL BOUNCE';
+            signalRationale = `Price touched 0.618 Fib Support (₹${techLevels.fibonacci.fib0618}) + PCR ${pcrMetrics.rawPcr} (Z-Score: ${pcrMetrics.pcrZScore.toFixed(2)}) + Breadth Support.`;
+        } else if (pcrMetrics.pcrZScore >= 1.2 && (bearishBreadth || !bullishBreadth)) {
             signal = 'BUY_PUT_PE';
             confidenceScore = 0.92;
-            signalTitle = '🔻 HIGH CONFLUENCE PUT (PE) SIGNAL';
-            signalRationale = `Price rejected at CPR Top (₹${techLevels.cpr.top}) + PCR ${pcrMetrics.rawPcr} (Z-Score: ${pcrMetrics.pcrZScore.toFixed(2)}) + Banking Breadth Negative (${breadthMetrics.decliningWeight}%).`;
+            signalTitle = '🔻 OVERBOUGHT PUT (PE) REVERSAL';
+            signalRationale = `Price rejected at CPR Top (₹${techLevels.cpr.top}) + PCR ${pcrMetrics.rawPcr} (Z-Score: ${pcrMetrics.pcrZScore.toFixed(2)}) + Negative Breadth.`;
+        }
+
+        // Log signal transition once when direction changes
+        if (signal !== this.lastEmittedSignal) {
+            this.lastEmittedSignal = signal;
+            console.log(`\n🎯 [QUANT SIGNAL] ${signalTitle} | Target: ${signal === 'BUY_PUT_PE' ? `BANKNIFTY ${atmStrike} PE` : `BANKNIFTY ${atmStrike} CE`} | Spot: ₹${spotPrice.toLocaleString('en-IN')}`);
         }
 
         return Object.freeze({

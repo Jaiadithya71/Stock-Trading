@@ -40,60 +40,31 @@ class SignalScheduler {
 
   async runEvaluationCycle() {
     try {
-      if (!this.isMarketHours()) {
-        return; // Silently skip outside market hours
+      const marketDataProvider = require('./marketDataProvider');
+      const { getActiveDashboards } = require('../middleware/authMiddleware');
+      const activeDashboards = getActiveDashboards();
+      const dashboard = Object.values(activeDashboards).find(d => d && d.authenticated);
+
+      // In production, strictly enforce regular market hours; in local mock testing, allow simulator feeds
+      const marketSnapshot = await marketDataProvider.getMarketSnapshot(dashboard);
+      const isMockFeed = marketSnapshot.source === 'MOCK_EXCHANGE_3001';
+
+      if (!isMockFeed && !this.isMarketHours()) {
+        return; // Silently skip outside market hours in live production
       }
 
       const now = new Date();
       const currentMinuteKey = now.toISOString().substring(0, 16); // YYYY-MM-DDTHH:MM
-      if (this.lastEvaluatedMinute === currentMinuteKey) {
-        return; // Already evaluated this minute
+      if (this.lastEvaluatedMinute === currentMinuteKey && !isMockFeed) {
+        return; // Already evaluated this minute in production
       }
       this.lastEvaluatedMinute = currentMinuteKey;
 
       const historicalData = await pcrStorage.loadData();
       const snapshots = historicalData.snapshots || [];
 
-      let liveSpotPrice = null;
-      let stockList = null;
-
-      // 1. Try querying real-time market data from active authenticated SmartAPI dashboard
-      try {
-        const { getActiveDashboards } = require('../middleware/authMiddleware');
-        const activeDashboards = getActiveDashboards();
-        const dashboard = Object.values(activeDashboards).find(d => d && d.authenticated);
-
-        if (dashboard && typeof dashboard.getLTPData === 'function') {
-          const ltpRes = await dashboard.getLTPData('NSE', ['99926009', '1333', '4963', '1922', '5900', '3045'], 'FULL');
-          if (ltpRes && ltpRes.success && ltpRes.data) {
-            if (ltpRes.data['99926009'] && ltpRes.data['99926009'].ltp) {
-              liveSpotPrice = parseFloat(ltpRes.data['99926009'].ltp);
-            }
-
-            const tokenSymbolMap = {
-              '1333': 'HDFCBANK',
-              '4963': 'ICICIBANK',
-              '1922': 'KOTAKBANK',
-              '5900': 'AXISBANK',
-              '3045': 'SBIN'
-            };
-
-            const extractedStocks = [];
-            for (const [t, sym] of Object.entries(tokenSymbolMap)) {
-              if (ltpRes.data[t]) {
-                const pChg = parseFloat(ltpRes.data[t].changePercent || ltpRes.data[t].percentChange || 0.0);
-                extractedStocks.push({ symbol: sym, pChange: pChg });
-              }
-            }
-
-            if (extractedStocks.length > 0) {
-              stockList = extractedStocks;
-            }
-          }
-        }
-      } catch (dashErr) {
-        console.warn(`   ⚠️ [SignalScheduler] Could not fetch live dashboard LTP: ${dashErr.message}`);
-      }
+      let liveSpotPrice = marketSnapshot.spotPrice;
+      let stockList = marketSnapshot.bankStocks;
 
       // 2. Fall back to latest PCR snapshot data if live query was not available
       if (!liveSpotPrice && snapshots.length > 0) {

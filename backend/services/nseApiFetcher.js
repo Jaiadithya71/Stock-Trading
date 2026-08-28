@@ -79,7 +79,6 @@ class NSEApiFetcher {
    */
   async initSession() {
     if (this.sessionInitialized && this.cookies) {
-      console.log('✅ Using existing session');
       return true;
     }
 
@@ -103,14 +102,14 @@ class NSEApiFetcher {
       const response = await this.makeRequest(options, 5000); // 5s timeout for session init
       
       // Extract cookies
-      const setCookie = response.headers['set-cookie'];
-      if (setCookie) {
-        this.cookies = setCookie.map(cookie => cookie.split(';')[0]).join('; ');
+      const setCookieHeaders = response.headers['set-cookie'];
+      if (setCookieHeaders) {
+        this.cookies = Array.isArray(setCookieHeaders) 
+          ? setCookieHeaders.map(c => c.split(';')[0]).join('; ')
+          : setCookieHeaders.split(';')[0];
         this.sessionInitialized = true;
-        console.log('✅ Session initialized, cookies obtained');
         return true;
       } else {
-        console.warn('⚠️  No cookies received, continuing anyway');
         this.sessionInitialized = true;
         return true;
       }
@@ -142,10 +141,6 @@ class NSEApiFetcher {
       throw new Error('Expiry date is required for NSE API');
     }
 
-    console.log(`\n📊 Fetching NSE Option Chain...`);
-    console.log(`   Symbol: ${symbol}`);
-    console.log(`   Expiry: ${expiry}`);
-    
     // Initialize session (with timeout)
     await this.initSession();
     
@@ -166,7 +161,6 @@ class NSEApiFetcher {
     
     // Build URL with expiry
     const path = `/api/option-chain-v3?type=Indices&symbol=${nseSymbol}&expiry=${encodeURIComponent(expiry)}`;
-    console.log(`   URL: ${this.baseUrl}${path}`);
 
     try {
       const options = {
@@ -197,17 +191,12 @@ class NSEApiFetcher {
       
       // NSE API v3 structure
       if (json.records && json.records.data) {
-        const dataArray = json.records.data;
-        console.log(`✅ Fetched ${dataArray.length} option entries from NSE`);
-        
         // Filter valid data
-        const validData = dataArray.filter(item => {
+        const validData = json.records.data.filter(item => {
           const ceStrike = item.CE?.strikePrice || 0;
           const peStrike = item.PE?.strikePrice || 0;
           return ceStrike > 0 || peStrike > 0;
         });
-        
-        console.log(`✅ Found ${validData.length} valid option contracts`);
         
         return {
           success: true,
@@ -306,9 +295,6 @@ class NSEApiFetcher {
         };
       }
     });
-
-    const strikeCount = Object.keys(optionChain.strikes).length;
-    console.log(`✅ Parsed ${strikeCount} unique strikes`);
 
     return optionChain;
   }

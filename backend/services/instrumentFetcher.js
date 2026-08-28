@@ -80,7 +80,6 @@ class InstrumentFetcher {
     try {
       const data = fs.readFileSync(this.instrumentsFile, 'utf8');
       const instruments = JSON.parse(data);
-      console.log(`✅ Loaded ${instruments.length} instruments from cache`);
       return instruments;
     } catch (error) {
       console.error('❌ Cache read error:', error.message);
@@ -108,8 +107,6 @@ class InstrumentFetcher {
    * Get expiry dates for a symbol
    */
   async getExpiryDates(symbol = 'BANKNIFTY') {
-    console.log(`\n📅 Getting expiry dates for ${symbol}...`);
-    
     const instruments = await this.getInstruments();
     
     // Filter for NFO options of the symbol
@@ -119,8 +116,6 @@ class InstrumentFetcher {
              inst.instrumenttype === 'OPTIDX' &&
              inst.name === symbol;
     });
-    
-    console.log(`✅ Found ${filtered.length} ${symbol} option contracts`);
     
     // Extract unique expiry dates
     const expirySet = new Set();
@@ -163,8 +158,6 @@ class InstrumentFetcher {
       const expDate = new Date(`${year}-${monthMap[month]}-${day}`);
       return expDate >= today;
     });
-    
-    console.log(`✅ Found ${futureExpiries.length} future expiries`);
     
     // Format for NSE API (30DEC2025 → 30-Dec-2025)
     const formattedExpiries = futureExpiries.map(exp => {

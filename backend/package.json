@@ -8,7 +8,17 @@
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "sim:bullish": "node test/cliController.js bullish",
+    "sim:bearish": "node test/cliController.js bearish",
+    "sim:crash": "node test/cliController.js crash",
+    "sim:whip": "node test/cliController.js whip",
+    "sim:chop": "node test/cliController.js chop",
+    "sim:reversal": "node test/cliController.js reversal",
+    "sim:outage": "node test/cliController.js outage",
+    "sim:restore": "node test/cliController.js restore",
+    "sim:reset": "node test/cliController.js reset",
+    "sim:status": "node test/cliController.js status"
   },
   "dependencies": {
     "body-parser": "1.20.4",

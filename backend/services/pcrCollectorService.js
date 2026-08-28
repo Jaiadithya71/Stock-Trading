@@ -1,10 +1,7 @@
 // ============================================================================
 // FILE: backend/services/pcrCollectorService.js
-// Background PCR Collector - Runs every minute to store PCR snapshots
-// - Fetches option chain from NSE India public API
-// - Calculates PCR from Put OI / Call OI
-// - Stores snapshot in local file
-// - Auto-runs in background
+// Background PCR Collector - Runs periodically to store PCR snapshots
+// Clean, non-verbose logging
 // ============================================================================
 
 const PCRStorageService = require('./pcrStorageService');
@@ -24,73 +21,33 @@ class PCRCollectorService {
     this.collectCount = 0;
     this.cachedExpiry = null;
     this.expiryLastFetched = null;
-    this.EXPIRY_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+    this.EXPIRY_CACHE_DURATION = 30 * 60 * 1000;
   }
 
-  /**
-   * Start collecting PCR data
-   */
   start() {
-    if (this.isRunning) {
-      console.log('⚠️  PCR Collector is already running');
-      return;
-    }
-    
-    console.log('\n🚀 Starting Angel One Native PCR Collector Service');
-    console.log(`   Interval: Every ${this.intervalMinutes} minute(s)`);
-    console.log(`   Symbol: BANKNIFTY (Angel One SmartAPI Provider)`);
-    console.log('─'.repeat(80));
-    
+    if (this.isRunning) return;
     this.isRunning = true;
-    
-    // Collect immediately
+    console.log('🚀 [PCRCollector] Angel One PCR Collector started (every 1 min)');
     this.collectPCR();
-    
-    // Then collect every interval
     this.intervalId = setInterval(() => {
       this.collectPCR();
     }, this.intervalMs);
-    
-    console.log('✅ Angel One PCR Collector started successfully\n');
   }
 
-  /**
-   * Stop collecting
-   */
   stop() {
-    if (!this.isRunning) {
-      console.log('⚠️  PCR Collector is not running');
-      return;
-    }
-    
-    console.log('\n🛑 Stopping PCR Collector Service...');
-    
+    if (!this.isRunning) return;
     this.isRunning = false;
-    
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
     }
-    
-    console.log(`✅ PCR Collector stopped (collected ${this.collectCount} snapshots)\n`);
+    console.log(`🛑 [PCRCollector] Stopped (collected ${this.collectCount} snapshots)`);
   }
 
-  /**
-   * Collect current PCR and store it via Angel One SmartAPI
-   */
   async collectPCR() {
-    const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-
     try {
-      console.log(`\n[${timestamp}] 📊 Collecting Angel One PCR snapshot #${this.collectCount + 1}...`);
-
       const pcrData = await this.angelOptionChainService.calculateAngelPCR('BANKNIFTY');
 
-      console.log(`   📈 Call Contracts: ${pcrData.callCount}`);
-      console.log(`   📉 Put Contracts: ${pcrData.putCount}`);
-      console.log(`   📊 PCR: ${pcrData.pcr}`);
-
-      // Fetch live spot price and constituent banking stocks via marketData API
       let spotPrice = null;
       let stockBreadth = null;
 
@@ -125,10 +82,9 @@ class PCRCollectorService {
             }));
         }
       } catch (marketErr) {
-        console.warn(`   ⚠️ Could not fetch marketData for spot: ${marketErr.message}`);
+        // silent fail
       }
 
-      // Create snapshot using Angel One native data
       const snapshot = {
         symbol: 'BANKNIFTY',
         pcr: pcrData.pcr,
@@ -141,73 +97,28 @@ class PCRCollectorService {
         source: 'angel_smartapi_native'
       };
 
-      // Store snapshot
       await this.storage.storeSnapshot(snapshot);
       this.collectCount++;
-
-      console.log(`   ✅ Stored: PCR=${pcrData.pcr.toFixed(2)} (${snapshot.sentiment}) - Spot: ₹${snapshot.spotPrice} - Expiry: ${pcrData.expiry}`);
-
+      console.log(`⏱️ [PCRCollector] Snapshot #${this.collectCount} Stored: PCR=${pcrData.pcr.toFixed(2)} (${snapshot.sentiment}) | Spot: ₹${snapshot.spotPrice}`);
     } catch (error) {
-      console.error(`   ❌ Error collecting Angel One PCR: ${error.message}`);
+      console.error(`❌ [PCRCollector] Error: ${error.message}`);
     }
   }
 
+  determineSentiment(pcr) {
+    if (pcr >= 1.3) return 'Extremely Bullish';
+    if (pcr >= 1.1) return 'Bullish';
+    if (pcr <= 0.7) return 'Extremely Bearish';
+    if (pcr <= 0.9) return 'Bearish';
+    return 'Neutral';
+  }
 
-  /**
-   * Show collection statistics
-   */
   async showStats() {
     try {
       const stats = await this.storage.getStats();
-      
-      console.log('\n' + '─'.repeat(80));
-      console.log('📊 PCR COLLECTOR STATISTICS');
-      console.log('─'.repeat(80));
-      console.log(`   Total Snapshots: ${stats.totalSnapshots}`);
-      console.log(`   Data Span: ${stats.dataSpanHours} hours`);
-      console.log(`   Oldest Snapshot: ${stats.oldestSnapshot || 'N/A'}`);
-      console.log(`   Newest Snapshot: ${stats.newestSnapshot || 'N/A'}`);
-      
-      if (stats.symbolCounts.length > 0) {
-        console.log(`\n   Symbols:`);
-        stats.symbolCounts.forEach(item => {
-          console.log(`     • ${item.symbol}: ${item.count} snapshots`);
-        });
-      }
-      
-      console.log('─'.repeat(80) + '\n');
-      
+      console.log(`📊 [PCRCollector Stats] Total Snapshots: ${stats.totalSnapshots}, Span: ${stats.dataSpanHours} hrs`);
     } catch (error) {
-      console.error(`❌ Error showing stats: ${error.message}`);
-    }
-  }
-
-  /**
-   * Get current status
-   */
-  getStatus() {
-    return {
-      isRunning: this.isRunning,
-      intervalMinutes: this.intervalMinutes,
-      collectCount: this.collectCount,
-      nextCollection: this.isRunning ? 
-        new Date(Date.now() + this.intervalMs).toLocaleString('en-IN') : 
-        'Not running'
-    };
-  }
-
-  /**
-   * Determine sentiment
-   */
-  determineSentiment(pcr) {
-    if (typeof pcr !== 'number') return 'Neutral';
-    
-    if (pcr > 1.2) {
-      return 'Selling';
-    } else if (pcr < 0.8) {
-      return 'Buying';
-    } else {
-      return 'Neutral';
+      console.error('❌ Error showing stats:', error.message);
     }
   }
 }

@@ -50,8 +50,6 @@ class PCRStorageService {
    * Store a PCR snapshot
    */
   async storeSnapshot(snapshot) {
-    console.log(`\n💾 Storing PCR snapshot for ${snapshot.symbol}...`);
-    
     try {
       // Validate snapshot
       if (!snapshot.symbol || typeof snapshot.pcr !== 'number') {
@@ -74,14 +72,8 @@ class PCRStorageService {
       // Clean old data (keep last 24 hours)
       data.snapshots = this.cleanOldSnapshots(data.snapshots, 24);
       
-      console.log(`   Total snapshots: ${data.snapshots.length}`);
-      console.log(`   Oldest: ${data.snapshots[0]?.timestamp || 'N/A'}`);
-      console.log(`   Newest: ${data.snapshots[data.snapshots.length - 1]?.timestamp || 'N/A'}`);
-      
       // Save with atomic write
       await this.saveDataAtomic(data);
-      
-      console.log(`✅ Snapshot stored successfully`);
       
       return snapshotWithTimestamp;
       
@@ -96,8 +88,6 @@ class PCRStorageService {
    * SMART VERSION: Uses "now" during market hours, "latest snapshot" when closed
    */
   async getHistoricalPCR(symbol, intervals = [1, 3, 5, 15, 30]) {
-    console.log(`\n📊 Calculating historical PCR for ${symbol}...`);
-    
     try {
       const data = await this.loadData();
       const results = {};
@@ -106,11 +96,8 @@ class PCRStorageService {
       const symbolSnapshots = data.snapshots.filter(s => s.symbol === symbol);
       
       if (symbolSnapshots.length === 0) {
-        console.log(`⚠️  No snapshots found for ${symbol}`);
         return null;
       }
-      
-      console.log(`   Found ${symbolSnapshots.length} snapshots`);
       
       // Sort by timestamp (oldest to newest)
       symbolSnapshots.sort((a, b) => a.timestampMs - b.timestampMs);
@@ -124,24 +111,11 @@ class PCRStorageService {
         // Market is OPEN - use current time for real-time data
         referenceTime = Date.now();
         referenceMode = 'REAL-TIME (Market Open)';
-        console.log(`   🟢 Market is OPEN - Using current time as reference`);
       } else {
         // Market is CLOSED - use latest snapshot for historical analysis
         referenceTime = symbolSnapshots[symbolSnapshots.length - 1].timestampMs;
         referenceMode = 'HISTORICAL (Market Closed)';
-        console.log(`   🔴 Market is CLOSED - Using latest snapshot as reference`);
       }
-      
-      console.log(`   Reference time: ${new Date(referenceTime).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
-      console.log(`   Mode: ${referenceMode}`);
-      
-      const oldestSnapshotTime = symbolSnapshots[0].timestampMs;
-      const latestSnapshotTime = symbolSnapshots[symbolSnapshots.length - 1].timestampMs;
-      const totalSpanMinutes = (latestSnapshotTime - oldestSnapshotTime) / (60 * 1000);
-      
-      console.log(`   Latest snapshot: ${new Date(latestSnapshotTime).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
-      console.log(`   Oldest snapshot: ${new Date(oldestSnapshotTime).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`);
-      console.log(`   Total span: ${totalSpanMinutes.toFixed(1)} minutes`);
       
       // Calculate for each interval
       for (const intervalMinutes of intervals) {
@@ -162,7 +136,6 @@ class PCRStorageService {
             underlyingValue: latestSnapshot.underlyingValue,
             timestamp: latestSnapshot.timestamp
           };
-          console.log(`   ✅ 0min (Current): PCR=${latestSnapshot.pcr.toFixed(4)}, Sentiment=${results['0min'].sentiment}`);
           continue;
         }
 
@@ -178,7 +151,6 @@ class PCRStorageService {
 
         if (intervalSnapshots.length === 0) {
           const mode = marketOpen ? 'current time' : 'latest snapshot';
-          console.log(`   ⚠️  ${intervalMinutes}min: No data (need snapshots within last ${intervalMinutes} min from ${mode})`);
           results[`${intervalMinutes}min`] = {
             pcr: null,
             sentiment: 'No Data',
@@ -187,7 +159,7 @@ class PCRStorageService {
             changePercent: null,
             dataPoints: 0,
             available: false,
-            reason: 'No snapshots in this interval'
+            reason: `No snapshots in ${intervalMinutes}min window from ${mode}`
           };
           continue;
         }
@@ -209,7 +181,6 @@ class PCRStorageService {
 
         if (hasInsufficientSpan || dataStartsTooLate) {
           const actualSpanMinutes = (actualSpanMs / 60000).toFixed(1);
-          console.log(`   ⚠️  ${intervalMinutes}min: Insufficient data (only ${actualSpanMinutes} min span, need ${intervalMinutes} min)`);
           results[`${intervalMinutes}min`] = {
             pcr: null,
             sentiment: 'No Data',
@@ -247,8 +218,6 @@ class PCRStorageService {
           oldest: intervalSnapshots[0].timestamp,
           newest: intervalSnapshots[intervalSnapshots.length - 1].timestamp
         };
-
-        console.log(`   ✅ ${intervalMinutes}min: PCR=${avgPCR.toFixed(4)}, Sentiment=${sentiment}, Trend=${trend} (${intervalSnapshots.length} points)`);
       }
       
       return {

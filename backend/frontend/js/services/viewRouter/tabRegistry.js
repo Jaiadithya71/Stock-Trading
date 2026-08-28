@@ -1,7 +1,7 @@
 // ============================================================================
 // FILE: frontend/js/services/viewRouter/tabRegistry.js
 // Declarative Tab Registry Mapping Tabs to View Components
-// Includes Option Chain Enabled by Default on Master Market Grid Tab
+// Includes Live Option Chain Matrix + 2-Column Market Bento Layout
 // ============================================================================
 
 const TAB_REGISTRY = {
@@ -39,12 +39,20 @@ const TAB_REGISTRY = {
     { 
       id: 'master-grid-container', 
       renderHtml: (state, filteredData) => {
-        let html = IndicesGrid.render(state.indicesData, state.indicesTimestamp);
-        if (state.showPCR) html += PCRWidget.render(state.pcrData, state.pcrTimestamp);
-        if (state.showCurrency && state.currencyData) html += CurrencyWidget.render(state.currencyData, state.currencyTimestamp);
-        // Render Option Chain by default
-        html += OptionChain.render(state.nseOptionChainData, state.selectedNSESymbol || 'BANKNIFTY');
-        html += BankNiftyTable.render(filteredData, state.bankNiftyTimestamp);
+        let html = `
+          <div class="market-bento-grid" style="display: grid; grid-template-columns: 1.15fr 0.95fr; gap: 14px; margin-bottom: 14px;">
+            <div>${IndicesGrid.render(state.indicesData, state.indicesTimestamp)}</div>
+            <div>${BankNiftyTable.render(filteredData, state.bankNiftyTimestamp)}</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 14px; margin-bottom: 14px;">
+            <div>${PCRWidget.render(state.pcrData, state.pcrTimestamp)}</div>
+            <div>${CurrencyWidget.render(state.currencyData, state.currencyTimestamp)}</div>
+          </div>
+        `;
+        // Live NSE Option Chain with ATM strike highlights and scrollable container
+        if (state.nseOptionChainData) {
+          html += OptionChain.render(state.nseOptionChainData, state.selectedNSESymbol || 'BANKNIFTY');
+        }
         return html;
       }
     }

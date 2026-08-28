@@ -40,11 +40,14 @@ function getPersistedSettings() {
  */
 router.get('/quant/signal', async (req, res) => {
   try {
+    const marketDataProvider = require('../services/marketDataProvider');
+    const marketSnapshot = await marketDataProvider.getMarketSnapshot();
+
     const historicalData = await pcrStorage.loadData();
     const snapshots = historicalData.snapshots || [];
 
-    let liveSpotPrice = 57491.10;
-    let stockList = [
+    let liveSpotPrice = marketSnapshot?.spotPrice || 57491.10;
+    let stockList = (marketSnapshot?.bankStocks && marketSnapshot.bankStocks.length > 0) ? marketSnapshot.bankStocks : [
       { symbol: 'HDFCBANK', pChange: 0.28 },
       { symbol: 'ICICIBANK', pChange: 0.73 },
       { symbol: 'KOTAKBANK', pChange: -0.32 },
@@ -52,28 +55,30 @@ router.get('/quant/signal', async (req, res) => {
       { symbol: 'SBIN', pChange: -1.41 }
     ];
 
-    if (snapshots.length > 0) {
-      const lastSnap = snapshots[snapshots.length - 1];
-      if (lastSnap && lastSnap.spotPrice) {
-        liveSpotPrice = parseFloat(lastSnap.spotPrice);
-      }
+    if (!marketSnapshot || !marketSnapshot.spotPrice) {
+      if (snapshots.length > 0) {
+        const lastSnap = snapshots[snapshots.length - 1];
+        if (lastSnap && lastSnap.spotPrice) {
+          liveSpotPrice = parseFloat(lastSnap.spotPrice);
+        }
 
-      if (lastSnap && lastSnap.stockBreadth && Array.isArray(lastSnap.stockBreadth)) {
-        stockList = lastSnap.stockBreadth.map(stk => ({
-          symbol: stk.symbol,
-          pChange: parseFloat(stk.pChange || stk.change || 0.0)
-        }));
-      } else if (snapshots.length > 1) {
-        const prevSnap = snapshots[snapshots.length - 2];
-        const spotDelta = ((lastSnap.spotPrice - prevSnap.spotPrice) / prevSnap.spotPrice) * 100;
-        
-        stockList = [
-          { symbol: 'HDFCBANK', pChange: parseFloat((spotDelta * 1.05).toFixed(2)) },
-          { symbol: 'ICICIBANK', pChange: parseFloat((spotDelta * 1.12).toFixed(2)) },
-          { symbol: 'KOTAKBANK', pChange: parseFloat((spotDelta * 0.92).toFixed(2)) },
-          { symbol: 'AXISBANK', pChange: parseFloat((spotDelta * 0.88).toFixed(2)) },
-          { symbol: 'SBIN', pChange: parseFloat((spotDelta * 0.95).toFixed(2)) }
-        ];
+        if (lastSnap && lastSnap.stockBreadth && Array.isArray(lastSnap.stockBreadth)) {
+          stockList = lastSnap.stockBreadth.map(stk => ({
+            symbol: stk.symbol,
+            pChange: parseFloat(stk.pChange || stk.change || 0.0)
+          }));
+        } else if (snapshots.length > 1) {
+          const prevSnap = snapshots[snapshots.length - 2];
+          const spotDelta = ((lastSnap.spotPrice - prevSnap.spotPrice) / prevSnap.spotPrice) * 100;
+          
+          stockList = [
+            { symbol: 'HDFCBANK', pChange: parseFloat((spotDelta * 1.05).toFixed(2)) },
+            { symbol: 'ICICIBANK', pChange: parseFloat((spotDelta * 1.12).toFixed(2)) },
+            { symbol: 'KOTAKBANK', pChange: parseFloat((spotDelta * 0.92).toFixed(2)) },
+            { symbol: 'AXISBANK', pChange: parseFloat((spotDelta * 0.88).toFixed(2)) },
+            { symbol: 'SBIN', pChange: parseFloat((spotDelta * 0.95).toFixed(2)) }
+          ];
+        }
       }
     }
 

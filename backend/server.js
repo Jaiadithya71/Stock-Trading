@@ -227,7 +227,7 @@ app.post("/api/stop-pcr-collector", (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.RENDER ? '0.0.0.0' : 'localhost';
+const HOST = '0.0.0.0';
 
 app.listen(PORT, HOST, async () => {
   console.log('\n' + '='.repeat(60));

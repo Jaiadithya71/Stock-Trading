@@ -41,6 +41,7 @@ const App = {
         // Auto-authenticate on localhost only; require explicit login / demo mode on production
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
             this.state.currentUsername = 'default';
+            this.state.refreshIntervalTime = 2000; // Fast 2-second live streaming for Stage 1 local testing
             await this.authenticate();
         } else {
             LoginModal.show();
@@ -232,6 +233,10 @@ const App = {
     },
 
     updateDashboard() {
+        if (typeof Header !== 'undefined' && typeof Header.updateTelemetryBadge === 'function') {
+            Header.updateTelemetryBadge(this.state.indicesTimestamp);
+        }
+
         const dashboard = document.getElementById('dashboardContent');
         if (!dashboard) return;
 

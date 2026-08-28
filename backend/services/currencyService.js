@@ -33,7 +33,6 @@ class CurrencyService {
   async fetchCurrencyRates() {
     // Return cached data if valid
     if (this.isCacheValid()) {
-      console.log("💾 Returning cached currency data");
       return {
         success: true,
         data: this.cache,
@@ -42,7 +41,6 @@ class CurrencyService {
     }
 
     try {
-      console.log("🌍 Fetching currency rates from NSE...");
       
       const response = await fetch(this.nseUrl, {
         method: 'GET',

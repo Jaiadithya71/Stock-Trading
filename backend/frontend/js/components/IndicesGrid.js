@@ -108,10 +108,10 @@ const IndicesGrid = {
             <div class="card" style="grid-column: span 2;">
                 <div class="card-header">
                     <div>
-                        <div class="card-title">Market Indices</div>
-                        <div class="timestamp">Last updated: ${timestamp || '--'}</div>
+                        <div class="card-title">📊 Real-Time Benchmark Indices Matrix</div>
+                        <div class="timestamp">Multi-Timeframe Trend & Candle Open Analytics</div>
                     </div>
-                    <button class="refresh-btn" data-action="refresh-indices">🔄 Refresh</button>
+                    <button class="btn-icon" data-action="refresh-indices">🔄 Refresh</button>
                 </div>
                 
                 <div class="indices-table-wrapper">

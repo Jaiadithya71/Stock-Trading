@@ -1,39 +1,42 @@
-/* Card Styles - ULTRA COMPACT */
+/* Card Styles - Institutional Glassmorphic Dark Theme */
 .card {
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 6px;
-    padding: 10px;
-    backdrop-filter: blur(10px);
+    background: rgba(14, 18, 28, 0.78);
+    border-radius: 14px;
+    padding: 16px 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: transform 0.15s ease;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .card-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #fff;
-    line-height: 1.2;
+    font-size: 14px;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
 }
 
 .timestamp {
-    font-size: 9px;
-    color: #666;
-    margin-top: 1px;
-    line-height: 1.2;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: #64748b;
+    margin-top: 2px;
 }
 
 /* Header - COMPACT */
@@ -278,34 +281,37 @@ tbody tr td:first-child {
 
 /* Quant Signal & Paper Trading Components */
 .quant-card, .paper-card {
-    background: rgba(20, 24, 38, 0.85);
-    border: 1px solid rgba(102, 126, 234, 0.3);
-    border-radius: 8px;
-    padding: 14px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    background: rgba(14, 18, 28, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
 }
 
 .quant-header, .paper-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 8px;
-    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 .quant-title, .paper-title {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .quant-title h3, .paper-title h3 {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
-    color: #fff;
+    color: #f8fafc;
     margin: 0;
+    font-family: var(--font-ui);
+    letter-spacing: -0.01em;
 }
 
 .signal-badge {
@@ -314,46 +320,56 @@ tbody tr td:first-child {
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
+    font-family: var(--font-mono);
 }
 
 .badge-bullish {
-    background: rgba(74, 222, 128, 0.2);
-    color: #4ade80;
-    border: 1px solid #4ade80;
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.35);
 }
 
 .badge-bearish {
-    background: rgba(248, 113, 113, 0.2);
-    color: #f87171;
-    border: 1px solid #f87171;
+    background: rgba(244, 63, 94, 0.15);
+    color: #fb7185;
+    border: 1px solid rgba(244, 63, 94, 0.35);
 }
 
 .badge-neutral {
-    background: rgba(156, 163, 175, 0.2);
-    color: #9ca3af;
-    border: 1px solid #9ca3af;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .quant-body-grid, .paper-summary-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 10px;
-    margin-bottom: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .metric-box, .summary-item {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 6px;
-    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 10px 14px;
     display: flex;
     flex-direction: column;
 }
 
 .metric-label, .summary-item .label {
-    font-size: 10px;
-    color: #9ca3af;
+    font-size: 10.5px;
+    color: #64748b;
     margin-bottom: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.metric-value, .summary-item .val {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    font-family: var(--font-mono);
 }
 
 .metric-value, .summary-item .val {
@@ -1829,20 +1845,22 @@ tbody tr td:first-child {
     letter-spacing: 0.5px;
 }
 
-/* Apple-Grade Glassmorphic Header & Navigation CSS */
+/* Institutional Glassmorphic Header & Navigation CSS */
 .apple-header-wrapper {
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(12, 16, 26, 0.88);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
     position: sticky;
-    top: 0;
+    top: 12px;
     z-index: 1000;
-    padding: 12px 24px;
+    padding: 14px 24px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
+    margin-bottom: 20px;
 }
 
 .apple-header-top {
@@ -1858,55 +1876,58 @@ tbody tr td:first-child {
 }
 
 .apple-logo-box {
-    width: 42px;
-    height: 42px;
-    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(37, 99, 235, 0.3) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 22px;
-    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
 }
 
 .apple-title-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .apple-logo-title {
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 800;
     color: #f8fafc;
     margin: 0;
-    letter-spacing: -0.3px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+    font-family: var(--font-ui);
 }
 
 .apple-header-subtitle {
-    font-size: 11px;
+    font-size: 12px;
     color: #94a3b8;
     font-weight: 500;
 }
 
 .apple-status-badge {
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 700;
-    padding: 3px 9px;
+    padding: 4px 10px;
     border-radius: 20px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.02em;
+    font-family: var(--font-mono);
 }
 
 .apple-status-badge.open {
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    color: #10b981;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #34d399;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
 }
 
 .apple-status-badge.closed {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: #94a3b8;
 }
 
@@ -1917,21 +1938,21 @@ tbody tr td:first-child {
 }
 
 .apple-telemetry-capsule {
-    background: rgba(30, 41, 59, 0.7);
+    background: rgba(0, 0, 0, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 30px;
-    padding: 6px 14px;
+    padding: 7px 16px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 11px;
+    gap: 10px;
+    font-size: 11.5px;
     font-weight: 600;
 }
 
 .capsule-divider {
     width: 1px;
-    height: 12px;
-    background: rgba(255, 255, 255, 0.15);
+    height: 14px;
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .capsule-text {
@@ -1939,71 +1960,73 @@ tbody tr td:first-child {
 }
 
 .capsule-gold {
-    color: #fbbf24;
+    color: #f59e0b;
     font-weight: 700;
+    font-family: var(--font-mono);
 }
 
 .apple-btn-tour {
-    background: rgba(59, 130, 246, 0.15);
-    border: 1px solid rgba(59, 130, 246, 0.4);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
     color: #38bdf8;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 6px 14px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 7px 14px;
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .apple-btn-tour:hover {
-    background: rgba(59, 130, 246, 0.3);
+    background: rgba(56, 189, 248, 0.22);
     color: #fff;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.2);
 }
 
 .apple-btn-kill {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    border: none;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.85) 0%, rgba(220, 38, 38, 0.95) 100%);
+    border: 1px solid rgba(239, 68, 68, 0.4);
     color: #fff;
-    font-size: 11px;
-    font-weight: 800;
-    padding: 6px 16px;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 7px 18px;
     border-radius: 20px;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.3);
     transition: all 0.2s ease;
 }
 
 .apple-btn-kill:hover {
-    transform: scale(1.03);
-    box-shadow: 0 6px 18px rgba(239, 68, 68, 0.6);
+    transform: scale(1.02);
+    box-shadow: 0 0 24px rgba(239, 68, 68, 0.5);
 }
 
-/* LEVEL 2: APPLE SEGMENTED CONTROL BAR */
+/* LEVEL 2: LINEAR / APPLE SEGMENTED CONTROL BAR */
 .apple-nav-bar {
     display: flex;
     justify-content: center;
 }
 
 .apple-segmented-control {
-    background: rgba(30, 41, 59, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     padding: 4px;
     display: flex;
     gap: 4px;
     width: 100%;
-    max-width: 1100px;
+    max-width: 1200px;
     justify-content: space-between;
 }
 
 .apple-nav-tab {
     flex: 1;
     background: transparent;
-    border: none;
+    border: 1px solid transparent;
     color: #94a3b8;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 8px 12px;
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 9px 14px;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2012,20 +2035,49 @@ tbody tr td:first-child {
     justify-content: center;
     gap: 6px;
     white-space: nowrap;
+    font-family: var(--font-ui);
 }
 
 .apple-nav-tab:hover {
     color: #f8fafc;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .apple-nav-tab.active {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: #ffffff;
-    font-weight: 700;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    background: rgba(56, 189, 248, 0.12);
+    border-color: rgba(56, 189, 248, 0.3);
+    color: #38bdf8;
+    font-weight: 600;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.12);
 }
 
+/* Strategy Audit & Quant Workbench Pills */
+.algo-pill {
+    background: transparent;
+    border: 1px solid transparent;
+    color: #94a3b8;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-ui);
+    white-space: nowrap;
+}
+
+.algo-pill:hover {
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.algo-pill.active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: rgba(56, 189, 248, 0.35);
+    color: #38bdf8;
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+}
 
 .kindle-chapter-body {
     font-size: 13px;
