@@ -1,10 +1,10 @@
-name: Wake Up & Keep Render Server Alive for Market Hours
+name: Wake Up & Keep Render Server Alive for Market & Archiving Hours
 
 on:
   schedule:
-    # Runs every 10 minutes between 03:00 UTC and 10:30 UTC (8:30 AM to 4:00 PM IST) Monday through Friday
-    # Prevents Render free-tier 15-minute idle spin-down throughout the entire trading day
-    - cron: '*/10 3-10 * * 1-5'
+    # Runs every 10 minutes between 03:00 UTC and 12:59 UTC (8:30 AM to 6:30 PM IST) Monday through Friday
+    # Keeps the server and in-memory audit logs active continuously through market hours and all archival fallback triggers
+    - cron: '*/10 3-12 * * 1-5'
   workflow_dispatch: # Allows manual trigger from GitHub UI / CLI anytime
 
 jobs:
