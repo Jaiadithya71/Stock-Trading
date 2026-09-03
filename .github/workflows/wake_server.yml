@@ -11,23 +11,33 @@ jobs:
   wake-server:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Keep-Alive Probe to Render (90s Timeout)
+      - name: Send Keep-Alive Probe to Render (Resilient Cold-Start Retry Loop)
         run: |
           echo "⏰ Sending keep-alive / warm-up probe to Render..."
           echo "Target URL: https://stock-trading-1-cquo.onrender.com/health"
           
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-            --max-time 90 \
-            --retry 2 \
-            --retry-delay 5 \
-            https://stock-trading-1-cquo.onrender.com/health)
+          MAX_ATTEMPTS=5
+          SUCCESS=false
           
-          echo "=== RESPONSE FROM RENDER ==="
-          echo "HTTP_CODE: $HTTP_CODE"
+          for i in $(seq 1 $MAX_ATTEMPTS); do
+            echo "Attempt $i of $MAX_ATTEMPTS: Probing Render /health..."
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 45 https://stock-trading-1-cquo.onrender.com/health || echo "000")
+            echo "Response: HTTP $HTTP_CODE"
+            
+            if [ "$HTTP_CODE" -eq 200 ]; then
+              echo "✅ Render server is healthy, active, and returned HTTP 200 OK!"
+              SUCCESS=true
+              break
+            elif [ "$HTTP_CODE" -eq 503 ] || [ "$HTTP_CODE" -eq 502 ] || [ "$HTTP_CODE" -eq 000 ]; then
+              echo "⏳ Server is cold-booting/waking up from idle sleep (HTTP $HTTP_CODE). Waiting 15s for container initialization..."
+              sleep 15
+            else
+              echo "⚠️ Response HTTP $HTTP_CODE. Retrying in 10s..."
+              sleep 10
+            fi
+          done
           
-          if [ "$HTTP_CODE" -ne 200 ]; then
-            echo "❌ Keep-alive probe failed! Render server returned HTTP $HTTP_CODE"
+          if [ "$SUCCESS" != "true" ]; then
+            echo "❌ Keep-alive probe failed after $MAX_ATTEMPTS attempts."
             exit 1
           fi
-          
-          echo "✅ Render server is healthy, active, and running without idle sleep!"
