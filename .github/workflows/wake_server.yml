@@ -20,8 +20,8 @@ jobs:
           SUCCESS=false
           
           for i in $(seq 1 $MAX_ATTEMPTS); do
-            echo "Attempt $i of $MAX_ATTEMPTS: Probing Render /health..."
-            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 45 https://stock-trading-1-cquo.onrender.com/health || echo "000")
+            echo "Attempt $i of $MAX_ATTEMPTS: Probing Render /health (60s timeout)..."
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 https://stock-trading-1-cquo.onrender.com/health || echo "000")
             echo "Response: HTTP $HTTP_CODE"
             
             if [ "$HTTP_CODE" -eq 200 ]; then
@@ -29,11 +29,11 @@ jobs:
               SUCCESS=true
               break
             elif [ "$HTTP_CODE" -eq 503 ] || [ "$HTTP_CODE" -eq 502 ] || [ "$HTTP_CODE" -eq 000 ]; then
-              echo "⏳ Server is cold-booting/waking up from idle sleep (HTTP $HTTP_CODE). Waiting 15s for container initialization..."
-              sleep 15
+              echo "⏳ Server is cold-booting/waking up from idle sleep (HTTP $HTTP_CODE). Waiting 20s for container initialization..."
+              sleep 20
             else
-              echo "⚠️ Response HTTP $HTTP_CODE. Retrying in 10s..."
-              sleep 10
+              echo "⚠️ Response HTTP $HTTP_CODE. Retrying in 15s..."
+              sleep 15
             fi
           done
           
