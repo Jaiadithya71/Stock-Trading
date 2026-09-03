@@ -63,6 +63,9 @@ const Header = {
                             <button class="apple-nav-tab ${activeTab === 'portfolio' ? 'active' : ''}" data-tab="portfolio" style="padding: 6px 12px; font-size: 12px;">
                                 💼 Portfolio
                             </button>
+                            <button class="apple-nav-tab ${activeTab === 'stocks' ? 'active' : ''}" data-tab="stocks" style="padding: 6px 12px; font-size: 12px;">
+                                📈 Stocks
+                            </button>
                             <button class="apple-nav-tab ${activeTab === 'market' ? 'active' : ''}" data-tab="market" style="padding: 6px 12px; font-size: 12px;">
                                 📊 Market Grid
                             </button>

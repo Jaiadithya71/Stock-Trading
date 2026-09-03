@@ -1,7 +1,7 @@
 // ============================================================================
 // FILE: backend/services/paperTradingService.js
-// Simulated Paper Trading Execution Engine for Bank Nifty Options
-// Persistent Portfolio Memory (Restores account balance & positions from disk)
+// Dual-Market Simulated Paper Execution Engine (Cash Equities & F&O Options)
+// Persistent Portfolio Memory & Realistic 0.05% Slippage Simulation
 // ============================================================================
 
 const fs = require('fs');
@@ -13,10 +13,11 @@ class PaperTradingService {
   constructor(initialCapital = 100000) {
     this.initialCapital = initialCapital;
     this.currentBalance = initialCapital;
-    this.positions = []; // Active open paper positions
-    this.tradeHistory = []; // Closed paper trade log
+    this.positions = [];     // Active open paper positions
+    this.tradeHistory = [];   // Closed trade ledger
     this.slippagePenalty = 0.0005; // 0.05% spread/slippage simulation
-    
+    this.intradayLeverage = 5;     // 5x SEBI MIS Intraday Margin for Stocks
+
     this.loadPersistedState();
   }
 
@@ -34,7 +35,6 @@ class PaperTradingService {
         this.currentBalance = state.currentBalance !== undefined ? state.currentBalance : this.initialCapital;
         this.positions = state.positions || [];
         this.tradeHistory = state.tradeHistory || [];
-        console.log(`✅ Loaded persisted Paper Trading State: Balance ₹${this.currentBalance.toLocaleString('en-IN')}, Open Positions: ${this.positions.length}`);
       }
     } catch (e) {
       console.warn('⚠️ Could not load paper portfolio state:', e.message);
@@ -45,7 +45,7 @@ class PaperTradingService {
     try {
       const state = {
         initialCapital: this.initialCapital,
-        currentBalance: this.currentBalance,
+        currentBalance: parseFloat(this.currentBalance.toFixed(2)),
         positions: this.positions,
         tradeHistory: this.tradeHistory,
         lastUpdated: new Date().toISOString()
@@ -57,79 +57,176 @@ class PaperTradingService {
   }
 
   /**
-   * Execute a simulated paper trade
-   * @param {Object} order - { symbol, optionType ('CE'|'PE'), strikePrice, entryPrice, quantity, stopLossPrice, targetPrice }
-   * @returns {Object} Executed trade confirmation
+   * Execute a simulated paper order (Equities or Options)
    */
   placePaperOrder(order) {
-    const { symbol, optionType, strikePrice, entryPrice, quantity, stopLossPrice, targetPrice } = order;
+    const { 
+      symbol, 
+      action = 'BUY', 
+      optionType, 
+      strikePrice, 
+      entryPrice, 
+      quantity, 
+      stopLoss, 
+      stopLossPrice, 
+      target, 
+      targetPrice, 
+      rationale 
+    } = order;
 
     if (!entryPrice || !quantity || quantity <= 0) {
-      throw new Error('Invalid paper order parameters');
+      throw new Error(`Invalid paper order parameters for ${symbol}`);
     }
 
-    const executionPrice = entryPrice * (1 + this.slippagePenalty);
-    const requiredMargin = executionPrice * quantity;
+    const isOption = !!optionType;
+    const isShort = action.toUpperCase() === 'SELL';
+    const effectivePrice = isShort 
+      ? entryPrice * (1 - this.slippagePenalty) 
+      : entryPrice * (1 + this.slippagePenalty);
+
+    const totalTradeValue = effectivePrice * quantity;
+    const requiredMargin = isOption ? totalTradeValue : (totalTradeValue / this.intradayLeverage); // 5x MIS for stocks
 
     if (requiredMargin > this.currentBalance) {
-      throw new Error(`Insufficient virtual capital. Required: ₹${requiredMargin.toFixed(2)}, Available: ₹${this.currentBalance.toFixed(2)}`);
+      throw new Error(`Insufficient virtual capital. Required Margin: ₹${requiredMargin.toFixed(2)}, Available: ₹${this.currentBalance.toFixed(2)}`);
     }
 
     this.currentBalance -= requiredMargin;
 
     const paperTrade = {
-      id: `PAPER-${Date.now()}`,
-      symbol: symbol || 'BANKNIFTY',
-      optionType,
-      strikePrice,
-      entryPrice: parseFloat(executionPrice.toFixed(2)),
-      quantity,
-      stopLossPrice: stopLossPrice || executionPrice * 0.85,
-      targetPrice: targetPrice || executionPrice * 1.30,
+      id: `PAPER-${symbol}-${Date.now()}`,
+      symbol: symbol ? symbol.toUpperCase() : 'BANKNIFTY',
+      action: action.toUpperCase(),
+      optionType: optionType || null,
+      strikePrice: strikePrice || null,
+      assetType: isOption ? 'OPTIONS' : 'EQUITY_CASH',
+      entryPrice: parseFloat(effectivePrice.toFixed(2)),
+      quantity: parseInt(quantity, 10),
+      totalValue: parseFloat(totalTradeValue.toFixed(2)),
+      marginBlocked: parseFloat(requiredMargin.toFixed(2)),
+      stopLoss: stopLoss ? parseFloat(stopLoss.toFixed(2)) : (stopLossPrice ? parseFloat(stopLossPrice.toFixed(2)) : (isShort ? effectivePrice * 1.01 : effectivePrice * 0.99)),
+      target: target ? parseFloat(target.toFixed(2)) : (targetPrice ? parseFloat(targetPrice.toFixed(2)) : (isShort ? effectivePrice * 0.985 : effectivePrice * 1.015)),
       status: 'OPEN',
+      rationale: rationale || 'Quantitative Confluence Signal',
       entryTimestamp: new Date().toISOString()
     };
 
     this.positions.push(paperTrade);
     this.savePersistedState();
 
-    console.log(`📝 [PaperTrading] Placed order: ${paperTrade.id} - ${paperTrade.symbol} ${paperTrade.strikePrice} ${paperTrade.optionType} @ ₹${paperTrade.entryPrice}`);
+    console.log(`📝 [PaperTrading] Executed: ${paperTrade.id} - ${paperTrade.action} ${quantity} ${paperTrade.symbol} @ ₹${paperTrade.entryPrice} (Margin: ₹${paperTrade.marginBlocked})`);
     return paperTrade;
   }
 
   /**
-   * Close a paper position and calculate P&L
+   * Monitor and auto-exit open positions on Target or Stop-Loss hits
    */
-  closePaperPosition(positionId, exitPrice) {
-    const posIndex = this.positions.findIndex(p => p.id === positionId);
-    if (posIndex === -1) {
-      throw new Error(`Paper position ${positionId} not found`);
+  evaluateOpenPositions(priceMap = {}) {
+    const closed = [];
+    const open = [];
+
+    for (const pos of this.positions) {
+      const cleanSymbol = pos.symbol.replace('-EQ', '');
+      const currentPrice = priceMap[cleanSymbol] || priceMap[pos.symbol] || pos.entryPrice;
+      let shouldExit = false;
+      let exitPrice = currentPrice;
+      let exitReason = '';
+
+      if (pos.action === 'BUY') {
+        if (currentPrice >= pos.target) {
+          shouldExit = true;
+          exitPrice = pos.target;
+          exitReason = 'TARGET_HIT';
+        } else if (currentPrice <= pos.stopLoss) {
+          shouldExit = true;
+          exitPrice = pos.stopLoss;
+          exitReason = 'STOP_LOSS_HIT';
+        }
+      } else if (pos.action === 'SELL') {
+        if (currentPrice <= pos.target) {
+          shouldExit = true;
+          exitPrice = pos.target;
+          exitReason = 'TARGET_HIT';
+        } else if (currentPrice >= pos.stopLoss) {
+          shouldExit = true;
+          exitPrice = pos.stopLoss;
+          exitReason = 'STOP_LOSS_HIT';
+        }
+      }
+
+      if (shouldExit) {
+        const closedTrade = this.closePosition(pos.id, exitPrice, exitReason);
+        closed.push(closedTrade);
+      } else {
+        open.push(pos);
+      }
     }
 
-    const pos = this.positions[posIndex];
-    const grossReturn = exitPrice * pos.quantity;
-    const netReturn = grossReturn * (1 - this.slippagePenalty);
-    const costBasis = pos.entryPrice * pos.quantity;
-    const pnl = netReturn - costBasis;
-
-    this.currentBalance += netReturn;
-
-    pos.status = 'CLOSED';
-    pos.exitPrice = parseFloat(exitPrice.toFixed(2));
-    pos.exitTimestamp = new Date().toISOString();
-    pos.pnl = parseFloat(pnl.toFixed(2));
-
-    this.positions.splice(posIndex, 1);
-    this.tradeHistory.push(pos);
-    this.savePersistedState();
-
-    console.log(`📉 [PaperTrading] Closed position ${pos.id} P&L: ₹${pos.pnl}`);
-    return pos;
+    return closed;
   }
 
   /**
-   * Get complete portfolio summary
+   * Close a specific position
    */
+  closePosition(orderId, marketExitPrice, exitReason = 'MANUAL_EXIT') {
+    const posIndex = this.positions.findIndex(p => p.id === orderId);
+    if (posIndex === -1) {
+      throw new Error(`Position ${orderId} not found`);
+    }
+
+    const pos = this.positions[posIndex];
+    const isShort = pos.action === 'SELL';
+    const effectiveExit = isShort
+      ? marketExitPrice * (1 + this.slippagePenalty)
+      : marketExitPrice * (1 - this.slippagePenalty);
+
+    let pnl = 0;
+    if (isShort) {
+      pnl = (pos.entryPrice - effectiveExit) * pos.quantity;
+    } else {
+      pnl = (effectiveExit - pos.entryPrice) * pos.quantity;
+    }
+
+    // Release margin and add realized P&L
+    this.currentBalance += (pos.marginBlocked + pnl);
+
+    const closedRecord = {
+      ...pos,
+      exitPrice: parseFloat(effectiveExit.toFixed(2)),
+      pnl: parseFloat(pnl.toFixed(2)),
+      pnlPct: parseFloat(((pnl / (pos.entryPrice * pos.quantity)) * 100).toFixed(2)),
+      status: 'CLOSED',
+      exitReason,
+      exitTimestamp: new Date().toISOString()
+    };
+
+    this.positions.splice(posIndex, 1);
+    this.tradeHistory.unshift(closedRecord);
+    this.savePersistedState();
+
+    console.log(`🏁 [PaperTrading] Closed: ${pos.symbol} P&L: ₹${closedRecord.pnl} (${closedRecord.pnlPct}%) Reason: ${exitReason}`);
+    return closedRecord;
+  }
+
+  /**
+   * End-of-Day 3:15 PM Square-Off Rule: Force-close all remaining open positions
+   */
+  squareOffAllPositions(priceMap = {}, reason = 'EOD_MIS_SQUARE_OFF_3_15_PM') {
+    const closedList = [];
+    const openIds = this.positions.map(p => p.id);
+
+    for (const id of openIds) {
+      const pos = this.positions.find(p => p.id === id);
+      if (!pos) continue;
+      const cleanSymbol = pos.symbol.replace('-EQ', '');
+      const price = priceMap[cleanSymbol] || priceMap[pos.symbol] || pos.entryPrice;
+      const closed = this.closePosition(id, price, reason);
+      closedList.push(closed);
+    }
+
+    return closedList;
+  }
+
   getPortfolioSummary() {
     const totalRealizedPnL = this.tradeHistory.reduce((sum, t) => sum + (t.pnl || 0), 0);
     const winningTrades = this.tradeHistory.filter(t => t.pnl > 0).length;
@@ -143,8 +240,8 @@ class PaperTradingService {
       completedTradesCount: totalCompleted,
       winRatePct: parseFloat(winRatePct.toFixed(1)),
       totalRealizedPnL: parseFloat(totalRealizedPnL.toFixed(2)),
-      activePositions: this.positions,
-      tradeHistory: this.tradeHistory
+      positions: this.positions,
+      tradeHistory: this.tradeHistory.slice(0, 50)
     };
   }
 }

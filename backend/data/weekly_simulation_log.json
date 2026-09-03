@@ -1,14 +1,192 @@
 {
   "createdTimestamp": "2026-08-17T23:39:24.000Z",
   "weeklySummary": {
-    "totalSignalsGenerated": 0,
-    "totalTradesExecuted": 0,
+    "totalSignalsGenerated": 13,
+    "totalTradesExecuted": 5,
     "winningTrades": 0,
-    "losingTrades": 0,
+    "losingTrades": 5,
     "winRatePct": 0,
-    "netRealizedPnL": 0,
-    "maxDrawdownPct": 0
+    "netRealizedPnL": -4947.84,
+    "maxDrawdownPct": 4.9
   },
-  "dailyLogs": {},
-  "trades": []
+  "dailyLogs": {
+    "2026-09-03": {
+      "date": "2026-09-03",
+      "tradesCount": 13,
+      "dailyPnL": -4947.84,
+      "wins": 0,
+      "losses": 5
+    }
+  },
+  "trades": [
+    {
+      "id": "PAPER-ASIANPAINT-1788465993750",
+      "timestamp": "2026-09-03T20:06:33.753Z",
+      "date": "2026-09-03",
+      "symbol": "ASIANPAINT",
+      "optionType": "CE",
+      "entryPrice": 3130.64,
+      "exitPrice": null,
+      "quantity": 39,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bearish ORB Breakdown below ₹3134.25 with VWAP resistance (₹3145.38) and -0.56% drift."
+    },
+    {
+      "id": "PAPER-SBIN-1788465993744",
+      "timestamp": "2026-09-03T20:06:33.748Z",
+      "date": "2026-09-03",
+      "symbol": "SBIN",
+      "optionType": "CE",
+      "entryPrice": 810.19,
+      "exitPrice": null,
+      "quantity": 154,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bearish ORB Breakdown below ₹811.522 with VWAP resistance (₹814.32) and -0.61% drift."
+    },
+    {
+      "id": "PAPER-TECHM-1788465169405",
+      "timestamp": "2026-09-03T20:05:33.722Z",
+      "date": "2026-09-03",
+      "symbol": "TECHM",
+      "optionType": "CE",
+      "entryPrice": 1550.89,
+      "exitPrice": 1539,
+      "quantity": 80,
+      "pnl": -951.19,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
+    {
+      "id": "PAPER-LT-1788464949921",
+      "timestamp": "2026-09-03T20:04:33.727Z",
+      "date": "2026-09-03",
+      "symbol": "LT",
+      "optionType": "CE",
+      "entryPrice": 3677.4,
+      "exitPrice": 3648.15,
+      "quantity": 34,
+      "pnl": -994.67,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
+    {
+      "id": "PAPER-ICICIBANK-1788465769492",
+      "timestamp": "2026-09-03T20:02:49.494Z",
+      "date": "2026-09-03",
+      "symbol": "ICICIBANK",
+      "optionType": "CE",
+      "entryPrice": 1193.55,
+      "exitPrice": null,
+      "quantity": 104,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bullish ORB Breakout above ₹1191.3052 with VWAP support (₹1187.91) and +0.74% momentum."
+    },
+    {
+      "id": "PAPER-ONGC-1788465169410",
+      "timestamp": "2026-09-03T20:02:49.485Z",
+      "date": "2026-09-03",
+      "symbol": "ONGC",
+      "optionType": "CE",
+      "entryPrice": 308.06,
+      "exitPrice": 310.64,
+      "quantity": 405,
+      "pnl": -1042.97,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
+    {
+      "id": "PAPER-ONGC-1788465169410",
+      "timestamp": "2026-09-03T19:52:49.412Z",
+      "date": "2026-09-03",
+      "symbol": "ONGC",
+      "optionType": "CE",
+      "entryPrice": 308.06,
+      "exitPrice": null,
+      "quantity": 405,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bearish ORB Breakdown below ₹308.45 with VWAP resistance (₹309.55) and -0.58% drift."
+    },
+    {
+      "id": "PAPER-TECHM-1788465169405",
+      "timestamp": "2026-09-03T19:52:49.408Z",
+      "date": "2026-09-03",
+      "symbol": "TECHM",
+      "optionType": "CE",
+      "entryPrice": 1550.89,
+      "exitPrice": null,
+      "quantity": 80,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bullish ORB Breakout above ₹1549.24 with VWAP support (₹1544.4) and +0.66% momentum."
+    },
+    {
+      "id": "PAPER-ICICIBANK-1788464889900",
+      "timestamp": "2026-09-03T19:51:49.398Z",
+      "date": "2026-09-03",
+      "symbol": "ICICIBANK",
+      "optionType": "CE",
+      "entryPrice": 1177.16,
+      "exitPrice": 1186.83,
+      "quantity": 106,
+      "pnl": -1025.35,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
+    {
+      "id": "PAPER-BHARTIARTL-1788464949928",
+      "timestamp": "2026-09-03T19:50:49.396Z",
+      "date": "2026-09-03",
+      "symbol": "BHARTIARTL",
+      "optionType": "CE",
+      "entryPrice": 1591.23,
+      "exitPrice": 1579.26,
+      "quantity": 78,
+      "pnl": -933.66,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
+    {
+      "id": "PAPER-BHARTIARTL-1788464949928",
+      "timestamp": "2026-09-03T19:49:09.932Z",
+      "date": "2026-09-03",
+      "symbol": "BHARTIARTL",
+      "optionType": "CE",
+      "entryPrice": 1591.23,
+      "exitPrice": null,
+      "quantity": 78,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bullish ORB Breakout above ₹1589.8824000000002 with VWAP support (₹1584.8) and +0.63% momentum."
+    },
+    {
+      "id": "PAPER-LT-1788464949921",
+      "timestamp": "2026-09-03T19:49:09.925Z",
+      "date": "2026-09-03",
+      "symbol": "LT",
+      "optionType": "CE",
+      "entryPrice": 3677.4,
+      "exitPrice": null,
+      "quantity": 34,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bullish ORB Breakout above ₹3671.9 with VWAP support (₹3660.95) and +0.7% momentum."
+    },
+    {
+      "id": "PAPER-ICICIBANK-1788464889900",
+      "timestamp": "2026-09-03T19:48:09.902Z",
+      "date": "2026-09-03",
+      "symbol": "ICICIBANK",
+      "optionType": "CE",
+      "entryPrice": 1177.16,
+      "exitPrice": null,
+      "quantity": 106,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bearish ORB Breakdown below ₹1178.279 with VWAP resistance (₹1182.69) and -0.54% drift."
+    }
+  ]
 }

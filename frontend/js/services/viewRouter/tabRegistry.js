@@ -5,6 +5,12 @@
 // ============================================================================
 
 const TAB_REGISTRY = {
+  stocks: [
+    {
+      id: 'stock-intraday-widget',
+      render: (state) => StockIntradayWidget.render()
+    }
+  ],
   signals: [
     { 
       id: 'minimalist-signal-view', 

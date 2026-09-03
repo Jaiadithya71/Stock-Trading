@@ -1,0 +1,2078 @@
+[
+  {
+    "timestamp": "2026-09-03T19:48:09.898Z",
+    "activeSignalsCount": 1,
+    "signals": [
+      {
+        "symbol": "ICICIBANK",
+        "token": "4963",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1177.75,
+        "vwap": 1182.69,
+        "orbHigh": 1191.3052,
+        "orbLow": 1178.279,
+        "ema20": 1183.0158000000001,
+        "stopLoss": 1186.24,
+        "target": 1162.47,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1178.279 with VWAP resistance (₹1182.69) and -0.54% drift.",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124841.5,
+          "marginRequired": 24968.3
+        },
+        "timestamp": "2026-09-03T19:48:09.898Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T19:49:09.919Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "ICICIBANK",
+        "token": "4963",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1174.83,
+        "vwap": 1180.96,
+        "orbHigh": 1191.3052,
+        "orbLow": 1178.279,
+        "ema20": 1183.0158000000001,
+        "stopLoss": 1184.5,
+        "target": 1157.42,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1178.279 with VWAP resistance (₹1180.96) and -0.79% drift.",
+        "riskAllocation": {
+          "allocatedShares": 103,
+          "riskAmount": 1000,
+          "estimatedExposure": 121007.49,
+          "marginRequired": 24201.5
+        },
+        "timestamp": "2026-09-03T19:49:09.917Z"
+      },
+      {
+        "symbol": "LT",
+        "token": "11483",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3675.56,
+        "vwap": 3660.95,
+        "orbHigh": 3671.9,
+        "orbLow": 3631.75,
+        "ema20": 3646.35,
+        "stopLoss": 3649.97,
+        "target": 3721.62,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3671.9 with VWAP support (₹3660.95) and +0.7% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 34,
+          "riskAmount": 1000,
+          "estimatedExposure": 124969.04,
+          "marginRequired": 24993.81
+        },
+        "timestamp": "2026-09-03T19:49:09.917Z"
+      },
+      {
+        "symbol": "BHARTIARTL",
+        "token": "10604",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1590.43,
+        "vwap": 1584.8,
+        "orbHigh": 1589.8824000000002,
+        "orbLow": 1572.498,
+        "ema20": 1578.8196,
+        "stopLoss": 1580.05,
+        "target": 1609.11,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1589.8824000000002 with VWAP support (₹1584.8) and +0.63% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 78,
+          "riskAmount": 1000,
+          "estimatedExposure": 124053.54,
+          "marginRequired": 24810.71
+        },
+        "timestamp": "2026-09-03T19:49:09.917Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T19:50:09.936Z",
+    "activeSignalsCount": 2,
+    "signals": [
+      {
+        "symbol": "ICICIBANK",
+        "token": "4963",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1174.55,
+        "vwap": 1180.12,
+        "orbHigh": 1191.3052,
+        "orbLow": 1178.279,
+        "ema20": 1183.0158000000001,
+        "stopLoss": 1183.66,
+        "target": 1158.15,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1178.279 with VWAP resistance (₹1180.12) and -0.81% drift.",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124502.3,
+          "marginRequired": 24900.46
+        },
+        "timestamp": "2026-09-03T19:50:09.933Z"
+      },
+      {
+        "symbol": "LT",
+        "token": "11483",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3675.65,
+        "vwap": 3660.98,
+        "orbHigh": 3671.9,
+        "orbLow": 3631.75,
+        "ema20": 3646.35,
+        "stopLoss": 3650,
+        "target": 3721.82,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3671.9 with VWAP support (₹3660.98) and +0.7% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 34,
+          "riskAmount": 1000,
+          "estimatedExposure": 124972.1,
+          "marginRequired": 24994.42
+        },
+        "timestamp": "2026-09-03T19:50:09.933Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T19:52:49.402Z",
+    "activeSignalsCount": 4,
+    "signals": [
+      {
+        "symbol": "TECHM",
+        "token": "13538",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1550.11,
+        "vwap": 1544.4,
+        "orbHigh": 1549.24,
+        "orbLow": 1532.3,
+        "ema20": 1538.46,
+        "stopLoss": 1539.77,
+        "target": 1568.72,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1549.24 with VWAP support (₹1544.4) and +0.66% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 80,
+          "riskAmount": 1000,
+          "estimatedExposure": 124008.8,
+          "marginRequired": 24801.76
+        },
+        "timestamp": "2026-09-03T19:52:49.401Z"
+      },
+      {
+        "symbol": "ONGC",
+        "token": "2475",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 308.21,
+        "vwap": 309.55,
+        "orbHigh": 311.86,
+        "orbLow": 308.45,
+        "ema20": 309.69,
+        "stopLoss": 310.48,
+        "target": 304.12,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹308.45 with VWAP resistance (₹309.55) and -0.58% drift.",
+        "riskAllocation": {
+          "allocatedShares": 405,
+          "riskAmount": 1000,
+          "estimatedExposure": 124825.05,
+          "marginRequired": 24965.01
+        },
+        "timestamp": "2026-09-03T19:52:49.401Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1187.97,
+        "vwap": 1183.44,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1179.89,
+        "target": 1202.51,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1183.44) and +0.68% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 105,
+          "riskAmount": 1000,
+          "estimatedExposure": 124736.85,
+          "marginRequired": 24947.37
+        },
+        "timestamp": "2026-09-03T19:52:49.401Z"
+      },
+      {
+        "symbol": "APOLLOHOSP",
+        "token": "157",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 7075.53,
+        "vwap": 7109.34,
+        "orbHigh": 7162.72,
+        "orbLow": 7084.4,
+        "ema20": 7112.88,
+        "stopLoss": 7130.67,
+        "target": 6976.28,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹7084.4 with VWAP resistance (₹7109.34) and -0.62% drift.",
+        "riskAllocation": {
+          "allocatedShares": 17,
+          "riskAmount": 1000,
+          "estimatedExposure": 120284.01,
+          "marginRequired": 24056.8
+        },
+        "timestamp": "2026-09-03T19:52:49.401Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T19:53:49.414Z",
+    "activeSignalsCount": 4,
+    "signals": [
+      {
+        "symbol": "ONGC",
+        "token": "2475",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 308.03,
+        "vwap": 309.49,
+        "orbHigh": 311.86,
+        "orbLow": 308.45,
+        "ema20": 309.69,
+        "stopLoss": 310.42,
+        "target": 303.73,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹308.45 with VWAP resistance (₹309.49) and -0.64% drift.",
+        "riskAllocation": {
+          "allocatedShares": 405,
+          "riskAmount": 1000,
+          "estimatedExposure": 124752.15,
+          "marginRequired": 24950.43
+        },
+        "timestamp": "2026-09-03T19:53:49.412Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1190,
+        "vwap": 1184.5,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.95,
+        "target": 1206.29,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1184.5) and +0.85% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 105,
+          "riskAmount": 1000,
+          "estimatedExposure": 124950,
+          "marginRequired": 24990
+        },
+        "timestamp": "2026-09-03T19:53:49.413Z"
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "token": "3351",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1829.77,
+        "vwap": 1837.82,
+        "orbHigh": 1851.04,
+        "orbLow": 1830.8,
+        "ema20": 1838.16,
+        "stopLoss": 1843.33,
+        "target": 1805.36,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1830.8 with VWAP resistance (₹1837.82) and -0.56% drift.",
+        "riskAllocation": {
+          "allocatedShares": 68,
+          "riskAmount": 1000,
+          "estimatedExposure": 124424.36,
+          "marginRequired": 24884.87
+        },
+        "timestamp": "2026-09-03T19:53:49.413Z"
+      },
+      {
+        "symbol": "APOLLOHOSP",
+        "token": "157",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 7071.53,
+        "vwap": 7105.43,
+        "orbHigh": 7162.72,
+        "orbLow": 7084.4,
+        "ema20": 7112.88,
+        "stopLoss": 7126.75,
+        "target": 6972.13,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹7084.4 with VWAP resistance (₹7105.43) and -0.68% drift.",
+        "riskAllocation": {
+          "allocatedShares": 17,
+          "riskAmount": 1000,
+          "estimatedExposure": 120216.01,
+          "marginRequired": 24043.2
+        },
+        "timestamp": "2026-09-03T19:53:49.413Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T19:54:49.417Z",
+    "activeSignalsCount": 4,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 820.64,
+        "vwap": 817.82,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 815.37,
+        "target": 830.13,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹820.4936 with VWAP support (₹817.82) and +0.62% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 152,
+          "riskAmount": 1000,
+          "estimatedExposure": 124737.28,
+          "marginRequired": 24947.46
+        },
+        "timestamp": "2026-09-03T19:54:49.416Z"
+      },
+      {
+        "symbol": "ONGC",
+        "token": "2475",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 307.83,
+        "vwap": 309.38,
+        "orbHigh": 311.86,
+        "orbLow": 308.45,
+        "ema20": 309.69,
+        "stopLoss": 310.31,
+        "target": 303.37,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹308.45 with VWAP resistance (₹309.38) and -0.7% drift.",
+        "riskAllocation": {
+          "allocatedShares": 403,
+          "riskAmount": 1000,
+          "estimatedExposure": 124055.49,
+          "marginRequired": 24811.1
+        },
+        "timestamp": "2026-09-03T19:54:49.416Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1190.44,
+        "vwap": 1184.65,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.1,
+        "target": 1207.25,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1184.65) and +0.88% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 105,
+          "riskAmount": 1000,
+          "estimatedExposure": 124996.2,
+          "marginRequired": 24999.24
+        },
+        "timestamp": "2026-09-03T19:54:49.417Z"
+      },
+      {
+        "symbol": "APOLLOHOSP",
+        "token": "157",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 7067.7,
+        "vwap": 7104.12,
+        "orbHigh": 7162.72,
+        "orbLow": 7084.4,
+        "ema20": 7112.88,
+        "stopLoss": 7125.43,
+        "target": 6963.79,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹7084.4 with VWAP resistance (₹7104.12) and -0.73% drift.",
+        "riskAllocation": {
+          "allocatedShares": 17,
+          "riskAmount": 1000,
+          "estimatedExposure": 120150.9,
+          "marginRequired": 24030.18
+        },
+        "timestamp": "2026-09-03T19:54:49.417Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T19:55:49.425Z",
+    "activeSignalsCount": 5,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 820.95,
+        "vwap": 817.93,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 815.48,
+        "target": 830.8,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹820.4936 with VWAP support (₹817.93) and +0.66% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 152,
+          "riskAmount": 1000,
+          "estimatedExposure": 124784.4,
+          "marginRequired": 24956.88
+        },
+        "timestamp": "2026-09-03T19:55:49.425Z"
+      },
+      {
+        "symbol": "AXISBANK",
+        "token": "5900",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1172.36,
+        "vwap": 1168.43,
+        "orbHigh": 1172.2918,
+        "orbLow": 1159.4735,
+        "ema20": 1164.1347,
+        "stopLoss": 1164.92,
+        "target": 1185.75,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1172.2918 with VWAP support (₹1168.43) and +0.61% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124270.16,
+          "marginRequired": 24854.03
+        },
+        "timestamp": "2026-09-03T19:55:49.425Z"
+      },
+      {
+        "symbol": "ONGC",
+        "token": "2475",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 307.73,
+        "vwap": 309.31,
+        "orbHigh": 311.86,
+        "orbLow": 308.45,
+        "ema20": 309.69,
+        "stopLoss": 310.24,
+        "target": 303.21,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹308.45 with VWAP resistance (₹309.31) and -0.73% drift.",
+        "riskAllocation": {
+          "allocatedShares": 398,
+          "riskAmount": 1000,
+          "estimatedExposure": 122476.54,
+          "marginRequired": 24495.31
+        },
+        "timestamp": "2026-09-03T19:55:49.425Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1190.54,
+        "vwap": 1184.68,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.13,
+        "target": 1207.48,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1184.68) and +0.89% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 104,
+          "riskAmount": 1000,
+          "estimatedExposure": 123816.16,
+          "marginRequired": 24763.23
+        },
+        "timestamp": "2026-09-03T19:55:49.425Z"
+      },
+      {
+        "symbol": "APOLLOHOSP",
+        "token": "157",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 7069.08,
+        "vwap": 7104.58,
+        "orbHigh": 7162.72,
+        "orbLow": 7084.4,
+        "ema20": 7112.88,
+        "stopLoss": 7125.89,
+        "target": 6966.82,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹7084.4 with VWAP resistance (₹7104.58) and -0.72% drift.",
+        "riskAllocation": {
+          "allocatedShares": 17,
+          "riskAmount": 1000,
+          "estimatedExposure": 120174.36,
+          "marginRequired": 24034.87
+        },
+        "timestamp": "2026-09-03T19:55:49.425Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T19:56:49.432Z",
+    "activeSignalsCount": 5,
+    "signals": [
+      {
+        "symbol": "AXISBANK",
+        "token": "5900",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1172.39,
+        "vwap": 1168.44,
+        "orbHigh": 1172.2918,
+        "orbLow": 1159.4735,
+        "ema20": 1164.1347,
+        "stopLoss": 1164.93,
+        "target": 1185.82,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1172.2918 with VWAP support (₹1168.44) and +0.61% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124273.34,
+          "marginRequired": 24854.67
+        },
+        "timestamp": "2026-09-03T19:56:49.430Z"
+      },
+      {
+        "symbol": "BAJAJFINSV",
+        "token": "16675",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1650.52,
+        "vwap": 1644.6,
+        "orbHigh": 1649.84,
+        "orbLow": 1631.8,
+        "ema20": 1638.36,
+        "stopLoss": 1639.67,
+        "target": 1670.05,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1649.84 with VWAP support (₹1644.6) and +0.64% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 75,
+          "riskAmount": 1000,
+          "estimatedExposure": 123789,
+          "marginRequired": 24757.8
+        },
+        "timestamp": "2026-09-03T19:56:49.430Z"
+      },
+      {
+        "symbol": "ONGC",
+        "token": "2475",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 307.6,
+        "vwap": 309.23,
+        "orbHigh": 311.86,
+        "orbLow": 308.45,
+        "ema20": 309.69,
+        "stopLoss": 310.16,
+        "target": 302.99,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹308.45 with VWAP resistance (₹309.23) and -0.77% drift.",
+        "riskAllocation": {
+          "allocatedShares": 390,
+          "riskAmount": 1000,
+          "estimatedExposure": 119964,
+          "marginRequired": 23992.8
+        },
+        "timestamp": "2026-09-03T19:56:49.430Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1189.87,
+        "vwap": 1184.46,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.91,
+        "target": 1206,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1184.46) and +0.84% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 105,
+          "riskAmount": 1000,
+          "estimatedExposure": 124936.35,
+          "marginRequired": 24987.27
+        },
+        "timestamp": "2026-09-03T19:56:49.430Z"
+      },
+      {
+        "symbol": "APOLLOHOSP",
+        "token": "157",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 7072.25,
+        "vwap": 7105.64,
+        "orbHigh": 7162.72,
+        "orbLow": 7084.4,
+        "ema20": 7112.88,
+        "stopLoss": 7126.96,
+        "target": 6973.77,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹7084.4 with VWAP resistance (₹7105.64) and -0.67% drift.",
+        "riskAllocation": {
+          "allocatedShares": 17,
+          "riskAmount": 1000,
+          "estimatedExposure": 120228.25,
+          "marginRequired": 24045.65
+        },
+        "timestamp": "2026-09-03T19:56:49.430Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T19:57:49.448Z",
+    "activeSignalsCount": 6,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 820.9,
+        "vwap": 817.91,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 815.46,
+        "target": 830.69,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹820.4936 with VWAP support (₹817.91) and +0.65% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 152,
+          "riskAmount": 1000,
+          "estimatedExposure": 124776.8,
+          "marginRequired": 24955.36
+        },
+        "timestamp": "2026-09-03T19:57:49.447Z"
+      },
+      {
+        "symbol": "AXISBANK",
+        "token": "5900",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1173.12,
+        "vwap": 1168.68,
+        "orbHigh": 1172.2918,
+        "orbLow": 1159.4735,
+        "ema20": 1164.1347,
+        "stopLoss": 1165.17,
+        "target": 1187.43,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1172.2918 with VWAP support (₹1168.68) and +0.67% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124350.72,
+          "marginRequired": 24870.14
+        },
+        "timestamp": "2026-09-03T19:57:49.447Z"
+      },
+      {
+        "symbol": "BAJAJFINSV",
+        "token": "16675",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1651.03,
+        "vwap": 1644.77,
+        "orbHigh": 1649.84,
+        "orbLow": 1631.8,
+        "ema20": 1638.36,
+        "stopLoss": 1639.84,
+        "target": 1671.17,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1649.84 with VWAP support (₹1644.77) and +0.67% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 75,
+          "riskAmount": 1000,
+          "estimatedExposure": 123827.25,
+          "marginRequired": 24765.45
+        },
+        "timestamp": "2026-09-03T19:57:49.447Z"
+      },
+      {
+        "symbol": "ONGC",
+        "token": "2475",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 307.83,
+        "vwap": 309.3,
+        "orbHigh": 311.86,
+        "orbLow": 308.45,
+        "ema20": 309.69,
+        "stopLoss": 310.23,
+        "target": 303.51,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹308.45 with VWAP resistance (₹309.3) and -0.7% drift.",
+        "riskAllocation": {
+          "allocatedShares": 406,
+          "riskAmount": 1000,
+          "estimatedExposure": 124978.98,
+          "marginRequired": 24995.8
+        },
+        "timestamp": "2026-09-03T19:57:49.447Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1190.27,
+        "vwap": 1184.59,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.04,
+        "target": 1206.88,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1184.59) and +0.87% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 105,
+          "riskAmount": 1000,
+          "estimatedExposure": 124978.35,
+          "marginRequired": 24995.67
+        },
+        "timestamp": "2026-09-03T19:57:49.447Z"
+      },
+      {
+        "symbol": "APOLLOHOSP",
+        "token": "157",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 7074.67,
+        "vwap": 7106.44,
+        "orbHigh": 7162.72,
+        "orbLow": 7084.4,
+        "ema20": 7112.88,
+        "stopLoss": 7127.76,
+        "target": 6979.11,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹7084.4 with VWAP resistance (₹7106.44) and -0.64% drift.",
+        "riskAllocation": {
+          "allocatedShares": 17,
+          "riskAmount": 1000,
+          "estimatedExposure": 120269.39,
+          "marginRequired": 24053.88
+        },
+        "timestamp": "2026-09-03T19:57:49.447Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T19:58:49.455Z",
+    "activeSignalsCount": 7,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 821.05,
+        "vwap": 817.96,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 815.51,
+        "target": 831.02,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹820.4936 with VWAP support (₹817.96) and +0.67% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 152,
+          "riskAmount": 1000,
+          "estimatedExposure": 124799.6,
+          "marginRequired": 24959.92
+        },
+        "timestamp": "2026-09-03T19:58:49.453Z"
+      },
+      {
+        "symbol": "BAJAJFINSV",
+        "token": "16675",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1650.69,
+        "vwap": 1644.66,
+        "orbHigh": 1649.84,
+        "orbLow": 1631.8,
+        "ema20": 1638.36,
+        "stopLoss": 1639.73,
+        "target": 1670.42,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1649.84 with VWAP support (₹1644.66) and +0.65% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 75,
+          "riskAmount": 1000,
+          "estimatedExposure": 123801.75,
+          "marginRequired": 24760.35
+        },
+        "timestamp": "2026-09-03T19:58:49.453Z"
+      },
+      {
+        "symbol": "INDUSINDBK",
+        "token": "5258",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1429.94,
+        "vwap": 1424.45,
+        "orbHigh": 1428.52,
+        "orbLow": 1412.9,
+        "ema20": 1418.58,
+        "stopLoss": 1420.18,
+        "target": 1447.51,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1428.52 with VWAP support (₹1424.45) and +0.7% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 87,
+          "riskAmount": 1000,
+          "estimatedExposure": 124404.78,
+          "marginRequired": 24880.96
+        },
+        "timestamp": "2026-09-03T19:58:49.453Z"
+      },
+      {
+        "symbol": "ONGC",
+        "token": "2475",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 308.28,
+        "vwap": 309.45,
+        "orbHigh": 311.86,
+        "orbLow": 308.45,
+        "ema20": 309.69,
+        "stopLoss": 310.38,
+        "target": 304.5,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹308.45 with VWAP resistance (₹309.45) and -0.55% drift.",
+        "riskAllocation": {
+          "allocatedShares": 405,
+          "riskAmount": 1000,
+          "estimatedExposure": 124853.4,
+          "marginRequired": 24970.68
+        },
+        "timestamp": "2026-09-03T19:58:49.453Z"
+      },
+      {
+        "symbol": "LT",
+        "token": "11483",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3676.53,
+        "vwap": 3661.28,
+        "orbHigh": 3671.9,
+        "orbLow": 3631.75,
+        "ema20": 3646.35,
+        "stopLoss": 3650.3,
+        "target": 3723.74,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3671.9 with VWAP support (₹3661.28) and +0.73% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 33,
+          "riskAmount": 1000,
+          "estimatedExposure": 121325.49,
+          "marginRequired": 24265.1
+        },
+        "timestamp": "2026-09-03T19:58:49.453Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1188.33,
+        "vwap": 1183.95,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.4,
+        "target": 1202.6,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1183.95) and +0.71% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 105,
+          "riskAmount": 1000,
+          "estimatedExposure": 124774.65,
+          "marginRequired": 24954.93
+        },
+        "timestamp": "2026-09-03T19:58:49.454Z"
+      },
+      {
+        "symbol": "APOLLOHOSP",
+        "token": "157",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 7082.71,
+        "vwap": 7109.12,
+        "orbHigh": 7162.72,
+        "orbLow": 7084.4,
+        "ema20": 7112.88,
+        "stopLoss": 7130.45,
+        "target": 6996.78,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹7084.4 with VWAP resistance (₹7109.12) and -0.52% drift.",
+        "riskAllocation": {
+          "allocatedShares": 17,
+          "riskAmount": 1000,
+          "estimatedExposure": 120406.07,
+          "marginRequired": 24081.21
+        },
+        "timestamp": "2026-09-03T19:58:49.454Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T19:59:49.460Z",
+    "activeSignalsCount": 9,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 823.56,
+        "vwap": 819.44,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 816.98,
+        "target": 835.4,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹820.4936 with VWAP support (₹819.44) and +0.98% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 151,
+          "riskAmount": 1000,
+          "estimatedExposure": 124357.56,
+          "marginRequired": 24871.51
+        },
+        "timestamp": "2026-09-03T19:59:49.459Z"
+      },
+      {
+        "symbol": "AXISBANK",
+        "token": "5900",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1173.58,
+        "vwap": 1169.08,
+        "orbHigh": 1172.2918,
+        "orbLow": 1159.4735,
+        "ema20": 1164.1347,
+        "stopLoss": 1165.57,
+        "target": 1188,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1172.2918 with VWAP support (₹1169.08) and +0.71% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124399.48,
+          "marginRequired": 24879.9
+        },
+        "timestamp": "2026-09-03T19:59:49.459Z"
+      },
+      {
+        "symbol": "TECHM",
+        "token": "13538",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1550.96,
+        "vwap": 1544.68,
+        "orbHigh": 1549.24,
+        "orbLow": 1532.3,
+        "ema20": 1538.46,
+        "stopLoss": 1540.05,
+        "target": 1570.6,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1549.24 with VWAP support (₹1544.68) and +0.71% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 80,
+          "riskAmount": 1000,
+          "estimatedExposure": 124076.8,
+          "marginRequired": 24815.36
+        },
+        "timestamp": "2026-09-03T19:59:49.459Z"
+      },
+      {
+        "symbol": "RELIANCE",
+        "token": "2885",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3003.7,
+        "vwap": 2993.49,
+        "orbHigh": 3003.3124000000003,
+        "orbLow": 2970.473,
+        "ema20": 2982.4146,
+        "stopLoss": 2984.51,
+        "target": 3038.24,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3003.3124000000003 with VWAP support (₹2993.49) and +0.61% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 41,
+          "riskAmount": 1000,
+          "estimatedExposure": 123151.7,
+          "marginRequired": 24630.34
+        },
+        "timestamp": "2026-09-03T19:59:49.459Z"
+      },
+      {
+        "symbol": "ONGC",
+        "token": "2475",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 308.37,
+        "vwap": 309.46,
+        "orbHigh": 311.86,
+        "orbLow": 308.45,
+        "ema20": 309.69,
+        "stopLoss": 310.39,
+        "target": 304.73,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹308.45 with VWAP resistance (₹309.46) and -0.53% drift.",
+        "riskAllocation": {
+          "allocatedShares": 405,
+          "riskAmount": 1000,
+          "estimatedExposure": 124889.85,
+          "marginRequired": 24977.97
+        },
+        "timestamp": "2026-09-03T19:59:49.459Z"
+      },
+      {
+        "symbol": "HINDUNILVR",
+        "token": "1394",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2837.45,
+        "vwap": 2827.7,
+        "orbHigh": 2836.92,
+        "orbLow": 2805.9,
+        "ema20": 2817.18,
+        "stopLoss": 2819.22,
+        "target": 2870.26,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2836.92 with VWAP support (₹2827.7) and +0.62% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 44,
+          "riskAmount": 1000,
+          "estimatedExposure": 124847.8,
+          "marginRequired": 24969.56
+        },
+        "timestamp": "2026-09-03T19:59:49.459Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1188,
+        "vwap": 1183.84,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.29,
+        "target": 1201.88,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1183.84) and +0.68% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 105,
+          "riskAmount": 1000,
+          "estimatedExposure": 124740,
+          "marginRequired": 24948
+        },
+        "timestamp": "2026-09-03T19:59:49.459Z"
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "token": "3351",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1830.63,
+        "vwap": 1837.82,
+        "orbHigh": 1851.04,
+        "orbLow": 1830.8,
+        "ema20": 1838.16,
+        "stopLoss": 1843.33,
+        "target": 1807.77,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1830.8 with VWAP resistance (₹1837.82) and -0.51% drift.",
+        "riskAllocation": {
+          "allocatedShares": 68,
+          "riskAmount": 1000,
+          "estimatedExposure": 124482.84,
+          "marginRequired": 24896.57
+        },
+        "timestamp": "2026-09-03T19:59:49.459Z"
+      },
+      {
+        "symbol": "DRREDDY",
+        "token": "881",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6693.84,
+        "vwap": 6669.18,
+        "orbHigh": 6689.9,
+        "orbLow": 6616.75,
+        "ema20": 6643.35,
+        "stopLoss": 6649.17,
+        "target": 6774.25,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6689.9 with VWAP support (₹6669.18) and +0.66% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 18,
+          "riskAmount": 1000,
+          "estimatedExposure": 120489.12,
+          "marginRequired": 24097.82
+        },
+        "timestamp": "2026-09-03T19:59:49.459Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T20:00:49.471Z",
+    "activeSignalsCount": 6,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 825.27,
+        "vwap": 820.42,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 817.96,
+        "target": 838.43,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹820.4936 with VWAP support (₹820.42) and +1.19% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 136,
+          "riskAmount": 1000,
+          "estimatedExposure": 112236.72,
+          "marginRequired": 22447.34
+        },
+        "timestamp": "2026-09-03T20:00:49.469Z"
+      },
+      {
+        "symbol": "AXISBANK",
+        "token": "5900",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1173.14,
+        "vwap": 1169.29,
+        "orbHigh": 1172.2918,
+        "orbLow": 1159.4735,
+        "ema20": 1164.1347,
+        "stopLoss": 1165.78,
+        "target": 1186.39,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1172.2918 with VWAP support (₹1169.29) and +0.67% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124352.84,
+          "marginRequired": 24870.57
+        },
+        "timestamp": "2026-09-03T20:00:49.469Z"
+      },
+      {
+        "symbol": "TECHM",
+        "token": "13538",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1554.42,
+        "vwap": 1546.53,
+        "orbHigh": 1549.24,
+        "orbLow": 1532.3,
+        "ema20": 1538.46,
+        "stopLoss": 1541.89,
+        "target": 1576.97,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1549.24 with VWAP support (₹1546.53) and +0.94% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 79,
+          "riskAmount": 1000,
+          "estimatedExposure": 122799.18,
+          "marginRequired": 24559.84
+        },
+        "timestamp": "2026-09-03T20:00:49.469Z"
+      },
+      {
+        "symbol": "LT",
+        "token": "11483",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3674.66,
+        "vwap": 3661.45,
+        "orbHigh": 3671.9,
+        "orbLow": 3631.75,
+        "ema20": 3646.35,
+        "stopLoss": 3650.47,
+        "target": 3718.2,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3671.9 with VWAP support (₹3661.45) and +0.68% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 34,
+          "riskAmount": 1000,
+          "estimatedExposure": 124938.44,
+          "marginRequired": 24987.69
+        },
+        "timestamp": "2026-09-03T20:00:49.469Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1191.84,
+        "vwap": 1185.65,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1182.09,
+        "target": 1209.39,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1185.65) and +1% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 102,
+          "riskAmount": 1000,
+          "estimatedExposure": 121567.68,
+          "marginRequired": 24313.54
+        },
+        "timestamp": "2026-09-03T20:00:49.469Z"
+      },
+      {
+        "symbol": "DRREDDY",
+        "token": "881",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6696.35,
+        "vwap": 6671.47,
+        "orbHigh": 6689.9,
+        "orbLow": 6616.75,
+        "ema20": 6643.35,
+        "stopLoss": 6651.46,
+        "target": 6777.15,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6689.9 with VWAP support (₹6671.47) and +0.7% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 18,
+          "riskAmount": 1000,
+          "estimatedExposure": 120534.3,
+          "marginRequired": 24106.86
+        },
+        "timestamp": "2026-09-03T20:00:49.469Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T20:01:49.474Z",
+    "activeSignalsCount": 7,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 823.45,
+        "vwap": 819.83,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 817.37,
+        "target": 834.39,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹820.4936 with VWAP support (₹819.83) and +0.96% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 151,
+          "riskAmount": 1000,
+          "estimatedExposure": 124340.95,
+          "marginRequired": 24868.19
+        },
+        "timestamp": "2026-09-03T20:01:49.473Z"
+      },
+      {
+        "symbol": "AXISBANK",
+        "token": "5900",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1173.37,
+        "vwap": 1169.36,
+        "orbHigh": 1172.2918,
+        "orbLow": 1159.4735,
+        "ema20": 1164.1347,
+        "stopLoss": 1165.85,
+        "target": 1186.91,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1172.2918 with VWAP support (₹1169.36) and +0.69% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124377.22,
+          "marginRequired": 24875.44
+        },
+        "timestamp": "2026-09-03T20:01:49.473Z"
+      },
+      {
+        "symbol": "TECHM",
+        "token": "13538",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1554.93,
+        "vwap": 1547.44,
+        "orbHigh": 1549.24,
+        "orbLow": 1532.3,
+        "ema20": 1538.46,
+        "stopLoss": 1542.8,
+        "target": 1576.76,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1549.24 with VWAP support (₹1547.44) and +0.97% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 80,
+          "riskAmount": 1000,
+          "estimatedExposure": 124394.4,
+          "marginRequired": 24878.88
+        },
+        "timestamp": "2026-09-03T20:01:49.473Z"
+      },
+      {
+        "symbol": "LT",
+        "token": "11483",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3671.99,
+        "vwap": 3660.56,
+        "orbHigh": 3671.9,
+        "orbLow": 3631.75,
+        "ema20": 3646.35,
+        "stopLoss": 3649.58,
+        "target": 3712.33,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3671.9 with VWAP support (₹3660.56) and +0.6% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 34,
+          "riskAmount": 1000,
+          "estimatedExposure": 124847.66,
+          "marginRequired": 24969.53
+        },
+        "timestamp": "2026-09-03T20:01:49.473Z"
+      },
+      {
+        "symbol": "HINDUNILVR",
+        "token": "1394",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2838.8,
+        "vwap": 2828.43,
+        "orbHigh": 2836.92,
+        "orbLow": 2805.9,
+        "ema20": 2817.18,
+        "stopLoss": 2819.94,
+        "target": 2872.75,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2836.92 with VWAP support (₹2828.43) and +0.67% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 44,
+          "riskAmount": 1000,
+          "estimatedExposure": 124907.2,
+          "marginRequired": 24981.44
+        },
+        "timestamp": "2026-09-03T20:01:49.473Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1190.66,
+        "vwap": 1185.3,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.74,
+        "target": 1206.72,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1185.3) and +0.9% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 104,
+          "riskAmount": 1000,
+          "estimatedExposure": 123828.64,
+          "marginRequired": 24765.73
+        },
+        "timestamp": "2026-09-03T20:01:49.474Z"
+      },
+      {
+        "symbol": "DRREDDY",
+        "token": "881",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6715.87,
+        "vwap": 6682.02,
+        "orbHigh": 6689.9,
+        "orbLow": 6616.75,
+        "ema20": 6643.35,
+        "stopLoss": 6661.97,
+        "target": 6812.89,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6689.9 with VWAP support (₹6682.02) and +0.99% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 18,
+          "riskAmount": 1000,
+          "estimatedExposure": 120885.66,
+          "marginRequired": 24177.13
+        },
+        "timestamp": "2026-09-03T20:01:49.474Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T20:02:49.489Z",
+    "activeSignalsCount": 11,
+    "signals": [
+      {
+        "symbol": "ICICIBANK",
+        "token": "4963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1192.95,
+        "vwap": 1187.91,
+        "orbHigh": 1191.3052,
+        "orbLow": 1178.279,
+        "ema20": 1183.0158000000001,
+        "stopLoss": 1184.35,
+        "target": 1208.43,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1191.3052 with VWAP support (₹1187.91) and +0.74% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 104,
+          "riskAmount": 1000,
+          "estimatedExposure": 124066.8,
+          "marginRequired": 24813.36
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      },
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 822.45,
+        "vwap": 819.5,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 817.04,
+        "target": 832.19,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹820.4936 with VWAP support (₹819.5) and +0.84% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 151,
+          "riskAmount": 1000,
+          "estimatedExposure": 124189.95,
+          "marginRequired": 24837.99
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      },
+      {
+        "symbol": "AXISBANK",
+        "token": "5900",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1175.97,
+        "vwap": 1170.23,
+        "orbHigh": 1172.2918,
+        "orbLow": 1159.4735,
+        "ema20": 1164.1347,
+        "stopLoss": 1166.72,
+        "target": 1192.62,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1172.2918 with VWAP support (₹1170.23) and +0.92% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124652.82,
+          "marginRequired": 24930.56
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      },
+      {
+        "symbol": "KOTAKBANK",
+        "token": "1922",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1792.02,
+        "vwap": 1785.19,
+        "orbHigh": 1790.68,
+        "orbLow": 1771.1,
+        "ema20": 1778.22,
+        "stopLoss": 1779.83,
+        "target": 1813.96,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1790.68 with VWAP support (₹1785.19) and +0.68% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 69,
+          "riskAmount": 1000,
+          "estimatedExposure": 123649.38,
+          "marginRequired": 24729.88
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      },
+      {
+        "symbol": "TECHM",
+        "token": "13538",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1557.99,
+        "vwap": 1549.29,
+        "orbHigh": 1549.24,
+        "orbLow": 1532.3,
+        "ema20": 1538.46,
+        "stopLoss": 1541.49,
+        "target": 1587.69,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1549.24 with VWAP support (₹1549.29) and +1.17% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 60,
+          "riskAmount": 1000,
+          "estimatedExposure": 93479.4,
+          "marginRequired": 18695.88
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      },
+      {
+        "symbol": "RELIANCE",
+        "token": "2885",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3014.99,
+        "vwap": 2999.16,
+        "orbHigh": 3003.3124000000003,
+        "orbLow": 2970.473,
+        "ema20": 2982.4146,
+        "stopLoss": 2990.16,
+        "target": 3059.68,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3003.3124000000003 with VWAP support (₹2999.16) and +0.99% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 40,
+          "riskAmount": 1000,
+          "estimatedExposure": 120599.6,
+          "marginRequired": 24119.92
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      },
+      {
+        "symbol": "HEROMOTOCO",
+        "token": "1348",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 5292.56,
+        "vwap": 5313.73,
+        "orbHigh": 5351.92,
+        "orbLow": 5293.4,
+        "ema20": 5314.68,
+        "stopLoss": 5329.67,
+        "target": 5225.76,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹5293.4 with VWAP resistance (₹5313.73) and -0.52% drift.",
+        "riskAllocation": {
+          "allocatedShares": 23,
+          "riskAmount": 1000,
+          "estimatedExposure": 121728.88,
+          "marginRequired": 24345.78
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      },
+      {
+        "symbol": "TATASTEEL",
+        "token": "3499",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 155.02,
+        "vwap": 154.44,
+        "orbHigh": 154.924,
+        "orbLow": 153.23,
+        "ema20": 153.846,
+        "stopLoss": 153.98,
+        "target": 156.89,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹154.924 with VWAP support (₹154.44) and +0.66% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 806,
+          "riskAmount": 1000,
+          "estimatedExposure": 124946.12,
+          "marginRequired": 24989.22
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1191.62,
+        "vwap": 1185.69,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1182.13,
+        "target": 1208.7,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1185.69) and +0.98% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 104,
+          "riskAmount": 1000,
+          "estimatedExposure": 123928.48,
+          "marginRequired": 24785.7
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      },
+      {
+        "symbol": "CIPLA",
+        "token": "694",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1631.88,
+        "vwap": 1625.04,
+        "orbHigh": 1629.72,
+        "orbLow": 1611.9,
+        "ema20": 1618.38,
+        "stopLoss": 1620.16,
+        "target": 1652.98,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1629.72 with VWAP support (₹1625.04) and +0.73% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 76,
+          "riskAmount": 1000,
+          "estimatedExposure": 124022.88,
+          "marginRequired": 24804.58
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      },
+      {
+        "symbol": "DRREDDY",
+        "token": "881",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6708.63,
+        "vwap": 6679.61,
+        "orbHigh": 6689.9,
+        "orbLow": 6616.75,
+        "ema20": 6643.35,
+        "stopLoss": 6659.57,
+        "target": 6796.94,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6689.9 with VWAP support (₹6679.61) and +0.88% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 18,
+          "riskAmount": 1000,
+          "estimatedExposure": 120755.34,
+          "marginRequired": 24151.07
+        },
+        "timestamp": "2026-09-03T20:02:49.487Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T20:03:49.490Z",
+    "activeSignalsCount": 13,
+    "signals": [
+      {
+        "symbol": "ICICIBANK",
+        "token": "4963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1197.37,
+        "vwap": 1190.94,
+        "orbHigh": 1191.3052,
+        "orbLow": 1178.279,
+        "ema20": 1183.0158000000001,
+        "stopLoss": 1187.37,
+        "target": 1215.37,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1191.3052 with VWAP support (₹1190.94) and +1.11% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 100,
+          "riskAmount": 1000,
+          "estimatedExposure": 119737,
+          "marginRequired": 23947.4
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 822.08,
+        "vwap": 819.37,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 816.91,
+        "target": 831.39,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹820.4936 with VWAP support (₹819.37) and +0.79% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 152,
+          "riskAmount": 1000,
+          "estimatedExposure": 124956.16,
+          "marginRequired": 24991.23
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "AXISBANK",
+        "token": "5900",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1178.47,
+        "vwap": 1172.05,
+        "orbHigh": 1172.2918,
+        "orbLow": 1159.4735,
+        "ema20": 1164.1347,
+        "stopLoss": 1168.53,
+        "target": 1196.36,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1172.2918 with VWAP support (₹1172.05) and +1.13% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 100,
+          "riskAmount": 1000,
+          "estimatedExposure": 117847,
+          "marginRequired": 23569.4
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "TECHM",
+        "token": "13538",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1557.41,
+        "vwap": 1549.1,
+        "orbHigh": 1549.24,
+        "orbLow": 1532.3,
+        "ema20": 1538.46,
+        "stopLoss": 1544.45,
+        "target": 1580.74,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1549.24 with VWAP support (₹1549.1) and +1.13% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 77,
+          "riskAmount": 1000,
+          "estimatedExposure": 119920.57,
+          "marginRequired": 23984.11
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "RELIANCE",
+        "token": "2885",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3016.47,
+        "vwap": 3001.93,
+        "orbHigh": 3003.3124000000003,
+        "orbLow": 2970.473,
+        "ema20": 2982.4146,
+        "stopLoss": 2992.92,
+        "target": 3058.86,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3003.3124000000003 with VWAP support (₹3001.93) and +1.04% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 41,
+          "riskAmount": 1000,
+          "estimatedExposure": 123675.27,
+          "marginRequired": 24735.05
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "BPCL",
+        "token": "526",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 347.74,
+        "vwap": 346.16,
+        "orbHigh": 347.07,
+        "orbLow": 343.275,
+        "ema20": 344.655,
+        "stopLoss": 345.12,
+        "target": 352.46,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹347.07 with VWAP support (₹346.16) and +0.79% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 359,
+          "riskAmount": 1000,
+          "estimatedExposure": 124838.66,
+          "marginRequired": 24967.73
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "TATASTEEL",
+        "token": "3499",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 155.17,
+        "vwap": 154.49,
+        "orbHigh": 154.924,
+        "orbLow": 153.23,
+        "ema20": 153.846,
+        "stopLoss": 154.03,
+        "target": 157.22,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹154.924 with VWAP support (₹154.49) and +0.76% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 805,
+          "riskAmount": 1000,
+          "estimatedExposure": 124911.85,
+          "marginRequired": 24982.37
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "COALINDIA",
+        "token": "20374",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 498.06,
+        "vwap": 496.35,
+        "orbHigh": 497.97,
+        "orbLow": 492.525,
+        "ema20": 494.505,
+        "stopLoss": 494.86,
+        "target": 503.82,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹497.97 with VWAP support (₹496.35) and +0.62% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 250,
+          "riskAmount": 1000,
+          "estimatedExposure": 124515,
+          "marginRequired": 24903
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "ITC",
+        "token": "1660",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 502.26,
+        "vwap": 504.4,
+        "orbHigh": 508.03000000000003,
+        "orbLow": 502.475,
+        "ema20": 504.495,
+        "stopLoss": 505.91,
+        "target": 495.69,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹502.475 with VWAP resistance (₹504.4) and -0.54% drift.",
+        "riskAllocation": {
+          "allocatedShares": 248,
+          "riskAmount": 1000,
+          "estimatedExposure": 124560.48,
+          "marginRequired": 24912.1
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2538.44,
+        "vwap": 2528.05,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2520.47,
+        "target": 2570.79,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2528.05) and +0.73% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124383.56,
+          "marginRequired": 24876.71
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1191.79,
+        "vwap": 1186.06,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1182.5,
+        "target": 1208.51,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1187.08 with VWAP support (₹1186.06) and +1% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 104,
+          "riskAmount": 1000,
+          "estimatedExposure": 123946.16,
+          "marginRequired": 24789.23
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "CIPLA",
+        "token": "694",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1629.89,
+        "vwap": 1624.38,
+        "orbHigh": 1629.72,
+        "orbLow": 1611.9,
+        "ema20": 1618.38,
+        "stopLoss": 1619.51,
+        "target": 1648.57,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1629.72 with VWAP support (₹1624.38) and +0.61% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 76,
+          "riskAmount": 1000,
+          "estimatedExposure": 123871.64,
+          "marginRequired": 24774.33
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      },
+      {
+        "symbol": "DRREDDY",
+        "token": "881",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6705.27,
+        "vwap": 6678.49,
+        "orbHigh": 6689.9,
+        "orbLow": 6616.75,
+        "ema20": 6643.35,
+        "stopLoss": 6658.45,
+        "target": 6789.55,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6689.9 with VWAP support (₹6678.49) and +0.83% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 18,
+          "riskAmount": 1000,
+          "estimatedExposure": 120694.86,
+          "marginRequired": 24138.97
+        },
+        "timestamp": "2026-09-03T20:03:49.489Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T20:06:33.739Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 810.6,
+        "vwap": 814.32,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 816.76,
+        "target": 799.51,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹811.522 with VWAP resistance (₹814.32) and -0.61% drift.",
+        "riskAllocation": {
+          "allocatedShares": 154,
+          "riskAmount": 1000,
+          "estimatedExposure": 124832.4,
+          "marginRequired": 24966.48
+        },
+        "timestamp": "2026-09-03T20:06:33.735Z"
+      },
+      {
+        "symbol": "ASIANPAINT",
+        "token": "236",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 3132.21,
+        "vwap": 3145.38,
+        "orbHigh": 3168.9,
+        "orbLow": 3134.25,
+        "ema20": 3146.85,
+        "stopLoss": 3154.82,
+        "target": 3091.51,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹3134.25 with VWAP resistance (₹3145.38) and -0.56% drift.",
+        "riskAllocation": {
+          "allocatedShares": 39,
+          "riskAmount": 1000,
+          "estimatedExposure": 122156.19,
+          "marginRequired": 24431.24
+        },
+        "timestamp": "2026-09-03T20:06:33.735Z"
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "token": "3351",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1858.1,
+        "vwap": 1848.48,
+        "orbHigh": 1851.04,
+        "orbLow": 1830.8,
+        "ema20": 1838.16,
+        "stopLoss": 1842.93,
+        "target": 1885.41,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1851.04 with VWAP support (₹1848.48) and +0.98% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 65,
+          "riskAmount": 1000,
+          "estimatedExposure": 120776.5,
+          "marginRequired": 24155.3
+        },
+        "timestamp": "2026-09-03T20:06:33.736Z"
+      }
+    ]
+  }
+]

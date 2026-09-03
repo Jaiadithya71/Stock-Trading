@@ -202,6 +202,35 @@ router.post('/paper/trade', async (req, res) => {
 });
 
 /**
+ * POST /api/paper/close
+ * Closes an active paper position and records realized P&L
+ */
+router.post('/paper/close', async (req, res) => {
+  try {
+    const { positionId, exitPrice } = req.body;
+    const PaperTradingService = require('../services/paperTradingService');
+    const paperTrading = new PaperTradingService();
+    const closed = paperTrading.closePosition(positionId, exitPrice || 100, 'Manual User Square-Off');
+
+    weeklyAuditLogger.logTradeEvent({
+      id: closed.id,
+      symbol: closed.symbol,
+      action: closed.action || 'BUY',
+      entryPrice: closed.entryPrice,
+      exitPrice: closed.exitPrice,
+      quantity: closed.quantity,
+      pnl: closed.pnl,
+      status: 'CLOSED',
+      rationale: 'Manual UI Square-Off'
+    });
+
+    res.json({ success: true, message: 'Position squared off successfully', closed });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+});
+
+/**
  * POST /api/oms/mode
  * Toggles OMS adapter mode (PAPER vs LIVE)
  */

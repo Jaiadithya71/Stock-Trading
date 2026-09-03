@@ -220,6 +220,34 @@ class SignalAuditLogger {
       console.warn('⚠️ Error during signal audit log pruning:', e.message);
     }
   }
+
+  /**
+   * Appends 1-minute stock signals snapshot to stock_signal_audit_<DATE>.json
+   */
+  logMinuteSignals(signals = []) {
+    try {
+      this.ensureDataDir();
+      const today = new Date().toISOString().split('T')[0];
+      const filePath = path.join(DATA_DIR, `stock_signal_audit_${today}.json`);
+      let logs = [];
+      if (fs.existsSync(filePath)) {
+        try {
+          logs = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        } catch (e) { logs = []; }
+      }
+      const active = signals.filter(s => s.signal !== 'NEUTRAL_HOLD');
+      if (active.length > 0) {
+        logs.push({
+          timestamp: new Date().toISOString(),
+          activeSignalsCount: active.length,
+          signals: active
+        });
+        fs.writeFileSync(filePath, JSON.stringify(logs, null, 2), 'utf8');
+      }
+    } catch (err) {
+      // silent
+    }
+  }
 }
 
 module.exports = new SignalAuditLogger();

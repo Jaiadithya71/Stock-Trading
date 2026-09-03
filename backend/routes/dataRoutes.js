@@ -55,6 +55,7 @@ router.post("/banknifty-data", requireAuth, async (req, res) => {
     let dataSource = 'marketData';
 
     // STEP 1: Try real-time marketData API first
+    const tokens = Object.values(SYMBOL_TOKEN_MAP);
     const ltpResponse = await dashboard.getLTPData("NSE", tokens, "FULL");
 
     if (ltpResponse.success && ltpResponse.data) {

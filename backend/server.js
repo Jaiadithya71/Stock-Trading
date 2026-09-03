@@ -259,9 +259,10 @@ app.listen(PORT, HOST, async () => {
   const { setActiveDashboard } = require("./middleware/authMiddleware");
   const autoCreds = getAnyAvailableCredentials();
 
+  let systemDashboard = null;
   if (autoCreds && autoCreds.credentials) {
     console.log(`\n🔐 Attempting headless background authentication for '${autoCreds.username}'...`);
-    const systemDashboard = new TradingDashboard(autoCreds.credentials);
+    systemDashboard = new TradingDashboard(autoCreds.credentials);
     systemDashboard.authenticate().then(authRes => {
       if (authRes && authRes.success) {
         setActiveDashboard(autoCreds.username, systemDashboard);
@@ -282,6 +283,10 @@ app.listen(PORT, HOST, async () => {
 
   // Start Autonomous 60-Second Signal Evaluation & Audit Scheduler
   signalScheduler.start();
+
+  // Start Autonomous End-to-End Stock Trading & Daily P&L Engine (CA Archana)
+  const stockExecutionEngine = require("./services/stockExecutionEngine");
+  stockExecutionEngine.start(systemDashboard ? systemDashboard.smart_api : null);
 });
 
 // Cleanup on exit
@@ -294,6 +299,10 @@ process.on('SIGINT', () => {
   if (signalScheduler) {
     signalScheduler.stop();
   }
+  try {
+    const stockExecutionEngine = require("./services/stockExecutionEngine");
+    stockExecutionEngine.stop();
+  } catch (e) {}
   console.log('✅ Cleanup complete. Goodbye!\n');
   process.exit(0);
 });
