@@ -78,7 +78,41 @@ const RiskSettingsView = {
             </div>
           </div>
 
-          <!-- CARD 3: EXECUTION MODE TOGGLE -->
+          <!-- CARD 3: TRADING HORIZON & MONTHLY TARGET STRATEGY -->
+          <div class="settings-card">
+            <h3>📅 Trading Horizon & Multi-Week Swing Mode</h3>
+            <p class="s-desc">Target ~30% monthly gains by holding Stage-2 breakout runners overnight across 2–4 weeks.</p>
+
+            <div class="form-group">
+              <label>Strategy Horizon Mode</label>
+              <select id="setting-horizon" style="width: 100%; padding: 8px 12px; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; color: #fff; font-size: 13px;">
+                <option value="HYBRID_RUNNER" selected>🚀 Hybrid Runner (Intraday MIS + Auto-Promote Winners to Swing)</option>
+                <option value="SWING_POSITIONAL">📅 Pure Positional Swing (Up to 1 Month / 30 Days)</option>
+                <option value="INTRADAY">⚡ Pure Intraday MIS (Forced 3:15 PM EOD Square-off)</option>
+              </select>
+              <span class="form-hint">Hybrid mode enters with 5x MIS margin and locks risk at breakeven before holding multi-day</span>
+            </div>
+
+            <div class="form-group">
+              <label>Target Monthly Gain Goal (%)</label>
+              <input type="number" id="setting-monthly-target" value="30" min="10" max="100" step="5">
+              <span class="form-hint">Target compound return goal per month (Default: 30%)</span>
+            </div>
+
+            <div class="form-group">
+              <label>Swing Trailing Stop Type</label>
+              <select id="setting-trailing-type" style="width: 100%; padding: 8px 12px; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; color: #fff; font-size: 13px;">
+                <option value="20_EMA_DAILY" selected>20-Day EMA (Exponential Moving Average)</option>
+                <option value="SUPERTREND">SuperTrend (10, 3)</option>
+                <option value="BREAKEVEN_LOCKED">Breakeven + 0.2% Profit Buffer</option>
+              </select>
+              <span class="form-hint">Trails stop-loss higher on daily timeframe to protect gains without choking trend</span>
+            </div>
+
+            <button class="btn btn-save-settings" onclick="RiskSettingsView.saveSettings()">💾 Save Horizon & Risk Settings</button>
+          </div>
+
+          <!-- CARD 4: EXECUTION MODE TOGGLE -->
           <div class="settings-card">
             <h3>⚡ Execution Mode & SmartAPI Broker Credentials</h3>
             <p class="s-desc">Toggle between Forward Simulation Paper Trading and Live Broker Execution.</p>
@@ -96,7 +130,7 @@ const RiskSettingsView = {
             </div>
           </div>
 
-          <!-- CARD 4: STRATEGY & QUESTIONNAIRE SURVEY -->
+          <!-- CARD 5: STRATEGY & QUESTIONNAIRE SURVEY -->
           <div class="settings-card">
             <h3>📋 Client Strategy & Preferences Survey</h3>
             <p class="s-desc">Review or update your 16-question trading strategy specifications and baseline requirements.</p>
@@ -124,6 +158,9 @@ const RiskSettingsView = {
           if (s.maxLoss && document.getElementById('setting-maxloss')) document.getElementById('setting-maxloss').value = s.maxLoss;
           if (s.maxDailyTrades !== undefined && document.getElementById('setting-maxtrades')) document.getElementById('setting-maxtrades').value = s.maxDailyTrades;
           if (s.maxOpenPositions !== undefined && document.getElementById('setting-maxpositions')) document.getElementById('setting-maxpositions').value = s.maxOpenPositions;
+          if (s.strategyHorizon && document.getElementById('setting-horizon')) document.getElementById('setting-horizon').value = s.strategyHorizon;
+          if (s.targetMonthlyGainPct && document.getElementById('setting-monthly-target')) document.getElementById('setting-monthly-target').value = s.targetMonthlyGainPct;
+          if (s.swingTrailingStop && document.getElementById('setting-trailing-type')) document.getElementById('setting-trailing-type').value = s.swingTrailingStop;
         }
       }
     } catch (e) {}
@@ -136,6 +173,9 @@ const RiskSettingsView = {
       const maxLoss = document.getElementById('setting-maxloss')?.value || 5000;
       const maxDailyTrades = parseInt(document.getElementById('setting-maxtrades')?.value, 10);
       const maxOpenPositions = parseInt(document.getElementById('setting-maxpositions')?.value, 10) || 5;
+      const strategyHorizon = document.getElementById('setting-horizon')?.value || 'HYBRID_RUNNER';
+      const targetMonthlyGainPct = parseFloat(document.getElementById('setting-monthly-target')?.value) || 30.0;
+      const swingTrailingStop = document.getElementById('setting-trailing-type')?.value || '20_EMA_DAILY';
 
       const res = await fetch('/api/quant/settings', {
         method: 'POST',
@@ -145,7 +185,10 @@ const RiskSettingsView = {
           lots, 
           maxLoss, 
           maxDailyTrades: isNaN(maxDailyTrades) ? 0 : maxDailyTrades,
-          maxOpenPositions
+          maxOpenPositions,
+          strategyHorizon,
+          targetMonthlyGainPct,
+          swingTrailingStop
         })
       });
       const data = await res.json();

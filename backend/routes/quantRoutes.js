@@ -503,4 +503,48 @@ router.post('/quant/settings', async (req, res) => {
   }
 });
 
+/**
+ * GET /api/quant/swing-signals
+ * Returns daily multi-week Stage-2 breakout candidates targeting ~30% monthly gains
+ */
+router.get('/quant/swing-signals', async (req, res) => {
+  try {
+    const stockMarketDataProvider = require('../services/stockMarketDataProvider');
+    const positionalSignalEngine = require('../services/positionalSignalEngine');
+    const snapshot = await stockMarketDataProvider.getQuotes();
+    const stockList = snapshot.stocks || [];
+    const swingSignals = positionalSignalEngine.evaluateUniverse(stockList);
+    res.json({
+      success: true,
+      targetGoal: '30% Monthly Gain Roadmap',
+      signals: swingSignals
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * POST /api/quant/promote-to-swing
+ * Promotes an intraday position to a multi-week swing runner (holding overnight with risk locked at breakeven)
+ */
+router.post('/quant/promote-to-swing', async (req, res) => {
+  try {
+    const { orderId } = req.body;
+    if (!orderId) {
+      return res.status(400).json({ success: false, message: 'orderId is required' });
+    }
+    const PaperTradingService = require('../services/paperTradingService');
+    const paperTrading = new PaperTradingService();
+    const updated = paperTrading.promotePositionToSwing(orderId);
+    res.json({
+      success: true,
+      message: `Successfully promoted ${updated.symbol} to Multi-Week Swing Runner!`,
+      position: updated
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 module.exports = router;

@@ -11,6 +11,7 @@ const stockSignalEngine = require('./stockSignalEngine');
 const PaperTradingService = require('./paperTradingService');
 const weeklyAuditLogger = require('./weeklyAuditLogger');
 const signalAuditLogger = require('./signalAuditLogger');
+const positionalSignalEngine = require('./positionalSignalEngine');
 const marketCalendar = require('../utils/marketCalendar');
 
 const paperTrading = new PaperTradingService();
@@ -33,7 +34,7 @@ class StockExecutionEngine {
         return JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
       }
     } catch (e) {}
-    return { tradingMode: 'PAPER_TRADING', capital: 100000, riskPerTradePct: 1.0, maxDailyLoss: 5000, maxOpenPositions: 5, killSwitchActive: false };
+    return { tradingMode: 'PAPER_TRADING', strategyHorizon: 'HYBRID_RUNNER', capital: 100000, riskPerTradePct: 1.0, maxDailyLoss: 5000, maxOpenPositions: 5, killSwitchActive: false };
   }
 
   getISTTime() {
@@ -96,12 +97,29 @@ class StockExecutionEngine {
         console.log(`🎯 [StockEngine] Position Auto-Closed: ${trade.symbol} P&L: ₹${trade.pnl} (${trade.exitReason})`);
       }
 
+      // 2B. Evaluate Swing Positional Holdings for Trailing 20-EMA & Pyramiding
+      const swingEval = positionalSignalEngine.evaluateSwingPositions(paperTrading.positions, priceMap);
+      if (swingEval.pyramidAlerts && swingEval.pyramidAlerts.length > 0) {
+        swingEval.pyramidAlerts.forEach(a => console.log(a.message));
+      }
+
       // 3. 3:15 PM EOD INTRADAY MIS SQUARE-OFF RULE
-      // Between 3:15 PM (915 min) and 3:29 PM (929 min), force-close all remaining open positions
+      // Between 3:15 PM (915 min) and 3:29 PM (929 min), square off intraday MIS positions
       if (ist.timeInMinutes >= 915 && ist.timeInMinutes < 930) {
-        if (paperTrading.positions.length > 0) {
-          console.log('⏰ [StockEngine] 3:15 PM IST Reached: Auto squaring off all remaining intraday positions...');
-          const eodExits = paperTrading.squareOffAllPositions(priceMap, 'EOD_MIS_SQUARE_OFF_3_15_PM');
+        // In HYBRID_RUNNER mode: If any intraday position has >= 1.0% profit, auto-promote to Swing runner!
+        if (settings.strategyHorizon === 'HYBRID_RUNNER' || settings.strategyHorizon === 'SWING_POSITIONAL') {
+          paperTrading.positions.forEach(p => {
+            if (p.holdingType !== 'SWING_POSITIONAL' && (p.unrealizedPnLPct || 0) >= 1.0) {
+              console.log(`🚀 [StockEngine] Auto-Promoting profitable intraday runner to Swing: ${p.symbol} (+${p.unrealizedPnLPct}%)`);
+              paperTrading.promotePositionToSwing(p.id);
+            }
+          });
+        }
+
+        const intradayOpen = paperTrading.positions.filter(p => p.holdingType !== 'SWING_POSITIONAL');
+        if (intradayOpen.length > 0) {
+          console.log(`⏰ [StockEngine] 3:15 PM IST Reached: Auto squaring off ${intradayOpen.length} intraday MIS positions...`);
+          const eodExits = paperTrading.squareOffAllPositions(priceMap, 'EOD_MIS_SQUARE_OFF_3_15_PM', false);
           eodExits.forEach(t => {
             this.tradesToday.push(t);
             weeklyAuditLogger.logTradeEvent(t);
@@ -276,6 +294,10 @@ class StockExecutionEngine {
       } catch (e) {}
     }
     return [];
+  }
+
+  promotePositionToSwing(orderId) {
+    return paperTrading.promotePositionToSwing(orderId);
   }
 
   start(smartApiInstance = null) {

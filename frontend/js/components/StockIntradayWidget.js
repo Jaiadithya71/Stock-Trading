@@ -90,6 +90,26 @@ const StockIntradayWidget = {
               🤖 AUTO-TRADE: ACTIVE
             </button>
 
+            <!-- Strategy Horizon Selector (Intraday vs Positional Swing vs Hybrid) -->
+            <div style="display: flex; align-items: center; background: #131722; padding: 3px; border-radius: 6px; border: 1px solid #2a2e39;">
+              <span style="font-size: 10px; color: #8896a8; font-weight: 700; padding: 0 6px;">HORIZON:</span>
+              <button id="horizonBtnIntraday" onclick="StockIntradayWidget.setStrategyHorizon('INTRADAY')" 
+                style="padding: 4px 8px; font-size: 10.5px; font-weight: 700; border: none; border-radius: 4px; background: transparent; color: #8896a8; cursor: pointer;"
+                title="Intraday 5x MIS margin with automatic 3:15 PM EOD square-off">
+                ⚡ Intraday
+              </button>
+              <button id="horizonBtnSwing" onclick="StockIntradayWidget.setStrategyHorizon('SWING_POSITIONAL')" 
+                style="padding: 4px 8px; font-size: 10.5px; font-weight: 700; border: none; border-radius: 4px; background: transparent; color: #8896a8; cursor: pointer;"
+                title="Multi-week Stage-2 Breakouts held up to 30 days with trailing 20-EMA stop">
+                📅 Swing (1M)
+              </button>
+              <button id="horizonBtnHybrid" onclick="StockIntradayWidget.setStrategyHorizon('HYBRID_RUNNER')" 
+                style="padding: 4px 8px; font-size: 10.5px; font-weight: 700; border: none; border-radius: 4px; background: #2962ff; color: #fff; cursor: pointer;"
+                title="Starts as Intraday 5x; automatically promotes profitable runners (>1.0%) to Swing with breakeven stop-loss">
+                🚀 Hybrid (30% Goal)
+              </button>
+            </div>
+
             <!-- Mode Switcher -->
             <div style="display: flex; background: #131722; padding: 3px; border-radius: 6px; border: 1px solid #2a2e39;">
               <button id="modeBtnPaper" onclick="StockIntradayWidget.setMode('PAPER_TRADING')" style="padding: 5px 12px; font-size: 11px; font-weight: 700; border: none; border-radius: 4px; background: #2962ff; color: #fff; cursor: pointer;">
@@ -1322,6 +1342,12 @@ const StockIntradayWidget = {
       const isSelected = cleanSym === currentSelected;
       const isProfitable = (pos.unrealizedPnL || 0) >= 0;
       const pnlColor = isProfitable ? '#00d084' : '#ff4757';
+      const isSwing = pos.holdingType === 'SWING_POSITIONAL';
+
+      const horizonBadge = isSwing
+        ? `<span style="display: block; font-size: 9px; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.15); padding: 1px 4px; border-radius: 3px; border: 1px solid rgba(56, 189, 248, 0.3); margin-top: 2px;">📅 SWING (Day ${pos.holdingDaysCount || 1}/30)</span>`
+        : `<span style="display: block; font-size: 9px; font-weight: 600; color: #eab308; background: rgba(234, 179, 8, 0.1); padding: 1px 4px; border-radius: 3px; border: 1px solid rgba(234, 179, 8, 0.2); margin-top: 2px;">⚡ INTRADAY (3:15 PM)</span>`;
+
       const trailingBadge = pos.trailingStatus 
         ? `<span style="display: block; font-size: 9.5px; font-weight: 700; color: #00d084;">🛡️ ${pos.trailingStatus.replace(/_/g, ' ')}</span>`
         : '';
@@ -1341,6 +1367,7 @@ const StockIntradayWidget = {
               <span style="color: ${isSelected ? '#2962ff' : '#fff'}; font-weight: 800; text-decoration: underline; text-underline-offset: 2px;">${pos.symbol}</span>
               <span style="font-size: 10px; opacity: 0.7; color: #38bdf8;" title="Hover for entry rationale & timing">ℹ️</span>
             </span>
+            ${horizonBadge}
           </td>
           <td style="padding: 8px; font-weight: 700; color: ${pos.action === 'BUY' ? '#00d084' : '#ff4757'};">${pos.action}</td>
           <td style="padding: 8px; font-family: monospace;">${pos.quantity}</td>
@@ -1355,13 +1382,64 @@ const StockIntradayWidget = {
             ${isProfitable ? '+' : ''}₹${(pos.unrealizedPnL || 0).toFixed(2)} (${(pos.unrealizedPnLPct || 0) >= 0 ? '+' : ''}${(pos.unrealizedPnLPct || 0).toFixed(2)}%)
           </td>
           <td style="padding: 8px;">
-            <button onclick="event.stopPropagation(); StockIntradayWidget.closePosition('${pos.id}', ${pos.currentPrice || pos.entryPrice})" 
-              style="padding: 3px 8px; background: transparent; border: 1px solid #ff4757; color: #ff4757; border-radius: 4px; font-size: 10.5px; cursor: pointer; transition: background 0.15s;"
-              onmouseenter="this.style.background='rgba(255,71,87,0.2)'" onmouseleave="this.style.background='transparent'">Exit</button>
+            <div style="display: flex; gap: 4px; align-items: center;">
+              <button onclick="event.stopPropagation(); StockIntradayWidget.closePosition('${pos.id}', ${pos.currentPrice || pos.entryPrice})" 
+                style="padding: 3px 6px; background: transparent; border: 1px solid #ff4757; color: #ff4757; border-radius: 4px; font-size: 10px; cursor: pointer; transition: background 0.15s;"
+                onmouseenter="this.style.background='rgba(255,71,87,0.2)'" onmouseleave="this.style.background='transparent'">Exit</button>
+              ${!isSwing ? `
+                <button onclick="event.stopPropagation(); StockIntradayWidget.promoteToSwing('${pos.id}')" 
+                  style="padding: 3px 6px; background: rgba(41, 98, 255, 0.18); border: 1px solid #2962ff; color: #38bdf8; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer; transition: background 0.15s;"
+                  title="Promote to Multi-Week Swing Runner: Locks Stop-Loss at Breakeven and holds overnight for +30% target">🚀 Swing</button>
+              ` : ''}
+            </div>
           </td>
         </tr>
       `;
     }).join('');
+  },
+
+  async setStrategyHorizon(horizon) {
+    this.currentStrategyHorizon = horizon;
+    const btnIntra = document.getElementById('horizonBtnIntraday');
+    const btnSwing = document.getElementById('horizonBtnSwing');
+    const btnHyb = document.getElementById('horizonBtnHybrid');
+
+    if (btnIntra) { btnIntra.style.background = horizon === 'INTRADAY' ? '#2962ff' : 'transparent'; btnIntra.style.color = horizon === 'INTRADAY' ? '#fff' : '#8896a8'; }
+    if (btnSwing) { btnSwing.style.background = horizon === 'SWING_POSITIONAL' ? '#2962ff' : 'transparent'; btnSwing.style.color = horizon === 'SWING_POSITIONAL' ? '#fff' : '#8896a8'; }
+    if (btnHyb) { btnHyb.style.background = horizon === 'HYBRID_RUNNER' ? '#2962ff' : 'transparent'; btnHyb.style.color = horizon === 'HYBRID_RUNNER' ? '#fff' : '#8896a8'; }
+
+    try {
+      await fetch('/api/quant/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ strategyHorizon: horizon })
+      });
+      if (typeof ToastNotification !== 'undefined') {
+        const name = horizon === 'HYBRID_RUNNER' ? 'Hybrid Runner (Intraday + Multi-Week Swing)' : (horizon === 'SWING_POSITIONAL' ? 'Multi-Week Positional Swing (30% Goal)' : 'Intraday MIS (3:15 PM EOD)');
+        ToastNotification.show(`🎯 Trading Horizon updated to: ${name}`, 'success');
+      }
+    } catch (e) {}
+  },
+
+  async promoteToSwing(orderId) {
+    try {
+      const res = await fetch('/api/quant/promote-to-swing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        if (typeof ToastNotification !== 'undefined') {
+          ToastNotification.show(`🚀 ${data.message}`, 'success');
+        }
+        this.fetchData();
+      } else {
+        alert(`Could not promote: ${data.message}`);
+      }
+    } catch (e) {
+      alert(`Error promoting position: ${e.message}`);
+    }
   },
 
   showPositionTooltip(event, id, isOpen) {
@@ -1448,10 +1526,20 @@ const StockIntradayWidget = {
           <span style="font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: ${isBuy ? 'rgba(0,208,132,0.15)' : 'rgba(255,71,87,0.15)'}; color: ${isBuy ? '#00d084' : '#ff4757'}; border: 1px solid ${isBuy ? 'rgba(0,208,132,0.3)' : 'rgba(255,71,87,0.3)'};">
             ${isBuy ? '▲ BUY (LONG)' : '▼ SELL (SHORT)'}
           </span>
-          <span style="font-size: 10px; color: #8896a8;">${item.quantity || 0} Shares (MIS 5x)</span>
+          <span style="font-size: 10px; color: #8896a8;">${item.quantity || 0} Shares (${item.holdingType === 'SWING_POSITIONAL' ? 'CNC Delivery 1x' : 'MIS 5x'})</span>
         </div>
         <span style="font-size: 10.5px; font-weight: 700; color: ${isOpen ? '#00d084' : '#8896a8'}; background: rgba(255,255,255,0.05); padding: 2px 7px; border-radius: 4px;">
           ${isOpen ? '🟢 ACTIVE IN-FLIGHT' : '🏁 CLOSED'}
+        </span>
+      </div>
+
+      <!-- HORIZON & MONTHLY ROADMAP -->
+      <div style="display: flex; justify-content: space-between; align-items: center; background: ${item.holdingType === 'SWING_POSITIONAL' ? 'rgba(56, 189, 248, 0.08)' : 'rgba(234, 179, 8, 0.08)'}; border: 1px solid ${item.holdingType === 'SWING_POSITIONAL' ? 'rgba(56, 189, 248, 0.25)' : 'rgba(234, 179, 8, 0.2)'}; border-radius: 6px; padding: 6px 10px; margin-bottom: 10px; font-size: 10.5px;">
+        <span style="color: ${item.holdingType === 'SWING_POSITIONAL' ? '#38bdf8' : '#eab308'}; font-weight: 700;">
+          ${item.holdingType === 'SWING_POSITIONAL' ? `📅 Positional Swing (Day ${item.holdingDaysCount || 1} of 30)` : '⚡ Intraday MIS (EOD 3:15 PM Square-off)'}
+        </span>
+        <span style="color: #d1d4dc; font-weight: 600;">
+          ${item.holdingType === 'SWING_POSITIONAL' ? '🎯 Target: +30% Monthly Gain Goal' : '🛡️ Strict 1:2 R:R Target'}
         </span>
       </div>
 

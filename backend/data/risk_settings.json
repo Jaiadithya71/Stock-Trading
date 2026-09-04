@@ -7,5 +7,8 @@
   "riskPerTradePct": 1.0,
   "maxOpenPositions": 5,
   "killSwitchActive": false,
-  "tradingMode": "PAPER_TRADING"
+  "tradingMode": "PAPER_TRADING",
+  "strategyHorizon": "HYBRID_RUNNER",
+  "targetMonthlyGainPct": 30.0,
+  "swingTrailingStop": "20_EMA_DAILY"
 }

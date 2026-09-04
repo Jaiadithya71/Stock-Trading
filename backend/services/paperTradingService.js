@@ -122,8 +122,12 @@ class PaperTradingService {
       ? entryPrice * (1 - this.slippagePenalty) 
       : entryPrice * (1 + this.slippagePenalty);
 
+    const isSwing = order.holdingType === 'SWING_POSITIONAL' || order.producttype === 'CNC' || order.producttype === 'DELIVERY';
+    const holdingType = isSwing ? 'SWING_POSITIONAL' : 'INTRADAY';
+
     const totalTradeValue = effectivePrice * quantity;
-    const requiredMargin = isOption ? totalTradeValue : (totalTradeValue / this.intradayLeverage); // 5x MIS for stocks
+    // Intraday equity gets 5x MIS leverage; Positional swing delivery uses 1x capital (or options full premium)
+    const requiredMargin = (isOption || isSwing) ? totalTradeValue : (totalTradeValue / this.intradayLeverage);
 
     if (requiredMargin > this.currentBalance) {
       throw new Error(`Insufficient virtual capital. Required Margin: ₹${requiredMargin.toFixed(2)}, Available: ₹${this.currentBalance.toFixed(2)}`);
@@ -138,6 +142,8 @@ class PaperTradingService {
       optionType: optionType || null,
       strikePrice: strikePrice || null,
       assetType: isOption ? 'OPTIONS' : 'EQUITY_CASH',
+      holdingType,
+      holdingDaysCount: 1,
       entryPrice: parseFloat(effectivePrice.toFixed(2)),
       quantity: parseInt(quantity, 10),
       totalValue: parseFloat(totalTradeValue.toFixed(2)),
@@ -292,9 +298,10 @@ class PaperTradingService {
   }
 
   /**
-   * End-of-Day 3:15 PM Square-Off Rule: Force-close all remaining open positions
+   * End-of-Day 3:15 PM Square-Off Rule: Force-close intraday open positions
+   * Positional Swing holdings (holdingType === 'SWING_POSITIONAL') are preserved overnight unless forceAll = true
    */
-  squareOffAllPositions(priceMap = {}, reason = 'EOD_MIS_SQUARE_OFF_3_15_PM') {
+  squareOffAllPositions(priceMap = {}, reason = 'EOD_MIS_SQUARE_OFF_3_15_PM', forceAll = false) {
     this.loadPersistedState();
     const closedList = [];
     const openIds = this.positions.map(p => p.id);
@@ -302,6 +309,13 @@ class PaperTradingService {
     for (const id of openIds) {
       const pos = this.positions.find(p => p.id === id);
       if (!pos) continue;
+
+      // Preserve multi-week swing positions across days
+      if (!forceAll && pos.holdingType === 'SWING_POSITIONAL') {
+        console.log(`🌙 [PaperTrading] Preserving Swing Holding Overnight: ${pos.symbol} (Target: ₹${pos.target})`);
+        continue;
+      }
+
       const cleanSymbol = pos.symbol.replace('-EQ', '');
       const price = priceMap[cleanSymbol] || priceMap[pos.symbol] || pos.entryPrice;
       const closed = this.closePosition(id, price, reason);
@@ -309,6 +323,37 @@ class PaperTradingService {
     }
 
     return closedList;
+  }
+
+  /**
+   * Promote an Intraday Winner into a Multi-Week Positional Swing Runner
+   * Locks Stop-Loss at Breakeven (making trade risk-free) and expands target to +30%
+   */
+  promotePositionToSwing(orderId) {
+    this.loadPersistedState();
+    const pos = this.positions.find(p => p.id === orderId);
+    if (!pos) {
+      throw new Error(`Position ${orderId} not found`);
+    }
+
+    pos.holdingType = 'SWING_POSITIONAL';
+    pos.holdingDaysCount = (pos.holdingDaysCount || 0) + 1;
+
+    // Move Stop Loss to Breakeven (+0.2% buffer) if currently in profit
+    const currentPrice = pos.currentPrice || pos.entryPrice;
+    if (pos.action === 'BUY' && currentPrice > pos.entryPrice) {
+      pos.stopLoss = parseFloat((pos.entryPrice * 1.002).toFixed(2));
+      pos.trailingStatus = 'STOP_AT_BREAKEVEN_RISK_FREE';
+    }
+
+    // Set 30% Multi-Week Target roadmap
+    pos.swingTarget = parseFloat((pos.entryPrice * 1.30).toFixed(2));
+    pos.target = pos.swingTarget;
+    pos.rationale = `🚀 PROMOTED TO SWING RUNNER: Riding multi-week momentum with risk locked at Breakeven (₹${pos.stopLoss}). Target: ₹${pos.target} (+30%).`;
+
+    this.savePersistedState();
+    console.log(`🚀 [PaperTrading] Promoted ${pos.symbol} to SWING RUNNER! SL: ₹${pos.stopLoss} | Target: ₹${pos.target} (+30%)`);
+    return pos;
   }
 
   getPortfolioSummary() {
