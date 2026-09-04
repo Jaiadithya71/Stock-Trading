@@ -1283,6 +1283,7 @@ const StockIntradayWidget = {
   },
 
   renderPositions(positions) {
+    this.lastPositions = positions || [];
     const tbody = document.getElementById('tvPositionsTbody');
     const countEl = document.getElementById('tvOpenCount');
     if (countEl) countEl.textContent = positions.length;
@@ -1314,12 +1315,15 @@ const StockIntradayWidget = {
 
       return `
         <tr id="tvPosRow_${cleanSym}" onclick="StockIntradayWidget.selectStock('${cleanSym}')" 
-          style="border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; background: ${rowBg}; border-left: ${rowBorder}; transition: background 0.15s;"
-          title="Click to view ${cleanSym} chart & intel in main trading terminal">
+          onmouseenter="StockIntradayWidget.showPositionTooltip(event, '${pos.id}', true)"
+          onmousemove="StockIntradayWidget.movePositionTooltip(event)"
+          onmouseleave="StockIntradayWidget.hidePositionTooltip()"
+          style="border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; background: ${rowBg}; border-left: ${rowBorder}; transition: background 0.15s;">
           <td style="padding: 8px; font-weight: 700; color: #fff;">
             <span style="display: inline-flex; align-items: center; gap: 6px;">
               <span style="font-size: 11px;">${isSelected ? '🔹' : '📈'}</span>
               <span style="color: ${isSelected ? '#2962ff' : '#fff'}; font-weight: 800; text-decoration: underline; text-underline-offset: 2px;">${pos.symbol}</span>
+              <span style="font-size: 10px; opacity: 0.7; color: #38bdf8;" title="Hover for entry rationale & timing">ℹ️</span>
             </span>
           </td>
           <td style="padding: 8px; font-weight: 700; color: ${pos.action === 'BUY' ? '#00d084' : '#ff4757'};">${pos.action}</td>
@@ -1342,6 +1346,195 @@ const StockIntradayWidget = {
         </tr>
       `;
     }).join('');
+  },
+
+  showPositionTooltip(event, id, isOpen) {
+    const item = isOpen 
+      ? (this.lastPositions || []).find(p => p.id === id)
+      : (this.lastClosedTrades || []).find(t => t.id === id);
+    if (!item) return;
+
+    let tooltip = document.getElementById('tvPositionHoverCard');
+    if (!tooltip) {
+      tooltip = document.createElement('div');
+      tooltip.id = 'tvPositionHoverCard';
+      tooltip.style.cssText = `
+        position: fixed;
+        z-index: 9999999;
+        display: none;
+        pointer-events: none;
+        width: 390px;
+        background: rgba(19, 23, 34, 0.97);
+        border: 1px solid #2962ff;
+        border-radius: 8px;
+        box-shadow: 0 16px 40px rgba(0,0,0,0.85), 0 0 20px rgba(41, 98, 255, 0.25);
+        padding: 14px 16px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: #d1d4dc;
+        font-size: 11.5px;
+        line-height: 1.45;
+        backdrop-filter: blur(10px);
+        transition: opacity 0.1s ease;
+      `;
+      document.body.appendChild(tooltip);
+    }
+
+    const isBuy = (item.action || item.side) === 'BUY';
+    const cleanSym = (item.symbol || '').replace('-EQ', '').trim().toUpperCase();
+    const entryTime = item.entryTimestamp || item.timestamp;
+    const exitTime = item.exitTimestamp;
+    
+    // Format entry time in Indian Standard Time (IST)
+    let entryTimeFormatted = '-';
+    let durationText = '';
+    if (entryTime) {
+      const entryDate = new Date(entryTime);
+      entryTimeFormatted = entryDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+      
+      const endTime = exitTime ? new Date(exitTime).getTime() : Date.now();
+      const diffSec = Math.max(0, Math.floor((endTime - entryDate.getTime()) / 1000));
+      const mins = Math.floor(diffSec / 60);
+      const secs = diffSec % 60;
+      durationText = mins > 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : (mins > 0 ? `${mins}m ${secs}s` : `${secs}s`);
+    }
+
+    let exitTimeFormatted = '-';
+    if (exitTime) {
+      exitTimeFormatted = new Date(exitTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+    }
+
+    // Strategy rationale
+    let rationale = item.rationale || 'Autonomous ORB Breakout / Breakdown trigger with VWAP confluence.';
+    if (rationale.startsWith('Automated Exit:') && isOpen) {
+      rationale = 'Opening Range Breakout (ORB) momentum trigger with VWAP confluence and ATR risk boundary.';
+    } else if (rationale.startsWith('Automated Exit:') && !isOpen) {
+      rationale = `Position triggered via Intraday ${isBuy ? 'Bullish' : 'Bearish'} ORB momentum. Closed upon ${item.exitReason || 'Exit trigger'}.`;
+    }
+
+    // Target & SL calculations
+    const entryPrice = item.entryPrice || 0;
+    const targetPrice = item.target || 0;
+    const slPrice = item.stopLoss || 0;
+    const riskPerShare = isBuy ? (entryPrice - slPrice) : (slPrice - entryPrice);
+    const rewardPerShare = isBuy ? (targetPrice - entryPrice) : (entryPrice - targetPrice);
+    const rrRatio = (riskPerShare > 0 && rewardPerShare > 0) ? (rewardPerShare / riskPerShare).toFixed(2) : '-';
+
+    const pnl = isOpen ? (item.unrealizedPnL || 0) : (item.pnl || 0);
+    const pnlPct = isOpen ? (item.unrealizedPnLPct || 0) : (item.pnlPct || 0);
+    const isProfitable = pnl >= 0;
+    const pnlColor = isProfitable ? '#00d084' : '#ff4757';
+
+    tooltip.innerHTML = `
+      <!-- HEADER -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; margin-bottom: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 14px; font-weight: 800; color: #fff;">${cleanSym}</span>
+          <span style="font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: ${isBuy ? 'rgba(0,208,132,0.15)' : 'rgba(255,71,87,0.15)'}; color: ${isBuy ? '#00d084' : '#ff4757'}; border: 1px solid ${isBuy ? 'rgba(0,208,132,0.3)' : 'rgba(255,71,87,0.3)'};">
+            ${isBuy ? '▲ BUY (LONG)' : '▼ SELL (SHORT)'}
+          </span>
+          <span style="font-size: 10px; color: #8896a8;">${item.quantity || 0} Shares (MIS 5x)</span>
+        </div>
+        <span style="font-size: 10.5px; font-weight: 700; color: ${isOpen ? '#00d084' : '#8896a8'}; background: rgba(255,255,255,0.05); padding: 2px 7px; border-radius: 4px;">
+          ${isOpen ? '🟢 ACTIVE IN-FLIGHT' : '🏁 CLOSED'}
+        </span>
+      </div>
+
+      <!-- TIMELINE: WHEN CHOSEN -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 6px; padding: 8px; margin-bottom: 10px;">
+        <div>
+          <div style="font-size: 10px; color: #8896a8; text-transform: uppercase;">🕒 Entry Time (IST)</div>
+          <div style="font-weight: 600; color: #fff; font-family: monospace;">${entryTimeFormatted}</div>
+        </div>
+        <div>
+          <div style="font-size: 10px; color: #8896a8; text-transform: uppercase;">⏱️ ${isOpen ? 'Elapsed Time' : 'Holding Duration'}</div>
+          <div style="font-weight: 600; color: #38bdf8; font-family: monospace;">${durationText || '-'}</div>
+        </div>
+        ${!isOpen && exitTimeFormatted !== '-' ? `
+          <div style="grid-column: span 2; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 4px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 10px; color: #8896a8;">🚪 Exit Time: <strong style="color: #fff; font-family: monospace;">${exitTimeFormatted}</strong></span>
+            <span style="font-size: 10px; color: ${item.exitReason?.includes('TARGET') ? '#00d084' : '#ff4757'}; font-weight: 700;">${(item.exitReason || 'EXIT').replace(/_/g, ' ')}</span>
+          </div>
+        ` : ''}
+      </div>
+
+      <!-- WHY CHOSEN: STRATEGY RATIONALE -->
+      <div style="margin-bottom: 10px;">
+        <div style="font-size: 10px; font-weight: 700; color: #2962ff; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+          💡 Strategy Rationale (Why Chosen)
+        </div>
+        <div style="background: rgba(41, 98, 255, 0.08); border-left: 3px solid #2962ff; border-radius: 4px; padding: 8px 10px; font-size: 11px; color: #e2e8f0; line-height: 1.45;">
+          ${rationale}
+        </div>
+      </div>
+
+      <!-- RISK & REWARD ARCHITECTURE -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 10.5px; margin-bottom: 8px;">
+        <div style="background: rgba(255,255,255,0.02); padding: 6px; border-radius: 4px;">
+          <div style="color: #8896a8;">Entry Price</div>
+          <div style="font-weight: 700; color: #fff; font-family: monospace;">₹${entryPrice ? entryPrice.toFixed(2) : '-'}</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); padding: 6px; border-radius: 4px;">
+          <div style="color: #8896a8;">${isOpen ? 'Current Price' : 'Exit Price'}</div>
+          <div style="font-weight: 700; color: ${pnlColor}; font-family: monospace;">
+            ₹${(isOpen ? (item.currentPrice || entryPrice) : (item.exitPrice || entryPrice)).toFixed(2)}
+          </div>
+        </div>
+        <div style="background: rgba(255, 71, 87, 0.06); border: 1px solid rgba(255, 71, 87, 0.2); padding: 6px; border-radius: 4px;">
+          <div style="color: #ff4757; font-weight: 600;">🛑 Stop Loss</div>
+          <div style="font-weight: 700; color: #ff4757; font-family: monospace;">
+            ₹${slPrice ? slPrice.toFixed(2) : '-'} ${riskPerShare > 0 ? `(-₹${riskPerShare.toFixed(2)})` : ''}
+          </div>
+        </div>
+        <div style="background: rgba(0, 208, 132, 0.06); border: 1px solid rgba(0, 208, 132, 0.2); padding: 6px; border-radius: 4px;">
+          <div style="color: #00d084; font-weight: 600;">🎯 Target</div>
+          <div style="font-weight: 700; color: #00d084; font-family: monospace;">
+            ₹${targetPrice ? targetPrice.toFixed(2) : '-'} ${rewardPerShare > 0 ? `(+₹${rewardPerShare.toFixed(2)})` : ''}
+          </div>
+        </div>
+      </div>
+
+      <!-- PNL & RATIO FOOTER -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px; font-size: 11px;">
+        <span style="color: #8896a8;">Planned R:R: <strong style="color: #fff;">1 : ${rrRatio}</strong></span>
+        <span>${isOpen ? 'Unrealized' : 'Realized'} P&L: 
+          <strong style="color: ${pnlColor}; font-family: monospace; font-size: 12px;">
+            ${pnl >= 0 ? '+' : ''}₹${pnl.toFixed(2)} (${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(2)}%)
+          </strong>
+        </span>
+      </div>
+    `;
+
+    tooltip.style.display = 'block';
+    this.movePositionTooltip(event);
+  },
+
+  movePositionTooltip(event) {
+    const tooltip = document.getElementById('tvPositionHoverCard');
+    if (!tooltip || tooltip.style.display !== 'block') return;
+
+    const pad = 16;
+    const tooltipWidth = 400;
+    const tooltipHeight = tooltip.offsetHeight || 280;
+    let left = event.clientX + pad;
+    let top = event.clientY + pad;
+
+    // Viewport clamping
+    if (left + tooltipWidth > window.innerWidth - 12) {
+      left = event.clientX - tooltipWidth - pad;
+    }
+    if (top + tooltipHeight > window.innerHeight - 12) {
+      top = window.innerHeight - tooltipHeight - 12;
+    }
+    if (top < 12) top = 12;
+    if (left < 12) left = 12;
+
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${top}px`;
+  },
+
+  hidePositionTooltip() {
+    const tooltip = document.getElementById('tvPositionHoverCard');
+    if (tooltip) tooltip.style.display = 'none';
   },
 
   renderScorecard(p) {
@@ -1394,16 +1587,17 @@ const StockIntradayWidget = {
   },
 
   renderClosedTrades(trades) {
+    this.lastClosedTrades = (trades || []).filter(t => t.status !== 'OPEN');
     const tbody = document.getElementById('tvTradesTbody');
     const countEl = document.getElementById('tvClosedCount');
     
     // Strictly filter out any open trades so this table is purely closed history
-    const closedTrades = (trades || []).filter(t => t.status !== 'OPEN');
+    const closedTrades = this.lastClosedTrades;
     if (countEl) countEl.textContent = closedTrades.length;
 
     if (!tbody) return;
     if (closedTrades.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 18px; color: #8896a8;">No closed trades yet today.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 18px; color: #8896a8;">No closed trades yet today.</td></tr>';
       return;
     }
 
@@ -1429,13 +1623,16 @@ const StockIntradayWidget = {
 
       return `
         <tr onclick="StockIntradayWidget.selectStock('${cleanSym}')" 
-          style="border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; background: ${rowBg}; border-left: ${rowBorder}; transition: background 0.15s;"
-          title="Click to view ${cleanSym} chart & intel in main trading terminal">
+          onmouseenter="StockIntradayWidget.showPositionTooltip(event, '${t.id}', false)"
+          onmousemove="StockIntradayWidget.movePositionTooltip(event)"
+          onmouseleave="StockIntradayWidget.hidePositionTooltip()"
+          style="border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; background: ${rowBg}; border-left: ${rowBorder}; transition: background 0.15s;">
           <td style="padding: 8px; color: #8896a8; font-family: monospace;">${timeStr}</td>
           <td style="padding: 8px; font-weight: 700; color: #fff;">
             <span style="display: inline-flex; align-items: center; gap: 6px;">
               <span style="font-size: 11px;">${isSelected ? '🔹' : '📈'}</span>
               <span style="color: ${isSelected ? '#2962ff' : '#fff'}; font-weight: 800; text-decoration: underline; text-underline-offset: 2px;">${t.symbol}</span>
+              <span style="font-size: 10px; opacity: 0.7; color: #38bdf8;" title="Hover for strategy setup & execution timing">ℹ️</span>
             </span>
           </td>
           <td style="padding: 8px; font-weight: 700; color: ${isBuy ? '#00d084' : '#ff4757'};">${side}</td>

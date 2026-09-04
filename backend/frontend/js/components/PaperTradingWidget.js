@@ -79,7 +79,7 @@ const PaperTradingWidget = {
                 </thead>
                 <tbody>
                   ${activePositions.map(pos => `
-                    <tr>
+                    <tr title="💡 Setup (Why Chosen): ${pos.rationale || 'Fibonacci 0.618 Support + PCR Z-Score Confluence'}&#10;🕒 When Chosen: ${pos.entryTimestamp ? new Date(pos.entryTimestamp).toLocaleTimeString('en-IN') : 'Today'}&#10;🎯 Target: ₹${pos.target || '-'} | 🛑 Stop Loss: ₹${pos.stopLoss || '-'}">
                       <td style="text-align: left; padding-left: 14px; font-weight: 600; color: #f8fafc; font-family: var(--font-ui);">${pos.symbol}</td>
                       <td><span class="badge ${pos.type === 'CE' ? 'badge-bullish' : 'badge-bearish'}">${pos.type}</span></td>
                       <td class="num">${pos.quantity}</td>

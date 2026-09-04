@@ -89,7 +89,9 @@ class StockExecutionEngine {
           pnlPct: trade.pnlPct,
           exitReason: trade.exitReason,
           status: 'CLOSED',
-          rationale: `Automated Exit: ${trade.exitReason}`
+          rationale: trade.rationale || `Automated Exit: ${trade.exitReason}`,
+          entryTimestamp: trade.entryTimestamp,
+          exitTimestamp: trade.exitTimestamp
         });
         console.log(`🎯 [StockEngine] Position Auto-Closed: ${trade.symbol} P&L: ₹${trade.pnl} (${trade.exitReason})`);
       }

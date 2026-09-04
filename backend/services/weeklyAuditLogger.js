@@ -113,7 +113,9 @@ class WeeklyAuditLogger {
       pnlPct: event.pnlPct !== undefined ? event.pnlPct : (event.entryPrice && event.exitPrice ? parseFloat((((event.exitPrice - event.entryPrice) / event.entryPrice) * (event.action === 'SELL' ? -100 : 100)).toFixed(2)) : 0.0),
       exitReason: event.exitReason || (event.rationale?.includes('Automated Exit:') ? event.rationale.replace('Automated Exit: ', '') : (event.status === 'CLOSED' ? 'EXIT' : '-')),
       status: event.status || 'OPEN',
-      rationale: event.rationale || 'Fib 0.618 Support + PCR Z-Score Confluence'
+      rationale: event.rationale || 'Fib 0.618 Support + PCR Z-Score Confluence',
+      entryTimestamp: event.entryTimestamp || event.timestamp || now.toISOString(),
+      exitTimestamp: event.exitTimestamp || null
     };
 
     logData.trades.unshift(tradeEntry);
