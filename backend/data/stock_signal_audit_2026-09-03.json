@@ -2074,5 +2074,749 @@
         "timestamp": "2026-09-03T20:06:33.736Z"
       }
     ]
+  },
+  {
+    "timestamp": "2026-09-03T20:07:34.258Z",
+    "activeSignalsCount": 9,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 810.4,
+        "vwap": 813.61,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 816.05,
+        "target": 800.23,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹811.522 with VWAP resistance (₹813.61) and -0.64% drift.",
+        "riskAllocation": {
+          "allocatedShares": 154,
+          "riskAmount": 1000,
+          "estimatedExposure": 124801.6,
+          "marginRequired": 24960.32
+        },
+        "timestamp": "2026-09-03T20:07:34.257Z"
+      },
+      {
+        "symbol": "RELIANCE",
+        "token": "2885",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3011.27,
+        "vwap": 2997.42,
+        "orbHigh": 3003.3124000000003,
+        "orbLow": 2970.473,
+        "ema20": 2982.4146,
+        "stopLoss": 2988.43,
+        "target": 3052.38,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3003.3124000000003 with VWAP support (₹2997.42) and +0.87% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 41,
+          "riskAmount": 1000,
+          "estimatedExposure": 123462.07,
+          "marginRequired": 24692.41
+        },
+        "timestamp": "2026-09-03T20:07:34.257Z"
+      },
+      {
+        "symbol": "ONGC",
+        "token": "2475",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 308.4,
+        "vwap": 309.67,
+        "orbHigh": 311.86,
+        "orbLow": 308.45,
+        "ema20": 309.69,
+        "stopLoss": 310.6,
+        "target": 304.44,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹308.45 with VWAP resistance (₹309.67) and -0.52% drift.",
+        "riskAllocation": {
+          "allocatedShares": 405,
+          "riskAmount": 1000,
+          "estimatedExposure": 124902,
+          "marginRequired": 24980.4
+        },
+        "timestamp": "2026-09-03T20:07:34.257Z"
+      },
+      {
+        "symbol": "MARUTI",
+        "token": "10999",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 12364.47,
+        "vwap": 12422.65,
+        "orbHigh": 12524.7,
+        "orbLow": 12387.75,
+        "ema20": 12437.55,
+        "stopLoss": 12459.92,
+        "target": 12192.66,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹12387.75 with VWAP resistance (₹12422.65) and -0.69% drift.",
+        "riskAllocation": {
+          "allocatedShares": 10,
+          "riskAmount": 1000,
+          "estimatedExposure": 123644.7,
+          "marginRequired": 24728.94
+        },
+        "timestamp": "2026-09-03T20:07:34.257Z"
+      },
+      {
+        "symbol": "JSWSTEEL",
+        "token": "11723",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 951.56,
+        "vwap": 947.82,
+        "orbHigh": 950.67,
+        "orbLow": 940.275,
+        "ema20": 944.055,
+        "stopLoss": 944.98,
+        "target": 963.4,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹950.67 with VWAP support (₹947.82) and +0.69% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 131,
+          "riskAmount": 1000,
+          "estimatedExposure": 124654.36,
+          "marginRequired": 24930.87
+        },
+        "timestamp": "2026-09-03T20:07:34.257Z"
+      },
+      {
+        "symbol": "COALINDIA",
+        "token": "20374",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 492.2,
+        "vwap": 494.34,
+        "orbHigh": 497.97,
+        "orbLow": 492.525,
+        "ema20": 494.505,
+        "stopLoss": 495.82,
+        "target": 485.68,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹492.525 with VWAP resistance (₹494.34) and -0.57% drift.",
+        "riskAllocation": {
+          "allocatedShares": 253,
+          "riskAmount": 1000,
+          "estimatedExposure": 124526.6,
+          "marginRequired": 24905.32
+        },
+        "timestamp": "2026-09-03T20:07:34.257Z"
+      },
+      {
+        "symbol": "HINDUNILVR",
+        "token": "1394",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2838.96,
+        "vwap": 2828.2,
+        "orbHigh": 2836.92,
+        "orbLow": 2805.9,
+        "ema20": 2817.18,
+        "stopLoss": 2819.72,
+        "target": 2873.59,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2836.92 with VWAP support (₹2828.2) and +0.67% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 44,
+          "riskAmount": 1000,
+          "estimatedExposure": 124914.24,
+          "marginRequired": 24982.85
+        },
+        "timestamp": "2026-09-03T20:07:34.257Z"
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "token": "3351",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1853.31,
+        "vwap": 1847.25,
+        "orbHigh": 1851.04,
+        "orbLow": 1830.8,
+        "ema20": 1838.16,
+        "stopLoss": 1841.71,
+        "target": 1874.19,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1851.04 with VWAP support (₹1847.25) and +0.72% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 67,
+          "riskAmount": 1000,
+          "estimatedExposure": 124171.77,
+          "marginRequired": 24834.35
+        },
+        "timestamp": "2026-09-03T20:07:34.257Z"
+      },
+      {
+        "symbol": "DRREDDY",
+        "token": "881",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6700.32,
+        "vwap": 6672.57,
+        "orbHigh": 6689.9,
+        "orbLow": 6616.75,
+        "ema20": 6643.35,
+        "stopLoss": 6652.55,
+        "target": 6786.31,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6689.9 with VWAP support (₹6672.57) and +0.76% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 18,
+          "riskAmount": 1000,
+          "estimatedExposure": 120605.76,
+          "marginRequired": 24121.15
+        },
+        "timestamp": "2026-09-03T20:07:34.257Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T20:08:54.084Z",
+    "activeSignalsCount": 13,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 808.61,
+        "vwap": 813.02,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 815.46,
+        "target": 796.28,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹811.522 with VWAP resistance (₹813.02) and -0.86% drift.",
+        "riskAllocation": {
+          "allocatedShares": 145,
+          "riskAmount": 1000,
+          "estimatedExposure": 117248.45,
+          "marginRequired": 23449.69
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "INFY",
+        "token": "1594",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1889.58,
+        "vwap": 1880.01,
+        "orbHigh": 1883.3326,
+        "orbLow": 1862.7395,
+        "ema20": 1870.2278999999999,
+        "stopLoss": 1874.37,
+        "target": 1916.96,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1883.3326 with VWAP support (₹1880.01) and +0.93% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 65,
+          "riskAmount": 1000,
+          "estimatedExposure": 122822.7,
+          "marginRequired": 24564.54
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "RELIANCE",
+        "token": "2885",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3008.27,
+        "vwap": 2996.83,
+        "orbHigh": 3003.3124000000003,
+        "orbLow": 2970.473,
+        "ema20": 2982.4146,
+        "stopLoss": 2987.84,
+        "target": 3045.04,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3003.3124000000003 with VWAP support (₹2996.83) and +0.77% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 41,
+          "riskAmount": 1000,
+          "estimatedExposure": 123339.07,
+          "marginRequired": 24667.81
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "NTPC",
+        "token": "11630",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 412.58,
+        "vwap": 411.13,
+        "orbHigh": 412.46,
+        "orbLow": 407.95,
+        "ema20": 409.59,
+        "stopLoss": 409.9,
+        "target": 417.4,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹412.46 with VWAP support (₹411.13) and +0.63% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 302,
+          "riskAmount": 1000,
+          "estimatedExposure": 124599.16,
+          "marginRequired": 24919.83
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "BPCL",
+        "token": "526",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 343.06,
+        "vwap": 344.52,
+        "orbHigh": 347.07,
+        "orbLow": 343.275,
+        "ema20": 344.655,
+        "stopLoss": 345.55,
+        "target": 338.58,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹343.275 with VWAP resistance (₹344.52) and -0.56% drift.",
+        "riskAllocation": {
+          "allocatedShares": 364,
+          "riskAmount": 1000,
+          "estimatedExposure": 124873.84,
+          "marginRequired": 24974.77
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "MARUTI",
+        "token": "10999",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 12381.95,
+        "vwap": 12422.16,
+        "orbHigh": 12524.7,
+        "orbLow": 12387.75,
+        "ema20": 12437.55,
+        "stopLoss": 12459.43,
+        "target": 12242.49,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹12387.75 with VWAP resistance (₹12422.16) and -0.55% drift.",
+        "riskAllocation": {
+          "allocatedShares": 10,
+          "riskAmount": 1000,
+          "estimatedExposure": 123819.5,
+          "marginRequired": 24763.9
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2799.61,
+        "vwap": 2788.39,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2780.02,
+        "target": 2834.87,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2796.68 with VWAP support (₹2788.39) and +0.71% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 44,
+          "riskAmount": 1000,
+          "estimatedExposure": 123182.84,
+          "marginRequired": 24636.57
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "JSWSTEEL",
+        "token": "11723",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 951.39,
+        "vwap": 947.76,
+        "orbHigh": 950.67,
+        "orbLow": 940.275,
+        "ema20": 944.055,
+        "stopLoss": 944.92,
+        "target": 963.04,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹950.67 with VWAP support (₹947.76) and +0.68% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 131,
+          "riskAmount": 1000,
+          "estimatedExposure": 124632.09,
+          "marginRequired": 24926.42
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "COALINDIA",
+        "token": "20374",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 491.18,
+        "vwap": 493.72,
+        "orbHigh": 497.97,
+        "orbLow": 492.525,
+        "ema20": 494.505,
+        "stopLoss": 495.2,
+        "target": 483.94,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹492.525 with VWAP resistance (₹493.72) and -0.77% drift.",
+        "riskAllocation": {
+          "allocatedShares": 248,
+          "riskAmount": 1000,
+          "estimatedExposure": 121812.64,
+          "marginRequired": 24362.53
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "HINDUNILVR",
+        "token": "1394",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2843.86,
+        "vwap": 2830.95,
+        "orbHigh": 2836.92,
+        "orbLow": 2805.9,
+        "ema20": 2817.18,
+        "stopLoss": 2822.46,
+        "target": 2882.38,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2836.92 with VWAP support (₹2830.95) and +0.85% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 43,
+          "riskAmount": 1000,
+          "estimatedExposure": 122285.98,
+          "marginRequired": 24457.2
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "TITAN",
+        "token": "3506",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3646.72,
+        "vwap": 3631.35,
+        "orbHigh": 3641.72,
+        "orbLow": 3601.9,
+        "ema20": 3616.38,
+        "stopLoss": 3620.46,
+        "target": 3693.99,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3641.72 with VWAP support (₹3631.35) and +0.74% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 34,
+          "riskAmount": 1000,
+          "estimatedExposure": 123988.48,
+          "marginRequired": 24797.7
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2507.07,
+        "vwap": 2517.37,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2524.92,
+        "target": 2474.94,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2507.4 with VWAP resistance (₹2517.37) and -0.51% drift.",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 122846.43,
+          "marginRequired": 24569.29
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "token": "3351",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1860.76,
+        "vwap": 1850.16,
+        "orbHigh": 1851.04,
+        "orbLow": 1830.8,
+        "ema20": 1838.16,
+        "stopLoss": 1844.61,
+        "target": 1889.83,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1851.04 with VWAP support (₹1850.16) and +1.13% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 61,
+          "riskAmount": 1000,
+          "estimatedExposure": 113506.36,
+          "marginRequired": 22701.27
+        },
+        "timestamp": "2026-09-03T20:08:54.034Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-03T21:52:25.021Z",
+    "activeSignalsCount": 11,
+    "signals": [
+      {
+        "symbol": "SBIN",
+        "token": "3045",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 809.02,
+        "vwap": 813.15,
+        "orbHigh": 820.4936,
+        "orbLow": 811.522,
+        "ema20": 814.7844,
+        "stopLoss": 815.59,
+        "target": 797.19,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹811.522 with VWAP resistance (₹813.15) and -0.81% drift.",
+        "riskAllocation": {
+          "allocatedShares": 152,
+          "riskAmount": 1000,
+          "estimatedExposure": 122971.04,
+          "marginRequired": 24594.21
+        },
+        "timestamp": "2026-09-03T21:52:24.955Z"
+      },
+      {
+        "symbol": "INFY",
+        "token": "1594",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1889.46,
+        "vwap": 1879.97,
+        "orbHigh": 1883.3326,
+        "orbLow": 1862.7395,
+        "ema20": 1870.2278999999999,
+        "stopLoss": 1874.33,
+        "target": 1916.69,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1883.3326 with VWAP support (₹1879.97) and +0.93% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 66,
+          "riskAmount": 1000,
+          "estimatedExposure": 124704.36,
+          "marginRequired": 24940.87
+        },
+        "timestamp": "2026-09-03T21:52:24.955Z"
+      },
+      {
+        "symbol": "RELIANCE",
+        "token": "2885",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3007.05,
+        "vwap": 2996.42,
+        "orbHigh": 3003.3124000000003,
+        "orbLow": 2970.473,
+        "ema20": 2982.4146,
+        "stopLoss": 2987.43,
+        "target": 3042.37,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3003.3124000000003 with VWAP support (₹2996.42) and +0.73% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 41,
+          "riskAmount": 1000,
+          "estimatedExposure": 123289.05,
+          "marginRequired": 24657.81
+        },
+        "timestamp": "2026-09-03T21:52:24.955Z"
+      },
+      {
+        "symbol": "BPCL",
+        "token": "526",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 343.07,
+        "vwap": 344.52,
+        "orbHigh": 347.07,
+        "orbLow": 343.275,
+        "ema20": 344.655,
+        "stopLoss": 345.55,
+        "target": 338.61,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹343.275 with VWAP resistance (₹344.52) and -0.56% drift.",
+        "riskAllocation": {
+          "allocatedShares": 364,
+          "riskAmount": 1000,
+          "estimatedExposure": 124877.48,
+          "marginRequired": 24975.5
+        },
+        "timestamp": "2026-09-03T21:52:24.956Z"
+      },
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2799.13,
+        "vwap": 2788.23,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2779.87,
+        "target": 2833.8,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2796.68 with VWAP support (₹2788.23) and +0.69% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 44,
+          "riskAmount": 1000,
+          "estimatedExposure": 123161.72,
+          "marginRequired": 24632.34
+        },
+        "timestamp": "2026-09-03T21:52:24.956Z"
+      },
+      {
+        "symbol": "JSWSTEEL",
+        "token": "11723",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 951.34,
+        "vwap": 947.74,
+        "orbHigh": 950.67,
+        "orbLow": 940.275,
+        "ema20": 944.055,
+        "stopLoss": 944.9,
+        "target": 962.93,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹950.67 with VWAP support (₹947.74) and +0.67% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 131,
+          "riskAmount": 1000,
+          "estimatedExposure": 124625.54,
+          "marginRequired": 24925.11
+        },
+        "timestamp": "2026-09-03T21:52:24.956Z"
+      },
+      {
+        "symbol": "COALINDIA",
+        "token": "20374",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 491.11,
+        "vwap": 493.7,
+        "orbHigh": 497.97,
+        "orbLow": 492.525,
+        "ema20": 494.505,
+        "stopLoss": 495.18,
+        "target": 483.78,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹492.525 with VWAP resistance (₹493.7) and -0.79% drift.",
+        "riskAllocation": {
+          "allocatedShares": 245,
+          "riskAmount": 1000,
+          "estimatedExposure": 120321.95,
+          "marginRequired": 24064.39
+        },
+        "timestamp": "2026-09-03T21:52:24.956Z"
+      },
+      {
+        "symbol": "HINDUNILVR",
+        "token": "1394",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2842.78,
+        "vwap": 2830.59,
+        "orbHigh": 2836.92,
+        "orbLow": 2805.9,
+        "ema20": 2817.18,
+        "stopLoss": 2822.1,
+        "target": 2880,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2836.92 with VWAP support (₹2830.59) and +0.81% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 43,
+          "riskAmount": 1000,
+          "estimatedExposure": 122239.54,
+          "marginRequired": 24447.91
+        },
+        "timestamp": "2026-09-03T21:52:24.956Z"
+      },
+      {
+        "symbol": "TITAN",
+        "token": "3506",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 3644.31,
+        "vwap": 3630.55,
+        "orbHigh": 3641.72,
+        "orbLow": 3601.9,
+        "ema20": 3616.38,
+        "stopLoss": 3619.66,
+        "target": 3688.68,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹3641.72 with VWAP support (₹3630.55) and +0.67% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 34,
+          "riskAmount": 1000,
+          "estimatedExposure": 123906.54,
+          "marginRequired": 24781.31
+        },
+        "timestamp": "2026-09-03T21:52:24.956Z"
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "token": "3351",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1859.83,
+        "vwap": 1849.85,
+        "orbHigh": 1851.04,
+        "orbLow": 1830.8,
+        "ema20": 1838.16,
+        "stopLoss": 1844.3,
+        "target": 1887.78,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1851.04 with VWAP support (₹1849.85) and +1.08% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 64,
+          "riskAmount": 1000,
+          "estimatedExposure": 119029.12,
+          "marginRequired": 23805.82
+        },
+        "timestamp": "2026-09-03T21:52:24.956Z"
+      },
+      {
+        "symbol": "DRREDDY",
+        "token": "881",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6690.58,
+        "vwap": 6669.32,
+        "orbHigh": 6689.9,
+        "orbLow": 6616.75,
+        "ema20": 6643.35,
+        "stopLoss": 6649.31,
+        "target": 6764.87,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6689.9 with VWAP support (₹6669.32) and +0.61% momentum.",
+        "riskAllocation": {
+          "allocatedShares": 18,
+          "riskAmount": 1000,
+          "estimatedExposure": 120430.44,
+          "marginRequired": 24086.09
+        },
+        "timestamp": "2026-09-03T21:52:24.956Z"
+      }
+    ]
   }
 ]
