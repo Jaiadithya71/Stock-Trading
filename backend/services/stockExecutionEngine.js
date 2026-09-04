@@ -98,7 +98,34 @@ class StockExecutionEngine {
         console.log(`🎯 [StockEngine] Position Auto-Closed: ${trade.symbol} P&L: ₹${trade.pnl} (${trade.exitReason})`);
       }
 
-      // 2B. Evaluate Swing Positional Holdings for Trailing 20-EMA & Pyramiding
+      // 2B. Dynamic Breakeven Lock (+1.0% Profit Lock)
+      // Once any position gains >= +1.0% floating profit, lock stopLoss at Breakeven (+0.2% buffer).
+      // A winning trade can NEVER turn into a loss!
+      paperTrading.positions.forEach(pos => {
+        const cleanSym = pos.symbol.replace('-EQ', '');
+        const currentPrice = priceMap[cleanSym] || priceMap[pos.symbol] || pos.currentPrice || pos.entryPrice;
+        const pnlPct = pos.action === 'BUY'
+          ? ((currentPrice - pos.entryPrice) / pos.entryPrice) * 100
+          : ((pos.entryPrice - currentPrice) / pos.entryPrice) * 100;
+
+        if (pnlPct >= 1.0 && pos.trailingStatus !== 'BREAKEVEN_LOCKED' && pos.trailingStatus !== 'STOP_AT_BREAKEVEN_RISK_FREE') {
+          if (pos.action === 'BUY' && pos.stopLoss < pos.entryPrice * 1.002) {
+            pos.stopLoss = parseFloat((pos.entryPrice * 1.002).toFixed(2));
+            pos.breakevenLocked = true;
+            pos.trailingStatus = 'BREAKEVEN_LOCKED';
+            console.log(`🛡️ [StockEngine] ${pos.symbol} reached +${pnlPct.toFixed(2)}%! SL moved to Breakeven (₹${pos.stopLoss}). Trade is now 100% RISK-FREE.`);
+            paperTrading.savePersistedState();
+          } else if (pos.action === 'SELL' && pos.stopLoss > pos.entryPrice * 0.998) {
+            pos.stopLoss = parseFloat((pos.entryPrice * 0.998).toFixed(2));
+            pos.breakevenLocked = true;
+            pos.trailingStatus = 'BREAKEVEN_LOCKED';
+            console.log(`🛡️ [StockEngine] ${pos.symbol} reached +${pnlPct.toFixed(2)}%! SL moved to Breakeven (₹${pos.stopLoss}). Trade is now 100% RISK-FREE.`);
+            paperTrading.savePersistedState();
+          }
+        }
+      });
+
+      // 2C. Evaluate Swing Positional Holdings for Trailing 20-EMA & Pyramiding
       const swingEval = positionalSignalEngine.evaluateSwingPositions(paperTrading.positions, priceMap);
       if (swingEval.pyramidAlerts && swingEval.pyramidAlerts.length > 0) {
         swingEval.pyramidAlerts.forEach(a => console.log(a.message));
@@ -107,10 +134,10 @@ class StockExecutionEngine {
       // 3. 3:15 PM EOD INTRADAY MIS SQUARE-OFF RULE
       // Between 3:15 PM (915 min) and 3:29 PM (929 min), square off intraday MIS positions
       if (ist.timeInMinutes >= 915 && ist.timeInMinutes < 930) {
-        // In HYBRID_RUNNER mode: If any intraday position has >= 1.0% profit, auto-promote to Swing runner!
+        // In HYBRID_RUNNER mode: If any intraday position has >= 0.6% profit, auto-promote to Swing runner!
         if (settings.strategyHorizon === 'HYBRID_RUNNER' || settings.strategyHorizon === 'SWING_POSITIONAL') {
           paperTrading.positions.forEach(p => {
-            if (p.holdingType !== 'SWING_POSITIONAL' && (p.unrealizedPnLPct || 0) >= 1.0) {
+            if (p.holdingType !== 'SWING_POSITIONAL' && (p.unrealizedPnLPct || 0) >= 0.6) {
               console.log(`🚀 [StockEngine] Auto-Promoting profitable intraday runner to Swing: ${p.symbol} (+${p.unrealizedPnLPct}%)`);
               paperTrading.promotePositionToSwing(p.id);
             }
@@ -136,8 +163,9 @@ class StockExecutionEngine {
       }
 
       // 5. SIGNAL IDENTIFICATION & AUTONOMOUS ORDER PLACEMENT
-      // Only enter new trades before 3:00 PM (900 min)
-      if (this.autoExecutionEnabled && ist.timeInMinutes < 900) {
+      // Entry Cutoff: Only enter new intraday trades before 2:15 PM (855 min)
+      // This ensures trades have at least 1 hour of active trading runway before 3:15 PM EOD square-off
+      if (this.autoExecutionEnabled && ist.timeInMinutes < 855) {
         // Daily Loss Limit Check
         const todayPnL = this.tradesToday.reduce((acc, t) => acc + (t.pnl || 0), 0);
         if (todayPnL <= -(settings.maxDailyLoss || 5000)) {

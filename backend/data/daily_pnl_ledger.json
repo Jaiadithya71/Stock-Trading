@@ -1,5 +1,12 @@
 [
   {
+    "date": "2026-09-04",
+    "netRealizedPnL": 0,
+    "winRatePct": 0,
+    "totalTrades": 0,
+    "endingBalance": 98518.6
+  },
+  {
     "date": "2026-09-04 (Phase 1 Baseline)",
     "netRealizedPnL": -10989.3,
     "winRatePct": 0,

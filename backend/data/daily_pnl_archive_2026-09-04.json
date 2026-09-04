@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-04",
+  "timestamp": "2026-09-04T13:18:49.433Z",
+  "summary": {
+    "totalTrades": 0,
+    "winningTrades": 0,
+    "losingTrades": 0,
+    "winRatePct": 0,
+    "grossProfit": 0,
+    "grossLoss": 0,
+    "netRealizedPnL": 0,
+    "endingPortfolioBalance": 98518.6
+  },
+  "brokerLivePositions": [],
+  "trades": []
+}

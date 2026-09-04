@@ -105,7 +105,7 @@ const StockIntradayWidget = {
               </button>
               <button id="horizonBtnHybrid" onclick="StockIntradayWidget.setStrategyHorizon('HYBRID_RUNNER')" 
                 style="padding: 4px 8px; font-size: 10.5px; font-weight: 700; border: none; border-radius: 4px; background: #2962ff; color: #fff; cursor: pointer;"
-                title="Starts as Intraday 5x; automatically promotes profitable runners (>1.0%) to Swing with breakeven stop-loss">
+                title="Starts as Intraday 5x; automatically promotes profitable runners (≥0.6%) to Swing with breakeven stop-loss">
                 🚀 Hybrid (30% Goal)
               </button>
             </div>
@@ -291,12 +291,12 @@ const StockIntradayWidget = {
               </div>
 
               <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px;">
-                <span style="color: #8896a8;">Target Price (2x ATR):</span>
+                <span style="color: #8896a8;">Target Price (3.0x ATR):</span>
                 <strong id="tvIntelTarget" style="color: #00d084; font-family: monospace;">₹1,675.00</strong>
               </div>
 
               <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px;">
-                <span style="color: #8896a8;">Stop Loss (1.2x ATR):</span>
+                <span style="color: #8896a8;">Stop Loss (1.5x ATR):</span>
                 <strong id="tvIntelStopLoss" style="color: #ff4757; font-family: monospace;">₹1,625.00</strong>
               </div>
 
@@ -913,9 +913,10 @@ const StockIntradayWidget = {
     const volEl = document.getElementById('tvIntelVolume');
     if (volEl) volEl.textContent = `${((stock.volume || 250000) / 1000).toFixed(0)}K`;
 
-    // Setup Target / Stop Loss
-    const targetVal = stock.target || parseFloat((stock.ltp + (2.0 * atr)).toFixed(2));
-    const stopLossVal = stock.stopLoss || parseFloat((stock.ltp - (1.2 * atr)).toFixed(2));
+    // Setup Target / Stop Loss (1.5x ATR stop, 3.0x ATR target = 1:2 R:R)
+    const isSell = stock.signal === 'SELL_SHORT';
+    const targetVal = stock.target || parseFloat((stock.ltp + (isSell ? -3.0 * atr : 3.0 * atr)).toFixed(2));
+    const stopLossVal = stock.stopLoss || parseFloat((stock.ltp + (isSell ? 1.5 * atr : -1.5 * atr)).toFixed(2));
     const targetEl = document.getElementById('tvIntelTarget');
     if (targetEl) targetEl.textContent = `₹${targetVal.toFixed(2)}`;
     const slEl = document.getElementById('tvIntelStopLoss');
