@@ -384,7 +384,7 @@ const StockIntradayWidget = {
           
           <div style="display: flex; border-bottom: 1px solid #2a2e39; padding: 0 16px;">
             <button class="tv-tab-btn active" id="tabBtnPos" onclick="StockIntradayWidget.switchBottomTab('positions')" style="padding: 10px 16px; font-size: 12px; font-weight: 700; background: transparent; border: none; border-bottom: 2px solid #2962ff; color: #fff; cursor: pointer;">
-              💼 Active Positions (<span id="tvOpenCount">0</span>)
+              💼 Active Positions (<span id="tvOpenCount">0</span> / 5 Slots)
             </button>
             <button class="tv-tab-btn" id="tabBtnTrades" onclick="StockIntradayWidget.switchBottomTab('trades')" style="padding: 10px 16px; font-size: 12px; font-weight: 700; background: transparent; border: none; color: #8896a8; cursor: pointer;">
               📜 Closed Trades History (<span id="tvClosedCount">0</span>)
@@ -399,6 +399,15 @@ const StockIntradayWidget = {
 
           <!-- TAB 1: POSITIONS BLOTTER -->
           <div id="tabContentPositions" style="padding: 14px; max-height: 200px; overflow-y: auto;">
+            <div id="tvSlotStatusBanner" style="display: flex; justify-content: space-between; align-items: center; background: rgba(41, 98, 255, 0.08); border: 1px solid rgba(41, 98, 255, 0.2); border-radius: 6px; padding: 6px 12px; margin-bottom: 10px; font-size: 11px; color: #d1d4dc;">
+              <div>
+                <span>⚡ Position Slots: <strong id="tvSlotUsedText" style="color: #00d084;">0 / 5 Used</strong></span>
+                <span style="color: #8896a8; margin-left: 10px;">• Running positions are held autonomously until ATR Target (+2.4%) or Stop-Loss (-1.2%) triggers.</span>
+              </div>
+              <div style="font-size: 10.5px; color: #8896a8;">
+                Click "Exit" to square off immediately and free up a slot
+              </div>
+            </div>
             <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; text-align: left;">
               <thead>
                 <tr style="color: #8896a8; border-bottom: 1px solid #2a2e39;">
@@ -843,26 +852,33 @@ const StockIntradayWidget = {
     const orbLow = stock.orbLow || (ltp * 0.995);
     const ema20 = stock.ema20 || ltp;
 
-    // Price scaling with safe symmetrical padding
+    // Price scaling: dedicated upper pane (y: 25 to 255)
     const allPrices = [ltp, vwap, orbHigh, orbLow, ema20];
     const maxP = Math.max(...allPrices) * 1.003;
     const minP = Math.min(...allPrices) * 0.997;
     const pRange = maxP - minP || 1;
 
+    const priceTop = 25;
+    const priceBottom = 255;
+    const priceHeight = priceBottom - priceTop; // 230px
+
     const getY = (price) => {
       const clamped = Math.max(minP, Math.min(maxP, price));
-      return height - 35 - (((clamped - minP) / pRange) * (height - 70));
+      return priceBottom - (((clamped - minP) / pRange) * priceHeight);
     };
+
+    // Volume Sub-Pane definition (TradingView style at bottom: y = 270 to 345)
+    const volSepY = 270;
+    const volBaseY = 345;
+    const volMaxH = 65;
 
     // Generate 20 proportional intraday candles ending cleanly at LTP
     const numCandles = 20;
     const candleWidth = (width - 90) / numCandles;
     const bodyW = Math.max(4, Math.min(18, candleWidth * 0.65));
 
-    this.currentCandles = [];
-    let candleSvg = '';
-    let hoverOverlaySvg = '';
-
+    // First pass: compute all candle data so peak volume is known for scaling
+    const rawCandles = [];
     for (let i = 0; i < numCandles; i++) {
       const x = 30 + (i * candleWidth);
       const isLast = i === numCandles - 1;
@@ -880,10 +896,6 @@ const StockIntradayWidget = {
       let low = Math.min(open, close) - (pRange * 0.015);
 
       const isGreen = close >= open;
-      const color = isGreen ? '#00d084' : '#ff4757';
-      const yTop = getY(Math.max(open, close));
-      const yBot = getY(Math.min(open, close));
-      const barH = Math.max(3, yBot - yTop);
       const wickX = x + candleWidth / 2;
       const bodyX = wickX - (bodyW / 2);
 
@@ -892,10 +904,13 @@ const StockIntradayWidget = {
       const hStr = String(Math.floor(startMin / 60)).padStart(2, '0');
       const mStr = String(startMin % 60).padStart(2, '0');
       const timeStr = `${hStr}:${mStr}`;
-      const candleVol = Math.floor(((stock.volume || 250000) / numCandles) * (0.7 + Math.abs(Math.sin(i * 1.5)) * 0.6));
+      const candleVol = Math.floor(((stock.volume || 250000) / numCandles) * (0.65 + Math.abs(Math.sin(i * 1.4)) * 0.7 + (isLast ? 0.35 : 0)));
 
-      this.currentCandles.push({
+      rawCandles.push({
         index: i,
+        x,
+        wickX,
+        bodyX,
         timeStr,
         open: parseFloat(open.toFixed(2)),
         high: parseFloat(high.toFixed(2)),
@@ -904,25 +919,54 @@ const StockIntradayWidget = {
         change: parseFloat((close - open).toFixed(2)),
         changePct: parseFloat((((close - open) / open) * 100).toFixed(2)),
         volume: candleVol,
-        wickX,
-        yClose: getY(close),
-        yOpen: getY(open),
         isGreen
       });
+    }
 
-      // SVG Candle Group
+    const maxVol = Math.max(...rawCandles.map(c => c.volume), 1);
+    this.currentCandles = [];
+    let candleSvg = '';
+    let volSvg = '';
+    let hoverOverlaySvg = '';
+
+    for (const c of rawCandles) {
+      const color = c.isGreen ? '#00d084' : '#ff4757';
+      const volBarColor = c.isGreen ? 'rgba(0, 208, 132, 0.45)' : 'rgba(255, 71, 87, 0.45)';
+      const yTop = getY(Math.max(c.open, c.close));
+      const yBot = getY(Math.min(c.open, c.close));
+      const barH = Math.max(3, yBot - yTop);
+
+      // Proportional volume bar height
+      const volH = Math.max(3, Math.min(volMaxH, (c.volume / maxVol) * volMaxH));
+      const volY = volBaseY - volH;
+
+      this.currentCandles.push({
+        ...c,
+        yClose: getY(c.close),
+        yOpen: getY(c.open),
+        volY,
+        volH,
+        volBarColor
+      });
+
+      // Volume Bar SVG (TradingView histogram)
+      volSvg += `
+        <rect id="tvVolBar_${c.index}" x="${c.bodyX}" y="${volY}" width="${bodyW}" height="${volH}" fill="${volBarColor}" rx="1" style="transition: fill 0.15s ease;" />
+      `;
+
+      // Candlestick SVG Group
       candleSvg += `
-        <g id="tvCandleG_${i}">
-          <line x1="${wickX}" y1="${getY(high)}" x2="${wickX}" y2="${getY(low)}" stroke="${color}" stroke-width="1.2" />
-          <rect x="${bodyX}" y="${yTop}" width="${bodyW}" height="${barH}" fill="${color}" rx="1" />
+        <g id="tvCandleG_${c.index}">
+          <line x1="${c.wickX}" y1="${getY(c.high)}" x2="${c.wickX}" y2="${getY(c.low)}" stroke="${color}" stroke-width="1.2" />
+          <rect x="${c.bodyX}" y="${yTop}" width="${bodyW}" height="${barH}" fill="${color}" rx="1" />
         </g>
       `;
 
       // Invisible wide hit area for effortless cursor hovering across the entire vertical band
       hoverOverlaySvg += `
-        <rect x="${x}" y="0" width="${candleWidth}" height="${height}" fill="transparent" cursor="crosshair"
-          onmouseenter="StockIntradayWidget.onHoverCandle(${i})"
-          onmousemove="StockIntradayWidget.onMoveCandle(event, ${i})" />
+        <rect x="${c.x}" y="0" width="${candleWidth}" height="${height}" fill="transparent" cursor="crosshair"
+          onmouseenter="StockIntradayWidget.onHoverCandle(${c.index})"
+          onmousemove="StockIntradayWidget.onMoveCandle(event, ${c.index})" />
       `;
     }
 
@@ -934,10 +978,19 @@ const StockIntradayWidget = {
 
     container.innerHTML = `
       <svg width="100%" height="${height}" style="overflow: hidden; display: block;">
-        <!-- Grid horizontal lines -->
-        <line x1="30" y1="${height/4}" x2="${width-20}" y2="${height/4}" stroke="#1e2433" stroke-width="1" stroke-dasharray="3,3" />
-        <line x1="30" y1="${height/2}" x2="${width-20}" y2="${height/2}" stroke="#1e2433" stroke-width="1" stroke-dasharray="3,3" />
-        <line x1="30" y1="${height*0.75}" x2="${width-20}" y2="${height*0.75}" stroke="#1e2433" stroke-width="1" stroke-dasharray="3,3" />
+        <!-- Price Grid horizontal lines -->
+        <line x1="30" y1="80" x2="${width-20}" y2="80" stroke="#181e2b" stroke-width="1" stroke-dasharray="3,3" />
+        <line x1="30" y1="140" x2="${width-20}" y2="140" stroke="#181e2b" stroke-width="1" stroke-dasharray="3,3" />
+        <line x1="30" y1="200" x2="${width-20}" y2="200" stroke="#181e2b" stroke-width="1" stroke-dasharray="3,3" />
+
+        <!-- Volume Sub-Pane Separator & Watermark (TradingView style) -->
+        <line x1="30" y1="${volSepY}" x2="${width-20}" y2="${volSepY}" stroke="#1f2533" stroke-width="1" stroke-dasharray="2,2" />
+        <text x="35" y="${volSepY + 12}" fill="#4f596d" font-size="9" font-weight="700" letter-spacing="0.8">VOLUME</text>
+        <text x="${width-85}" y="${volSepY + 12}" fill="#4f596d" font-size="8.5" font-family="monospace">PEAK ${(maxVol / 1000).toFixed(0)}K</text>
+        <line x1="30" y1="${volBaseY}" x2="${width-20}" y2="${volBaseY}" stroke="#181e2b" stroke-width="1" />
+
+        <!-- TradingView Volume Histogram Bars -->
+        ${volSvg}
 
         <!-- ORB High Level (Green Dashed) -->
         <line x1="30" y1="${yOrbHigh}" x2="${width-20}" y2="${yOrbHigh}" stroke="#00d084" stroke-width="1.5" stroke-dasharray="5,5" />
@@ -982,6 +1035,22 @@ const StockIntradayWidget = {
     const candle = this.currentCandles[idx];
     if (!candle) return;
     this.updateOhlcBar(candle);
+
+    // Reset previously highlighted volume bar
+    if (this.lastHoveredIdx !== undefined && this.lastHoveredIdx !== null && this.lastHoveredIdx !== idx) {
+      const prevVol = document.getElementById(`tvVolBar_${this.lastHoveredIdx}`);
+      const prevCandle = this.currentCandles[this.lastHoveredIdx];
+      if (prevVol && prevCandle) {
+        prevVol.setAttribute('fill', prevCandle.volBarColor);
+      }
+    }
+
+    // Highlight currently hovered volume bar to solid color
+    const currVol = document.getElementById(`tvVolBar_${idx}`);
+    if (currVol) {
+      currVol.setAttribute('fill', candle.isGreen ? '#00d084' : '#ff4757');
+    }
+    this.lastHoveredIdx = idx;
     
     const crossX = document.getElementById('tvCrosshairX');
     const crossY = document.getElementById('tvCrosshairY');
@@ -1055,6 +1124,16 @@ const StockIntradayWidget = {
     if (crossY) crossY.style.display = 'none';
     if (tooltip) tooltip.style.display = 'none';
 
+    // Reset volume highlight on cursor exit
+    if (this.lastHoveredIdx !== undefined && this.lastHoveredIdx !== null) {
+      const prevVol = document.getElementById(`tvVolBar_${this.lastHoveredIdx}`);
+      const prevCandle = this.currentCandles[this.lastHoveredIdx];
+      if (prevVol && prevCandle) {
+        prevVol.setAttribute('fill', prevCandle.volBarColor);
+      }
+      this.lastHoveredIdx = null;
+    }
+
     // Reset OHLC bar to latest candle
     if (this.currentCandles && this.currentCandles.length > 0) {
       this.updateOhlcBar(this.currentCandles[this.currentCandles.length - 1]);
@@ -1088,6 +1167,12 @@ const StockIntradayWidget = {
     const tbody = document.getElementById('tvPositionsTbody');
     const countEl = document.getElementById('tvOpenCount');
     if (countEl) countEl.textContent = positions.length;
+
+    const slotText = document.getElementById('tvSlotUsedText');
+    if (slotText) {
+      slotText.textContent = `${positions.length} / 5 Used`;
+      slotText.style.color = positions.length >= 5 ? '#ff4757' : (positions.length > 0 ? '#eab308' : '#00d084');
+    }
 
     if (!tbody) return;
     if (positions.length === 0) {

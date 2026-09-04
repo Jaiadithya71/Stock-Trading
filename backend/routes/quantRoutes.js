@@ -389,7 +389,8 @@ router.get('/quant/settings', async (req, res) => {
  */
 router.post('/quant/settings', async (req, res) => {
   try {
-    const settings = req.body;
+    const existing = getPersistedSettings();
+    const settings = { ...existing, ...req.body };
     fs.mkdirSync(path.dirname(SETTINGS_FILE_PATH), { recursive: true });
     fs.writeFileSync(SETTINGS_FILE_PATH, JSON.stringify(settings, null, 2), 'utf8');
     console.log('✅ Risk settings persisted to disk:', settings);

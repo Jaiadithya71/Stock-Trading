@@ -60,6 +60,12 @@ const RiskSettingsView = {
             </div>
 
             <div class="form-group">
+              <label>Max Open Concurrent Positions</label>
+              <input type="number" id="setting-maxpositions" value="5" min="1" max="20">
+              <span class="form-hint">Maximum number of stock positions held simultaneously (Default: 5)</span>
+            </div>
+
+            <div class="form-group">
               <label>Trailing Stop Loss % per Trade</label>
               <input type="number" id="setting-sl" value="15" step="1" min="5" max="30">
               <span class="form-hint">Default: -15% hard stop loss</span>
@@ -117,6 +123,7 @@ const RiskSettingsView = {
           if (s.lots && document.getElementById('setting-lots')) document.getElementById('setting-lots').value = s.lots;
           if (s.maxLoss && document.getElementById('setting-maxloss')) document.getElementById('setting-maxloss').value = s.maxLoss;
           if (s.maxDailyTrades !== undefined && document.getElementById('setting-maxtrades')) document.getElementById('setting-maxtrades').value = s.maxDailyTrades;
+          if (s.maxOpenPositions !== undefined && document.getElementById('setting-maxpositions')) document.getElementById('setting-maxpositions').value = s.maxOpenPositions;
         }
       }
     } catch (e) {}
@@ -128,6 +135,7 @@ const RiskSettingsView = {
       const lots = document.getElementById('setting-lots')?.value || 1;
       const maxLoss = document.getElementById('setting-maxloss')?.value || 5000;
       const maxDailyTrades = parseInt(document.getElementById('setting-maxtrades')?.value, 10);
+      const maxOpenPositions = parseInt(document.getElementById('setting-maxpositions')?.value, 10) || 5;
 
       const res = await fetch('/api/quant/settings', {
         method: 'POST',
@@ -136,7 +144,8 @@ const RiskSettingsView = {
           capital, 
           lots, 
           maxLoss, 
-          maxDailyTrades: isNaN(maxDailyTrades) ? 10 : maxDailyTrades 
+          maxDailyTrades: isNaN(maxDailyTrades) ? 0 : maxDailyTrades,
+          maxOpenPositions
         })
       });
       const data = await res.json();

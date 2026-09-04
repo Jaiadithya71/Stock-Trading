@@ -5,7 +5,7 @@
   "maxDailyLoss": 5000,
   "maxDailyTrades": 0,
   "riskPerTradePct": 1.0,
-  "maxOpenPositions": 3,
+  "maxOpenPositions": 5,
   "killSwitchActive": false,
   "tradingMode": "PAPER_TRADING"
 }

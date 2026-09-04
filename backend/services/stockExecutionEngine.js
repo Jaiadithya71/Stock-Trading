@@ -33,7 +33,7 @@ class StockExecutionEngine {
         return JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
       }
     } catch (e) {}
-    return { tradingMode: 'PAPER_TRADING', capital: 100000, riskPerTradePct: 1.0, maxDailyLoss: 5000, maxOpenPositions: 3, killSwitchActive: false };
+    return { tradingMode: 'PAPER_TRADING', capital: 100000, riskPerTradePct: 1.0, maxDailyLoss: 5000, maxOpenPositions: 5, killSwitchActive: false };
   }
 
   getISTTime() {
@@ -58,6 +58,7 @@ class StockExecutionEngine {
     try {
       const ist = this.getISTTime();
       const settings = this.getRiskSettings();
+      paperTrading.loadPersistedState();
 
       // Check Kill Switch
       if (settings.killSwitchActive) {
@@ -130,7 +131,7 @@ class StockExecutionEngine {
         const openSymbols = new Set(paperTrading.positions.map(p => p.symbol.replace('-EQ', '')));
 
         for (const sig of actionable) {
-          if (paperTrading.positions.length >= (settings.maxOpenPositions || 3)) {
+          if (paperTrading.positions.length >= (settings.maxOpenPositions || 5)) {
             break;
           }
           if (openSymbols.has(sig.symbol)) {
@@ -184,7 +185,7 @@ class StockExecutionEngine {
         }
       }
 
-      console.log(`⏱️ [StockEngine ${ist.timeString} IST] Active Positions: ${paperTrading.positions.length} | Today Closed: ${this.tradesToday.length}`);
+      console.log(`⏱️ [StockEngine ${ist.timeString} IST] Active Positions: ${paperTrading.positions.length} / ${settings.maxOpenPositions || 5} | Today Closed: ${this.tradesToday.length}`);
     } catch (err) {
       console.error('❌ [StockEngine] Cycle error:', err.message);
     }

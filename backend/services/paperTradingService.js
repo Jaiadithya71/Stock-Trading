@@ -60,6 +60,7 @@ class PaperTradingService {
    * Execute a simulated paper order (Equities or Options)
    */
   placePaperOrder(order) {
+    this.loadPersistedState();
     const { 
       symbol, 
       action = 'BUY', 
@@ -122,6 +123,7 @@ class PaperTradingService {
    * Monitor and auto-exit open positions on Target or Stop-Loss hits
    */
   evaluateOpenPositions(priceMap = {}) {
+    this.loadPersistedState();
     const closed = [];
     const openPositions = [...this.positions];
 
@@ -212,6 +214,7 @@ class PaperTradingService {
    * Close a specific position
    */
   closePosition(orderId, marketExitPrice, exitReason = 'MANUAL_EXIT') {
+    this.loadPersistedState();
     const posIndex = this.positions.findIndex(p => p.id === orderId);
     if (posIndex === -1) {
       throw new Error(`Position ${orderId} not found`);
@@ -255,6 +258,7 @@ class PaperTradingService {
    * End-of-Day 3:15 PM Square-Off Rule: Force-close all remaining open positions
    */
   squareOffAllPositions(priceMap = {}, reason = 'EOD_MIS_SQUARE_OFF_3_15_PM') {
+    this.loadPersistedState();
     const closedList = [];
     const openIds = this.positions.map(p => p.id);
 
@@ -271,6 +275,7 @@ class PaperTradingService {
   }
 
   getPortfolioSummary() {
+    this.loadPersistedState();
     const totalRealizedPnL = this.tradeHistory.reduce((sum, t) => sum + (t.pnl || 0), 0);
     const winningTrades = this.tradeHistory.filter(t => t.pnl > 0).length;
     const losingTrades = this.tradeHistory.filter(t => t.pnl < 0).length;
@@ -300,6 +305,7 @@ class PaperTradingService {
   }
 
   resetCapital(amount = 100000) {
+    this.loadPersistedState();
     const timestamp = new Date().toISOString();
     const dateStr = timestamp.split('T')[0];
     const dataDir = path.dirname(PAPER_STATE_FILE);

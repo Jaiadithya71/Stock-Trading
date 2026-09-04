@@ -20,7 +20,7 @@ class StockSignalEngine {
     } catch (e) {
       // fallback
     }
-    return { capital: 100000, riskPerTradePct: 1.0, maxDailyLoss: 5000, maxOpenPositions: 3, killSwitchActive: false };
+    return { capital: 100000, riskPerTradePct: 1.0, maxDailyLoss: 5000, maxOpenPositions: 5, killSwitchActive: false };
   }
 
   /**
