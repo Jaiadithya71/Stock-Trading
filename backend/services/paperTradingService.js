@@ -28,6 +28,8 @@ class PaperTradingService {
         fs.mkdirSync(dir, { recursive: true });
       }
 
+      const backupFile = path.join(dir, 'paper_portfolio_state.backup.json');
+
       if (fs.existsSync(PAPER_STATE_FILE)) {
         const raw = fs.readFileSync(PAPER_STATE_FILE, 'utf8');
         const state = JSON.parse(raw);
@@ -35,6 +37,37 @@ class PaperTradingService {
         this.currentBalance = state.currentBalance !== undefined ? state.currentBalance : this.initialCapital;
         this.positions = state.positions || [];
         this.tradeHistory = state.tradeHistory || [];
+      }
+
+      // Auto-recovery: If positions is empty on disk, check backup file or weekly simulation log
+      if (this.positions.length === 0 && fs.existsSync(backupFile)) {
+        try {
+          const rawBackup = fs.readFileSync(backupFile, 'utf8');
+          const backupState = JSON.parse(rawBackup);
+          if (backupState.positions && backupState.positions.length > 0) {
+            console.log(`♻️ [PaperTrading] Auto-recovering ${backupState.positions.length} open positions from backup file...`);
+            this.positions = backupState.positions;
+            this.currentBalance = backupState.currentBalance !== undefined ? backupState.currentBalance : this.currentBalance;
+            this.initialCapital = backupState.initialCapital || this.initialCapital;
+            this.savePersistedState();
+          }
+        } catch (err) {}
+      }
+
+      // Secondary recovery: Check weekly simulation log
+      if (this.positions.length === 0) {
+        try {
+          const weeklyLogPath = path.join(dir, 'weekly_simulation_log.json');
+          if (fs.existsSync(weeklyLogPath)) {
+            const log = JSON.parse(fs.readFileSync(weeklyLogPath, 'utf8'));
+            const openTrades = (log.trades || []).filter(t => t.status === 'OPEN');
+            if (openTrades.length > 0) {
+              console.log(`♻️ [PaperTrading] Auto-recovering ${openTrades.length} open positions from weekly simulation log...`);
+              this.positions = openTrades;
+              this.savePersistedState();
+            }
+          }
+        } catch (err) {}
       }
     } catch (e) {
       console.warn('⚠️ Could not load paper portfolio state:', e.message);
@@ -51,6 +84,10 @@ class PaperTradingService {
         lastUpdated: new Date().toISOString()
       };
       fs.writeFileSync(PAPER_STATE_FILE, JSON.stringify(state, null, 2), 'utf8');
+
+      // Keep redundant backup file in sync
+      const backupFile = path.join(path.dirname(PAPER_STATE_FILE), 'paper_portfolio_state.backup.json');
+      fs.writeFileSync(backupFile, JSON.stringify(state, null, 2), 'utf8');
     } catch (e) {
       console.error('❌ Failed to save paper portfolio state:', e.message);
     }

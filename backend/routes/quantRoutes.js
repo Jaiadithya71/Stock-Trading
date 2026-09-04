@@ -272,6 +272,60 @@ router.post('/paper/reset', async (req, res) => {
 });
 
 /**
+ * POST /api/paper/restore-state
+ * Cloud Persistence Recovery: Restores open positions and balances across server restarts/deploys
+ */
+router.post('/paper/restore-state', async (req, res) => {
+  try {
+    const { positions, currentBalance, initialCapital, tradeHistory } = req.body;
+    if (!Array.isArray(positions)) {
+      return res.status(400).json({ success: false, message: 'Invalid positions array' });
+    }
+    const PaperTradingService = require('../services/paperTradingService');
+    const paperTrading = new PaperTradingService();
+    paperTrading.loadPersistedState();
+
+    if (positions && positions.length > 0) {
+      paperTrading.positions = positions;
+    }
+    if (currentBalance !== undefined) {
+      paperTrading.currentBalance = parseFloat(currentBalance);
+    }
+    if (initialCapital !== undefined) {
+      paperTrading.initialCapital = parseFloat(initialCapital);
+    }
+    if (Array.isArray(tradeHistory) && tradeHistory.length > 0) {
+      paperTrading.tradeHistory = tradeHistory;
+    }
+    paperTrading.savePersistedState();
+
+    // Also synchronize with weekly audit logger
+    const auditLog = weeklyAuditLogger.loadLog();
+    if (positions && positions.length > 0) {
+      positions.forEach(p => {
+        if (!auditLog.trades.some(t => t.id === p.id)) {
+          auditLog.trades.unshift({
+            ...p,
+            status: 'OPEN',
+            timestamp: p.entryTimestamp || new Date().toISOString()
+          });
+        }
+      });
+      weeklyAuditLogger.saveLog(auditLog);
+    }
+
+    console.log(`♻️ [PaperTrading] Restored ${positions.length} active positions and balance ₹${paperTrading.currentBalance} from client state.`);
+    res.json({
+      success: true,
+      message: `Successfully restored ${positions.length} open positions and portfolio state.`,
+      data: paperTrading.getPortfolioSummary()
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
  * GET /api/paper/summary
  * Returns portfolio summary from Layer 4 OMSAdapter merged with Weekly Audit Logger
  */

@@ -653,6 +653,7 @@ const StockIntradayWidget = {
       const res = await fetch('/api/paper/reset', { method: 'POST' });
       const data = await res.json();
       if (data.success) {
+        localStorage.removeItem('prot_active_positions_backup');
         alert(`✅ Capital Refilled Successfully!\n\nVirtual Balance: ₹1,00,000.00\nPrior Session: ${data.archive?.totalTrades || 0} trades permanently archived.`);
         this.fetchData();
         this.fetchDailyLedger();
@@ -711,7 +712,49 @@ const StockIntradayWidget = {
       if (posRes.ok) {
         const posData = await posRes.json();
         const p = posData.data || posData.portfolio || posData;
-        this.renderPositions(p.activePositions || []);
+        const activePositions = p.activePositions || [];
+
+        // Dual Persistence: Mirror active positions to browser storage for cloud persistence
+        if (activePositions.length > 0) {
+          try {
+            localStorage.setItem('prot_active_positions_backup', JSON.stringify({
+              positions: activePositions,
+              balance: p.currentBalance,
+              capital: p.initialCapital,
+              tradeHistory: p.tradeHistory || [],
+              dateStr: new Date().toISOString().split('T')[0],
+              timestamp: Date.now()
+            }));
+          } catch (err) {}
+        } else if (!this._restoredThisSession) {
+          // If server reports 0 active positions (e.g. after cloud rebuild/restart), auto-restore from backup
+          try {
+            const rawBackup = localStorage.getItem('prot_active_positions_backup');
+            if (rawBackup) {
+              const backup = JSON.parse(rawBackup);
+              const todayStr = new Date().toISOString().split('T')[0];
+              const isToday = backup.dateStr === todayStr;
+              const isRecent = (Date.now() - (backup.timestamp || 0)) < 12 * 3600 * 1000;
+              if (isToday && isRecent && Array.isArray(backup.positions) && backup.positions.length > 0) {
+                this._restoredThisSession = true;
+                console.log('♻️ [StockTerminal] Auto-restoring active positions across cloud deployment...', backup.positions.length);
+                fetch('/api/paper/restore-state', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    positions: backup.positions,
+                    currentBalance: backup.balance,
+                    initialCapital: backup.capital,
+                    tradeHistory: backup.tradeHistory
+                  })
+                }).then(() => this.fetchData());
+                return;
+              }
+            }
+          } catch (err) {}
+        }
+
+        this.renderPositions(activePositions);
         this.renderClosedTrades(p.tradeHistory || []);
         this.renderScorecard(p);
       }

@@ -1,7 +1,7 @@
 {
   "createdTimestamp": "2026-09-04T07:01:21.991Z",
   "weeklySummary": {
-    "totalSignalsGenerated": 0,
+    "totalSignalsGenerated": 3,
     "totalTradesExecuted": 0,
     "winningTrades": 0,
     "losingTrades": 0,
@@ -9,6 +9,69 @@
     "netRealizedPnL": 0,
     "maxDrawdownPct": 0
   },
-  "dailyLogs": {},
-  "trades": []
+  "dailyLogs": {
+    "2026-09-04": {
+      "date": "2026-09-04",
+      "tradesCount": 3,
+      "dailyPnL": 0,
+      "wins": 0,
+      "losses": 0
+    }
+  },
+  "trades": [
+    {
+      "id": "PAPER-HEROMOTOCO-1788508676971",
+      "timestamp": "2026-09-04T07:57:56.972Z",
+      "date": "2026-09-04",
+      "symbol": "HEROMOTOCO",
+      "action": "SELL",
+      "optionType": null,
+      "entryPrice": 5284.49,
+      "stopLoss": 5363.27,
+      "target": 5134.85,
+      "exitPrice": null,
+      "quantity": 13,
+      "pnl": 0,
+      "pnlPct": 0,
+      "exitReason": "-",
+      "status": "OPEN",
+      "rationale": "Bearish ORB Breakdown below ₹5293.4 (ATR: ₹63.45) with VWAP resistance (₹5312.27) and -0.62% drift."
+    },
+    {
+      "id": "PAPER-LT-1788508616968",
+      "timestamp": "2026-09-04T07:56:56.972Z",
+      "date": "2026-09-04",
+      "symbol": "LT",
+      "action": "BUY",
+      "optionType": null,
+      "entryPrice": 3677.58,
+      "stopLoss": 3622.81,
+      "target": 3781.6,
+      "exitPrice": null,
+      "quantity": 18,
+      "pnl": 0,
+      "pnlPct": 0,
+      "exitReason": "-",
+      "status": "OPEN",
+      "rationale": "Bullish ORB Breakout above ₹3671.9 (ATR: ₹44.11) with VWAP support (₹3661.01) and +0.71% momentum."
+    },
+    {
+      "id": "PAPER-M&M-1788508616965",
+      "timestamp": "2026-09-04T07:56:56.967Z",
+      "date": "2026-09-04",
+      "symbol": "M&M",
+      "action": "BUY",
+      "optionType": null,
+      "entryPrice": 2801.63,
+      "stopLoss": 2759.91,
+      "target": 2880.87,
+      "exitPrice": null,
+      "quantity": 24,
+      "pnl": 0,
+      "pnlPct": 0,
+      "exitReason": "-",
+      "status": "OPEN",
+      "rationale": "Bullish ORB Breakout above ₹2796.68 (ATR: ₹33.6) with VWAP support (₹2788.6) and +0.73% momentum."
+    }
+  ]
 }
