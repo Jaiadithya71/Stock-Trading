@@ -26,6 +26,9 @@ router.get('/signals', async (req, res) => {
       success: true,
       timestamp: new Date().toISOString(),
       source: snapshot.source,
+      isMarketOpen: snapshot.isMarketOpen,
+      marketStatus: snapshot.marketStatus,
+      marketNotice: snapshot.marketNotice,
       signals
     });
   } catch (error) {

@@ -1,13 +1,13 @@
 {
   "createdTimestamp": "2026-08-17T23:39:24.000Z",
   "weeklySummary": {
-    "totalSignalsGenerated": 13,
-    "totalTradesExecuted": 5,
+    "totalSignalsGenerated": 17,
+    "totalTradesExecuted": 8,
     "winningTrades": 0,
-    "losingTrades": 5,
+    "losingTrades": 8,
     "winRatePct": 0,
-    "netRealizedPnL": -4947.84,
-    "maxDrawdownPct": 4.9
+    "netRealizedPnL": -8045.44,
+    "maxDrawdownPct": 8
   },
   "dailyLogs": {
     "2026-09-03": {
@@ -16,9 +16,68 @@
       "dailyPnL": -4947.84,
       "wins": 0,
       "losses": 5
+    },
+    "2026-09-04": {
+      "date": "2026-09-04",
+      "tradesCount": 4,
+      "dailyPnL": -3097.6,
+      "wins": 0,
+      "losses": 3
     }
   },
   "trades": [
+    {
+      "id": "PAPER-CIPLA-1788497935315",
+      "timestamp": "2026-09-04T04:58:55.318Z",
+      "date": "2026-09-04",
+      "symbol": "CIPLA",
+      "optionType": "CE",
+      "entryPrice": 1610.5,
+      "exitPrice": null,
+      "quantity": 77,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bearish ORB Breakdown below ₹1611.9 with VWAP resistance (₹1618.18) and -0.54% drift."
+    },
+    {
+      "id": "PAPER-ASIANPAINT-1788465993750",
+      "timestamp": "2026-09-04T04:45:55.087Z",
+      "date": "2026-09-04",
+      "symbol": "ASIANPAINT",
+      "optionType": "CE",
+      "entryPrice": 3130.64,
+      "exitPrice": 3156.4,
+      "quantity": 39,
+      "pnl": -1004.54,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
+    {
+      "id": "PAPER-SBIN-1788465993744",
+      "timestamp": "2026-09-04T04:42:55.073Z",
+      "date": "2026-09-04",
+      "symbol": "SBIN",
+      "optionType": "CE",
+      "entryPrice": 810.19,
+      "exitPrice": 817.17,
+      "quantity": 154,
+      "pnl": -1074.67,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
+    {
+      "id": "PAPER-ICICIBANK-1788465769492",
+      "timestamp": "2026-09-04T04:35:55.010Z",
+      "date": "2026-09-04",
+      "symbol": "ICICIBANK",
+      "optionType": "CE",
+      "entryPrice": 1193.55,
+      "exitPrice": 1183.76,
+      "quantity": 104,
+      "pnl": -1018.39,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
     {
       "id": "PAPER-ASIANPAINT-1788465993750",
       "timestamp": "2026-09-03T20:06:33.753Z",

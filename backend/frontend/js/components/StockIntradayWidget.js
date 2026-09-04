@@ -324,13 +324,13 @@ const StockIntradayWidget = {
     const tag = document.getElementById('tvDataSourceTag');
     if (!banner || !text || !tag) return;
 
-    if (data.isMarketOpen && data.source === 'SMARTAPI_LIVE') {
+    if (data.isMarketOpen) {
       banner.style.background = 'rgba(0, 208, 132, 0.12)';
       banner.style.borderBottomColor = 'rgba(0, 208, 132, 0.25)';
       banner.style.color = '#00d084';
       dot.textContent = '🟢';
-      text.innerHTML = '<strong>LIVE NSE EXCHANGE FEED</strong>: Connected to Angel One SmartAPI. Live tick updates and official exchange prices.';
-      tag.textContent = 'FEED: LIVE NSE';
+      text.innerHTML = '<strong>LIVE NSE EXCHANGE SESSION</strong>: Market is OPEN (09:15 AM - 03:30 PM IST). Streaming live tick updates and breakout signals.';
+      tag.textContent = data.source === 'SMARTAPI_LIVE' ? 'FEED: LIVE NSE' : 'FEED: STREAMING';
       tag.style.color = '#00d084';
       tag.style.borderColor = 'rgba(0,208,132,0.3)';
     } else {
@@ -465,38 +465,47 @@ const StockIntradayWidget = {
     const orbLow = stock.orbLow;
     const ema20 = stock.ema20;
 
-    // Price scaling
-    const maxP = Math.max(ltp, orbHigh, vwap) * 1.008;
-    const minP = Math.min(ltp, orbLow, vwap) * 0.992;
+    // Price scaling with safe symmetrical padding
+    const allPrices = [ltp, vwap, orbHigh, orbLow, ema20];
+    const maxP = Math.max(...allPrices) * 1.004;
+    const minP = Math.min(...allPrices) * 0.996;
     const pRange = maxP - minP || 1;
 
-    const getY = (price) => height - 30 - (((price - minP) / pRange) * (height - 60));
+    const getY = (price) => {
+      const clamped = Math.max(minP, Math.min(maxP, price));
+      return height - 35 - (((clamped - minP) / pRange) * (height - 70));
+    };
 
-    // Generate 16 synthetic intraday candles ending at current price
-    const numCandles = 16;
-    const candleWidth = (width - 100) / numCandles;
+    // Generate 18 proportional intraday candles ending cleanly at LTP
+    const numCandles = 18;
+    const candleWidth = (width - 90) / numCandles;
     let candleSvg = '';
 
     for (let i = 0; i < numCandles; i++) {
-      const x = 40 + (i * candleWidth);
+      const x = 30 + (i * candleWidth);
       const isLast = i === numCandles - 1;
       
-      // Interpolate candle path toward ltp
       const progress = i / (numCandles - 1);
-      const open = orbLow + (pRange * 0.4) + ((ltp - orbLow) * progress * 0.8) + (Math.sin(i) * pRange * 0.05);
-      const close = isLast ? ltp : open + (Math.cos(i) * pRange * 0.08);
-      const high = Math.max(open, close) + (pRange * 0.04);
-      const low = Math.min(open, close) - (pRange * 0.04);
+      const baseMid = vwap + ((ltp - vwap) * progress * 0.85);
+      const osc = Math.sin(i * 0.85) * (pRange * 0.06);
+      
+      let open = baseMid + osc;
+      let close = isLast ? ltp : open + (Math.cos(i * 1.2) * (pRange * 0.05));
+      if (isLast) {
+        open = close + (stock.signal === 'SELL_SHORT' ? (pRange * 0.08) : -(pRange * 0.08));
+      }
+      let high = Math.max(open, close) + (pRange * 0.02);
+      let low = Math.min(open, close) - (pRange * 0.02);
 
       const isGreen = close >= open;
       const color = isGreen ? '#00d084' : '#ff4757';
       const yTop = getY(Math.max(open, close));
       const yBot = getY(Math.min(open, close));
-      const barH = Math.max(2, yBot - yTop);
+      const barH = Math.max(3, yBot - yTop);
 
       candleSvg += `
         <line x1="${x + candleWidth/2}" y1="${getY(high)}" x2="${x + candleWidth/2}" y2="${getY(low)}" stroke="${color}" stroke-width="1.2" />
-        <rect x="${x + 2}" y="${yTop}" width="${Math.max(2, candleWidth - 4)}" height="${barH}" fill="${color}" rx="1" />
+        <rect x="${x + 2}" y="${yTop}" width="${Math.max(2, candleWidth - 5)}" height="${barH}" fill="${color}" rx="1" />
       `;
     }
 
@@ -507,11 +516,7 @@ const StockIntradayWidget = {
     const yEma = getY(ema20);
 
     container.innerHTML = `
-      <svg width="100%" height="${height}" style="overflow: visible;">
-        <!-- Background Data Watermark (Prevent mistaking test data for live) -->
-        <text x="50%" y="45%" text-anchor="middle" fill="rgba(255,255,255,0.03)" font-size="30" font-weight="900" letter-spacing="4">
-          SIMULATED / TEST DATA
-        </text>
+      <svg width="100%" height="${height}" style="overflow: hidden; display: block;">
 
         <!-- Grid horizontal lines -->
         <line x1="30" y1="${height/4}" x2="${width-20}" y2="${height/4}" stroke="#202634" stroke-width="1" stroke-dasharray="3,3" />

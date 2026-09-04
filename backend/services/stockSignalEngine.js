@@ -1,4 +1,4 @@
-﻿// ============================================================================
+// ============================================================================
 // FILE: backend/services/stockSignalEngine.js
 // Intraday Momentum & Breakout Strategy Engine for NSE Cash Equities
 // Confluence: 15-Min ORB + VWAP + 20 EMA + Dynamic Risk Parity Sizing
@@ -105,6 +105,8 @@ class StockSignalEngine {
         target,
         confidence: Math.round(confidence * 100) + '%',
         rationale,
+        pChange: pChange !== undefined ? pChange : 0,
+        sector: stock.sector || 'Equities',
         riskAllocation: {
           allocatedShares: signal !== 'NEUTRAL_HOLD' ? calculatedShares : 0,
           riskAmount: riskPerTrade,

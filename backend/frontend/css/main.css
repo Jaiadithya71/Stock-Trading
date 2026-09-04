@@ -105,8 +105,11 @@ body {
     margin-bottom: 20px;
 }
 
-.dashboard-container > .card:first-child {
+.dashboard-container > .card:first-child,
+#stock-intraday-widget,
+.tradingview-terminal {
     grid-column: span 2;
+    width: 100%;
 }
 
 .pcr-widget-container,

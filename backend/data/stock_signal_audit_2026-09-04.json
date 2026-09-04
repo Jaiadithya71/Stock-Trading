@@ -626,5 +626,61 @@
         "timestamp": "2026-09-04T04:27:58.417Z"
       }
     ]
+  },
+  {
+    "timestamp": "2026-09-04T04:58:55.313Z",
+    "activeSignalsCount": 1,
+    "signals": [
+      {
+        "symbol": "CIPLA",
+        "token": "694",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1611.31,
+        "vwap": 1618.18,
+        "orbHigh": 1629.72,
+        "orbLow": 1611.9,
+        "ema20": 1618.38,
+        "stopLoss": 1623.03,
+        "target": 1590.21,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1611.9 with VWAP resistance (₹1618.18) and -0.54% drift.",
+        "riskAllocation": {
+          "allocatedShares": 77,
+          "riskAmount": 1000,
+          "estimatedExposure": 124070.87,
+          "marginRequired": 24814.17
+        },
+        "timestamp": "2026-09-04T04:58:55.312Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T04:59:55.328Z",
+    "activeSignalsCount": 1,
+    "signals": [
+      {
+        "symbol": "CIPLA",
+        "token": "694",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1611.42,
+        "vwap": 1618.22,
+        "orbHigh": 1629.72,
+        "orbLow": 1611.9,
+        "ema20": 1618.38,
+        "stopLoss": 1623.07,
+        "target": 1590.45,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1611.9 with VWAP resistance (₹1618.22) and -0.53% drift.",
+        "riskAllocation": {
+          "allocatedShares": 77,
+          "riskAmount": 1000,
+          "estimatedExposure": 124079.34,
+          "marginRequired": 24815.87
+        },
+        "timestamp": "2026-09-04T04:59:55.327Z"
+      }
+    ]
   }
 ]
