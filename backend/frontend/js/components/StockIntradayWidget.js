@@ -82,6 +82,76 @@ const StockIntradayWidget = {
 
         </div>
 
+        <!-- EXECUTIVE STOCKS P&L PERFORMANCE SCORECARD -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: #2a2e39; border-bottom: 1px solid #2a2e39;">
+          
+          <!-- KPI 1: REALIZED P&L -->
+          <div style="background: #171b26; padding: 12px 16px;">
+            <div style="font-size: 11px; font-weight: 700; color: #8896a8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+              Realized P&L (Today)
+            </div>
+            <div id="tvKpiRealized" style="font-size: 18px; font-weight: 800; font-family: monospace; color: #d1d4dc;">
+              ₹0.00
+            </div>
+            <div id="tvKpiRealizedSub" style="font-size: 10.5px; color: #8896a8; margin-top: 2px;">
+              0 Closed Trades Today
+            </div>
+          </div>
+
+          <!-- KPI 2: UNREALIZED P&L (ACTIVE) -->
+          <div style="background: #171b26; padding: 12px 16px;">
+            <div style="font-size: 11px; font-weight: 700; color: #8896a8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+              Unrealized P&L (Floating)
+            </div>
+            <div id="tvKpiUnrealized" style="font-size: 18px; font-weight: 800; font-family: monospace; color: #d1d4dc;">
+              ₹0.00
+            </div>
+            <div id="tvKpiUnrealizedSub" style="font-size: 10.5px; color: #8896a8; margin-top: 2px;">
+              0 Open Positions
+            </div>
+          </div>
+
+          <!-- KPI 3: NET TOTAL INTRADAY P&L -->
+          <div style="background: #171b26; padding: 12px 16px; border-left: 2px solid #2962ff;">
+            <div style="font-size: 11px; font-weight: 700; color: #2962ff; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+              Net Total Intraday P&L
+            </div>
+            <div id="tvKpiNetTotal" style="font-size: 20px; font-weight: 800; font-family: monospace; color: #d1d4dc;">
+              ₹0.00
+            </div>
+            <div id="tvKpiNetTotalSub" style="font-size: 10.5px; color: #8896a8; margin-top: 2px;">
+              Realized + Floating
+            </div>
+          </div>
+
+          <!-- KPI 4: WIN RATE & RECORD -->
+          <div style="background: #171b26; padding: 12px 16px;">
+            <div style="font-size: 11px; font-weight: 700; color: #8896a8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+              Win Rate & Record
+            </div>
+            <div id="tvKpiWinRate" style="font-size: 18px; font-weight: 800; font-family: monospace; color: #d1d4dc;">
+              0.0%
+            </div>
+            <div id="tvKpiWinRecordSub" style="font-size: 10.5px; color: #8896a8; margin-top: 2px;">
+              0W / 0L (0 Total)
+            </div>
+          </div>
+
+          <!-- KPI 5: CAPITAL & 5X MARGIN -->
+          <div style="background: #171b26; padding: 12px 16px;">
+            <div style="font-size: 11px; font-weight: 700; color: #8896a8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+              Capital & Margin (5x)
+            </div>
+            <div id="tvKpiBalance" style="font-size: 17px; font-weight: 800; font-family: monospace; color: #fff;">
+              ₹1,00,000.00
+            </div>
+            <div id="tvKpiMarginSub" style="font-size: 10.5px; color: #8896a8; margin-top: 2px;">
+              Margin Used: ₹0.00
+            </div>
+          </div>
+
+        </div>
+
         <!-- MAIN TRADING INTERFACE: 2-COLUMN SPLIT (CHART vs WATCHLIST) -->
         <div style="display: grid; grid-template-columns: 1fr 340px; min-height: 480px; border-bottom: 1px solid #2a2e39;">
           
@@ -395,6 +465,7 @@ const StockIntradayWidget = {
         const p = posData.data || posData.portfolio || posData;
         this.renderPositions(p.activePositions || []);
         this.renderClosedTrades(p.tradeHistory || []);
+        this.renderScorecard(p);
       }
     } catch (e) {}
   },
@@ -588,19 +659,81 @@ const StockIntradayWidget = {
       return;
     }
 
-    tbody.innerHTML = positions.map(pos => `
-      <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
-        <td style="padding: 8px; font-weight: 700; color: #fff;">${pos.symbol}</td>
-        <td style="padding: 8px; font-weight: 700; color: ${pos.action === 'BUY' ? '#00d084' : '#ff4757'};">${pos.action}</td>
-        <td style="padding: 8px; font-family: monospace;">${pos.quantity}</td>
-        <td style="padding: 8px; font-family: monospace;">₹${pos.entryPrice.toFixed(2)}</td>
-        <td style="padding: 8px; font-family: monospace; color: #ff4757;">₹${pos.stopLoss?.toFixed(2) || '-'}</td>
-        <td style="padding: 8px; font-family: monospace; color: #00d084;">₹${pos.target?.toFixed(2) || '-'}</td>
-        <td style="padding: 8px; font-family: monospace;">₹${pos.marginBlocked?.toFixed(2) || '-'}</td>
-        <td style="padding: 8px; font-weight: 700; color: #00d084; font-family: monospace;">+0.00</td>
-        <td style="padding: 8px;"><button onclick="StockIntradayWidget.closePosition('${pos.id}', ${pos.entryPrice})" style="padding: 3px 8px; background: transparent; border: 1px solid #ff4757; color: #ff4757; border-radius: 4px; font-size: 10.5px; cursor: pointer;">Exit</button></td>
-      </tr>
-    `).join('');
+    tbody.innerHTML = positions.map(pos => {
+      const isProfitable = (pos.unrealizedPnL || 0) >= 0;
+      const pnlColor = isProfitable ? '#00d084' : '#ff4757';
+      const trailingBadge = pos.trailingStatus 
+        ? `<span style="display: block; font-size: 9.5px; font-weight: 700; color: #00d084;">🛡️ ${pos.trailingStatus.replace(/_/g, ' ')}</span>`
+        : '';
+
+      return `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+          <td style="padding: 8px; font-weight: 700; color: #fff;">${pos.symbol}</td>
+          <td style="padding: 8px; font-weight: 700; color: ${pos.action === 'BUY' ? '#00d084' : '#ff4757'};">${pos.action}</td>
+          <td style="padding: 8px; font-family: monospace;">${pos.quantity}</td>
+          <td style="padding: 8px; font-family: monospace;">₹${pos.entryPrice.toFixed(2)}</td>
+          <td style="padding: 8px; font-family: monospace; color: #ff4757;">
+            ₹${pos.stopLoss?.toFixed(2) || '-'}
+            ${trailingBadge}
+          </td>
+          <td style="padding: 8px; font-family: monospace; color: #00d084;">₹${pos.target?.toFixed(2) || '-'}</td>
+          <td style="padding: 8px; font-family: monospace;">₹${pos.marginBlocked?.toFixed(2) || '-'}</td>
+          <td style="padding: 8px; font-weight: 700; color: ${pnlColor}; font-family: monospace;">
+            ${isProfitable ? '+' : ''}₹${(pos.unrealizedPnL || 0).toFixed(2)} (${(pos.unrealizedPnLPct || 0) >= 0 ? '+' : ''}${(pos.unrealizedPnLPct || 0).toFixed(2)}%)
+          </td>
+          <td style="padding: 8px;"><button onclick="StockIntradayWidget.closePosition('${pos.id}', ${pos.currentPrice || pos.entryPrice})" style="padding: 3px 8px; background: transparent; border: 1px solid #ff4757; color: #ff4757; border-radius: 4px; font-size: 10.5px; cursor: pointer;">Exit</button></td>
+        </tr>
+      `;
+    }).join('');
+  },
+
+  renderScorecard(p) {
+    const elRealized = document.getElementById('tvKpiRealized');
+    const elRealizedSub = document.getElementById('tvKpiRealizedSub');
+    const elUnrealized = document.getElementById('tvKpiUnrealized');
+    const elUnrealizedSub = document.getElementById('tvKpiUnrealizedSub');
+    const elNetTotal = document.getElementById('tvKpiNetTotal');
+    const elNetTotalSub = document.getElementById('tvKpiNetTotalSub');
+    const elWinRate = document.getElementById('tvKpiWinRate');
+    const elWinRecordSub = document.getElementById('tvKpiWinRecordSub');
+    const elBalance = document.getElementById('tvKpiBalance');
+    const elMarginSub = document.getElementById('tvKpiMarginSub');
+
+    if (!elRealized) return;
+
+    const realized = p.totalRealizedPnL || 0;
+    const unrealized = p.totalUnrealizedPnL || 0;
+    const netTotal = p.netTotalPnL !== undefined ? p.netTotalPnL : (realized + unrealized);
+    const winRate = p.winRatePct || 0;
+    const completed = p.completedTradesCount || 0;
+    const wins = p.winningTradesCount !== undefined ? p.winningTradesCount : 0;
+    const losses = p.losingTradesCount !== undefined ? p.losingTradesCount : (completed - wins);
+    const balance = p.currentBalance || 100000;
+    const margin = p.totalMarginUsed || 0;
+
+    // 1. Realized
+    elRealized.textContent = `${realized >= 0 ? '+' : ''}₹${realized.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    elRealized.style.color = realized > 0 ? '#00d084' : (realized < 0 ? '#ff4757' : '#d1d4dc');
+    elRealizedSub.textContent = `${completed} Closed Trades Today`;
+
+    // 2. Unrealized
+    elUnrealized.textContent = `${unrealized >= 0 ? '+' : ''}₹${unrealized.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    elUnrealized.style.color = unrealized > 0 ? '#00d084' : (unrealized < 0 ? '#ff4757' : '#8896a8');
+    elUnrealizedSub.textContent = `${p.activePositionsCount || 0} Open Positions`;
+
+    // 3. Net Total
+    elNetTotal.textContent = `${netTotal >= 0 ? '+' : ''}₹${netTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    elNetTotal.style.color = netTotal > 0 ? '#00d084' : (netTotal < 0 ? '#ff4757' : '#d1d4dc');
+    elNetTotalSub.textContent = `${netTotal >= 0 ? '🟢 Net Profitable' : '🔴 Net Drawdown'} (Realized + Floating)`;
+
+    // 4. Win Rate
+    elWinRate.textContent = `${winRate.toFixed(1)}%`;
+    elWinRate.style.color = winRate >= 50 ? '#00d084' : (completed > 0 ? '#ff4757' : '#d1d4dc');
+    elWinRecordSub.textContent = `${wins}W / ${losses}L (${completed} Total)`;
+
+    // 5. Balance & Margin
+    elBalance.textContent = `₹${balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    elMarginSub.textContent = `Margin Used: ₹${margin.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   },
 
   renderClosedTrades(trades) {

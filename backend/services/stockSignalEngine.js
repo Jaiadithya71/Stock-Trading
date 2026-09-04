@@ -43,40 +43,51 @@ class StockSignalEngine {
     const evaluatedSignals = [];
 
     for (const stock of stockList) {
-      const { symbol, ltp, vwap, orbHigh, orbLow, ema20, pChange, volume } = stock;
+      const { symbol, ltp, vwap, orbHigh, orbLow, ema20, pChange, volume, high, low } = stock;
       let signal = 'NEUTRAL_HOLD';
       let confidence = 0.70;
       let rationale = `Price consolidating around ₹${ltp.toLocaleString('en-IN')}. Awaiting ORB breakout.`;
       let stopLoss = 0;
       let target = 0;
 
+      // 1. Dynamic ATR (Average True Range) Estimation for large-cap equities
+      // Floor at 1.2% of LTP to ensure stop is never choked inside intraday noise
+      const intradayRange = (high && low && high > low) ? (high - low) : (ltp * 0.015);
+      const atr = parseFloat(Math.max(intradayRange * 0.75, ltp * 0.012).toFixed(2));
+
+      // 2. Breakout Confirmation Filter: require at least 0.1% clearance beyond ORB boundaries
+      const isCleanBreakout = ltp > (orbHigh * 1.001);
+      const isCleanBreakdown = ltp < (orbLow * 0.999);
+
       // STRATEGY 1: Opening Range Breakout (ORB) Long
-      // Price breaks above 15-min High + Above VWAP + Above 20 EMA
-      if (ltp > orbHigh && ltp > vwap && ltp > ema20) {
+      // Price breaks cleanly above 15-min High + Above VWAP + Above 20 EMA
+      if (isCleanBreakout && ltp > vwap && ltp > ema20) {
         signal = 'BUY_LONG';
         confidence = 0.88;
-        stopLoss = parseFloat((vwap < orbHigh ? vwap * 0.997 : orbHigh * 0.995).toFixed(2));
+        // Institutional Stop Loss: 1.2 x ATR below entry
+        stopLoss = parseFloat((ltp - (1.2 * atr)).toFixed(2));
         const risk = ltp - stopLoss;
-        target = parseFloat((ltp + (risk * 1.8)).toFixed(2)); // 1:1.8 Risk:Reward
-        rationale = `Bullish ORB Breakout above ₹${orbHigh} with VWAP support (₹${vwap}) and +${pChange}% momentum.`;
+        target = parseFloat((ltp + (risk * 2.0)).toFixed(2)); // Strict 1:2 Risk:Reward
+        rationale = `Bullish ORB Breakout above ₹${orbHigh} (ATR: ₹${atr}) with VWAP support (₹${vwap}) and +${pChange}% momentum.`;
       }
       // STRATEGY 2: Opening Range Breakdown (ORB) Short (Intraday MIS)
-      // Price breaks below 15-min Low + Below VWAP + Below 20 EMA
-      else if (ltp < orbLow && ltp < vwap && ltp < ema20) {
+      // Price breaks cleanly below 15-min Low + Below VWAP + Below 20 EMA
+      else if (isCleanBreakdown && ltp < vwap && ltp < ema20) {
         signal = 'SELL_SHORT';
         confidence = 0.86;
-        stopLoss = parseFloat((vwap > orbLow ? vwap * 1.003 : orbLow * 1.005).toFixed(2));
+        // Institutional Stop Loss: 1.2 x ATR above entry
+        stopLoss = parseFloat((ltp + (1.2 * atr)).toFixed(2));
         const risk = stopLoss - ltp;
-        target = parseFloat((ltp - (risk * 1.8)).toFixed(2)); // 1:1.8 Risk:Reward
-        rationale = `Bearish ORB Breakdown below ₹${orbLow} with VWAP resistance (₹${vwap}) and ${pChange}% drift.`;
+        target = parseFloat((ltp - (risk * 2.0)).toFixed(2)); // Strict 1:2 Risk:Reward
+        rationale = `Bearish ORB Breakdown below ₹${orbLow} (ATR: ₹${atr}) with VWAP resistance (₹${vwap}) and ${pChange}% drift.`;
       }
       // STRATEGY 3: 20-EMA Pullback in Established Uptrend
-      else if (pChange > 0.6 && Math.abs(ltp - ema20) / ltp < 0.002 && ltp >= vwap) {
+      else if (pChange > 0.6 && Math.abs(ltp - ema20) / ltp < 0.003 && ltp >= vwap) {
         signal = 'BUY_LONG';
         confidence = 0.82;
-        stopLoss = parseFloat((ema20 * 0.995).toFixed(2));
+        stopLoss = parseFloat((ltp - (1.0 * atr)).toFixed(2));
         const risk = ltp - stopLoss;
-        target = parseFloat((ltp + (risk * 1.5)).toFixed(2));
+        target = parseFloat((ltp + (risk * 2.0)).toFixed(2));
         rationale = `Uptrend EMA Pullback: Price testing 20-EMA support (₹${ema20}) with positive breadth.`;
       }
 

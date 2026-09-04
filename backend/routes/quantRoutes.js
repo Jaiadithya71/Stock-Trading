@@ -268,14 +268,26 @@ router.get('/paper/summary', async (req, res) => {
     const winningTrades = closedTrades.filter(t => (t.pnl || 0) > 0).length;
     const winRate = completedCount > 0 ? (winningTrades / completedCount) * 100 : 0.0;
     const currentBalance = summary.currentBalance !== undefined ? summary.currentBalance : (100000 + realizedPnL);
+    const unrealizedPnL = summary.totalUnrealizedPnL !== undefined 
+      ? summary.totalUnrealizedPnL 
+      : (summary.activePositions || []).reduce((sum, p) => sum + (p.unrealizedPnL || 0), 0);
+    const netTotalPnL = parseFloat((realizedPnL + unrealizedPnL).toFixed(2));
+    const marginUsed = summary.totalMarginUsed !== undefined 
+      ? summary.totalMarginUsed 
+      : (summary.activePositions || []).reduce((sum, p) => sum + (p.marginBlocked || 0), 0);
 
     const mergedSummary = {
       initialCapital: summary.initialCapital || 100000,
       currentBalance: parseFloat(currentBalance.toFixed ? currentBalance.toFixed(2) : currentBalance),
       activePositionsCount: summary.activePositionsCount || (summary.activePositions ? summary.activePositions.length : 0),
       completedTradesCount: completedCount,
+      winningTradesCount: winningTrades,
+      losingTradesCount: completedCount - winningTrades,
       winRatePct: parseFloat(winRate.toFixed ? winRate.toFixed(1) : winRate),
       totalRealizedPnL: parseFloat(realizedPnL.toFixed ? realizedPnL.toFixed(2) : realizedPnL),
+      totalUnrealizedPnL: parseFloat(unrealizedPnL.toFixed ? unrealizedPnL.toFixed(2) : unrealizedPnL),
+      netTotalPnL: netTotalPnL,
+      totalMarginUsed: parseFloat(marginUsed.toFixed ? marginUsed.toFixed(2) : marginUsed),
       activePositions: summary.activePositions || [],
       tradeHistory: closedTrades
     };

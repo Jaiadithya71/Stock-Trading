@@ -1,6 +1,6 @@
 {
   "initialCapital": 100000,
-  "currentBalance": 64147.07,
+  "currentBalance": 63946.97,
   "positions": [
     {
       "id": "PAPER-TATACONSUM-1788500196147",
@@ -264,5 +264,5 @@
       "exitTimestamp": "2026-09-03T19:50:49.394Z"
     }
   ],
-  "lastUpdated": "2026-09-04T06:25:36.190Z"
+  "lastUpdated": "2026-09-04T06:46:51.600Z"
 }

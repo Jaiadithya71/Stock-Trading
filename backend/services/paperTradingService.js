@@ -128,6 +128,51 @@ class PaperTradingService {
     for (const pos of openPositions) {
       const cleanSymbol = pos.symbol.replace('-EQ', '');
       const currentPrice = priceMap[cleanSymbol] || priceMap[pos.symbol] || pos.entryPrice;
+      const isBuy = pos.action === 'BUY';
+
+      // Real-time floating unrealized P&L computation
+      const pnlPct = isBuy
+        ? ((currentPrice - pos.entryPrice) / pos.entryPrice) * 100
+        : ((pos.entryPrice - currentPrice) / pos.entryPrice) * 100;
+      const unrealizedPnL = isBuy
+        ? (currentPrice - pos.entryPrice) * pos.quantity
+        : (pos.entryPrice - currentPrice) * pos.quantity;
+
+      pos.currentPrice = currentPrice;
+      pos.unrealizedPnL = parseFloat(unrealizedPnL.toFixed(2));
+      pos.unrealizedPnLPct = parseFloat(pnlPct.toFixed(2));
+
+      // 1. DYNAMIC TRAILING STOP & BREAKEVEN MECHANISM
+      // Stage 1: If profit reaches +0.8%, ratchet Stop-Loss to Breakeven (Entry Price)
+      if (pnlPct >= 0.8) {
+        if (isBuy && pos.stopLoss < pos.entryPrice) {
+          pos.stopLoss = pos.entryPrice;
+          pos.trailingStatus = 'BREAKEVEN_LOCKED';
+          console.log(`🛡️ [PaperTrading] Breakeven Locked for ${pos.symbol} @ ₹${pos.entryPrice}`);
+        } else if (!isBuy && pos.stopLoss > pos.entryPrice) {
+          pos.stopLoss = pos.entryPrice;
+          pos.trailingStatus = 'BREAKEVEN_LOCKED';
+          console.log(`🛡️ [PaperTrading] Breakeven Locked for ${pos.symbol} @ ₹${pos.entryPrice}`);
+        }
+      }
+
+      // Stage 2: If profit reaches +1.4%, trail Stop-Loss aggressively to lock in +0.6% gain
+      if (pnlPct >= 1.4) {
+        if (isBuy) {
+          const trailedSl = parseFloat((pos.entryPrice * 1.006).toFixed(2));
+          if (pos.stopLoss < trailedSl) {
+            pos.stopLoss = trailedSl;
+            pos.trailingStatus = 'PROFIT_TRAILED';
+          }
+        } else {
+          const trailedSl = parseFloat((pos.entryPrice * 0.994).toFixed(2));
+          if (pos.stopLoss > trailedSl) {
+            pos.stopLoss = trailedSl;
+            pos.trailingStatus = 'PROFIT_TRAILED';
+          }
+        }
+      }
+
       let shouldExit = false;
       let exitPrice = currentPrice;
       let exitReason = '';
@@ -140,7 +185,7 @@ class PaperTradingService {
         } else if (currentPrice <= pos.stopLoss) {
           shouldExit = true;
           exitPrice = pos.stopLoss;
-          exitReason = 'STOP_LOSS_HIT';
+          exitReason = pos.trailingStatus ? `${pos.trailingStatus}_HIT` : 'STOP_LOSS_HIT';
         }
       } else if (pos.action === 'SELL') {
         if (currentPrice <= pos.target) {
@@ -150,7 +195,7 @@ class PaperTradingService {
         } else if (currentPrice >= pos.stopLoss) {
           shouldExit = true;
           exitPrice = pos.stopLoss;
-          exitReason = 'STOP_LOSS_HIT';
+          exitReason = pos.trailingStatus ? `${pos.trailingStatus}_HIT` : 'STOP_LOSS_HIT';
         }
       }
 
@@ -228,16 +273,26 @@ class PaperTradingService {
   getPortfolioSummary() {
     const totalRealizedPnL = this.tradeHistory.reduce((sum, t) => sum + (t.pnl || 0), 0);
     const winningTrades = this.tradeHistory.filter(t => t.pnl > 0).length;
+    const losingTrades = this.tradeHistory.filter(t => t.pnl < 0).length;
     const totalCompleted = this.tradeHistory.length;
     const winRatePct = totalCompleted > 0 ? (winningTrades / totalCompleted) * 100 : 0;
+
+    const totalUnrealizedPnL = this.positions.reduce((sum, p) => sum + (p.unrealizedPnL || 0), 0);
+    const netTotalPnL = parseFloat((totalRealizedPnL + totalUnrealizedPnL).toFixed(2));
+    const totalMarginUsed = this.positions.reduce((sum, p) => sum + (p.marginBlocked || 0), 0);
 
     return {
       initialCapital: this.initialCapital,
       currentBalance: parseFloat(this.currentBalance.toFixed(2)),
       activePositionsCount: this.positions.length,
       completedTradesCount: totalCompleted,
+      winningTradesCount: winningTrades,
+      losingTradesCount: losingTrades,
       winRatePct: parseFloat(winRatePct.toFixed(1)),
       totalRealizedPnL: parseFloat(totalRealizedPnL.toFixed(2)),
+      totalUnrealizedPnL: parseFloat(totalUnrealizedPnL.toFixed(2)),
+      netTotalPnL: netTotalPnL,
+      totalMarginUsed: parseFloat(totalMarginUsed.toFixed(2)),
       activePositions: this.positions,
       positions: this.positions,
       tradeHistory: this.tradeHistory.slice(0, 50)
