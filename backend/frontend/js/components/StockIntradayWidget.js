@@ -606,33 +606,44 @@ const StockIntradayWidget = {
   renderClosedTrades(trades) {
     const tbody = document.getElementById('tvTradesTbody');
     const countEl = document.getElementById('tvClosedCount');
-    if (countEl) countEl.textContent = (trades && trades.length) ? trades.length : 0;
+    
+    // Strictly filter out any open trades so this table is purely closed history
+    const closedTrades = (trades || []).filter(t => t.status !== 'OPEN');
+    if (countEl) countEl.textContent = closedTrades.length;
 
     if (!tbody) return;
-    if (!trades || trades.length === 0) {
+    if (closedTrades.length === 0) {
       tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 18px; color: #8896a8;">No closed trades yet today.</td></tr>';
       return;
     }
 
-    tbody.innerHTML = trades.map(t => {
-      const timeStr = t.exitTimestamp ? new Date(t.exitTimestamp).toLocaleTimeString('en-IN', { hour12: false }) : (t.entryTimestamp ? new Date(t.entryTimestamp).toLocaleTimeString('en-IN', { hour12: false }) : '-');
+    tbody.innerHTML = closedTrades.map(t => {
+      const rawTime = t.exitTimestamp || t.timestamp || t.entryTimestamp;
+      const timeStr = rawTime ? new Date(rawTime).toLocaleTimeString('en-IN', { hour12: false }) : '-';
+      const side = t.action || t.side || (t.rationale?.toUpperCase().includes('BUY') ? 'BUY' : 'SELL');
+      const isBuy = side === 'BUY';
       const isProfitable = (t.pnl || 0) >= 0;
-      const isBuy = t.action === 'BUY';
       const pnlColor = isProfitable ? '#00d084' : '#ff4757';
-      const cleanReason = (t.exitReason || '-').replace(/_/g, ' ');
+      
+      const pnlPct = (t.pnlPct !== undefined && t.pnlPct !== null)
+        ? t.pnlPct 
+        : (t.entryPrice && t.exitPrice ? (((t.exitPrice - t.entryPrice) / t.entryPrice) * (isBuy ? 100 : -100)) : 0);
+      
+      const rawReason = t.exitReason || (t.rationale?.includes('Automated Exit:') ? t.rationale.replace('Automated Exit: ', '') : (t.pnl >= 0 ? 'TARGET_HIT' : 'STOP_LOSS_HIT'));
+      const cleanReason = rawReason.replace(/_/g, ' ');
 
       return `
         <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
           <td style="padding: 8px; color: #8896a8; font-family: monospace;">${timeStr}</td>
           <td style="padding: 8px; font-weight: 700; color: #fff;">${t.symbol}</td>
-          <td style="padding: 8px; font-weight: 700; color: ${isBuy ? '#00d084' : '#ff4757'};">${t.action}</td>
+          <td style="padding: 8px; font-weight: 700; color: ${isBuy ? '#00d084' : '#ff4757'};">${side}</td>
           <td style="padding: 8px; font-family: monospace;">${t.quantity}</td>
-          <td style="padding: 8px; font-family: monospace;">₹${t.entryPrice?.toFixed(2) || '-'}</td>
-          <td style="padding: 8px; font-family: monospace;">₹${t.exitPrice?.toFixed(2) || '-'}</td>
+          <td style="padding: 8px; font-family: monospace;">₹${t.entryPrice ? t.entryPrice.toFixed(2) : '-'}</td>
+          <td style="padding: 8px; font-family: monospace;">₹${t.exitPrice ? t.exitPrice.toFixed(2) : '-'}</td>
           <td style="padding: 8px; font-weight: 700; font-family: monospace; color: ${pnlColor};">
-            ${isProfitable ? '+' : ''}₹${(t.pnl || 0).toFixed(2)} (${t.pnlPct ? t.pnlPct.toFixed(2) : '0.00'}%)
+            ${isProfitable ? '+' : ''}₹${(t.pnl || 0).toFixed(2)} (${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(2)}%)
           </td>
-          <td style="padding: 8px; font-size: 10.5px; color: ${t.exitReason === 'TARGET_HIT' ? '#00d084' : (t.exitReason === 'STOP_LOSS_HIT' ? '#ff4757' : '#8896a8')}; font-weight: 600;">
+          <td style="padding: 8px; font-size: 10.5px; color: ${rawReason.includes('TARGET') ? '#00d084' : '#ff4757'}; font-weight: 600;">
             ${cleanReason}
           </td>
         </tr>

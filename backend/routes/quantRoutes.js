@@ -259,10 +259,14 @@ router.get('/paper/summary', async (req, res) => {
     const auditLog = weeklyAuditLogger.loadLog();
     const auditSummary = auditLog.weeklySummary || {};
 
-    const trades = (auditLog.trades && auditLog.trades.length > 0) ? auditLog.trades : (summary.tradeHistory || []);
-    const completedCount = (auditLog.trades && auditLog.trades.length > 0) ? (auditSummary.totalTradesExecuted || trades.length) : (summary.completedTradesCount || trades.length);
-    const winRate = (auditLog.trades && auditLog.trades.length > 0 && auditSummary.winRatePct !== undefined) ? auditSummary.winRatePct : (summary.winRatePct || 0.0);
-    const realizedPnL = (auditLog.trades && auditLog.trades.length > 0 && auditSummary.netRealizedPnL !== undefined) ? auditSummary.netRealizedPnL : (summary.totalRealizedPnL || 0.0);
+    const closedTrades = (summary.tradeHistory && summary.tradeHistory.length > 0)
+      ? summary.tradeHistory
+      : (auditLog.trades || []).filter(t => t.status === 'CLOSED');
+
+    const completedCount = closedTrades.length;
+    const realizedPnL = closedTrades.reduce((sum, t) => sum + (t.pnl || 0), 0);
+    const winningTrades = closedTrades.filter(t => (t.pnl || 0) > 0).length;
+    const winRate = completedCount > 0 ? (winningTrades / completedCount) * 100 : 0.0;
     const currentBalance = summary.currentBalance !== undefined ? summary.currentBalance : (100000 + realizedPnL);
 
     const mergedSummary = {
@@ -273,7 +277,7 @@ router.get('/paper/summary', async (req, res) => {
       winRatePct: parseFloat(winRate.toFixed ? winRate.toFixed(1) : winRate),
       totalRealizedPnL: parseFloat(realizedPnL.toFixed ? realizedPnL.toFixed(2) : realizedPnL),
       activePositions: summary.activePositions || [],
-      tradeHistory: trades
+      tradeHistory: closedTrades
     };
 
     res.json({

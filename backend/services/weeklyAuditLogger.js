@@ -69,15 +69,18 @@ class WeeklyAuditLogger {
 
     const tradeEntry = {
       id: event.id || `TRADE-${Date.now()}`,
-      timestamp: now.toISOString(),
+      timestamp: event.exitTimestamp || event.entryTimestamp || now.toISOString(),
       date: dateKey,
       symbol: event.symbol || 'BANKNIFTY',
-      optionType: event.optionType || 'CE',
+      action: event.action || (event.rationale?.toUpperCase().includes('BUY') ? 'BUY' : 'SELL'),
+      optionType: event.optionType || null,
       strikePrice: event.strikePrice,
       entryPrice: event.entryPrice,
       exitPrice: event.exitPrice || null,
       quantity: event.quantity,
       pnl: event.pnl || 0.0,
+      pnlPct: event.pnlPct !== undefined ? event.pnlPct : (event.entryPrice && event.exitPrice ? parseFloat((((event.exitPrice - event.entryPrice) / event.entryPrice) * (event.action === 'SELL' ? -100 : 100)).toFixed(2)) : 0.0),
+      exitReason: event.exitReason || (event.rationale?.includes('Automated Exit:') ? event.rationale.replace('Automated Exit: ', '') : (event.status === 'CLOSED' ? 'EXIT' : '-')),
       status: event.status || 'OPEN',
       rationale: event.rationale || 'Fib 0.618 Support + PCR Z-Score Confluence'
     };
