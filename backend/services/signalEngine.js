@@ -50,7 +50,7 @@ class SignalEngine {
                 return JSON.parse(fs.readFileSync(settingsFile, 'utf8'));
             }
         } catch (e) {}
-        return { capital: 100000, lots: 1, maxLoss: 5000, maxDailyTrades: 10 };
+        return { capital: 100000, lots: 1, maxLoss: 5000, maxDailyTrades: 0 };
     }
 
     resetCounter() {

@@ -31,7 +31,7 @@ function getPersistedSettings() {
   } catch (e) {
     console.warn('⚠️ Could not load risk settings:', e.message);
   }
-  return { capital: 1000, lots: 1, maxLoss: 5000 };
+  return { capital: 100000, lots: 1, maxLoss: 5000, maxDailyTrades: 0 };
 }
 
 /**

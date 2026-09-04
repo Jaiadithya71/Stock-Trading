@@ -1,6 +1,11 @@
 {
-  "capital": 1000,
+  "capital": 100000,
   "lots": 1,
   "maxLoss": 5000,
-  "maxDailyTrades": 10
+  "maxDailyLoss": 5000,
+  "maxDailyTrades": 0,
+  "riskPerTradePct": 1.0,
+  "maxOpenPositions": 3,
+  "killSwitchActive": false,
+  "tradingMode": "PAPER_TRADING"
 }
