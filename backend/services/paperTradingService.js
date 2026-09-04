@@ -157,8 +157,6 @@ class PaperTradingService {
       if (shouldExit) {
         const closedTrade = this.closePosition(pos.id, exitPrice, exitReason);
         closed.push(closedTrade);
-      } else {
-        open.push(pos);
       }
     }
 
