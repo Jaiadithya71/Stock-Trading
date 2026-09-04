@@ -95,6 +95,31 @@ jobs:
             }
           "
 
+          echo "📦 Downloading Daily Stock P&L & Telemetry Bundle from Render..."
+          curl -s --max-time 60 --retry 3 \
+            "https://stock-trading-1-cquo.onrender.com/api/stocks/download-pnl-data" \
+            -o "/tmp/stock_pnl_bundle.json" || echo "⚠️ Warning: Stock P&L fetch failed"
+
+          node -e "
+            const fs = require('fs');
+            const path = '/tmp/stock_pnl_bundle.json';
+
+            if (fs.existsSync(path)) {
+              try {
+                const bundle = JSON.parse(fs.readFileSync(path, 'utf8'));
+                if (bundle && bundle.data) {
+                  Object.entries(bundle.data).forEach(([filename, content]) => {
+                    const dest = 'backend/data/' + filename;
+                    fs.writeFileSync(dest, JSON.stringify(content, null, 2));
+                    console.log('✅ Archived stock data file:', filename);
+                  });
+                }
+              } catch(e) {
+                console.log('⚠️ Stock P&L bundle parse skipped:', e.message);
+              }
+            }
+          "
+
       - name: Commit and Push Archived Logs to GitHub
         run: |
           git config user.name "github-actions[bot]"
