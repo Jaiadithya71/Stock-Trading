@@ -503,8 +503,79 @@ const StockIntradayWidget = {
     this.renderWatchlist(this.activeStocks);
   },
   selectStock(symbol) {
-    this.selectedSymbol = symbol;
+    if (!symbol) return;
+    const clean = symbol.replace('-EQ', '').trim().toUpperCase();
+    this.selectedSymbol = clean;
+
+    // 1. Update Left Stock Intel, Center Pro Chart & Top Header
     this.updateActiveStockView();
+
+    // 2. Right Side Watchlist: Ensure the selected stock is visible and highlighted
+    const stockInUniverse = (this.activeStocks || []).find(s => s.symbol.replace('-EQ', '').toUpperCase() === clean);
+    if (stockInUniverse) {
+      // If a sector filter is active that hides this stock, reset to ALL so it appears
+      if (this.selectedSector && this.selectedSector !== 'ALL' && stockInUniverse.sector !== this.selectedSector) {
+        this.selectedSector = 'ALL';
+        const chips = document.querySelectorAll('.sector-chip');
+        chips.forEach(c => {
+          if (c.textContent.trim().startsWith('All')) {
+            c.classList.add('active');
+            c.style.background = '#2962ff';
+            c.style.color = '#fff';
+            c.style.border = 'none';
+          } else {
+            c.classList.remove('active');
+            c.style.background = 'transparent';
+            c.style.color = '#8896a8';
+            c.style.border = '1px solid #2a2e39';
+          }
+        });
+      }
+      // If a search query is active that filters out this stock, clear it
+      if (this.searchQuery && !clean.includes(this.searchQuery.toUpperCase())) {
+        this.searchQuery = '';
+        const searchInput = document.getElementById('tvSearchInput');
+        if (searchInput) searchInput.value = '';
+      }
+    }
+
+    // Re-render watchlist so the selected stock receives active styling
+    this.renderWatchlist(this.activeStocks || []);
+
+    // Smoothly scroll the selected row into view in the watchlist container
+    setTimeout(() => {
+      const row = document.getElementById(`tvWatchlistRow_${clean}`);
+      if (row) {
+        row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }, 60);
+
+    // 3. Highlight the corresponding row in Active Positions blotter
+    this.highlightActivePositionRow(clean);
+
+    // 4. Smoothly scroll view to main trading terminal if user is scrolled down
+    const mainTerminal = document.querySelector('.tv-terminal-main-grid') || document.getElementById('tvChartContainer');
+    if (mainTerminal) {
+      const rect = mainTerminal.getBoundingClientRect();
+      if (rect.top < 0 || rect.top > 250) {
+        mainTerminal.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      }
+    }
+  },
+
+  highlightActivePositionRow(clean) {
+    const tbody = document.getElementById('tvPositionsTbody');
+    if (!tbody) return;
+    const rows = tbody.querySelectorAll('tr');
+    rows.forEach(r => {
+      if (r.id === `tvPosRow_${clean}`) {
+        r.style.background = 'rgba(41, 98, 255, 0.18)';
+        r.style.borderLeft = '3px solid #2962ff';
+      } else {
+        r.style.background = 'transparent';
+        r.style.borderLeft = '3px solid transparent';
+      }
+    });
   },
 
   switchBottomTab(tab) {
@@ -649,7 +720,8 @@ const StockIntradayWidget = {
 
   updateActiveStockView() {
     if (!this.activeStocks || this.activeStocks.length === 0) return;
-    const stock = this.activeStocks.find(s => s.symbol === this.selectedSymbol) || this.activeStocks[0];
+    const cleanTarget = (this.selectedSymbol || '').replace('-EQ', '').trim().toUpperCase();
+    const stock = this.activeStocks.find(s => s.symbol.replace('-EQ', '').trim().toUpperCase() === cleanTarget) || this.activeStocks[0];
     if (!stock) return;
 
     this.selectedSymbol = stock.symbol;
@@ -796,7 +868,9 @@ const StockIntradayWidget = {
     if (countEl) countEl.textContent = `${filtered.length} of ${stocks.length} Stocks`;
 
     container.innerHTML = filtered.map(s => {
-      const isSelected = s.symbol === this.selectedSymbol;
+      const sClean = s.symbol.replace('-EQ', '').trim().toUpperCase();
+      const currentSelected = (this.selectedSymbol || '').replace('-EQ', '').trim().toUpperCase();
+      const isSelected = sClean === currentSelected;
       const isUp = (s.pChange || 0) >= 0;
       const isBuy = s.signal === 'BUY_LONG';
       const isSell = s.signal === 'SELL_SHORT';
@@ -806,11 +880,13 @@ const StockIntradayWidget = {
       const atrVal = s.atr ? s.atr.toFixed(1) : (s.ltp * 0.012).toFixed(1);
 
       return `
-        <div class="tv-watchlist-row" onclick="StockIntradayWidget.selectStock('${s.symbol}')" style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; background: ${isSelected ? '#202634' : 'transparent'}; border-left: ${isSelected ? '3px solid #2962ff' : '3px solid transparent'}; transition: background 0.15s;">
+        <div id="tvWatchlistRow_${sClean}" class="tv-watchlist-row" onclick="StockIntradayWidget.selectStock('${s.symbol}')" style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; background: ${isSelected ? '#1e2438' : 'transparent'}; border-left: ${isSelected ? '3px solid #2962ff' : '3px solid transparent'}; transition: background 0.15s;">
           <!-- Row 1: Symbol, Sector, LTP, % Chg -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
             <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="font-size: 12.5px; font-weight: 700; color: ${isSelected ? '#fff' : '#e1e4ea'};">${s.symbol}</span>
+              <span style="font-size: 12.5px; font-weight: 700; color: ${isSelected ? '#2962ff' : '#e1e4ea'};">
+                ${isSelected ? '🔹 ' : ''}${s.symbol}
+              </span>
               <span style="font-size: 9px; padding: 1px 4px; border-radius: 2px; background: rgba(255,255,255,0.06); color: #8896a8;">${s.sector || 'Eq'}</span>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
@@ -1181,15 +1257,28 @@ const StockIntradayWidget = {
     }
 
     tbody.innerHTML = positions.map(pos => {
+      const cleanSym = (pos.symbol || '').replace('-EQ', '').trim().toUpperCase();
+      const currentSelected = (this.selectedSymbol || '').replace('-EQ', '').trim().toUpperCase();
+      const isSelected = cleanSym === currentSelected;
       const isProfitable = (pos.unrealizedPnL || 0) >= 0;
       const pnlColor = isProfitable ? '#00d084' : '#ff4757';
       const trailingBadge = pos.trailingStatus 
         ? `<span style="display: block; font-size: 9.5px; font-weight: 700; color: #00d084;">🛡️ ${pos.trailingStatus.replace(/_/g, ' ')}</span>`
         : '';
 
+      const rowBg = isSelected ? 'rgba(41, 98, 255, 0.18)' : 'transparent';
+      const rowBorder = isSelected ? '3px solid #2962ff' : '3px solid transparent';
+
       return `
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
-          <td style="padding: 8px; font-weight: 700; color: #fff;">${pos.symbol}</td>
+        <tr id="tvPosRow_${cleanSym}" onclick="StockIntradayWidget.selectStock('${cleanSym}')" 
+          style="border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; background: ${rowBg}; border-left: ${rowBorder}; transition: background 0.15s;"
+          title="Click to view ${cleanSym} chart & intel in main trading terminal">
+          <td style="padding: 8px; font-weight: 700; color: #fff;">
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+              <span style="font-size: 11px;">${isSelected ? '🔹' : '📈'}</span>
+              <span style="color: ${isSelected ? '#2962ff' : '#fff'}; font-weight: 800; text-decoration: underline; text-underline-offset: 2px;">${pos.symbol}</span>
+            </span>
+          </td>
           <td style="padding: 8px; font-weight: 700; color: ${pos.action === 'BUY' ? '#00d084' : '#ff4757'};">${pos.action}</td>
           <td style="padding: 8px; font-family: monospace;">${pos.quantity}</td>
           <td style="padding: 8px; font-family: monospace;">₹${pos.entryPrice.toFixed(2)}</td>
@@ -1202,7 +1291,11 @@ const StockIntradayWidget = {
           <td style="padding: 8px; font-weight: 700; color: ${pnlColor}; font-family: monospace;">
             ${isProfitable ? '+' : ''}₹${(pos.unrealizedPnL || 0).toFixed(2)} (${(pos.unrealizedPnLPct || 0) >= 0 ? '+' : ''}${(pos.unrealizedPnLPct || 0).toFixed(2)}%)
           </td>
-          <td style="padding: 8px;"><button onclick="StockIntradayWidget.closePosition('${pos.id}', ${pos.currentPrice || pos.entryPrice})" style="padding: 3px 8px; background: transparent; border: 1px solid #ff4757; color: #ff4757; border-radius: 4px; font-size: 10.5px; cursor: pointer;">Exit</button></td>
+          <td style="padding: 8px;">
+            <button onclick="event.stopPropagation(); StockIntradayWidget.closePosition('${pos.id}', ${pos.currentPrice || pos.entryPrice})" 
+              style="padding: 3px 8px; background: transparent; border: 1px solid #ff4757; color: #ff4757; border-radius: 4px; font-size: 10.5px; cursor: pointer; transition: background 0.15s;"
+              onmouseenter="this.style.background='rgba(255,71,87,0.2)'" onmouseleave="this.style.background='transparent'">Exit</button>
+          </td>
         </tr>
       `;
     }).join('');
@@ -1285,11 +1378,23 @@ const StockIntradayWidget = {
       
       const rawReason = t.exitReason || (t.rationale?.includes('Automated Exit:') ? t.rationale.replace('Automated Exit: ', '') : (t.pnl >= 0 ? 'TARGET_HIT' : 'STOP_LOSS_HIT'));
       const cleanReason = rawReason.replace(/_/g, ' ');
+      const cleanSym = (t.symbol || '').replace('-EQ', '').trim().toUpperCase();
+      const currentSelected = (this.selectedSymbol || '').replace('-EQ', '').trim().toUpperCase();
+      const isSelected = cleanSym === currentSelected;
+      const rowBg = isSelected ? 'rgba(41, 98, 255, 0.15)' : 'transparent';
+      const rowBorder = isSelected ? '3px solid #2962ff' : '3px solid transparent';
 
       return `
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+        <tr onclick="StockIntradayWidget.selectStock('${cleanSym}')" 
+          style="border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; background: ${rowBg}; border-left: ${rowBorder}; transition: background 0.15s;"
+          title="Click to view ${cleanSym} chart & intel in main trading terminal">
           <td style="padding: 8px; color: #8896a8; font-family: monospace;">${timeStr}</td>
-          <td style="padding: 8px; font-weight: 700; color: #fff;">${t.symbol}</td>
+          <td style="padding: 8px; font-weight: 700; color: #fff;">
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+              <span style="font-size: 11px;">${isSelected ? '🔹' : '📈'}</span>
+              <span style="color: ${isSelected ? '#2962ff' : '#fff'}; font-weight: 800; text-decoration: underline; text-underline-offset: 2px;">${t.symbol}</span>
+            </span>
+          </td>
           <td style="padding: 8px; font-weight: 700; color: ${isBuy ? '#00d084' : '#ff4757'};">${side}</td>
           <td style="padding: 8px; font-family: monospace;">${t.quantity}</td>
           <td style="padding: 8px; font-family: monospace;">₹${t.entryPrice ? t.entryPrice.toFixed(2) : '-'}</td>
