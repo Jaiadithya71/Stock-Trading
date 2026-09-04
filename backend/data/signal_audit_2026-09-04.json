@@ -1,0 +1,16 @@
+[
+  {
+    "timestamp": "2026-09-04T04:28:02.687Z",
+    "timeIST": "09:58:02 am",
+    "spotPrice": 57407.05,
+    "atmStrike": 57400,
+    "rawPcr": 0.95,
+    "pcrZScore": 1,
+    "advancingWeight": 0,
+    "decliningWeight": 85,
+    "signal": "BUY_PUT_PE",
+    "confidenceScore": "88%",
+    "signalTitle": "🔻 HIGH CONFLUENCE PUT (PE) WATERFALL BREAKDOWN",
+    "signalRationale": "Bearish Momentum plunge + Heavy Declining Breadth (85% declining) + Below CPR Pivot."
+  }
+]
