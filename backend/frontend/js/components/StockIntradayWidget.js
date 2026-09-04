@@ -33,8 +33,11 @@ const StockIntradayWidget = {
             <span id="tvDataSourceTag" style="font-size: 10px; padding: 2px 6px; border-radius: 3px; background: #000; font-family: monospace; color: #eab308; border: 1px solid rgba(234,179,8,0.3);">
               FEED: SIMULATED
             </span>
+            <button onclick="window.open('/api/stocks/export-trades-csv', '_blank')" style="padding: 3px 8px; font-size: 10.5px; background: rgba(0, 208, 132, 0.15); border: 1px solid rgba(0, 208, 132, 0.3); color: #00d084; border-radius: 4px; cursor: pointer;">
+              📥 Export Trades (CSV)
+            </button>
             <button onclick="window.open('/api/stocks/download-pnl-data', '_blank')" style="padding: 3px 8px; font-size: 10.5px; background: rgba(255,255,255,0.08); border: 1px solid #2a2e39; color: #fff; border-radius: 4px; cursor: pointer;">
-              📥 Export P&L Data
+              📥 Export P&L Bundle
             </button>
           </div>
         </div>

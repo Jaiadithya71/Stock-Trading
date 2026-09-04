@@ -107,4 +107,61 @@ router.get('/download-pnl-data', (req, res) => {
   }
 });
 
+// Export completed stock trades to CSV
+router.get('/export-trades-csv', (req, res) => {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const dataDir = path.join(__dirname, '../data');
+    
+    // Gather trades from paper_portfolio_state and daily archives
+    let allTrades = [];
+    
+    // 1. Check current state
+    const stateFile = path.join(dataDir, 'paper_portfolio_state.json');
+    if (fs.existsSync(stateFile)) {
+      try {
+        const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+        if (state.tradeHistory) allTrades.push(...state.tradeHistory);
+      } catch (e) {}
+    }
+
+    // 2. Check archives
+    const archiveFiles = fs.readdirSync(dataDir).filter(f => f.startsWith('daily_pnl_archive_') || f.startsWith('paper_archive_'));
+    archiveFiles.forEach(f => {
+      try {
+        const content = JSON.parse(fs.readFileSync(path.join(dataDir, f), 'utf8'));
+        const list = content.trades || content.tradeHistory || [];
+        allTrades.push(...list);
+      } catch (e) {}
+    });
+
+    // Deduplicate by ID
+    const seen = new Set();
+    allTrades = allTrades.filter(t => {
+      if (!t.id || seen.has(t.id)) return false;
+      seen.add(t.id);
+      return true;
+    });
+
+    let csv = 'Timestamp (IST),Order ID,Symbol,Side,Quantity,Entry Price,Target Price,Stop Loss,Exit Price,Realized P&L,Return %,Exit Reason,Rationale\n';
+    allTrades.forEach(t => {
+      const rawTime = t.exitTimestamp || t.timestamp || t.entryTimestamp;
+      const istTime = rawTime ? new Date(rawTime).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '-';
+      const side = t.action || t.side || 'BUY';
+      const pnlPct = t.pnlPct !== undefined ? t.pnlPct : (t.entryPrice && t.exitPrice ? (((t.exitPrice - t.entryPrice) / t.entryPrice) * (side === 'SELL' ? -100 : 100)).toFixed(2) : 0);
+      const reason = (t.exitReason || '-').replace(/"/g, '""');
+      const rationale = (t.rationale || '').replace(/"/g, '""');
+
+      csv += `"${istTime}","${t.id || ''}","${t.symbol || ''}","${side}",${t.quantity || 0},${t.entryPrice || 0},${t.target || ''},${t.stopLoss || ''},${t.exitPrice || ''},${t.pnl || 0},"${pnlPct}%","${reason}","${rationale}"\n`;
+    });
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="stocks_trades_audit_${new Date().toISOString().split('T')[0]}.csv"`);
+    res.send(csv);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 module.exports = router;
