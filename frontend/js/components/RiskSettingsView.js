@@ -54,6 +54,12 @@ const RiskSettingsView = {
             </div>
 
             <div class="form-group">
+              <label>Daily Max Trades Cap (0 = Unlimited)</label>
+              <input type="number" id="setting-maxtrades" value="10" min="0" max="50">
+              <span class="form-hint">Set to 0 for unlimited trades, or cap max trades per day (Default: 10)</span>
+            </div>
+
+            <div class="form-group">
               <label>Trailing Stop Loss % per Trade</label>
               <input type="number" id="setting-sl" value="15" step="1" min="5" max="30">
               <span class="form-hint">Default: -15% hard stop loss</span>
@@ -96,6 +102,24 @@ const RiskSettingsView = {
         </div>
       </div>
     `;
+
+    this.loadSettings();
+  },
+
+  async loadSettings() {
+    try {
+      const res = await fetch('/api/quant/settings');
+      if (res.ok) {
+        const data = await res.json();
+        const s = data.settings || data;
+        if (s) {
+          if (s.capital && document.getElementById('setting-capital')) document.getElementById('setting-capital').value = s.capital;
+          if (s.lots && document.getElementById('setting-lots')) document.getElementById('setting-lots').value = s.lots;
+          if (s.maxLoss && document.getElementById('setting-maxloss')) document.getElementById('setting-maxloss').value = s.maxLoss;
+          if (s.maxDailyTrades !== undefined && document.getElementById('setting-maxtrades')) document.getElementById('setting-maxtrades').value = s.maxDailyTrades;
+        }
+      }
+    } catch (e) {}
   },
 
   async saveSettings() {
@@ -103,18 +127,25 @@ const RiskSettingsView = {
       const capital = document.getElementById('setting-capital')?.value || 1000;
       const lots = document.getElementById('setting-lots')?.value || 1;
       const maxLoss = document.getElementById('setting-maxloss')?.value || 5000;
+      const maxDailyTrades = parseInt(document.getElementById('setting-maxtrades')?.value, 10);
 
       const res = await fetch('/api/quant/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ capital, lots, maxLoss })
+        body: JSON.stringify({ 
+          capital, 
+          lots, 
+          maxLoss, 
+          maxDailyTrades: isNaN(maxDailyTrades) ? 10 : maxDailyTrades 
+        })
       });
       const data = await res.json();
 
+      const tradesMsg = maxDailyTrades === 0 ? 'Unlimited trades' : `${maxDailyTrades} max trades/day`;
       if (typeof ToastNotification !== 'undefined') {
-        ToastNotification.show(`✅ Risk Settings Saved: ₹${capital} Initial Capital per Trade allocated.`, 'success');
+        ToastNotification.show(`✅ Risk Settings Saved: Max Loss ₹${maxLoss}, ${tradesMsg}.`, 'success');
       } else {
-        alert(`✅ Risk Settings Saved: ₹${capital} Initial Capital per Trade allocated.`);
+        alert(`✅ Risk Settings Saved: Max Loss ₹${maxLoss}, ${tradesMsg}.`);
       }
     } catch (e) {
       if (typeof ToastNotification !== 'undefined') {

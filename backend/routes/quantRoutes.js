@@ -174,8 +174,10 @@ router.post('/paper/trade', async (req, res) => {
     const omsAdapter = omsFactory.getAdapter();
     const tradeResult = await omsAdapter.executeOrder(orderParams);
     
-    // Trigger 15-minute cooldown & increment daily trade counter in SignalEngine
-    signalEngine.recordTradeExecuted();
+    // Trigger 15-minute cooldown & increment daily trade counter in SignalEngine ONLY for F&O Options
+    if (orderParams.optionType || (orderParams.symbol && orderParams.symbol.toUpperCase().includes('BANKNIFTY'))) {
+      signalEngine.recordTradeExecuted();
+    }
 
     weeklyAuditLogger.logTradeEvent({
       id: tradeResult.orderId || tradeResult.id || `PAPER-${Date.now()}`,
@@ -258,6 +260,7 @@ router.post('/paper/reset', async (req, res) => {
     const paperTradingInstance = new PaperTradingService();
     const archive = paperTradingInstance.resetCapital(100000);
     weeklyAuditLogger.resetLog();
+    signalEngine.resetCounter();
     res.json({
       success: true,
       message: 'Virtual capital successfully refilled to ₹1,00,000. Prior session permanently archived on disk.',
@@ -362,6 +365,19 @@ router.get('/paper/weekly-audit', async (req, res) => {
       success: true,
       data: log
     });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * GET /api/quant/settings
+ * Returns current persisted risk settings
+ */
+router.get('/quant/settings', async (req, res) => {
+  try {
+    const settings = getPersistedSettings();
+    res.json({ success: true, settings });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

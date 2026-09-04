@@ -43,6 +43,23 @@ class SignalEngine {
         }
     }
 
+    getRiskSettings() {
+        try {
+            const settingsFile = path.join(__dirname, '../data/risk_settings.json');
+            if (fs.existsSync(settingsFile)) {
+                return JSON.parse(fs.readFileSync(settingsFile, 'utf8'));
+            }
+        } catch (e) {}
+        return { capital: 100000, lots: 1, maxLoss: 5000, maxDailyTrades: 10 };
+    }
+
+    resetCounter() {
+        this.tradesTodayCount = 0;
+        this.lastTradeTimestamp = null;
+        this.recentSpotHistory = [];
+        console.log('🔄 [SignalEngine] Daily trade counter reset to 0.');
+    }
+
     resetDailyCounterIfNeeded() {
         const today = new Date().toISOString().split('T')[0];
         if (this.lastTradeDate !== today) {
@@ -57,7 +74,9 @@ class SignalEngine {
         this.resetDailyCounterIfNeeded();
         this.lastTradeTimestamp = Date.now();
         this.tradesTodayCount++;
-        console.log(`⏱️ [SignalEngine] Trade recorded. Today Count: ${this.tradesTodayCount}/5, Timestamp: ${new Date(this.lastTradeTimestamp).toLocaleTimeString('en-IN')}`);
+        const settings = this.getRiskSettings();
+        const maxTrades = settings.maxDailyTrades !== undefined ? parseInt(settings.maxDailyTrades, 10) : 10;
+        console.log(`⏱️ [SignalEngine] Trade recorded. Today Count: ${this.tradesTodayCount}/${maxTrades || '∞'}, Timestamp: ${new Date(this.lastTradeTimestamp).toLocaleTimeString('en-IN')}`);
     }
 
     evaluateSignal(marketData = {}, pcrSnapshots = [], bankStocks = [], userCapital = 100000) {
@@ -91,16 +110,19 @@ class SignalEngine {
         // Dynamic At-The-Money (ATM) Option Strike Calculation
         const atmStrike = Math.round(spotPrice / 100) * 100;
 
-        // CHECK 1: Max Trades Per Day Cap (Max 5 Trades / Day)
-        if (this.tradesTodayCount >= 5) {
+        // CHECK 1: Max Trades Per Day Cap (Configurable via Risk Settings; 0 = Unlimited)
+        const settings = this.getRiskSettings();
+        const maxTrades = settings.maxDailyTrades !== undefined ? parseInt(settings.maxDailyTrades, 10) : 10;
+
+        if (maxTrades > 0 && this.tradesTodayCount >= maxTrades) {
             return Object.freeze({
                 signal: 'NEUTRAL_HOLD',
                 underlyingPrice: spotPrice,
                 atmStrike,
                 targetOptionPrice: estimatedPremium,
                 confidenceScore: '100%',
-                signalTitle: '🔒 DAILY MAX TRADES CAP REACHED (5/5)',
-                signalRationale: 'Daily trade limit of 5 trades reached. Capital protected against market over-trading.',
+                signalTitle: `🔒 DAILY MAX TRADES CAP REACHED (${this.tradesTodayCount}/${maxTrades})`,
+                signalRationale: `Daily trade limit of ${maxTrades} trades reached. Capital protected against market over-trading. Adjust in Risk Settings if desired.`,
                 targetContract: `BANKNIFTY ${atmStrike} CE`,
                 pcrMetrics,
                 techLevels,

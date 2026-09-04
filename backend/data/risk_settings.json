@@ -1,5 +1,6 @@
 {
   "capital": 1000,
   "lots": 1,
-  "maxLoss": 5000
+  "maxLoss": 5000,
+  "maxDailyTrades": 10
 }
