@@ -286,15 +286,26 @@ router.post('/paper/restore-state', async (req, res) => {
     paperTrading.loadPersistedState();
 
     if (positions && positions.length > 0) {
-      paperTrading.positions = positions;
+      if (paperTrading.positions.length === 0) {
+        paperTrading.positions = positions;
+      } else {
+        // Merge missing positions by ID without clobbering existing server positions
+        const existingIds = new Set(paperTrading.positions.map(p => p.id));
+        for (const p of positions) {
+          if (!existingIds.has(p.id)) {
+            paperTrading.positions.push(p);
+            existingIds.add(p.id);
+          }
+        }
+      }
     }
-    if (currentBalance !== undefined) {
+    if (currentBalance !== undefined && paperTrading.positions.length === 0) {
       paperTrading.currentBalance = parseFloat(currentBalance);
     }
     if (initialCapital !== undefined) {
       paperTrading.initialCapital = parseFloat(initialCapital);
     }
-    if (Array.isArray(tradeHistory) && tradeHistory.length > 0) {
+    if (Array.isArray(tradeHistory) && tradeHistory.length > 0 && paperTrading.tradeHistory.length === 0) {
       paperTrading.tradeHistory = tradeHistory;
     }
     paperTrading.savePersistedState();
