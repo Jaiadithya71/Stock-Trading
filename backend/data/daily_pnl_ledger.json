@@ -1,9 +1,10 @@
 [
   {
-    "date": "2026-09-03",
-    "netRealizedPnL": 0,
+    "date": "2026-09-04 (Phase 1 Baseline)",
+    "netRealizedPnL": -10989.3,
     "winRatePct": 0,
-    "totalTrades": 0,
-    "endingBalance": 100000
+    "totalTrades": 11,
+    "endingBalance": 63946.97,
+    "note": "Pre-ATR Baseline (Fixed tight stops choked in noise)"
   }
 ]

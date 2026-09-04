@@ -78,6 +78,9 @@ const StockIntradayWidget = {
             <button onclick="StockIntradayWidget.triggerEODSettlement()" style="padding: 6px 12px; font-size: 11px; font-weight: 700; border-radius: 6px; border: 1px solid #3b82f6; background: rgba(59, 130, 246, 0.15); color: #3b82f6; cursor: pointer;">
               💾 Archive EOD P&L
             </button>
+            <button onclick="StockIntradayWidget.resetVirtualCapital()" style="padding: 6px 12px; font-size: 11px; font-weight: 700; border-radius: 6px; border: 1px solid #00d084; background: rgba(0, 208, 132, 0.15); color: #00d084; cursor: pointer;">
+              🔄 Refill Capital (₹1L)
+            </button>
           </div>
 
         </div>
@@ -413,6 +416,21 @@ const StockIntradayWidget = {
         this.fetchDailyLedger();
       }
     } catch (e) { alert(e.message); }
+  },
+
+  async resetVirtualCapital() {
+    if (!confirm('Refill virtual capital back to ₹1,00,000?\n\nYour prior 11 trades and loss record will be permanently archived on disk for strategy comparison.')) return;
+    try {
+      const res = await fetch('/api/paper/reset', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        alert(`✅ Capital Refilled Successfully!\n\nVirtual Balance: ₹1,00,000.00\nPrior Session: ${data.archive?.totalTrades || 0} trades permanently archived.`);
+        this.fetchData();
+        this.fetchDailyLedger();
+      }
+    } catch (e) {
+      alert('Reset failed: ' + e.message);
+    }
   },
 
     updateMarketBanner(data) {

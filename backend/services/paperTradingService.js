@@ -298,6 +298,37 @@ class PaperTradingService {
       tradeHistory: this.tradeHistory.slice(0, 50)
     };
   }
+
+  resetCapital(amount = 100000) {
+    const timestamp = new Date().toISOString();
+    const dateStr = timestamp.split('T')[0];
+    const dataDir = path.dirname(PAPER_STATE_FILE);
+    const archivePath = path.join(dataDir, `paper_archive_${dateStr}_${Date.now()}.json`);
+
+    const archiveData = {
+      archiveTimestamp: timestamp,
+      previousBalance: this.currentBalance,
+      netRealizedPnL: this.tradeHistory.reduce((sum, t) => sum + (t.pnl || 0), 0),
+      totalTrades: this.tradeHistory.length,
+      positionsClosed: this.positions,
+      tradeHistory: this.tradeHistory
+    };
+
+    try {
+      fs.writeFileSync(archivePath, JSON.stringify(archiveData, null, 2), 'utf8');
+      console.log(`💾 [PaperTrading] Prior trading session safely archived to: ${archivePath}`);
+    } catch (e) {
+      console.warn('⚠️ Could not save paper archive file:', e.message);
+    }
+
+    this.initialCapital = amount;
+    this.currentBalance = amount;
+    this.positions = [];
+    this.tradeHistory = [];
+    this.savePersistedState();
+
+    return archiveData;
+  }
 }
 
 module.exports = PaperTradingService;

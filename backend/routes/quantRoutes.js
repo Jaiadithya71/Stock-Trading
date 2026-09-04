@@ -249,6 +249,26 @@ router.post('/oms/mode', async (req, res) => {
 });
 
 /**
+ * POST /api/paper/reset
+ * Resets virtual capital back to 100,000, archives previous trades into historical archive file
+ */
+router.post('/paper/reset', async (req, res) => {
+  try {
+    const PaperTradingService = require('../services/paperTradingService');
+    const paperTradingInstance = new PaperTradingService();
+    const archive = paperTradingInstance.resetCapital(100000);
+    weeklyAuditLogger.resetLog();
+    res.json({
+      success: true,
+      message: 'Virtual capital successfully refilled to ₹1,00,000. Prior session permanently archived on disk.',
+      archive
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+/**
  * GET /api/paper/summary
  * Returns portfolio summary from Layer 4 OMSAdapter merged with Weekly Audit Logger
  */
@@ -259,7 +279,7 @@ router.get('/paper/summary', async (req, res) => {
     const auditLog = weeklyAuditLogger.loadLog();
     const auditSummary = auditLog.weeklySummary || {};
 
-    const closedTrades = (summary.tradeHistory && summary.tradeHistory.length > 0)
+    const closedTrades = Array.isArray(summary.tradeHistory)
       ? summary.tradeHistory
       : (auditLog.trades || []).filter(t => t.status === 'CLOSED');
 

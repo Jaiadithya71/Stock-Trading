@@ -62,6 +62,35 @@ class WeeklyAuditLogger {
     }
   }
 
+  resetLog() {
+    try {
+      const now = new Date();
+      const archivePath = path.join(path.dirname(LOG_FILE_PATH), `weekly_simulation_archive_${now.toISOString().split('T')[0]}_${Date.now()}.json`);
+      if (fs.existsSync(LOG_FILE_PATH)) {
+        fs.copyFileSync(LOG_FILE_PATH, archivePath);
+        console.log(`💾 [WeeklyAuditLogger] Prior weekly log archived to: ${archivePath}`);
+      }
+      const initialData = {
+        createdTimestamp: now.toISOString(),
+        weeklySummary: {
+          totalSignalsGenerated: 0,
+          totalTradesExecuted: 0,
+          winningTrades: 0,
+          losingTrades: 0,
+          winRatePct: 0,
+          netRealizedPnL: 0.0,
+          maxDrawdownPct: 0.0
+        },
+        dailyLogs: {},
+        trades: []
+      };
+      this.saveLog(initialData);
+      return initialData;
+    } catch (e) {
+      console.warn('Could not reset weekly simulation log:', e.message);
+    }
+  }
+
   logTradeEvent(event) {
     const logData = this.loadLog();
     const now = new Date();
