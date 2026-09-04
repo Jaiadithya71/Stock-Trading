@@ -144,8 +144,11 @@ class EmailNotificationService {
     const swingHoldings = openPositions.filter(p => p.holdingType === 'SWING_POSITIONAL');
     const intradayRemaining = openPositions.filter(p => p.holdingType !== 'SWING_POSITIONAL');
     const totalUnrealizedPnL = parseFloat(openPositions.reduce((sum, p) => sum + (p.unrealizedPnL || 0), 0).toFixed(2));
+    // Active session trades vs pre-refill archived trades breakdown
+    const activeClosed = portfolio.tradeHistory || [];
+    const activeSessionPnL = parseFloat(activeClosed.reduce((sum, t) => sum + (t.pnl || 0), 0).toFixed(2));
+    const archivedSessionPnL = parseFloat((netRealizedPnL - activeSessionPnL).toFixed(2));
     const totalDayNetPnL = parseFloat((netRealizedPnL + totalUnrealizedPnL).toFixed(2));
-
     const totalEquity = parseFloat((portfolio.currentBalance + portfolio.totalMarginUsed + totalUnrealizedPnL).toFixed(2));
 
     return {
@@ -155,6 +158,9 @@ class EmailNotificationService {
         netRealizedPnL,
         totalUnrealizedPnL,
         totalDayNetPnL,
+        activeSessionPnL,
+        archivedSessionPnL,
+        postRefillCapital: portfolio.initialCapital || 100000,
         totalTrades: allClosedToday.length,
         winningTrades: wins.length,
         losingTrades: losses.length,
@@ -253,7 +259,7 @@ class EmailNotificationService {
         <div style="background: #1e2433; padding: 16px; border-radius: 8px; border: 1px solid #2a3142;">
           <div style="font-size: 11px; color: #8892b0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Net Total Day P&L</div>
           <div style="font-size: 24px; font-weight: bold; color: ${pnlColor};">${pnlSign}₹${data.summary.totalDayNetPnL.toLocaleString('en-IN')}</div>
-          <div style="font-size: 11px; color: #718096; margin-top: 4px;">Realized: ₹${data.summary.netRealizedPnL} | Unrealized: ₹${data.summary.totalUnrealizedPnL}</div>
+          <div style="font-size: 11px; color: #718096; margin-top: 4px;">Active Session: ₹${data.summary.activeSessionPnL} | Pre-Refill: ₹${data.summary.archivedSessionPnL}</div>
         </div>
 
         <div style="background: #1e2433; padding: 16px; border-radius: 8px; border: 1px solid #2a3142;">
@@ -265,7 +271,7 @@ class EmailNotificationService {
         <div style="background: #1e2433; padding: 16px; border-radius: 8px; border: 1px solid #2a3142;">
           <div style="font-size: 11px; color: #8892b0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Total Portfolio Equity</div>
           <div style="font-size: 24px; font-weight: bold; color: #38bdf8;">₹${data.summary.totalEquity.toLocaleString('en-IN')}</div>
-          <div style="font-size: 11px; color: #718096; margin-top: 4px;">Cash: ₹${data.summary.endingCashBalance.toLocaleString('en-IN')}</div>
+          <div style="font-size: 11px; color: #718096; margin-top: 4px;">Cash Balance: ₹${data.summary.endingCashBalance.toLocaleString('en-IN')} (Refill ₹1,00,000)</div>
         </div>
 
         <div style="background: #1e2433; padding: 16px; border-radius: 8px; border: 1px solid #2a3142;">
