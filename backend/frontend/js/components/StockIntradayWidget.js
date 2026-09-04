@@ -429,7 +429,23 @@ const StockIntradayWidget = {
           </div>
 
           <!-- TAB: CLOSED TRADES HISTORY -->
-          <div id="tabContentTrades" style="display: none; padding: 14px; max-height: 200px; overflow-y: auto;">
+          <div id="tabContentTrades" style="display: none; padding: 14px; max-height: 250px; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(255,255,255,0.02); padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px; color: #8896a8; font-weight: 600;">Session:</span>
+                <button id="btnViewCurrentTrades" onclick="StockIntradayWidget.toggleTradesView('current')" 
+                  style="padding: 3px 10px; font-size: 11px; font-weight: 700; border-radius: 4px; border: 1px solid #2962ff; background: #2962ff; color: #fff; cursor: pointer;">
+                  ⚡ Active Session (<span id="tvCurrentTradesBadge">0</span>)
+                </button>
+                <button id="btnViewArchivedTrades" onclick="StockIntradayWidget.toggleTradesView('archived')" 
+                  style="padding: 3px 10px; font-size: 11px; font-weight: 700; border-radius: 4px; border: 1px solid #2a2e39; background: transparent; color: #8896a8; cursor: pointer;">
+                  📁 Archived Session Trades
+                </button>
+              </div>
+              <div style="font-size: 10.5px; color: #8896a8;">
+                💡 Hover any row for strategy rationale & timing details
+              </div>
+            </div>
             <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; text-align: left;">
               <thead>
                 <tr style="color: #8896a8; border-bottom: 1px solid #2a2e39;">
@@ -1587,18 +1603,58 @@ const StockIntradayWidget = {
     elMarginSub.textContent = `Blocked: ₹${margin.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} | Total Equity: ₹${totalEquity.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   },
 
-  renderClosedTrades(trades) {
+  async toggleTradesView(mode) {
+    this._tradesViewMode = mode;
+    const btnCur = document.getElementById('btnViewCurrentTrades');
+    const btnArc = document.getElementById('btnViewArchivedTrades');
+
+    if (mode === 'archived') {
+      if (btnCur) { btnCur.style.background = 'transparent'; btnCur.style.color = '#8896a8'; btnCur.style.borderColor = '#2a2e39'; }
+      if (btnArc) { btnArc.style.background = '#2962ff'; btnArc.style.color = '#fff'; btnArc.style.borderColor = '#2962ff'; }
+      try {
+        const res = await fetch('/api/paper/archived-trades');
+        const json = await res.json();
+        const archivedTrades = json.data || [];
+        this.renderClosedTrades(archivedTrades, true);
+      } catch (e) {}
+    } else {
+      if (btnCur) { btnCur.style.background = '#2962ff'; btnCur.style.color = '#fff'; btnCur.style.borderColor = '#2962ff'; }
+      if (btnArc) { btnArc.style.background = 'transparent'; btnArc.style.color = '#8896a8'; btnArc.style.borderColor = '#2a2e39'; }
+      this.renderClosedTrades(this._latestSessionTrades || [], false);
+    }
+  },
+
+  renderClosedTrades(trades, isArchive = false) {
+    if (!isArchive) {
+      this._latestSessionTrades = (trades || []).filter(t => t.status !== 'OPEN');
+      const badge = document.getElementById('tvCurrentTradesBadge');
+      if (badge) badge.textContent = this._latestSessionTrades.length;
+      if (this._tradesViewMode === 'archived') {
+        return; // Don't clobber archived view with empty polling data
+      }
+    }
+
     this.lastClosedTrades = (trades || []).filter(t => t.status !== 'OPEN');
     const tbody = document.getElementById('tvTradesTbody');
     const countEl = document.getElementById('tvClosedCount');
     
-    // Strictly filter out any open trades so this table is purely closed history
     const closedTrades = this.lastClosedTrades;
     if (countEl) countEl.textContent = closedTrades.length;
 
     if (!tbody) return;
     if (closedTrades.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 18px; color: #8896a8;">No closed trades yet today.</td></tr>';
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align: center; padding: 24px 16px; color: #8896a8;">
+            <div style="font-size: 13px; font-weight: 600; color: #d1d4dc; margin-bottom: 6px;">⚡ Active Session: 0 Closed Trades</div>
+            <div style="font-size: 11px; margin-bottom: 12px;">All active positions are currently in-flight running towards ATR targets. No trades have exited in this refilled session.</div>
+            <button onclick="StockIntradayWidget.toggleTradesView('archived')" 
+              style="padding: 6px 14px; background: rgba(41, 98, 255, 0.15); border: 1px solid #2962ff; color: #38bdf8; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; transition: background 0.15s;">
+              📁 View 11 Archived Trades from Prior Session
+            </button>
+          </td>
+        </tr>
+      `;
       return;
     }
 

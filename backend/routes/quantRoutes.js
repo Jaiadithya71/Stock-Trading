@@ -337,6 +337,40 @@ router.post('/paper/restore-state', async (req, res) => {
 });
 
 /**
+ * GET /api/paper/archived-trades
+ * Returns archived closed trades from prior reset sessions
+ */
+router.get('/paper/archived-trades', async (req, res) => {
+  try {
+    const dataDir = path.join(__dirname, '../data');
+    if (!fs.existsSync(dataDir)) {
+      return res.json({ success: true, data: [] });
+    }
+    const files = fs.readdirSync(dataDir).filter(f => f.startsWith('paper_archive_') && f.endsWith('.json'));
+    files.sort().reverse();
+    
+    let allArchivedTrades = [];
+    for (const file of files) {
+      try {
+        const raw = fs.readFileSync(path.join(dataDir, file), 'utf8');
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.tradeHistory) && parsed.tradeHistory.length > 0) {
+          allArchivedTrades = parsed.tradeHistory;
+          break;
+        }
+      } catch (e) {}
+    }
+
+    res.json({
+      success: true,
+      data: allArchivedTrades
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
  * GET /api/paper/summary
  * Returns portfolio summary from Layer 4 OMSAdapter merged with Weekly Audit Logger
  */
