@@ -76,6 +76,8 @@ class WeeklyAuditLogger {
       optionType: event.optionType || null,
       strikePrice: event.strikePrice,
       entryPrice: event.entryPrice,
+      stopLoss: event.stopLoss || null,
+      target: event.target || null,
       exitPrice: event.exitPrice || null,
       quantity: event.quantity,
       pnl: event.pnl || 0.0,

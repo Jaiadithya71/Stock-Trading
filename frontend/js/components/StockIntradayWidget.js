@@ -277,13 +277,14 @@ const StockIntradayWidget = {
                   <th style="padding: 6px 8px;">Side</th>
                   <th style="padding: 6px 8px;">Qty</th>
                   <th style="padding: 6px 8px;">Entry Price</th>
+                  <th style="padding: 6px 8px; color: #00d084;">Target Price</th>
                   <th style="padding: 6px 8px;">Exit Price</th>
                   <th style="padding: 6px 8px;">Realized P&L</th>
                   <th style="padding: 6px 8px;">Exit Reason</th>
                 </tr>
               </thead>
               <tbody id="tvTradesTbody">
-                <tr><td colspan="8" style="text-align: center; padding: 18px; color: #8896a8;">No closed trades yet today.</td></tr>
+                <tr><td colspan="9" style="text-align: center; padding: 18px; color: #8896a8;">No closed trades yet today.</td></tr>
               </tbody>
             </table>
           </div>
@@ -772,6 +773,7 @@ const StockIntradayWidget = {
           <td style="padding: 8px; font-weight: 700; color: ${isBuy ? '#00d084' : '#ff4757'};">${side}</td>
           <td style="padding: 8px; font-family: monospace;">${t.quantity}</td>
           <td style="padding: 8px; font-family: monospace;">₹${t.entryPrice ? t.entryPrice.toFixed(2) : '-'}</td>
+          <td style="padding: 8px; font-family: monospace; color: #00d084; font-weight: 600;">₹${t.target ? t.target.toFixed(2) : '-'}</td>
           <td style="padding: 8px; font-family: monospace;">₹${t.exitPrice ? t.exitPrice.toFixed(2) : '-'}</td>
           <td style="padding: 8px; font-weight: 700; font-family: monospace; color: ${pnlColor};">
             ${isProfitable ? '+' : ''}₹${(t.pnl || 0).toFixed(2)} (${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(2)}%)

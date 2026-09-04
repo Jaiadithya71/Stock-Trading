@@ -80,9 +80,13 @@ class StockExecutionEngine {
           symbol: trade.symbol,
           action: trade.action,
           entryPrice: trade.entryPrice,
+          stopLoss: trade.stopLoss,
+          target: trade.target,
           exitPrice: trade.exitPrice,
           quantity: trade.quantity,
           pnl: trade.pnl,
+          pnlPct: trade.pnlPct,
+          exitReason: trade.exitReason,
           status: 'CLOSED',
           rationale: `Automated Exit: ${trade.exitReason}`
         });
@@ -168,6 +172,8 @@ class StockExecutionEngine {
               symbol: sig.symbol,
               action: sig.action,
               entryPrice: paperOrder.entryPrice,
+              stopLoss: sig.stopLoss,
+              target: sig.target,
               exitPrice: null,
               quantity: paperOrder.quantity,
               pnl: 0.0,
