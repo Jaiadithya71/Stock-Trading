@@ -168,13 +168,13 @@ const StockIntradayWidget = {
           <!-- KPI 5: CAPITAL & 5X MARGIN -->
           <div style="background: #171b26; padding: 12px 16px;">
             <div style="font-size: 11px; font-weight: 700; color: #8896a8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
-              Capital & Margin (5x)
+              Available Cash (Free Margin)
             </div>
             <div id="tvKpiBalance" style="font-size: 17px; font-weight: 800; font-family: monospace; color: #fff;">
               ₹1,00,000.00
             </div>
             <div id="tvKpiMarginSub" style="font-size: 10.5px; color: #8896a8; margin-top: 2px;">
-              Margin Used: ₹0.00
+              Margin Blocked: ₹0.00
             </div>
           </div>
 
@@ -1583,7 +1583,8 @@ const StockIntradayWidget = {
 
     // 5. Balance & Margin
     elBalance.textContent = `₹${balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    elMarginSub.textContent = `Margin Used: ₹${margin.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+    const totalEquity = balance + margin + unrealized;
+    elMarginSub.textContent = `Blocked: ₹${margin.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} | Total Equity: ₹${totalEquity.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
   },
 
   renderClosedTrades(trades) {

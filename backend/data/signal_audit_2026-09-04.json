@@ -3666,5 +3666,61 @@
     "confidenceScore": "75%",
     "signalTitle": "🟡 NEUTRAL / HOLD IN CASH",
     "signalRationale": "Price consolidating around ₹57,548.55. Awaiting Fibonacci level bounce or Momentum breakout."
+  },
+  {
+    "timestamp": "2026-09-04T08:57:10.789Z",
+    "timeIST": "02:27:10 pm",
+    "spotPrice": 57491.1,
+    "atmStrike": 57500,
+    "rawPcr": 0.95,
+    "pcrZScore": 1,
+    "advancingWeight": 0,
+    "decliningWeight": 0,
+    "signal": "NEUTRAL_HOLD",
+    "confidenceScore": "75%",
+    "signalTitle": "🟡 NEUTRAL / HOLD IN CASH",
+    "signalRationale": "Price consolidating around ₹57,491.1. Awaiting Fibonacci level bounce or Momentum breakout."
+  },
+  {
+    "timestamp": "2026-09-04T08:58:10.385Z",
+    "timeIST": "02:28:10 pm",
+    "spotPrice": 57554.55,
+    "atmStrike": 57600,
+    "rawPcr": 0.95,
+    "pcrZScore": 1,
+    "advancingWeight": 0,
+    "decliningWeight": 85,
+    "signal": "NEUTRAL_HOLD",
+    "confidenceScore": "75%",
+    "signalTitle": "🟡 NEUTRAL / HOLD IN CASH",
+    "signalRationale": "Price consolidating around ₹57,554.55. Awaiting Fibonacci level bounce or Momentum breakout."
+  },
+  {
+    "timestamp": "2026-09-04T08:59:10.456Z",
+    "timeIST": "02:29:10 pm",
+    "spotPrice": 57562.95,
+    "atmStrike": 57600,
+    "rawPcr": 0.95,
+    "pcrZScore": 1,
+    "advancingWeight": 0,
+    "decliningWeight": 85,
+    "signal": "NEUTRAL_HOLD",
+    "confidenceScore": "75%",
+    "signalTitle": "🟡 NEUTRAL / HOLD IN CASH",
+    "signalRationale": "Price consolidating around ₹57,562.95. Awaiting Fibonacci level bounce or Momentum breakout."
+  },
+  {
+    "timestamp": "2026-09-04T09:00:10.446Z",
+    "timeIST": "02:30:10 pm",
+    "spotPrice": 57565.2,
+    "atmStrike": 57600,
+    "rawPcr": 0.95,
+    "pcrZScore": 1,
+    "advancingWeight": 0,
+    "decliningWeight": 85,
+    "signal": "NEUTRAL_HOLD",
+    "confidenceScore": "75%",
+    "signalTitle": "🟡 NEUTRAL / HOLD IN CASH",
+    "signalRationale": "Price consolidating around ₹57,565.2. Awaiting Fibonacci level bounce or Momentum breakout."
   }
 ]
