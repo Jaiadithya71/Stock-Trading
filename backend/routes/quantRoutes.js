@@ -259,15 +259,21 @@ router.get('/paper/summary', async (req, res) => {
     const auditLog = weeklyAuditLogger.loadLog();
     const auditSummary = auditLog.weeklySummary || {};
 
+    const trades = (auditLog.trades && auditLog.trades.length > 0) ? auditLog.trades : (summary.tradeHistory || []);
+    const completedCount = (auditLog.trades && auditLog.trades.length > 0) ? (auditSummary.totalTradesExecuted || trades.length) : (summary.completedTradesCount || trades.length);
+    const winRate = (auditLog.trades && auditLog.trades.length > 0 && auditSummary.winRatePct !== undefined) ? auditSummary.winRatePct : (summary.winRatePct || 0.0);
+    const realizedPnL = (auditLog.trades && auditLog.trades.length > 0 && auditSummary.netRealizedPnL !== undefined) ? auditSummary.netRealizedPnL : (summary.totalRealizedPnL || 0.0);
+    const currentBalance = summary.currentBalance !== undefined ? summary.currentBalance : (100000 + realizedPnL);
+
     const mergedSummary = {
       initialCapital: summary.initialCapital || 100000,
-      currentBalance: auditSummary.netRealizedPnL !== undefined ? (100000 + auditSummary.netRealizedPnL) : (summary.currentBalance || 100000),
-      activePositionsCount: summary.activePositionsCount || 0,
-      completedTradesCount: auditSummary.totalTradesExecuted || 0,
-      winRatePct: auditSummary.winRatePct !== undefined ? auditSummary.winRatePct : (summary.winRatePct || 0.0),
-      totalRealizedPnL: auditSummary.netRealizedPnL !== undefined ? auditSummary.netRealizedPnL : (summary.totalRealizedPnL || 0.0),
+      currentBalance: parseFloat(currentBalance.toFixed ? currentBalance.toFixed(2) : currentBalance),
+      activePositionsCount: summary.activePositionsCount || (summary.activePositions ? summary.activePositions.length : 0),
+      completedTradesCount: completedCount,
+      winRatePct: parseFloat(winRate.toFixed ? winRate.toFixed(1) : winRate),
+      totalRealizedPnL: parseFloat(realizedPnL.toFixed ? realizedPnL.toFixed(2) : realizedPnL),
       activePositions: summary.activePositions || [],
-      tradeHistory: auditLog.trades || []
+      tradeHistory: trades
     };
 
     res.json({

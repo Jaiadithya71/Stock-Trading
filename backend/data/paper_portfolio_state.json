@@ -1,7 +1,70 @@
 {
   "initialCapital": 100000,
-  "currentBalance": 67152.8,
+  "currentBalance": 64147.07,
   "positions": [
+    {
+      "id": "PAPER-TATACONSUM-1788500196147",
+      "symbol": "TATACONSUM",
+      "action": "SELL",
+      "optionType": null,
+      "strikePrice": null,
+      "assetType": "EQUITY_CASH",
+      "entryPrice": 1172.81,
+      "quantity": 106,
+      "totalValue": 124318.21,
+      "marginBlocked": 24863.64,
+      "stopLoss": 1182.13,
+      "target": 1157.69,
+      "status": "OPEN",
+      "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.59) and -0.56% drift.",
+      "entryTimestamp": "2026-09-04T05:36:36.147Z"
+    }
+  ],
+  "tradeHistory": [
+    {
+      "id": "PAPER-M&M-1788499296005",
+      "symbol": "M&M",
+      "action": "SELL",
+      "optionType": null,
+      "strikePrice": null,
+      "assetType": "EQUITY_CASH",
+      "entryPrice": 2764.55,
+      "quantity": 45,
+      "totalValue": 124404.62,
+      "marginBlocked": 24880.92,
+      "stopLoss": 2785.49,
+      "target": 2730.72,
+      "status": "CLOSED",
+      "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2777.16) and -0.51% drift.",
+      "entryTimestamp": "2026-09-04T05:21:36.005Z",
+      "exitPrice": 2786.88,
+      "pnl": -1004.97,
+      "pnlPct": -0.81,
+      "exitReason": "STOP_LOSS_HIT",
+      "exitTimestamp": "2026-09-04T06:25:36.190Z"
+    },
+    {
+      "id": "PAPER-BRITANNIA-1788500196141",
+      "symbol": "BRITANNIA",
+      "action": "BUY",
+      "optionType": null,
+      "strikePrice": null,
+      "assetType": "EQUITY_CASH",
+      "entryPrice": 6021.37,
+      "quantity": 20,
+      "totalValue": 120427.38,
+      "marginBlocked": 24085.48,
+      "stopLoss": 5978.78,
+      "target": 6089.6,
+      "status": "CLOSED",
+      "rationale": "Bullish ORB Breakout above ₹6015.88 with VWAP support (₹5996.77) and +0.64% momentum.",
+      "entryTimestamp": "2026-09-04T05:36:36.142Z",
+      "exitPrice": 5975.79,
+      "pnl": -911.59,
+      "pnlPct": -0.76,
+      "exitReason": "STOP_LOSS_HIT",
+      "exitTimestamp": "2026-09-04T06:05:04.217Z"
+    },
     {
       "id": "PAPER-CIPLA-1788497935315",
       "symbol": "CIPLA",
@@ -15,12 +78,15 @@
       "marginBlocked": 24801.77,
       "stopLoss": 1623.03,
       "target": 1590.21,
-      "status": "OPEN",
+      "status": "CLOSED",
       "rationale": "Bearish ORB Breakdown below ₹1611.9 with VWAP resistance (₹1618.18) and -0.54% drift.",
-      "entryTimestamp": "2026-09-04T04:58:55.315Z"
-    }
-  ],
-  "tradeHistory": [
+      "entryTimestamp": "2026-09-04T04:58:55.315Z",
+      "exitPrice": 1623.84,
+      "pnl": -1027.3,
+      "pnlPct": -0.83,
+      "exitReason": "STOP_LOSS_HIT",
+      "exitTimestamp": "2026-09-04T05:06:35.867Z"
+    },
     {
       "id": "PAPER-ASIANPAINT-1788465993750",
       "symbol": "ASIANPAINT",
@@ -198,5 +264,5 @@
       "exitTimestamp": "2026-09-03T19:50:49.394Z"
     }
   ],
-  "lastUpdated": "2026-09-04T04:58:55.315Z"
+  "lastUpdated": "2026-09-04T06:25:36.190Z"
 }

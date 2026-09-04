@@ -164,6 +164,9 @@ const StockIntradayWidget = {
             <button class="tv-tab-btn active" id="tabBtnPos" onclick="StockIntradayWidget.switchBottomTab('positions')" style="padding: 10px 16px; font-size: 12px; font-weight: 700; background: transparent; border: none; border-bottom: 2px solid #2962ff; color: #fff; cursor: pointer;">
               💼 Active Positions (<span id="tvOpenCount">0</span>)
             </button>
+            <button class="tv-tab-btn" id="tabBtnTrades" onclick="StockIntradayWidget.switchBottomTab('trades')" style="padding: 10px 16px; font-size: 12px; font-weight: 700; background: transparent; border: none; color: #8896a8; cursor: pointer;">
+              📜 Closed Trades History (<span id="tvClosedCount">0</span>)
+            </button>
             <button class="tv-tab-btn" id="tabBtnHist" onclick="StockIntradayWidget.switchBottomTab('history')" style="padding: 10px 16px; font-size: 12px; font-weight: 700; background: transparent; border: none; color: #8896a8; cursor: pointer;">
               📅 Daily P&L Ledger (Stored on Disk)
             </button>
@@ -190,6 +193,27 @@ const StockIntradayWidget = {
               </thead>
               <tbody id="tvPositionsTbody">
                 <tr><td colspan="9" style="text-align: center; padding: 18px; color: #8896a8;">No open positions. 100% virtual capital safe in cash.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TAB: CLOSED TRADES HISTORY -->
+          <div id="tabContentTrades" style="display: none; padding: 14px; max-height: 200px; overflow-y: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; text-align: left;">
+              <thead>
+                <tr style="color: #8896a8; border-bottom: 1px solid #2a2e39;">
+                  <th style="padding: 6px 8px;">Time</th>
+                  <th style="padding: 6px 8px;">Symbol</th>
+                  <th style="padding: 6px 8px;">Side</th>
+                  <th style="padding: 6px 8px;">Qty</th>
+                  <th style="padding: 6px 8px;">Entry Price</th>
+                  <th style="padding: 6px 8px;">Exit Price</th>
+                  <th style="padding: 6px 8px;">Realized P&L</th>
+                  <th style="padding: 6px 8px;">Exit Reason</th>
+                </tr>
+              </thead>
+              <tbody id="tvTradesTbody">
+                <tr><td colspan="8" style="text-align: center; padding: 18px; color: #8896a8;">No closed trades yet today.</td></tr>
               </tbody>
             </table>
           </div>
@@ -254,11 +278,14 @@ const StockIntradayWidget = {
   switchBottomTab(tab) {
     this.activeTab = tab;
     document.getElementById('tabContentPositions').style.display = tab === 'positions' ? 'block' : 'none';
+    document.getElementById('tabContentTrades').style.display = tab === 'trades' ? 'block' : 'none';
     document.getElementById('tabContentHistory').style.display = tab === 'history' ? 'block' : 'none';
     document.getElementById('tabContentBacktest').style.display = tab === 'backtest' ? 'block' : 'none';
 
     document.getElementById('tabBtnPos').style.borderBottom = tab === 'positions' ? '2px solid #2962ff' : 'none';
     document.getElementById('tabBtnPos').style.color = tab === 'positions' ? '#fff' : '#8896a8';
+    document.getElementById('tabBtnTrades').style.borderBottom = tab === 'trades' ? '2px solid #2962ff' : 'none';
+    document.getElementById('tabBtnTrades').style.color = tab === 'trades' ? '#fff' : '#8896a8';
     document.getElementById('tabBtnHist').style.borderBottom = tab === 'history' ? '2px solid #2962ff' : 'none';
     document.getElementById('tabBtnHist').style.color = tab === 'history' ? '#fff' : '#8896a8';
     document.getElementById('tabBtnSim').style.borderBottom = tab === 'backtest' ? '2px solid #2962ff' : 'none';
@@ -361,12 +388,13 @@ const StockIntradayWidget = {
         this.updateActiveStockView();
       }
 
-      // Fetch positions
+      // Fetch positions & closed trades
       const posRes = await fetch('/api/paper/summary');
       if (posRes.ok) {
         const posData = await posRes.json();
         const p = posData.data || posData.portfolio || posData;
         this.renderPositions(p.activePositions || []);
+        this.renderClosedTrades(p.tradeHistory || []);
       }
     } catch (e) {}
   },
@@ -573,6 +601,43 @@ const StockIntradayWidget = {
         <td style="padding: 8px;"><button onclick="StockIntradayWidget.closePosition('${pos.id}', ${pos.entryPrice})" style="padding: 3px 8px; background: transparent; border: 1px solid #ff4757; color: #ff4757; border-radius: 4px; font-size: 10.5px; cursor: pointer;">Exit</button></td>
       </tr>
     `).join('');
+  },
+
+  renderClosedTrades(trades) {
+    const tbody = document.getElementById('tvTradesTbody');
+    const countEl = document.getElementById('tvClosedCount');
+    if (countEl) countEl.textContent = (trades && trades.length) ? trades.length : 0;
+
+    if (!tbody) return;
+    if (!trades || trades.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 18px; color: #8896a8;">No closed trades yet today.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = trades.map(t => {
+      const timeStr = t.exitTimestamp ? new Date(t.exitTimestamp).toLocaleTimeString('en-IN', { hour12: false }) : (t.entryTimestamp ? new Date(t.entryTimestamp).toLocaleTimeString('en-IN', { hour12: false }) : '-');
+      const isProfitable = (t.pnl || 0) >= 0;
+      const isBuy = t.action === 'BUY';
+      const pnlColor = isProfitable ? '#00d084' : '#ff4757';
+      const cleanReason = (t.exitReason || '-').replace(/_/g, ' ');
+
+      return `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+          <td style="padding: 8px; color: #8896a8; font-family: monospace;">${timeStr}</td>
+          <td style="padding: 8px; font-weight: 700; color: #fff;">${t.symbol}</td>
+          <td style="padding: 8px; font-weight: 700; color: ${isBuy ? '#00d084' : '#ff4757'};">${t.action}</td>
+          <td style="padding: 8px; font-family: monospace;">${t.quantity}</td>
+          <td style="padding: 8px; font-family: monospace;">₹${t.entryPrice?.toFixed(2) || '-'}</td>
+          <td style="padding: 8px; font-family: monospace;">₹${t.exitPrice?.toFixed(2) || '-'}</td>
+          <td style="padding: 8px; font-weight: 700; font-family: monospace; color: ${pnlColor};">
+            ${isProfitable ? '+' : ''}₹${(t.pnl || 0).toFixed(2)} (${t.pnlPct ? t.pnlPct.toFixed(2) : '0.00'}%)
+          </td>
+          <td style="padding: 8px; font-size: 10.5px; color: ${t.exitReason === 'TARGET_HIT' ? '#00d084' : (t.exitReason === 'STOP_LOSS_HIT' ? '#ff4757' : '#8896a8')}; font-weight: 600;">
+            ${cleanReason}
+          </td>
+        </tr>
+      `;
+    }).join('');
   },
 
   async executeSelectedOrder(action) {

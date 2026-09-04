@@ -2078,6 +2078,3058 @@
       "source": "angel_smartapi_native",
       "timestamp": "2026-09-04T05:00:38.152Z",
       "timestampMs": 1788498038152
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57475.25,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.69
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.28
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.03
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": -0.07
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.68
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:01:38.698Z",
+      "timestampMs": 1788498098698
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57480.3,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.7
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.28
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.01
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": -0.03
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.68
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:02:39.867Z",
+      "timestampMs": 1788498159867
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57457.1,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.67
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.23
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": -0.04
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": -0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.66
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:03:39.459Z",
+      "timestampMs": 1788498219459
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57453.55,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.68
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.21
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": -0.02
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": -0.05
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.66
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:04:39.508Z",
+      "timestampMs": 1788498279508
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57454.6,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.67
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.24
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": -0.03
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": -0.08
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.64
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:05:39.348Z",
+      "timestampMs": 1788498339348
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57453.15,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.64
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": -0.02
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": -0.07
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.65
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:06:39.609Z",
+      "timestampMs": 1788498399609
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57467.25,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.62
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.25
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": -0.05
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.62
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:07:39.345Z",
+      "timestampMs": 1788498459345
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57488.6,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.63
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.3
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.13
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.12
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.68
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:08:39.697Z",
+      "timestampMs": 1788498519697
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57479.45,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.63
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.28
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.09
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.68
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:09:39.640Z",
+      "timestampMs": 1788498579640
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57489.5,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.63
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.26
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.12
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.15
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.63
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:10:38.839Z",
+      "timestampMs": 1788498638839
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57485.2,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.64
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.1
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.16
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.66
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:11:38.826Z",
+      "timestampMs": 1788498698826
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57485.5,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.63
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.25
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.07
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.08
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.64
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:12:39.746Z",
+      "timestampMs": 1788498759747
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57483.75,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.64
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.23
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.09
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.63
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:13:39.492Z",
+      "timestampMs": 1788498819492
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57473.9,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.62
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.25
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.08
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.05
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.62
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:14:40.024Z",
+      "timestampMs": 1788498880024
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57467.25,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.64
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.21
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.07
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.04
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.59
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:15:39.768Z",
+      "timestampMs": 1788498939768
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57471.45,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.64
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.21
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.09
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.02
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.57
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:16:39.525Z",
+      "timestampMs": 1788498999525
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57474,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.64
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.25
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.09
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.04
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.57
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:17:39.345Z",
+      "timestampMs": 1788499059345
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57471.6,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.64
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.1
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.05
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.58
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:18:39.383Z",
+      "timestampMs": 1788499119383
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57483.4,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.64
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.25
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.1
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.05
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.63
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:19:39.407Z",
+      "timestampMs": 1788499179407
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57480,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.64
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.14
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.1
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.08
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.61
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:20:39.345Z",
+      "timestampMs": 1788499239345
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57478.75,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.64
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.19
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.1
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.64
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:21:39.342Z",
+      "timestampMs": 1788499299342
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57492.9,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.69
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.2
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.17
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.08
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.68
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:22:39.505Z",
+      "timestampMs": 1788499359505
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57477.25,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.7
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.16
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.17
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.68
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:23:39.365Z",
+      "timestampMs": 1788499419365
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57484.8,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.7
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.19
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.17
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.68
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:24:39.459Z",
+      "timestampMs": 1788499479459
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57489.55,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.74
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.21
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.18
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.68
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:25:39.516Z",
+      "timestampMs": 1788499539516
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57479,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.71
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.18
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.14
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.68
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:26:39.480Z",
+      "timestampMs": 1788499599480
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57473.6,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.76
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.2
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.13
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.62
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:27:38.930Z",
+      "timestampMs": 1788499658930
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57469.95,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.79
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.2
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.1
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.02
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.56
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:28:39.640Z",
+      "timestampMs": 1788499719640
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57479.8,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.8
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.23
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.17
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.02
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.61
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:29:39.480Z",
+      "timestampMs": 1788499779480
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57486.2,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.83
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.24
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.59
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:30:39.549Z",
+      "timestampMs": 1788499839549
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57481.75,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.83
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.25
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.08
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.61
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:31:39.713Z",
+      "timestampMs": 1788499899713
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57478.3,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.82
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.26
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.24
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.09
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.57
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:32:39.450Z",
+      "timestampMs": 1788499959450
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57481.95,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.84
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.26
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.23
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.07
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.57
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:33:39.331Z",
+      "timestampMs": 1788500019331
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57496.15,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.9
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.28
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.57
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:34:39.689Z",
+      "timestampMs": 1788500079689
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57484.1,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.85
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.24
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.23
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.59
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:35:39.801Z",
+      "timestampMs": 1788500139801
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57499.15,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.83
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.29
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.59
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:36:39.677Z",
+      "timestampMs": 1788500199677
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57522.95,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.84
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.33
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.4
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.63
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:37:39.653Z",
+      "timestampMs": 1788500259653
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57541.3,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.9
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.35
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.43
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.62
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:38:39.620Z",
+      "timestampMs": 1788500319620
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57545.95,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.03
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.32
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.43
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.08
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.61
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:39:39.710Z",
+      "timestampMs": 1788500379710
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57562.3,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.12
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.36
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.4
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.12
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.61
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:40:39.501Z",
+      "timestampMs": 1788500439501
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57560.9,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.4
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.42
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.23
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.61
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:41:39.749Z",
+      "timestampMs": 1788500499749
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57553.9,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.93
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.41
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.42
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.17
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.62
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:42:39.542Z",
+      "timestampMs": 1788500559542
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57529.75,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.94
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.33
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.35
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.62
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:43:39.518Z",
+      "timestampMs": 1788500619518
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57535.5,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.9
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.31
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.35
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.19
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.61
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:44:39.652Z",
+      "timestampMs": 1788500679652
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57537.75,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.89
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.32
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.36
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.14
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.63
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:45:39.668Z",
+      "timestampMs": 1788500739668
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57530.85,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.88
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.33
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.31
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.61
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:46:39.668Z",
+      "timestampMs": 1788500799668
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57533.1,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.88
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.33
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.31
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.15
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.62
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:47:39.911Z",
+      "timestampMs": 1788500859911
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57564.95,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.37
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.35
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.2
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.85
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:48:42.346Z",
+      "timestampMs": 1788500922346
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57567.2,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.96
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.37
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.38
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.18
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.9
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:49:39.666Z",
+      "timestampMs": 1788500979666
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57565.85,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.94
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.39
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.35
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.21
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.88
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:50:39.924Z",
+      "timestampMs": 1788501039924
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57571.95,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 0.99
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.39
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.42
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.89
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:51:39.825Z",
+      "timestampMs": 1788501099825
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57602.4,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.15
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.43
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.46
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.21
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.89
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:52:39.826Z",
+      "timestampMs": 1788501159826
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57606.8,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.12
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.44
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.48
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.2
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.84
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:53:39.783Z",
+      "timestampMs": 1788501219783
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57585.95,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.08
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.42
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.4
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.13
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.81
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:54:39.672Z",
+      "timestampMs": 1788501279672
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57616.4,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.08
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.47
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.41
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.14
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.83
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:55:40.011Z",
+      "timestampMs": 1788501340012
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57614.8,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.11
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.54
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.38
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.15
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.83
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:56:39.761Z",
+      "timestampMs": 1788501399761
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57599.6,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.18
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.32
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.39
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.12
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.81
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:57:39.803Z",
+      "timestampMs": 1788501459803
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57597.3,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.13
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.29
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.38
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.13
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.82
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:58:39.830Z",
+      "timestampMs": 1788501519830
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57590.9,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.09
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.33
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.38
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.13
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.77
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T05:59:39.734Z",
+      "timestampMs": 1788501579734
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57584.3,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.09
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.43
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.13
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.76
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:00:40.889Z",
+      "timestampMs": 1788501640889
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57491.1,
+      "stockBreadth": [],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:01:46.645Z",
+      "timestampMs": 1788501706645
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57592.35,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.08
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.25
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.41
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.74
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:02:39.326Z",
+      "timestampMs": 1788501759326
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57611.45,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.08
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.29
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.43
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.78
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:03:06.821Z",
+      "timestampMs": 1788501786821
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57596.1,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.05
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.24
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.43
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.1
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.72
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:04:07.234Z",
+      "timestampMs": 1788501847235
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57595.4,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.07
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.23
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.4
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.09
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.76
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:05:07.288Z",
+      "timestampMs": 1788501907288
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57590.05,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.05
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.21
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.41
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.13
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.75
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:06:07.352Z",
+      "timestampMs": 1788501967352
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57585.15,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.02
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.25
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.39
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.12
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.74
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:07:07.503Z",
+      "timestampMs": 1788502027503
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57587.15,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.06
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.29
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.36
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.09
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.78
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:08:09.017Z",
+      "timestampMs": 1788502089017
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57642.65,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.21
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.39
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.41
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.37
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.83
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:09:08.328Z",
+      "timestampMs": 1788502148328
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57654.5,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.27
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.38
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.41
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.5
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.84
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:10:08.068Z",
+      "timestampMs": 1788502208068
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57637.1,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.27
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.28
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.42
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.4
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.85
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:11:08.334Z",
+      "timestampMs": 1788502268334
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57617.45,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.2
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.19
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.42
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.39
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.81
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:12:07.996Z",
+      "timestampMs": 1788502327996
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57594.3,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.11
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.17
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.36
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.32
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.84
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:13:09.528Z",
+      "timestampMs": 1788502389528
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57580.35,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.1
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.17
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.24
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.29
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.85
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:14:07.433Z",
+      "timestampMs": 1788502447433
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57558.85,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.11
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.1
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.24
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.88
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:15:19.243Z",
+      "timestampMs": 1788502519243
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57565.5,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.13
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.28
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.87
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:16:19.785Z",
+      "timestampMs": 1788502579785
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57571,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.16
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.12
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.27
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.84
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:16:49.816Z",
+      "timestampMs": 1788502609816
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57574.2,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.14
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.26
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.28
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.87
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:17:50.935Z",
+      "timestampMs": 1788502670935
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57571.15,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.15
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.24
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.26
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.88
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:18:50.995Z",
+      "timestampMs": 1788502730995
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57582.45,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.17
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.32
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.97
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:19:50.303Z",
+      "timestampMs": 1788502790303
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57600.75,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.24
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.08
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.47
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 1.04
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:20:39.418Z",
+      "timestampMs": 1788502839418
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57606,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.25
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.22
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.5
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 1.06
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:21:40.527Z",
+      "timestampMs": 1788502900527
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57601.6,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.25
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.21
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.62
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 1.01
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:22:40.285Z",
+      "timestampMs": 1788502960285
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57491.1,
+      "stockBreadth": [],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:23:48.657Z",
+      "timestampMs": 1788503028658
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57607.2,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.22
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.13
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.19
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.55
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 1.04
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:24:40.718Z",
+      "timestampMs": 1788503080718
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57604.65,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.19
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.13
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.15
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.58
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 1.04
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:25:40.152Z",
+      "timestampMs": 1788503140152
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57610.25,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.19
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.16
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.15
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.55
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 1.09
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:26:40.083Z",
+      "timestampMs": 1788503200083
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57597.75,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.22
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.16
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.15
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.49
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.94
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:27:40.685Z",
+      "timestampMs": 1788503260685
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57596.95,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.22
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.12
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.51
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.97
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:28:40.195Z",
+      "timestampMs": 1788503320195
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57593.55,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.2
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.09
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.49
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.99
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:29:40.089Z",
+      "timestampMs": 1788503380089
+    },
+    {
+      "symbol": "BANKNIFTY",
+      "pcr": 0.95,
+      "pcrVolume": 1,
+      "expiry": "23NOV2026",
+      "strikeCount": 126,
+      "sentiment": "Neutral",
+      "spotPrice": 57595.6,
+      "stockBreadth": [
+        {
+          "symbol": "HDFCBANK",
+          "pChange": 1.22
+        },
+        {
+          "symbol": "SBIN",
+          "pChange": 0.06
+        },
+        {
+          "symbol": "ICICIBANK",
+          "pChange": 0.11
+        },
+        {
+          "symbol": "AXISBANK",
+          "pChange": 0.52
+        },
+        {
+          "symbol": "KOTAKBANK",
+          "pChange": 0.91
+        }
+      ],
+      "source": "angel_smartapi_native",
+      "timestamp": "2026-09-04T06:30:15.676Z",
+      "timestampMs": 1788503415676
     }
   ]
 }

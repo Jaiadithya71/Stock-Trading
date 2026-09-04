@@ -1,13 +1,13 @@
 {
   "createdTimestamp": "2026-08-17T23:39:24.000Z",
   "weeklySummary": {
-    "totalSignalsGenerated": 17,
-    "totalTradesExecuted": 8,
+    "totalSignalsGenerated": 23,
+    "totalTradesExecuted": 11,
     "winningTrades": 0,
-    "losingTrades": 8,
+    "losingTrades": 11,
     "winRatePct": 0,
-    "netRealizedPnL": -8045.44,
-    "maxDrawdownPct": 8
+    "netRealizedPnL": -10989.3,
+    "maxDrawdownPct": 11
   },
   "dailyLogs": {
     "2026-09-03": {
@@ -19,13 +19,91 @@
     },
     "2026-09-04": {
       "date": "2026-09-04",
-      "tradesCount": 4,
-      "dailyPnL": -3097.6,
+      "tradesCount": 10,
+      "dailyPnL": -6041.46,
       "wins": 0,
-      "losses": 3
+      "losses": 6
     }
   },
   "trades": [
+    {
+      "id": "PAPER-M&M-1788499296005",
+      "timestamp": "2026-09-04T06:25:36.192Z",
+      "date": "2026-09-04",
+      "symbol": "M&M",
+      "optionType": "CE",
+      "entryPrice": 2764.55,
+      "exitPrice": 2786.88,
+      "quantity": 45,
+      "pnl": -1004.97,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
+    {
+      "id": "PAPER-BRITANNIA-1788500196141",
+      "timestamp": "2026-09-04T06:05:04.219Z",
+      "date": "2026-09-04",
+      "symbol": "BRITANNIA",
+      "optionType": "CE",
+      "entryPrice": 6021.37,
+      "exitPrice": 5975.79,
+      "quantity": 20,
+      "pnl": -911.59,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
+    {
+      "id": "PAPER-TATACONSUM-1788500196147",
+      "timestamp": "2026-09-04T05:36:36.150Z",
+      "date": "2026-09-04",
+      "symbol": "TATACONSUM",
+      "optionType": "CE",
+      "entryPrice": 1172.81,
+      "exitPrice": null,
+      "quantity": 106,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.59) and -0.56% drift."
+    },
+    {
+      "id": "PAPER-BRITANNIA-1788500196141",
+      "timestamp": "2026-09-04T05:36:36.145Z",
+      "date": "2026-09-04",
+      "symbol": "BRITANNIA",
+      "optionType": "CE",
+      "entryPrice": 6021.37,
+      "exitPrice": null,
+      "quantity": 20,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bullish ORB Breakout above ₹6015.88 with VWAP support (₹5996.77) and +0.64% momentum."
+    },
+    {
+      "id": "PAPER-M&M-1788499296005",
+      "timestamp": "2026-09-04T05:21:36.009Z",
+      "date": "2026-09-04",
+      "symbol": "M&M",
+      "optionType": "CE",
+      "entryPrice": 2764.55,
+      "exitPrice": null,
+      "quantity": 45,
+      "pnl": 0,
+      "status": "OPEN",
+      "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2777.16) and -0.51% drift."
+    },
+    {
+      "id": "PAPER-CIPLA-1788497935315",
+      "timestamp": "2026-09-04T05:06:35.871Z",
+      "date": "2026-09-04",
+      "symbol": "CIPLA",
+      "optionType": "CE",
+      "entryPrice": 1610.5,
+      "exitPrice": 1623.84,
+      "quantity": 77,
+      "pnl": -1027.3,
+      "status": "CLOSED",
+      "rationale": "Automated Exit: STOP_LOSS_HIT"
+    },
     {
       "id": "PAPER-CIPLA-1788497935315",
       "timestamp": "2026-09-04T04:58:55.318Z",

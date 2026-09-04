@@ -682,5 +682,2339 @@
         "timestamp": "2026-09-04T04:59:55.327Z"
       }
     ]
+  },
+  {
+    "timestamp": "2026-09-04T05:21:36.002Z",
+    "activeSignalsCount": 1,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2765.93,
+        "vwap": 2777.16,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2785.49,
+        "target": 2730.72,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2777.16) and -0.51% drift.",
+        "pChange": -0.51,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124466.85,
+          "marginRequired": 24893.37
+        },
+        "timestamp": "2026-09-04T05:21:36.001Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:24:36.046Z",
+    "activeSignalsCount": 1,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2765.93,
+        "vwap": 2777.16,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2785.49,
+        "target": 2730.72,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2777.16) and -0.51% drift.",
+        "pChange": -0.51,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124466.85,
+          "marginRequired": 24893.37
+        },
+        "timestamp": "2026-09-04T05:24:36.044Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:25:36.057Z",
+    "activeSignalsCount": 1,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2765.78,
+        "vwap": 2777.11,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2785.44,
+        "target": 2730.39,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2777.11) and -0.51% drift.",
+        "pChange": -0.51,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124460.1,
+          "marginRequired": 24892.02
+        },
+        "timestamp": "2026-09-04T05:25:36.055Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:29:36.083Z",
+    "activeSignalsCount": 1,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2765.69,
+        "vwap": 2777.08,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2785.41,
+        "target": 2730.19,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2777.08) and -0.51% drift.",
+        "pChange": -0.51,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124456.05,
+          "marginRequired": 24891.21
+        },
+        "timestamp": "2026-09-04T05:29:36.081Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:30:36.085Z",
+    "activeSignalsCount": 1,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2765.48,
+        "vwap": 2777.01,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2785.34,
+        "target": 2729.73,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2777.01) and -0.52% drift.",
+        "pChange": -0.52,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124446.6,
+          "marginRequired": 24889.32
+        },
+        "timestamp": "2026-09-04T05:30:36.083Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:35:36.137Z",
+    "activeSignalsCount": 1,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2764.83,
+        "vwap": 2776.8,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2785.13,
+        "target": 2728.29,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2776.8) and -0.55% drift.",
+        "pChange": -0.55,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124417.35,
+          "marginRequired": 24883.47
+        },
+        "timestamp": "2026-09-04T05:35:36.135Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:36:36.139Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2765.64,
+        "vwap": 2777.07,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2785.4,
+        "target": 2730.07,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2777.07) and -0.52% drift.",
+        "pChange": -0.52,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124453.8,
+          "marginRequired": 24890.76
+        },
+        "timestamp": "2026-09-04T05:36:36.137Z"
+      },
+      {
+        "symbol": "BRITANNIA",
+        "token": "547",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6018.36,
+        "vwap": 5996.77,
+        "orbHigh": 6015.88,
+        "orbLow": 5950.1,
+        "ema20": 5974.02,
+        "stopLoss": 5978.78,
+        "target": 6089.6,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6015.88 with VWAP support (₹5996.77) and +0.64% momentum.",
+        "pChange": 0.64,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 20,
+          "riskAmount": 1000,
+          "estimatedExposure": 120367.2,
+          "marginRequired": 24073.44
+        },
+        "timestamp": "2026-09-04T05:36:36.137Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1173.4,
+        "vwap": 1178.59,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1182.13,
+        "target": 1157.69,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.59) and -0.56% drift.",
+        "pChange": -0.56,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124380.4,
+          "marginRequired": 24876.08
+        },
+        "timestamp": "2026-09-04T05:36:36.137Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:37:36.150Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2765.14,
+        "vwap": 2776.9,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2785.23,
+        "target": 2728.98,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2776.9) and -0.53% drift.",
+        "pChange": -0.53,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124431.3,
+          "marginRequired": 24886.26
+        },
+        "timestamp": "2026-09-04T05:37:36.148Z"
+      },
+      {
+        "symbol": "BRITANNIA",
+        "token": "547",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6017.51,
+        "vwap": 5996.49,
+        "orbHigh": 6015.88,
+        "orbLow": 5950.1,
+        "ema20": 5974.02,
+        "stopLoss": 5978.5,
+        "target": 6087.73,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6015.88 with VWAP support (₹5996.49) and +0.63% momentum.",
+        "pChange": 0.63,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 20,
+          "riskAmount": 1000,
+          "estimatedExposure": 120350.2,
+          "marginRequired": 24070.04
+        },
+        "timestamp": "2026-09-04T05:37:36.148Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1173.54,
+        "vwap": 1178.63,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1182.17,
+        "target": 1158.01,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.63) and -0.55% drift.",
+        "pChange": -0.55,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124395.24,
+          "marginRequired": 24879.05
+        },
+        "timestamp": "2026-09-04T05:37:36.148Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:38:36.166Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2763.36,
+        "vwap": 2776.31,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2784.64,
+        "target": 2725.06,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2776.31) and -0.6% drift.",
+        "pChange": -0.6,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124351.2,
+          "marginRequired": 24870.24
+        },
+        "timestamp": "2026-09-04T05:38:36.164Z"
+      },
+      {
+        "symbol": "BRITANNIA",
+        "token": "547",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6018.48,
+        "vwap": 5996.81,
+        "orbHigh": 6015.88,
+        "orbLow": 5950.1,
+        "ema20": 5974.02,
+        "stopLoss": 5978.82,
+        "target": 6089.87,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6015.88 with VWAP support (₹5996.81) and +0.64% momentum.",
+        "pChange": 0.64,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 20,
+          "riskAmount": 1000,
+          "estimatedExposure": 120369.6,
+          "marginRequired": 24073.92
+        },
+        "timestamp": "2026-09-04T05:38:36.164Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1172.77,
+        "vwap": 1178.33,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.86,
+        "target": 1156.41,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.33) and -0.61% drift.",
+        "pChange": -0.61,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124313.62,
+          "marginRequired": 24862.72
+        },
+        "timestamp": "2026-09-04T05:38:36.164Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:39:36.164Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2764.01,
+        "vwap": 2776.52,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2784.85,
+        "target": 2726.5,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2776.52) and -0.58% drift.",
+        "pChange": -0.58,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124380.45,
+          "marginRequired": 24876.09
+        },
+        "timestamp": "2026-09-04T05:39:36.162Z"
+      },
+      {
+        "symbol": "BRITANNIA",
+        "token": "547",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6016.2,
+        "vwap": 5996.05,
+        "orbHigh": 6015.88,
+        "orbLow": 5950.1,
+        "ema20": 5974.02,
+        "stopLoss": 5978.06,
+        "target": 6084.85,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6015.88 with VWAP support (₹5996.05) and +0.61% momentum.",
+        "pChange": 0.61,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 20,
+          "riskAmount": 1000,
+          "estimatedExposure": 120324,
+          "marginRequired": 24064.8
+        },
+        "timestamp": "2026-09-04T05:39:36.162Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1172.65,
+        "vwap": 1178.25,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.78,
+        "target": 1156.22,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.25) and -0.62% drift.",
+        "pChange": -0.62,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124300.9,
+          "marginRequired": 24860.18
+        },
+        "timestamp": "2026-09-04T05:39:36.162Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:40:36.170Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2763.41,
+        "vwap": 2776.32,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2784.65,
+        "target": 2725.18,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2776.32) and -0.6% drift.",
+        "pChange": -0.6,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124353.45,
+          "marginRequired": 24870.69
+        },
+        "timestamp": "2026-09-04T05:40:36.168Z"
+      },
+      {
+        "symbol": "BRITANNIA",
+        "token": "547",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6018.14,
+        "vwap": 5996.7,
+        "orbHigh": 6015.88,
+        "orbLow": 5950.1,
+        "ema20": 5974.02,
+        "stopLoss": 5978.71,
+        "target": 6089.11,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6015.88 with VWAP support (₹5996.7) and +0.64% momentum.",
+        "pChange": 0.64,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 20,
+          "riskAmount": 1000,
+          "estimatedExposure": 120362.8,
+          "marginRequired": 24072.56
+        },
+        "timestamp": "2026-09-04T05:40:36.168Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1173.45,
+        "vwap": 1178.51,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1182.05,
+        "target": 1157.97,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.51) and -0.56% drift.",
+        "pChange": -0.56,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124385.7,
+          "marginRequired": 24877.14
+        },
+        "timestamp": "2026-09-04T05:40:36.168Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:41:36.172Z",
+    "activeSignalsCount": 2,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2762.13,
+        "vwap": 2775.5,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.83,
+        "target": 2723.07,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.5) and -0.64% drift.",
+        "pChange": -0.64,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124295.85,
+          "marginRequired": 24859.17
+        },
+        "timestamp": "2026-09-04T05:41:36.170Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1173.71,
+        "vwap": 1178.6,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1182.14,
+        "target": 1158.54,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.6) and -0.53% drift.",
+        "pChange": -0.53,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124413.26,
+          "marginRequired": 24882.65
+        },
+        "timestamp": "2026-09-04T05:41:36.171Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:42:36.184Z",
+    "activeSignalsCount": 2,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2763.05,
+        "vwap": 2775.81,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2784.14,
+        "target": 2725.09,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.81) and -0.61% drift.",
+        "pChange": -0.61,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124337.25,
+          "marginRequired": 24867.45
+        },
+        "timestamp": "2026-09-04T05:42:36.182Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1173.28,
+        "vwap": 1178.46,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1182,
+        "target": 1157.58,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.46) and -0.57% drift.",
+        "pChange": -0.57,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124367.68,
+          "marginRequired": 24873.54
+        },
+        "timestamp": "2026-09-04T05:42:36.182Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:43:36.187Z",
+    "activeSignalsCount": 2,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2763.42,
+        "vwap": 2775.93,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2784.26,
+        "target": 2725.91,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.93) and -0.6% drift.",
+        "pChange": -0.6,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124353.9,
+          "marginRequired": 24870.78
+        },
+        "timestamp": "2026-09-04T05:43:36.186Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1172.78,
+        "vwap": 1178.29,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.82,
+        "target": 1156.51,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.29) and -0.61% drift.",
+        "pChange": -0.61,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124314.68,
+          "marginRequired": 24862.94
+        },
+        "timestamp": "2026-09-04T05:43:36.186Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:44:36.194Z",
+    "activeSignalsCount": 2,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2761.96,
+        "vwap": 2775.39,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.72,
+        "target": 2722.79,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.39) and -0.65% drift.",
+        "pChange": -0.65,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124288.2,
+          "marginRequired": 24857.64
+        },
+        "timestamp": "2026-09-04T05:44:36.192Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1173.12,
+        "vwap": 1178.4,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.94,
+        "target": 1157.24,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.4) and -0.58% drift.",
+        "pChange": -0.58,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124350.72,
+          "marginRequired": 24870.14
+        },
+        "timestamp": "2026-09-04T05:44:36.193Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:45:36.209Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2762.34,
+        "vwap": 2775.51,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.84,
+        "target": 2723.64,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.51) and -0.64% drift.",
+        "pChange": -0.64,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124305.3,
+          "marginRequired": 24861.06
+        },
+        "timestamp": "2026-09-04T05:45:36.207Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2536.15,
+        "vwap": 2527.06,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2519.48,
+        "target": 2566.16,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2527.06) and +0.64% momentum.",
+        "pChange": 0.64,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124271.35,
+          "marginRequired": 24854.27
+        },
+        "timestamp": "2026-09-04T05:45:36.207Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1172.43,
+        "vwap": 1178.1,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.63,
+        "target": 1155.87,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1178.1) and -0.64% drift.",
+        "pChange": -0.64,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124277.58,
+          "marginRequired": 24855.52
+        },
+        "timestamp": "2026-09-04T05:45:36.207Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:46:36.227Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2761.5,
+        "vwap": 2775.08,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.41,
+        "target": 2722.06,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.08) and -0.67% drift.",
+        "pChange": -0.67,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124267.5,
+          "marginRequired": 24853.5
+        },
+        "timestamp": "2026-09-04T05:46:36.225Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2538.08,
+        "vwap": 2527.71,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2520.13,
+        "target": 2570.39,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2527.71) and +0.72% momentum.",
+        "pChange": 0.72,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124365.92,
+          "marginRequired": 24873.18
+        },
+        "timestamp": "2026-09-04T05:46:36.225Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.73,
+        "vwap": 1177.63,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.16,
+        "target": 1154.76,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.63) and -0.7% drift.",
+        "pChange": -0.7,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124203.38,
+          "marginRequired": 24840.68
+        },
+        "timestamp": "2026-09-04T05:46:36.225Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:47:36.227Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2763.21,
+        "vwap": 2775.65,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.98,
+        "target": 2725.82,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.65) and -0.6% drift.",
+        "pChange": -0.6,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124344.45,
+          "marginRequired": 24868.89
+        },
+        "timestamp": "2026-09-04T05:47:36.225Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2539.96,
+        "vwap": 2528.33,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2520.75,
+        "target": 2574.54,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2528.33) and +0.79% momentum.",
+        "pChange": 0.79,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124458.04,
+          "marginRequired": 24891.61
+        },
+        "timestamp": "2026-09-04T05:47:36.225Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.03,
+        "vwap": 1177.17,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.7,
+        "target": 1153.62,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.17) and -0.76% drift.",
+        "pChange": -0.76,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 103,
+          "riskAmount": 1000,
+          "estimatedExposure": 120616.09,
+          "marginRequired": 24123.22
+        },
+        "timestamp": "2026-09-04T05:47:36.225Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:48:36.242Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2764.93,
+        "vwap": 2776.22,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2784.55,
+        "target": 2729.61,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2776.22) and -0.54% drift.",
+        "pChange": -0.54,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124421.85,
+          "marginRequired": 24884.37
+        },
+        "timestamp": "2026-09-04T05:48:36.236Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2539.78,
+        "vwap": 2528.27,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2520.69,
+        "target": 2574.14,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2528.27) and +0.78% momentum.",
+        "pChange": 0.78,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124449.22,
+          "marginRequired": 24889.84
+        },
+        "timestamp": "2026-09-04T05:48:36.237Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.07,
+        "vwap": 1177.18,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.71,
+        "target": 1153.72,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.18) and -0.76% drift.",
+        "pChange": -0.76,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 103,
+          "riskAmount": 1000,
+          "estimatedExposure": 120620.21,
+          "marginRequired": 24124.04
+        },
+        "timestamp": "2026-09-04T05:48:36.237Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:49:36.237Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2763.5,
+        "vwap": 2775.75,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2784.08,
+        "target": 2726.46,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.75) and -0.59% drift.",
+        "pChange": -0.59,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124357.5,
+          "marginRequired": 24871.5
+        },
+        "timestamp": "2026-09-04T05:49:36.235Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2539.48,
+        "vwap": 2528.17,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2520.59,
+        "target": 2573.48,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2528.17) and +0.77% momentum.",
+        "pChange": 0.77,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124434.52,
+          "marginRequired": 24886.9
+        },
+        "timestamp": "2026-09-04T05:49:36.235Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.07,
+        "vwap": 1177.18,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.71,
+        "target": 1153.72,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.18) and -0.76% drift.",
+        "pChange": -0.76,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 103,
+          "riskAmount": 1000,
+          "estimatedExposure": 120620.21,
+          "marginRequired": 24124.04
+        },
+        "timestamp": "2026-09-04T05:49:36.235Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:50:36.239Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2762.38,
+        "vwap": 2775.37,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.7,
+        "target": 2724,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.37) and -0.63% drift.",
+        "pChange": -0.63,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124307.1,
+          "marginRequired": 24861.42
+        },
+        "timestamp": "2026-09-04T05:50:36.236Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2541.21,
+        "vwap": 2529.1,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2521.51,
+        "target": 2576.67,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2529.1) and +0.84% momentum.",
+        "pChange": 0.84,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124519.29,
+          "marginRequired": 24903.86
+        },
+        "timestamp": "2026-09-04T05:50:36.236Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.59,
+        "vwap": 1177.35,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.88,
+        "target": 1154.87,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.35) and -0.71% drift.",
+        "pChange": -0.71,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124188.54,
+          "marginRequired": 24837.71
+        },
+        "timestamp": "2026-09-04T05:50:36.236Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:51:36.252Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2760.56,
+        "vwap": 2774.45,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2782.77,
+        "target": 2720.58,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2774.45) and -0.7% drift.",
+        "pChange": -0.7,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124225.2,
+          "marginRequired": 24845.04
+        },
+        "timestamp": "2026-09-04T05:51:36.248Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2539.47,
+        "vwap": 2528.52,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2520.93,
+        "target": 2572.84,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2528.52) and +0.77% momentum.",
+        "pChange": 0.77,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124434.03,
+          "marginRequired": 24886.81
+        },
+        "timestamp": "2026-09-04T05:51:36.248Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.68,
+        "vwap": 1177.38,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.91,
+        "target": 1155.07,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.38) and -0.71% drift.",
+        "pChange": -0.71,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124198.08,
+          "marginRequired": 24839.62
+        },
+        "timestamp": "2026-09-04T05:51:36.248Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:52:36.269Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2761.17,
+        "vwap": 2774.66,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2782.98,
+        "target": 2721.91,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2774.66) and -0.68% drift.",
+        "pChange": -0.68,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124252.65,
+          "marginRequired": 24850.53
+        },
+        "timestamp": "2026-09-04T05:52:36.266Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2540.73,
+        "vwap": 2528.94,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2521.35,
+        "target": 2575.61,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2528.94) and +0.82% momentum.",
+        "pChange": 0.82,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124495.77,
+          "marginRequired": 24899.15
+        },
+        "timestamp": "2026-09-04T05:52:36.266Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.56,
+        "vwap": 1177.34,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.87,
+        "target": 1154.8,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.34) and -0.72% drift.",
+        "pChange": -0.72,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124185.36,
+          "marginRequired": 24837.07
+        },
+        "timestamp": "2026-09-04T05:52:36.266Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:53:36.280Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2762.05,
+        "vwap": 2774.95,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.27,
+        "target": 2723.85,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2774.95) and -0.65% drift.",
+        "pChange": -0.65,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124292.25,
+          "marginRequired": 24858.45
+        },
+        "timestamp": "2026-09-04T05:53:36.277Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2541.22,
+        "vwap": 2529.11,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2521.52,
+        "target": 2576.68,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2529.11) and +0.84% momentum.",
+        "pChange": 0.84,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124519.78,
+          "marginRequired": 24903.96
+        },
+        "timestamp": "2026-09-04T05:53:36.277Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.21,
+        "vwap": 1177.23,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.76,
+        "target": 1154.02,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.23) and -0.74% drift.",
+        "pChange": -0.74,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 104,
+          "riskAmount": 1000,
+          "estimatedExposure": 121805.84,
+          "marginRequired": 24361.17
+        },
+        "timestamp": "2026-09-04T05:53:36.277Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:54:36.281Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2762.45,
+        "vwap": 2775.08,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.41,
+        "target": 2724.72,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.08) and -0.63% drift.",
+        "pChange": -0.63,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124310.25,
+          "marginRequired": 24862.05
+        },
+        "timestamp": "2026-09-04T05:54:36.278Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2542.59,
+        "vwap": 2530.02,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2522.43,
+        "target": 2578.88,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2530.02) and +0.9% momentum.",
+        "pChange": 0.9,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124586.91,
+          "marginRequired": 24917.38
+        },
+        "timestamp": "2026-09-04T05:54:36.278Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.02,
+        "vwap": 1177.16,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.69,
+        "target": 1153.61,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.16) and -0.76% drift.",
+        "pChange": -0.76,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 103,
+          "riskAmount": 1000,
+          "estimatedExposure": 120615.06,
+          "marginRequired": 24123.01
+        },
+        "timestamp": "2026-09-04T05:54:36.278Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:55:36.282Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2760.76,
+        "vwap": 2774.52,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2782.84,
+        "target": 2721.02,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2774.52) and -0.69% drift.",
+        "pChange": -0.69,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124234.2,
+          "marginRequired": 24846.84
+        },
+        "timestamp": "2026-09-04T05:55:36.279Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2543.73,
+        "vwap": 2530.78,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2523.19,
+        "target": 2580.7,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2530.78) and +0.94% momentum.",
+        "pChange": 0.94,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 48,
+          "riskAmount": 1000,
+          "estimatedExposure": 122099.04,
+          "marginRequired": 24419.81
+        },
+        "timestamp": "2026-09-04T05:55:36.279Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.66,
+        "vwap": 1177.37,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.9,
+        "target": 1155.03,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.37) and -0.71% drift.",
+        "pChange": -0.71,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124195.96,
+          "marginRequired": 24839.19
+        },
+        "timestamp": "2026-09-04T05:55:36.279Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:56:36.291Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2759.54,
+        "vwap": 2773.77,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2782.09,
+        "target": 2718.95,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2773.77) and -0.74% drift.",
+        "pChange": -0.74,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 44,
+          "riskAmount": 1000,
+          "estimatedExposure": 121419.76,
+          "marginRequired": 24283.95
+        },
+        "timestamp": "2026-09-04T05:56:36.288Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2543.85,
+        "vwap": 2530.86,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2523.27,
+        "target": 2580.89,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2530.86) and +0.95% momentum.",
+        "pChange": 0.95,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 48,
+          "riskAmount": 1000,
+          "estimatedExposure": 122104.8,
+          "marginRequired": 24420.96
+        },
+        "timestamp": "2026-09-04T05:56:36.289Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1172.47,
+        "vwap": 1177.64,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1181.17,
+        "target": 1156.81,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.64) and -0.64% drift.",
+        "pChange": -0.64,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124281.82,
+          "marginRequired": 24856.36
+        },
+        "timestamp": "2026-09-04T05:56:36.289Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:57:36.306Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2760.67,
+        "vwap": 2774.15,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2782.47,
+        "target": 2721.43,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2774.15) and -0.7% drift.",
+        "pChange": -0.7,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124230.15,
+          "marginRequired": 24846.03
+        },
+        "timestamp": "2026-09-04T05:57:36.304Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2542.46,
+        "vwap": 2530.4,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2522.81,
+        "target": 2577.83,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2530.4) and +0.89% momentum.",
+        "pChange": 0.89,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124580.54,
+          "marginRequired": 24916.11
+        },
+        "timestamp": "2026-09-04T05:57:36.304Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.82,
+        "vwap": 1177.43,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.96,
+        "target": 1155.37,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.43) and -0.69% drift.",
+        "pChange": -0.69,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124212.92,
+          "marginRequired": 24842.58
+        },
+        "timestamp": "2026-09-04T05:57:36.304Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:58:36.319Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2762.63,
+        "vwap": 2774.8,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.12,
+        "target": 2725.75,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2774.8) and -0.62% drift.",
+        "pChange": -0.62,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124318.35,
+          "marginRequired": 24863.67
+        },
+        "timestamp": "2026-09-04T05:58:36.316Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2542.78,
+        "vwap": 2530.5,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2522.91,
+        "target": 2578.55,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2530.5) and +0.9% momentum.",
+        "pChange": 0.9,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124596.22,
+          "marginRequired": 24919.24
+        },
+        "timestamp": "2026-09-04T05:58:36.316Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.23,
+        "vwap": 1177.23,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.76,
+        "target": 1154.08,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.23) and -0.74% drift.",
+        "pChange": -0.74,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 104,
+          "riskAmount": 1000,
+          "estimatedExposure": 121807.92,
+          "marginRequired": 24361.58
+        },
+        "timestamp": "2026-09-04T05:58:36.316Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T05:59:36.325Z",
+    "activeSignalsCount": 3,
+    "signals": [
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2761.99,
+        "vwap": 2774.59,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2782.91,
+        "target": 2724.33,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2774.59) and -0.65% drift.",
+        "pChange": -0.65,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124289.55,
+          "marginRequired": 24857.91
+        },
+        "timestamp": "2026-09-04T05:59:36.322Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2542.69,
+        "vwap": 2530.47,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2522.88,
+        "target": 2578.35,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2530.47) and +0.9% momentum.",
+        "pChange": 0.9,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124591.81,
+          "marginRequired": 24918.36
+        },
+        "timestamp": "2026-09-04T05:59:36.322Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1170.82,
+        "vwap": 1177.03,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.56,
+        "target": 1153.29,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.03) and -0.78% drift.",
+        "pChange": -0.78,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 102,
+          "riskAmount": 1000,
+          "estimatedExposure": 119423.64,
+          "marginRequired": 23884.73
+        },
+        "timestamp": "2026-09-04T05:59:36.322Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T06:00:36.330Z",
+    "activeSignalsCount": 5,
+    "signals": [
+      {
+        "symbol": "INFY",
+        "token": "1594",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1862.13,
+        "vwap": 1870.02,
+        "orbHigh": 1883.3326,
+        "orbLow": 1862.7395,
+        "ema20": 1870.2278999999999,
+        "stopLoss": 1875.63,
+        "target": 1837.83,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1862.7395 with VWAP resistance (₹1870.02) and -0.53% drift.",
+        "pChange": -0.53,
+        "sector": "IT",
+        "riskAllocation": {
+          "allocatedShares": 67,
+          "riskAmount": 1000,
+          "estimatedExposure": 124762.71,
+          "marginRequired": 24952.54
+        },
+        "timestamp": "2026-09-04T06:00:36.327Z"
+      },
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2763.37,
+        "vwap": 2775.05,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.38,
+        "target": 2727.35,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2775.05) and -0.6% drift.",
+        "pChange": -0.6,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124351.65,
+          "marginRequired": 24870.33
+        },
+        "timestamp": "2026-09-04T06:00:36.327Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2542.93,
+        "vwap": 2530.55,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2522.96,
+        "target": 2578.88,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2530.55) and +0.91% momentum.",
+        "pChange": 0.91,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124603.57,
+          "marginRequired": 24920.71
+        },
+        "timestamp": "2026-09-04T06:00:36.327Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.12,
+        "vwap": 1177.13,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.66,
+        "target": 1153.95,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.13) and -0.75% drift.",
+        "pChange": -0.75,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 104,
+          "riskAmount": 1000,
+          "estimatedExposure": 121796.48,
+          "marginRequired": 24359.3
+        },
+        "timestamp": "2026-09-04T06:00:36.327Z"
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "token": "3351",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1852.14,
+        "vwap": 1845.27,
+        "orbHigh": 1851.04,
+        "orbLow": 1830.8,
+        "ema20": 1838.16,
+        "stopLoss": 1839.73,
+        "target": 1874.48,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1851.04 with VWAP support (₹1845.27) and +0.66% momentum.",
+        "pChange": 0.66,
+        "sector": "Pharma",
+        "riskAllocation": {
+          "allocatedShares": 67,
+          "riskAmount": 1000,
+          "estimatedExposure": 124093.38,
+          "marginRequired": 24818.68
+        },
+        "timestamp": "2026-09-04T06:00:36.327Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T06:01:36.342Z",
+    "activeSignalsCount": 5,
+    "signals": [
+      {
+        "symbol": "BAJFINANCE",
+        "token": "317",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 6993.19,
+        "vwap": 6969.03,
+        "orbHigh": 6991.7,
+        "orbLow": 6915.25,
+        "ema20": 6943.05,
+        "stopLoss": 6948.12,
+        "target": 7074.32,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹6991.7 with VWAP support (₹6969.03) and +0.62% momentum.",
+        "pChange": 0.62,
+        "sector": "Financials",
+        "riskAllocation": {
+          "allocatedShares": 17,
+          "riskAmount": 1000,
+          "estimatedExposure": 118884.23,
+          "marginRequired": 23776.85
+        },
+        "timestamp": "2026-09-04T06:01:36.339Z"
+      },
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2761.63,
+        "vwap": 2774.47,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2782.79,
+        "target": 2723.54,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2774.47) and -0.66% drift.",
+        "pChange": -0.66,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124273.35,
+          "marginRequired": 24854.67
+        },
+        "timestamp": "2026-09-04T06:01:36.339Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2543.46,
+        "vwap": 2530.73,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2523.14,
+        "target": 2580.04,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2530.73) and +0.93% momentum.",
+        "pChange": 0.93,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 49,
+          "riskAmount": 1000,
+          "estimatedExposure": 124629.54,
+          "marginRequired": 24925.91
+        },
+        "timestamp": "2026-09-04T06:01:36.339Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1171.52,
+        "vwap": 1177.26,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.79,
+        "target": 1154.83,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.26) and -0.72% drift.",
+        "pChange": -0.72,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124181.12,
+          "marginRequired": 24836.22
+        },
+        "timestamp": "2026-09-04T06:01:36.339Z"
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "token": "3351",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1851.82,
+        "vwap": 1845.17,
+        "orbHigh": 1851.04,
+        "orbLow": 1830.8,
+        "ema20": 1838.16,
+        "stopLoss": 1839.63,
+        "target": 1873.76,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1851.04 with VWAP support (₹1845.17) and +0.64% momentum.",
+        "pChange": 0.64,
+        "sector": "Pharma",
+        "riskAllocation": {
+          "allocatedShares": 67,
+          "riskAmount": 1000,
+          "estimatedExposure": 124071.94,
+          "marginRequired": 24814.39
+        },
+        "timestamp": "2026-09-04T06:01:36.339Z"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-09-04T06:02:36.353Z",
+    "activeSignalsCount": 5,
+    "signals": [
+      {
+        "symbol": "INDUSINDBK",
+        "token": "5258",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1412.54,
+        "vwap": 1418.46,
+        "orbHigh": 1428.52,
+        "orbLow": 1412.9,
+        "ema20": 1418.58,
+        "stopLoss": 1422.72,
+        "target": 1394.22,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1412.9 with VWAP resistance (₹1418.46) and -0.53% drift.",
+        "pChange": -0.53,
+        "sector": "Banking",
+        "riskAllocation": {
+          "allocatedShares": 88,
+          "riskAmount": 1000,
+          "estimatedExposure": 124303.52,
+          "marginRequired": 24860.7
+        },
+        "timestamp": "2026-09-04T06:02:36.351Z"
+      },
+      {
+        "symbol": "M&M",
+        "token": "2031",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 2762.57,
+        "vwap": 2774.78,
+        "orbHigh": 2796.68,
+        "orbLow": 2766.1,
+        "ema20": 2777.22,
+        "stopLoss": 2783.1,
+        "target": 2725.62,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹2766.1 with VWAP resistance (₹2774.78) and -0.63% drift.",
+        "pChange": -0.63,
+        "sector": "Auto",
+        "riskAllocation": {
+          "allocatedShares": 45,
+          "riskAmount": 1000,
+          "estimatedExposure": 124315.65,
+          "marginRequired": 24863.13
+        },
+        "timestamp": "2026-09-04T06:02:36.351Z"
+      },
+      {
+        "symbol": "NESTLEIND",
+        "token": "17963",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 2544.85,
+        "vwap": 2531.53,
+        "orbHigh": 2535.12,
+        "orbLow": 2507.4,
+        "ema20": 2517.48,
+        "stopLoss": 2523.94,
+        "target": 2582.49,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹2535.12 with VWAP support (₹2531.53) and +0.99% momentum.",
+        "pChange": 0.99,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 47,
+          "riskAmount": 1000,
+          "estimatedExposure": 119607.95,
+          "marginRequired": 23921.59
+        },
+        "timestamp": "2026-09-04T06:02:36.351Z"
+      },
+      {
+        "symbol": "TATACONSUM",
+        "token": "3432",
+        "signal": "SELL_SHORT",
+        "action": "SELL",
+        "ltp": 1172,
+        "vwap": 1177.42,
+        "orbHigh": 1187.08,
+        "orbLow": 1174.1,
+        "ema20": 1178.82,
+        "stopLoss": 1180.95,
+        "target": 1155.89,
+        "confidence": "86%",
+        "rationale": "Bearish ORB Breakdown below ₹1174.1 with VWAP resistance (₹1177.42) and -0.68% drift.",
+        "pChange": -0.68,
+        "sector": "FMCG",
+        "riskAllocation": {
+          "allocatedShares": 106,
+          "riskAmount": 1000,
+          "estimatedExposure": 124232,
+          "marginRequired": 24846.4
+        },
+        "timestamp": "2026-09-04T06:02:36.351Z"
+      },
+      {
+        "symbol": "SUNPHARMA",
+        "token": "3351",
+        "signal": "BUY_LONG",
+        "action": "BUY",
+        "ltp": 1851.22,
+        "vwap": 1844.97,
+        "orbHigh": 1851.04,
+        "orbLow": 1830.8,
+        "ema20": 1838.16,
+        "stopLoss": 1839.44,
+        "target": 1872.42,
+        "confidence": "88%",
+        "rationale": "Bullish ORB Breakout above ₹1851.04 with VWAP support (₹1844.97) and +0.61% momentum.",
+        "pChange": 0.61,
+        "sector": "Pharma",
+        "riskAllocation": {
+          "allocatedShares": 67,
+          "riskAmount": 1000,
+          "estimatedExposure": 124031.74,
+          "marginRequired": 24806.35
+        },
+        "timestamp": "2026-09-04T06:02:36.351Z"
+      }
+    ]
   }
 ]
