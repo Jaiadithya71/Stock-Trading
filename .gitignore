@@ -12,6 +12,7 @@ credentials*.txt
 
 # Data cache files (ephemeral)
 backend/cache/*.json
+backend/data/email_reports/*.html
 
 # Logs
 logs/

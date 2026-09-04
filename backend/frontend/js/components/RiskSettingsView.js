@@ -112,7 +112,55 @@ const RiskSettingsView = {
             <button class="btn btn-save-settings" onclick="RiskSettingsView.saveSettings()">💾 Save Horizon & Risk Settings</button>
           </div>
 
-          <!-- CARD 4: EXECUTION MODE TOGGLE -->
+          <!-- CARD 4: AUTOMATED MARKET CLOSE EMAIL NOTIFICATIONS -->
+          <div class="settings-card" style="border: 1px solid rgba(56, 189, 248, 0.35); background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+              <h3 style="color: #38bdf8; margin: 0;">📧 Market Close Daily Performance Email</h3>
+              <span id="email-status-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+                Loading...
+              </span>
+            </div>
+            <p class="s-desc">Automatically compiles and emails an executive P&L, closed trades, and overnight swing holdings summary at market close (3:30 PM IST).</p>
+
+            <div class="form-group" style="margin-top: 12px;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="checkbox" id="setting-email-enabled" checked style="width: 16px; height: 16px; accent-color: #38bdf8;">
+                <span style="font-weight: 600; color: #f0f3f6;">Enable Automated Market Close Email</span>
+              </label>
+              <span class="form-hint">Dispatches automatically when regular session closes at 3:30 PM IST</span>
+            </div>
+
+            <div class="form-group">
+              <label>Recipient Email Address</label>
+              <input type="email" id="setting-email-recipient" value="jaiadithya2020@gmail.com" placeholder="jaiadithya2020@gmail.com" style="width: 100%; padding: 8px 12px; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; color: #fff; font-size: 13px;">
+              <span class="form-hint">Primary inbox where daily trading performance reports will be delivered</span>
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 6px; border: 1px dashed #334155; margin-bottom: 14px;">
+              <div style="font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">🔑 Gmail SMTP Credentials (Optional for Direct Inbox Delivery)</div>
+              
+              <div class="form-group" style="margin-bottom: 10px;">
+                <label style="font-size: 11px; color: #94a3b8;">Sender Gmail Address</label>
+                <input type="email" id="setting-smtp-user" placeholder="e.g. your-email@gmail.com" style="width: 100%; padding: 7px 10px; background: #0f172a; border: 1px solid #1e293b; border-radius: 5px; color: #fff; font-size: 12px;">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label style="font-size: 11px; color: #94a3b8;">Gmail 16-Character App Password</label>
+                <input type="password" id="setting-smtp-pass" placeholder="xxxx xxxx xxxx xxxx" style="width: 100%; padding: 7px 10px; background: #0f172a; border: 1px solid #1e293b; border-radius: 5px; color: #fff; font-size: 12px; letter-spacing: 1px;">
+                <span class="form-hint" style="font-size: 11px; color: #64748b;">
+                  Need an App Password? Generate one in 30 seconds at <a href="https://myaccount.google.com/apppasswords" target="_blank" style="color: #38bdf8; text-decoration: underline;">Google Account &gt; App Passwords</a>. If blank, reports are safely compiled & saved to server disk.
+                </span>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn btn-save-settings" onclick="RiskSettingsView.saveEmailSettings()" style="flex: 1; min-width: 160px;">💾 Save Email Settings</button>
+              <button class="btn btn-trade" onclick="RiskSettingsView.triggerEmailDispatch()" style="flex: 1; min-width: 180px; background: #0284c7; border-color: #38bdf8;">📧 Send Today's Summary Now</button>
+              <button class="btn" onclick="RiskSettingsView.previewEmailModal()" style="background: #334155; color: #f1f5f9; border: 1px solid #475569; padding: 8px 14px; border-radius: 6px; cursor: pointer;">👁️ Preview HTML Report</button>
+            </div>
+          </div>
+
+          <!-- CARD 5: EXECUTION MODE TOGGLE -->
           <div class="settings-card">
             <h3>⚡ Execution Mode & SmartAPI Broker Credentials</h3>
             <p class="s-desc">Toggle between Forward Simulation Paper Trading and Live Broker Execution.</p>
@@ -130,7 +178,7 @@ const RiskSettingsView = {
             </div>
           </div>
 
-          <!-- CARD 5: STRATEGY & QUESTIONNAIRE SURVEY -->
+          <!-- CARD 6: STRATEGY & QUESTIONNAIRE SURVEY -->
           <div class="settings-card">
             <h3>📋 Client Strategy & Preferences Survey</h3>
             <p class="s-desc">Review or update your 16-question trading strategy specifications and baseline requirements.</p>
@@ -164,6 +212,151 @@ const RiskSettingsView = {
         }
       }
     } catch (e) {}
+
+    await this.loadEmailSettings();
+  },
+
+  async loadEmailSettings() {
+    try {
+      const res = await fetch('/api/quant/email-settings');
+      if (res.ok) {
+        const data = await res.json();
+        const cfg = data.settings || {};
+        if (document.getElementById('setting-email-enabled')) {
+          document.getElementById('setting-email-enabled').checked = cfg.enabled !== false;
+        }
+        if (cfg.recipientEmail && document.getElementById('setting-email-recipient')) {
+          document.getElementById('setting-email-recipient').value = cfg.recipientEmail;
+        }
+        if (cfg.smtpUser && document.getElementById('setting-smtp-user')) {
+          document.getElementById('setting-smtp-user').value = cfg.smtpUser;
+        }
+        if (cfg.smtpPass && document.getElementById('setting-smtp-pass')) {
+          document.getElementById('setting-smtp-pass').value = cfg.smtpPass;
+        }
+
+        const badge = document.getElementById('email-status-badge');
+        if (badge) {
+          if (cfg.isConfigured) {
+            badge.textContent = '✅ Inbox Ready';
+            badge.style.background = 'rgba(0, 208, 132, 0.15)';
+            badge.style.color = '#00d084';
+            badge.style.borderColor = 'rgba(0, 208, 132, 0.3)';
+          } else {
+            badge.textContent = '💾 Archiving to Disk (Awaiting App PW)';
+            badge.style.background = 'rgba(245, 158, 11, 0.15)';
+            badge.style.color = '#fbbf24';
+            badge.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Could not load email settings:', e);
+    }
+  },
+
+  async saveEmailSettings() {
+    try {
+      const enabled = document.getElementById('setting-email-enabled')?.checked;
+      const recipientEmail = document.getElementById('setting-email-recipient')?.value?.trim() || 'jaiadithya2020@gmail.com';
+      const smtpUser = document.getElementById('setting-smtp-user')?.value?.trim() || '';
+      const smtpPass = document.getElementById('setting-smtp-pass')?.value?.trim() || '';
+
+      const payload = { enabled, recipientEmail };
+      if (smtpUser) payload.smtpUser = smtpUser;
+      if (smtpPass && !smtpPass.includes('••••')) payload.smtpPass = smtpPass;
+
+      const res = await fetch('/api/quant/email-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        if (typeof ToastNotification !== 'undefined') {
+          ToastNotification.show('✅ Email settings saved! Recipient: ' + recipientEmail, 'success');
+        } else {
+          alert('✅ Email settings saved! Recipient: ' + recipientEmail);
+        }
+        await this.loadEmailSettings();
+      } else {
+        throw new Error(data.message || 'Failed to save');
+      }
+    } catch (e) {
+      if (typeof ToastNotification !== 'undefined') {
+        ToastNotification.show('❌ Error: ' + e.message, 'error');
+      } else {
+        alert('❌ Error: ' + e.message);
+      }
+    }
+  },
+
+  async triggerEmailDispatch() {
+    try {
+      const recipient = document.getElementById('setting-email-recipient')?.value?.trim() || 'jaiadithya2020@gmail.com';
+      if (typeof ToastNotification !== 'undefined') {
+        ToastNotification.show('⏳ Compiling and sending market close summary to ' + recipient + '...', 'info');
+      }
+
+      const res = await fetch('/api/quant/send-market-close-summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipient, force: true })
+      });
+      const data = await res.json();
+
+      if (data.delivered) {
+        const msg = `🎉 Market close summary successfully sent to ${data.recipient} via ${data.method}!`;
+        if (typeof ToastNotification !== 'undefined') ToastNotification.show(msg, 'success');
+        else alert(msg);
+      } else if (data.archived) {
+        const msg = `💾 Summary compiled and saved to ${data.reportFilename}. Add Gmail App Password for direct inbox delivery.`;
+        if (typeof ToastNotification !== 'undefined') ToastNotification.show(msg, 'warning');
+        else alert(msg);
+        this.previewEmailModal();
+      } else {
+        const msg = data.message || 'Failed to dispatch email';
+        if (typeof ToastNotification !== 'undefined') ToastNotification.show('⚠️ ' + msg, 'warning');
+        else alert('⚠️ ' + msg);
+      }
+    } catch (e) {
+      if (typeof ToastNotification !== 'undefined') ToastNotification.show('❌ ' + e.message, 'error');
+      else alert('❌ ' + e.message);
+    }
+  },
+
+  async previewEmailModal() {
+    try {
+      const res = await fetch('/api/quant/latest-email-summary');
+      const data = await res.json();
+      if (!data.html) {
+        alert('No compiled summary found yet.');
+        return;
+      }
+
+      let modal = document.getElementById('tvEmailPreviewModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'tvEmailPreviewModal';
+        modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(6px);';
+        document.body.appendChild(modal);
+      }
+
+      modal.innerHTML = `
+        <div style="width: 90%; max-width: 900px; height: 88vh; background: #131722; border: 1px solid #2a2e39; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.7);">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: #1e2433; border-bottom: 1px solid #2a3142;">
+            <div style="font-weight: 700; color: #38bdf8; font-size: 15px;">📧 EOD Market Close Summary Email Preview</div>
+            <button onclick="document.getElementById('tvEmailPreviewModal').remove()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 4px 8px;">✕</button>
+          </div>
+          <div style="flex: 1; overflow: auto; padding: 0;">
+            <iframe srcdoc="${encodeURIComponent(data.html)}" style="width: 100%; height: 100%; border: none; background: #0f1318;"></iframe>
+          </div>
+        </div>
+      `;
+    } catch (e) {
+      alert('Could not open preview: ' + e.message);
+    }
   },
 
   async saveSettings() {

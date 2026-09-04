@@ -12,6 +12,7 @@ const PaperTradingService = require('./paperTradingService');
 const weeklyAuditLogger = require('./weeklyAuditLogger');
 const signalAuditLogger = require('./signalAuditLogger');
 const positionalSignalEngine = require('./positionalSignalEngine');
+const emailNotificationService = require('./emailNotificationService');
 const marketCalendar = require('../utils/marketCalendar');
 
 const paperTrading = new PaperTradingService();
@@ -281,6 +282,13 @@ class StockExecutionEngine {
 
     console.log(`✅ [EOD Settlement] Successfully archived: Net P&L: ₹${netPnL.toFixed(2)} | Win Rate: ${winRate.toFixed(1)}%`);
     console.log(`💾 Saved to: ${archivePath}`);
+
+    // 3. Automated Market Close Summary Email dispatch to user
+    try {
+      await emailNotificationService.sendDailySummaryEmail({ date: dateString });
+    } catch (mailErr) {
+      console.warn('⚠️ [EOD Settlement] Email dispatch notification error:', mailErr.message);
+    }
 
     // Reset daily trade ledger for next session
     this.tradesToday = [];

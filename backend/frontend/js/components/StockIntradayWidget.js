@@ -402,7 +402,7 @@ const StockIntradayWidget = {
         <!-- BOTTOM PANEL: TRADINGVIEW STYLE DOCKED TABS -->
         <div style="background: #1e222d;">
           
-          <div style="display: flex; border-bottom: 1px solid #2a2e39; padding: 0 16px;">
+          <div style="display: flex; border-bottom: 1px solid #2a2e39; padding: 0 16px; align-items: center;">
             <button class="tv-tab-btn active" id="tabBtnPos" onclick="StockIntradayWidget.switchBottomTab('positions')" style="padding: 10px 16px; font-size: 12px; font-weight: 700; background: transparent; border: none; border-bottom: 2px solid #2962ff; color: #fff; cursor: pointer;">
               💼 Active Positions (<span id="tvOpenCount">0</span> / 5 Slots)
             </button>
@@ -415,6 +415,12 @@ const StockIntradayWidget = {
             <button class="tv-tab-btn" id="tabBtnSim" onclick="StockIntradayWidget.switchBottomTab('backtest')" style="padding: 10px 16px; font-size: 12px; font-weight: 700; background: transparent; border: none; color: #8896a8; cursor: pointer;">
               📊 Stage 1 Backtesting Replay
             </button>
+            <div style="margin-left: auto; display: flex; align-items: center;">
+              <button onclick="StockIntradayWidget.openEmailSummaryModal()" title="View and dispatch EOD Market Close Summary to jaiadithya2020@gmail.com" 
+                style="padding: 4px 12px; font-size: 11px; font-weight: 700; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
+                📧 EOD Market Summary Email
+              </button>
+            </div>
           </div>
 
           <!-- TAB 1: POSITIONS BLOTTER -->
@@ -1884,5 +1890,80 @@ const StockIntradayWidget = {
         resultSpan.textContent = `Net Profit: ₹${s.netProfit.toLocaleString('en-IN')} (${s.netProfitPct}%) | Win Rate: ${s.winRatePct}% | Sharpe: ${s.sharpeRatio.toFixed(2)}`;
       }
     } catch (e) { alert(e.message); }
+  },
+
+  async openEmailSummaryModal() {
+    try {
+      const res = await fetch('/api/quant/latest-email-summary');
+      const data = await res.json();
+      if (!data.html) {
+        alert('No compiled summary found yet.');
+        return;
+      }
+
+      let modal = document.getElementById('tvEmailPreviewModal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'tvEmailPreviewModal';
+        modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(6px);';
+        document.body.appendChild(modal);
+      }
+
+      modal.innerHTML = `
+        <div style="width: 90%; max-width: 900px; height: 88vh; background: #131722; border: 1px solid #2a2e39; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.7);">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #1e2433; border-bottom: 1px solid #2a3142;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-weight: 700; color: #38bdf8; font-size: 15px;">📧 EOD Market Close Summary Email</span>
+              <span style="font-size: 11px; background: rgba(56,189,248,0.15); color: #38bdf8; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.3);">
+                Target: jaiadithya2020@gmail.com
+              </span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <button onclick="StockIntradayWidget.dispatchEmailSummaryNow()" style="padding: 6px 14px; background: #0284c7; border: 1px solid #38bdf8; color: #fff; font-size: 11.5px; font-weight: 700; border-radius: 5px; cursor: pointer;">
+                📨 Send to jaiadithya2020@gmail.com
+              </button>
+              <button onclick="document.getElementById('tvEmailPreviewModal').remove()" style="background: transparent; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 4px 8px;">✕</button>
+            </div>
+          </div>
+          <div style="flex: 1; overflow: auto; padding: 0;">
+            <iframe srcdoc="${encodeURIComponent(data.html)}" style="width: 100%; height: 100%; border: none; background: #0f1318;"></iframe>
+          </div>
+        </div>
+      `;
+    } catch (e) {
+      alert('Could not load summary: ' + e.message);
+    }
+  },
+
+  async dispatchEmailSummaryNow() {
+    try {
+      if (typeof ToastNotification !== 'undefined') {
+        ToastNotification.show('⏳ Sending market close summary to jaiadithya2020@gmail.com...', 'info');
+      }
+
+      const res = await fetch('/api/quant/send-market-close-summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipient: 'jaiadithya2020@gmail.com', force: true })
+      });
+      const data = await res.json();
+
+      if (data.delivered) {
+        const msg = `🎉 Market close summary successfully sent to ${data.recipient} via ${data.method}!`;
+        if (typeof ToastNotification !== 'undefined') ToastNotification.show(msg, 'success');
+        else alert(msg);
+      } else if (data.archived) {
+        const msg = `💾 Summary compiled and saved to ${data.reportFilename}. (To send direct to Gmail inbox, configure your Gmail App Password in Risk Settings).`;
+        if (typeof ToastNotification !== 'undefined') ToastNotification.show(msg, 'warning');
+        else alert(msg);
+      } else {
+        const msg = data.message || 'Failed to dispatch email';
+        if (typeof ToastNotification !== 'undefined') ToastNotification.show('⚠️ ' + msg, 'warning');
+        else alert('⚠️ ' + msg);
+      }
+    } catch (e) {
+      if (typeof ToastNotification !== 'undefined') ToastNotification.show('❌ ' + e.message, 'error');
+      else alert('❌ ' + e.message);
+    }
   }
 };

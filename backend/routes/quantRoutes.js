@@ -547,4 +547,89 @@ router.post('/quant/promote-to-swing', async (req, res) => {
   }
 });
 
+/**
+ * GET /api/quant/email-settings
+ * Returns current EOD email notification configuration
+ */
+router.get('/quant/email-settings', (req, res) => {
+  try {
+    const emailNotificationService = require('../services/emailNotificationService');
+    const settings = emailNotificationService.getSettings();
+    // Mask password in response
+    const maskedSettings = {
+      ...settings,
+      smtpPass: settings.smtpPass ? '••••••••••••••••' : '',
+      isConfigured: Boolean(settings.smtpUser && settings.smtpPass)
+    };
+    res.json({ success: true, settings: maskedSettings });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * POST /api/quant/email-settings
+ * Updates email notification settings (recipient, credentials, toggle)
+ */
+router.post('/quant/email-settings', (req, res) => {
+  try {
+    const emailNotificationService = require('../services/emailNotificationService');
+    const updated = emailNotificationService.saveEmailSettings(req.body);
+    res.json({
+      success: true,
+      message: 'Email notification settings updated successfully',
+      settings: {
+        ...updated,
+        smtpPass: updated.smtpPass ? '••••••••••••••••' : '',
+        isConfigured: Boolean(updated.smtpUser && updated.smtpPass)
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * POST /api/quant/send-market-close-summary
+ * Triggers compilation and email dispatch of today's market close executive summary
+ */
+router.post('/quant/send-market-close-summary', async (req, res) => {
+  try {
+    const emailNotificationService = require('../services/emailNotificationService');
+    const { recipient, force } = req.body || {};
+    const result = await emailNotificationService.sendDailySummaryEmail({
+      recipient,
+      force: force !== false // manual trigger forces dispatch
+    });
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * GET /api/quant/latest-email-summary
+ * Returns the latest compiled HTML market close summary for in-app preview
+ */
+router.get('/quant/latest-email-summary', (req, res) => {
+  try {
+    const emailNotificationService = require('../services/emailNotificationService');
+    const latest = emailNotificationService.getLatestReport();
+    if (!latest) {
+      // Compile fresh if none exists
+      const dayData = emailNotificationService.compileDayData();
+      const html = emailNotificationService.generateHtmlReport(dayData);
+      return res.json({
+        success: true,
+        filename: `market_close_summary_${dayData.date}.html`,
+        html,
+        isFresh: true
+      });
+    }
+    res.json({ success: true, ...latest });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 module.exports = router;

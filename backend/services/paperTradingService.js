@@ -33,8 +33,15 @@ class PaperTradingService {
       if (fs.existsSync(PAPER_STATE_FILE)) {
         const raw = fs.readFileSync(PAPER_STATE_FILE, 'utf8');
         const state = JSON.parse(raw);
-        this.initialCapital = state.initialCapital || this.initialCapital;
-        this.currentBalance = state.currentBalance !== undefined ? state.currentBalance : this.initialCapital;
+        this.initialCapital = Number(state.initialCapital) || 100000;
+        const rawBal = Number(state.currentBalance);
+        if (!isNaN(rawBal) && rawBal > 0) {
+          this.currentBalance = rawBal;
+        } else {
+          const totalPnL = (state.tradeHistory || []).reduce((sum, t) => sum + (Number(t.pnl) || 0), 0);
+          const totalMargin = (state.positions || []).reduce((sum, p) => sum + (Number(p.marginBlocked) || 0), 0);
+          this.currentBalance = parseFloat((this.initialCapital + totalPnL - totalMargin).toFixed(2));
+        }
         this.positions = state.positions || [];
         this.tradeHistory = state.tradeHistory || [];
       }
@@ -76,9 +83,10 @@ class PaperTradingService {
 
   savePersistedState() {
     try {
+      const bal = Number.isFinite(this.currentBalance) ? parseFloat(this.currentBalance.toFixed(2)) : this.initialCapital;
       const state = {
         initialCapital: this.initialCapital,
-        currentBalance: parseFloat(this.currentBalance.toFixed(2)),
+        currentBalance: bal,
         positions: this.positions,
         tradeHistory: this.tradeHistory,
         lastUpdated: new Date().toISOString()
