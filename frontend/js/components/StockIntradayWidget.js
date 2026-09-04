@@ -19,8 +19,29 @@ const StockIntradayWidget = {
     if (!container) return;
 
     container.innerHTML = `
-      <div class="tradingview-terminal" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #d1d4dc; background: #131722; border-radius: 10px; overflow: hidden; border: 1px solid #2a2e39; margin-bottom: 20px;">
+      <div class="tradingview-terminal" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #d1d4dc; background: #131722; border-radius: 10px; overflow: hidden; border: 1px solid #2a2e39; margin-top: 14px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
         
+        <style>
+          .tv-terminal-main-grid {
+            display: grid;
+            grid-template-columns: 310px 1fr 360px;
+            min-height: 500px;
+          }
+          @media (max-width: 1380px) {
+            .tv-terminal-main-grid {
+              grid-template-columns: 290px 1fr 330px;
+            }
+          }
+          @media (max-width: 1100px) {
+            .tv-terminal-main-grid {
+              grid-template-columns: 1fr;
+            }
+          }
+          .tv-watchlist-row:hover {
+            background: #1c2230 !important;
+          }
+        </style>
+
         <!-- DATA INTEGRITY & MARKET STATUS BANNER -->
         <div id="tvMarketStatusBanner" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: rgba(234, 179, 8, 0.12); border-bottom: 1px solid rgba(234, 179, 8, 0.25); font-size: 11.5px; color: #eab308;">
           <div style="display: flex; align-items: center; gap: 8px;">
@@ -158,62 +179,175 @@ const StockIntradayWidget = {
 
         </div>
 
-        <!-- MAIN TRADING INTERFACE: 2-COLUMN SPLIT (CHART vs WATCHLIST) -->
-        <div style="display: grid; grid-template-columns: 1fr 340px; min-height: 480px; border-bottom: 1px solid #2a2e39;">
+        <!-- MAIN TRADING INTERFACE: 3-COLUMN BENTO TERMINAL (INTEL vs PRO CHART vs EXPANDED WATCHLIST) -->
+        <div class="tv-terminal-main-grid" style="border-bottom: 1px solid #2a2e39;">
           
-          <!-- LEFT: PRO CHART & STRATEGY CONFLUENCE VIEW -->
-          <div style="padding: 16px; border-right: 1px solid #2a2e39; display: flex; flex-direction: column;">
+          <!-- COLUMN 1: DEDICATED STOCK INTEL & ORDER STATION -->
+          <div style="padding: 14px; background: #161a25; border-right: 1px solid #2a2e39; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; max-height: 520px;">
             
-            <!-- Chart Toolbar -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-              <div style="display: flex; gap: 8px; align-items: center; font-size: 12px;">
-                <span style="color: #8896a8;">Timeframe:</span>
-                <span style="background: #2a2e39; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700;">15m ORB</span>
-                <span style="color: #2962ff; font-weight: 600; margin-left: 10px;">● VWAP</span>
-                <span style="color: #eab308; font-weight: 600; margin-left: 6px;">● 20 EMA</span>
-                <span style="color: #00d084; font-weight: 600; margin-left: 6px;">-- ORB High</span>
-                <span style="color: #ff4757; font-weight: 600; margin-left: 6px;">-- ORB Low</span>
+            <!-- Stock Overview Card -->
+            <div style="background: #1c212f; border: 1px solid #2a2e39; border-radius: 8px; padding: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span id="tvIntelSymbol" style="font-size: 16px; font-weight: 800; color: #fff; letter-spacing: 0.5px;">HDFCBANK</span>
+                    <span id="tvIntelSector" style="font-size: 10px; background: rgba(41, 98, 255, 0.2); color: #2962ff; padding: 1px 6px; border-radius: 3px; font-weight: 700; border: 1px solid rgba(41, 98, 255, 0.4);">Banking</span>
+                  </div>
+                  <div id="tvIntelName" style="font-size: 10.5px; color: #8896a8; margin-top: 2px;">HDFC Bank Ltd.</div>
+                </div>
+                <div style="text-align: right;">
+                  <div id="tvIntelLtp" style="font-size: 18px; font-weight: 800; font-family: monospace; color: #00d084;">₹1,642.50</div>
+                  <div id="tvIntelChg" style="font-size: 11px; font-weight: 700; font-family: monospace; color: #00d084;">+0.85%</div>
+                </div>
               </div>
 
-              <div id="tvSignalRationale" style="font-size: 11px; color: #8896a8; max-width: 450px; text-align: right;">
-                Awaiting ORB Breakout...
+              <!-- Day Range Meter -->
+              <div style="margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; font-size: 9.5px; color: #8896a8; margin-bottom: 3px;">
+                  <span>L: <strong id="tvIntelRangeLow" style="color: #ff4757; font-family: monospace;">₹1,632.00</strong></span>
+                  <span style="font-weight: 600; color: #d1d4dc;">Intraday Range</span>
+                  <span>H: <strong id="tvIntelRangeHigh" style="color: #00d084; font-family: monospace;">₹1,655.00</strong></span>
+                </div>
+                <div style="position: relative; height: 6px; background: #262b3a; border-radius: 3px;">
+                  <div id="tvIntelRangeFill" style="height: 100%; width: 55%; background: linear-gradient(90deg, #ff4757, #eab308, #00d084); border-radius: 3px;"></div>
+                  <div id="tvIntelRangeMarker" style="position: absolute; top: -3px; left: 55%; width: 4px; height: 12px; background: #fff; border-radius: 2px; box-shadow: 0 0 4px #000;"></div>
+                </div>
               </div>
             </div>
 
-            <!-- Candlestick SVG Visualizer -->
-            <div id="tvChartContainer" style="flex: 1; min-height: 320px; background: #131722; position: relative; border-radius: 6px; border: 1px solid rgba(255,255,255,0.03);">
-              <!-- Rendered via renderChartSVG -->
+            <!-- Technical Confluence Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              
+              <!-- VWAP -->
+              <div style="background: #1c212f; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px;">
+                <div style="font-size: 10px; color: #8896a8; text-transform: uppercase; font-weight: 700;">VWAP</div>
+                <div id="tvIntelVwap" style="font-size: 13px; font-weight: 700; color: #2962ff; font-family: monospace; margin: 2px 0;">₹1,640.20</div>
+                <div id="tvIntelVwapBias" style="font-size: 9.5px; color: #00d084; font-weight: 600;">▲ +0.14% Above</div>
+              </div>
+
+              <!-- 20 EMA -->
+              <div style="background: #1c212f; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px;">
+                <div style="font-size: 10px; color: #8896a8; text-transform: uppercase; font-weight: 700;">20 EMA</div>
+                <div id="tvIntelEma20" style="font-size: 13px; font-weight: 700; color: #eab308; font-family: monospace; margin: 2px 0;">₹1,638.50</div>
+                <div id="tvIntelEmaTrend" style="font-size: 9.5px; color: #00d084; font-weight: 600;">Bullish Trend</div>
+              </div>
+
+              <!-- 15m ORB High -->
+              <div style="background: #1c212f; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px;">
+                <div style="font-size: 10px; color: #8896a8; text-transform: uppercase; font-weight: 700;">15m ORB High</div>
+                <div id="tvIntelOrbHigh" style="font-size: 13px; font-weight: 700; color: #00d084; font-family: monospace; margin: 2px 0;">₹1,650.00</div>
+                <div style="font-size: 9px; color: #8896a8;">Breakout Barrier</div>
+              </div>
+
+              <!-- 15m ORB Low -->
+              <div style="background: #1c212f; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px;">
+                <div style="font-size: 10px; color: #8896a8; text-transform: uppercase; font-weight: 700;">15m ORB Low</div>
+                <div id="tvIntelOrbLow" style="font-size: 13px; font-weight: 700; color: #ff4757; font-family: monospace; margin: 2px 0;">₹1,635.00</div>
+                <div style="font-size: 9px; color: #8896a8;">Breakdown Barrier</div>
+              </div>
+
+              <!-- ATR 14 -->
+              <div style="background: #1c212f; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px;">
+                <div style="font-size: 10px; color: #8896a8; text-transform: uppercase; font-weight: 700;">ATR (14 Volatility)</div>
+                <div id="tvIntelAtr" style="font-size: 13px; font-weight: 700; color: #fff; font-family: monospace; margin: 2px 0;">₹19.50</div>
+                <div style="font-size: 9px; color: #8896a8;">~1.2% Day Range</div>
+              </div>
+
+              <!-- Volume -->
+              <div style="background: #1c212f; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px;">
+                <div style="font-size: 10px; color: #8896a8; text-transform: uppercase; font-weight: 700;">Session Volume</div>
+                <div id="tvIntelVolume" style="font-size: 13px; font-weight: 700; color: #fff; font-family: monospace; margin: 2px 0;">250K</div>
+                <div style="font-size: 9px; color: #8896a8;">NSE Equities</div>
+              </div>
+
             </div>
 
-            <!-- Quick Action Bar -->
-            <div style="display: flex; gap: 12px; margin-top: 14px; align-items: center; justify-content: space-between; background: #1e222d; padding: 10px 14px; border-radius: 8px;">
-              <div style="display: flex; gap: 14px; font-size: 12px;">
-                <div>Risk Budget: <strong style="color: #fff;">₹1,000 (1%)</strong></div>
-                <div>Allocated Shares: <strong id="tvOrderShares" style="color: #2962ff;">40 Qty</strong></div>
-                <div>Margin (5x): <strong id="tvOrderMargin" style="color: #eab308;">₹13,140</strong></div>
+            <!-- Trade Setup & Sizing Card -->
+            <div style="background: #1c212f; border: 1px solid #2a2e39; border-radius: 8px; padding: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 10.5px; font-weight: 800; color: #8896a8; text-transform: uppercase;">1:2 Risk Setup</span>
+                <span id="tvIntelSetupConfidence" style="font-size: 10px; font-weight: 700; color: #00d084; background: rgba(0,208,132,0.12); padding: 1px 6px; border-radius: 3px;">88% Confidence</span>
               </div>
 
-              <div style="display: flex; gap: 10px;">
-                <button onclick="StockIntradayWidget.executeSelectedOrder('BUY')" style="padding: 8px 24px; background: #00d084; color: #000; border: none; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; transition: opacity 0.2s;">
-                  BUY LONG (MIS)
-                </button>
-                <button onclick="StockIntradayWidget.executeSelectedOrder('SELL')" style="padding: 8px 24px; background: #ff4757; color: #fff; border: none; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; transition: opacity 0.2s;">
-                  SELL SHORT (MIS)
-                </button>
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px;">
+                <span style="color: #8896a8;">Target Price (2x ATR):</span>
+                <strong id="tvIntelTarget" style="color: #00d084; font-family: monospace;">₹1,675.00</strong>
               </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px;">
+                <span style="color: #8896a8;">Stop Loss (1.2x ATR):</span>
+                <strong id="tvIntelStopLoss" style="color: #ff4757; font-family: monospace;">₹1,625.00</strong>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px;">
+                <span style="color: #8896a8;">Risk Budget (1%):</span>
+                <strong style="color: #fff; font-family: monospace;">₹1,000.00</strong>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px;">
+                <span style="color: #8896a8;">Allocated Position:</span>
+                <strong id="tvOrderShares" style="color: #2962ff; font-family: monospace;">40 Shares</strong>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 11px; padding-top: 5px; border-top: 1px dashed #2a2e39;">
+                <span style="color: #8896a8;">Margin Required (5x):</span>
+                <strong id="tvOrderMargin" style="color: #eab308; font-family: monospace;">₹13,140</strong>
+              </div>
+            </div>
+
+            <!-- Instant Order Execution Buttons -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: auto;">
+              <button onclick="StockIntradayWidget.executeSelectedOrder('BUY')" style="padding: 10px 12px; background: #00d084; color: #000; border: none; border-radius: 6px; font-weight: 800; font-size: 11.5px; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                <span>🟢</span> BUY (MIS)
+              </button>
+              <button onclick="StockIntradayWidget.executeSelectedOrder('SELL')" style="padding: 10px 12px; background: #ff4757; color: #fff; border: none; border-radius: 6px; font-weight: 800; font-size: 11.5px; cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                <span>🔴</span> SELL (MIS)
+              </button>
             </div>
 
           </div>
 
-          <!-- RIGHT: TRADINGVIEW STYLE WATCHLIST -->
-          <div style="background: #181c27; display: flex; flex-direction: column;">
+          <!-- COLUMN 2: PRO CANDLESTICK CHART & RATIONALE -->
+          <div style="padding: 14px; background: #131722; border-right: 1px solid #2a2e39; display: flex; flex-direction: column; min-width: 0;">
             
-            <div style="padding: 10px 14px; border-bottom: 1px solid #2a2e39;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-size: 12px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;">Expanded Universe</span>
-                <span id="tvWatchlistCount" style="font-size: 11px; color: #00d084; font-weight: 700;">40 Stocks (5x MIS)</span>
+            <!-- Chart Toolbar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; gap: 8px; align-items: center; font-size: 11px;">
+                <span style="background: #2a2e39; color: #fff; padding: 2px 7px; border-radius: 4px; font-weight: 700;">15m ORB</span>
+                <span style="color: #2962ff; font-weight: 600;">● VWAP</span>
+                <span style="color: #eab308; font-weight: 600;">● 20 EMA</span>
+                <span style="color: #00d084; font-weight: 600;">-- ORB High</span>
+                <span style="color: #ff4757; font-weight: 600;">-- ORB Low</span>
               </div>
-              <input type="text" id="tvSearchInput" placeholder="🔍 Search stock (e.g. INFY, ITC, MARUTI)..." oninput="StockIntradayWidget.onSearch(this.value)" style="width: 100%; box-sizing: border-box; padding: 6px 10px; background: #131722; border: 1px solid #2a2e39; color: #fff; border-radius: 4px; font-size: 11px; margin-bottom: 6px;">
+
+              <div id="tvChartStatus" style="font-size: 11px; color: #8896a8; font-family: monospace;">
+                Scales on Selection
+              </div>
+            </div>
+
+            <!-- Signal Rationale Callout -->
+            <div id="tvSignalRationale" style="font-size: 11.5px; color: #d1d4dc; background: #1a1e2b; border-left: 3px solid #2962ff; padding: 8px 12px; border-radius: 0 6px 6px 0; margin-bottom: 10px; line-height: 1.4;">
+              Awaiting ORB Breakout...
+            </div>
+
+            <!-- Candlestick SVG Visualizer -->
+            <div id="tvChartContainer" style="flex: 1; min-height: 350px; background: #0e1118; position: relative; border-radius: 6px; border: 1px solid #202634; display: flex; flex-direction: column; justify-content: center;">
+              <!-- Rendered via renderChartSVG -->
+            </div>
+
+          </div>
+
+          <!-- COLUMN 3: EXPANDED UNIVERSE WATCHLIST (RICH MULTI-DATA) -->
+          <div style="background: #181c27; display: flex; flex-direction: column; min-width: 0;">
+            
+            <div style="padding: 10px 12px; border-bottom: 1px solid #2a2e39;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 12px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;">Universe Watchlist</span>
+                <span id="tvWatchlistCount" style="font-size: 10.5px; color: #00d084; font-weight: 700;">40 Stocks (5x MIS)</span>
+              </div>
+              
+              <input type="text" id="tvSearchInput" placeholder="🔍 Search (e.g. INFY, ITC, MARUTI)..." oninput="StockIntradayWidget.onSearch(this.value)" style="width: 100%; box-sizing: border-box; padding: 6px 10px; background: #131722; border: 1px solid #2a2e39; color: #fff; border-radius: 4px; font-size: 11px; margin-bottom: 6px;">
+              
               <div style="display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px;">
                 <button class="sector-chip active" onclick="StockIntradayWidget.onFilterSector('ALL')" style="padding: 2px 7px; font-size: 10px; border-radius: 3px; border: none; background: #2962ff; color: #fff; cursor: pointer; white-space: nowrap;">All (40)</button>
                 <button class="sector-chip" onclick="StockIntradayWidget.onFilterSector('Banking')" style="padding: 2px 7px; font-size: 10px; border-radius: 3px; border: 1px solid #2a2e39; background: transparent; color: #8896a8; cursor: pointer; white-space: nowrap;">Banking</button>
@@ -499,37 +633,128 @@ const StockIntradayWidget = {
 
     this.selectedSymbol = stock.symbol;
 
-    document.getElementById('tvSymbolTitle').textContent = stock.symbol;
-    document.getElementById('tvLtpDisplay').textContent = `₹${stock.ltp.toFixed(2)}`;
+    // Top Header Bar
+    const titleEl = document.getElementById('tvSymbolTitle');
+    if (titleEl) titleEl.textContent = stock.symbol;
+    const ltpEl = document.getElementById('tvLtpDisplay');
+    if (ltpEl) ltpEl.textContent = `₹${stock.ltp.toFixed(2)}`;
     
     const isUp = (stock.pChange || 0) >= 0;
     const chgEl = document.getElementById('tvChgDisplay');
-    chgEl.textContent = `${isUp ? '+' : ''}${stock.pChange || 0}%`;
-    chgEl.style.color = isUp ? '#00d084' : '#ff4757';
-    document.getElementById('tvLtpDisplay').style.color = isUp ? '#00d084' : '#ff4757';
+    if (chgEl) {
+      chgEl.textContent = `${isUp ? '+' : ''}${stock.pChange || 0}%`;
+      chgEl.style.color = isUp ? '#00d084' : '#ff4757';
+    }
+    if (ltpEl) ltpEl.style.color = isUp ? '#00d084' : '#ff4757';
 
-    // Signal pill
+    // Signal pill in Top Header Bar
     const pill = document.getElementById('tvSignalPill');
-    if (stock.signal === 'BUY_LONG') {
-      pill.textContent = '🟢 BUY BREAKOUT (ORB)';
-      pill.style.background = 'rgba(0, 208, 132, 0.15)';
-      pill.style.color = '#00d084';
-      pill.style.borderColor = 'rgba(0, 208, 132, 0.3)';
-    } else if (stock.signal === 'SELL_SHORT') {
-      pill.textContent = '🔴 SELL BREAKDOWN (ORB)';
-      pill.style.background = 'rgba(255, 71, 87, 0.15)';
-      pill.style.color = '#ff4757';
-      pill.style.borderColor = 'rgba(255, 71, 87, 0.3)';
-    } else {
-      pill.textContent = '🟡 CONSOLIDATING (HOLD)';
-      pill.style.background = 'rgba(255, 255, 255, 0.05)';
-      pill.style.color = '#8896a8';
-      pill.style.borderColor = '#2a2e39';
+    if (pill) {
+      if (stock.signal === 'BUY_LONG') {
+        pill.textContent = '🟢 BUY BREAKOUT (ORB)';
+        pill.style.background = 'rgba(0, 208, 132, 0.15)';
+        pill.style.color = '#00d084';
+        pill.style.borderColor = 'rgba(0, 208, 132, 0.3)';
+      } else if (stock.signal === 'SELL_SHORT') {
+        pill.textContent = '🔴 SELL BREAKDOWN (ORB)';
+        pill.style.background = 'rgba(255, 71, 87, 0.15)';
+        pill.style.color = '#ff4757';
+        pill.style.borderColor = 'rgba(255, 71, 87, 0.3)';
+      } else {
+        pill.textContent = '🟡 CONSOLIDATING (HOLD)';
+        pill.style.background = 'rgba(255, 255, 255, 0.05)';
+        pill.style.color = '#8896a8';
+        pill.style.borderColor = '#2a2e39';
+      }
     }
 
-    document.getElementById('tvSignalRationale').textContent = stock.rationale || 'Consolidating inside 15m range.';
-    document.getElementById('tvOrderShares').textContent = `${stock.riskAllocation?.allocatedShares || 10} Qty`;
-    document.getElementById('tvOrderMargin').textContent = `₹${stock.riskAllocation?.marginRequired?.toFixed(0) || '0'}`;
+    // Column 1: Left Stock Intel Card
+    const intelSym = document.getElementById('tvIntelSymbol');
+    if (intelSym) intelSym.textContent = stock.symbol;
+    const intelSec = document.getElementById('tvIntelSector');
+    if (intelSec) intelSec.textContent = stock.sector || 'Equities';
+    const intelName = document.getElementById('tvIntelName');
+    if (intelName) intelName.textContent = stock.name || `${stock.symbol} Ltd.`;
+    const intelLtp = document.getElementById('tvIntelLtp');
+    if (intelLtp) {
+      intelLtp.textContent = `₹${stock.ltp.toFixed(2)}`;
+      intelLtp.style.color = isUp ? '#00d084' : '#ff4757';
+    }
+    const intelChg = document.getElementById('tvIntelChg');
+    if (intelChg) {
+      intelChg.textContent = `${isUp ? '+' : ''}${stock.pChange || 0}%`;
+      intelChg.style.color = isUp ? '#00d084' : '#ff4757';
+    }
+
+    // Day Range Meter
+    const high = stock.high || (stock.ltp * 1.008);
+    const low = stock.low || (stock.ltp * 0.994);
+    const range = Math.max(0.01, high - low);
+    const pctFromLow = Math.max(0, Math.min(100, ((stock.ltp - low) / range) * 100));
+
+    const lowEl = document.getElementById('tvIntelRangeLow');
+    if (lowEl) lowEl.textContent = `₹${low.toFixed(2)}`;
+    const highEl = document.getElementById('tvIntelRangeHigh');
+    if (highEl) highEl.textContent = `₹${high.toFixed(2)}`;
+    const fillEl = document.getElementById('tvIntelRangeFill');
+    if (fillEl) fillEl.style.width = `${pctFromLow}%`;
+    const markerEl = document.getElementById('tvIntelRangeMarker');
+    if (markerEl) markerEl.style.left = `calc(${pctFromLow}% - 2px)`;
+
+    // Confluence technical values
+    const vwapVal = stock.vwap || stock.ltp;
+    const vwapEl = document.getElementById('tvIntelVwap');
+    if (vwapEl) vwapEl.textContent = `₹${vwapVal.toFixed(2)}`;
+    const vwapBiasEl = document.getElementById('tvIntelVwapBias');
+    if (vwapBiasEl) {
+      const vDiff = (((stock.ltp - vwapVal) / vwapVal) * 100);
+      const isAbove = vDiff >= 0;
+      vwapBiasEl.textContent = `${isAbove ? '▲ +' : '▼ '}${vDiff.toFixed(2)}% ${isAbove ? 'Above' : 'Below'}`;
+      vwapBiasEl.style.color = isAbove ? '#00d084' : '#ff4757';
+    }
+
+    const emaVal = stock.ema20 || stock.ltp;
+    const emaEl = document.getElementById('tvIntelEma20');
+    if (emaEl) emaEl.textContent = `₹${emaVal.toFixed(2)}`;
+    const emaTrendEl = document.getElementById('tvIntelEmaTrend');
+    if (emaTrendEl) {
+      const aboveEma = stock.ltp >= emaVal;
+      emaTrendEl.textContent = aboveEma ? 'Bullish Trend' : 'Bearish Trend';
+      emaTrendEl.style.color = aboveEma ? '#00d084' : '#ff4757';
+    }
+
+    const orbHEl = document.getElementById('tvIntelOrbHigh');
+    if (orbHEl) orbHEl.textContent = `₹${(stock.orbHigh || (stock.ltp * 1.005)).toFixed(2)}`;
+    const orbLEl = document.getElementById('tvIntelOrbLow');
+    if (orbLEl) orbLEl.textContent = `₹${(stock.orbLow || (stock.ltp * 0.995)).toFixed(2)}`;
+
+    const atr = stock.atr || parseFloat((stock.ltp * 0.012).toFixed(2));
+    const atrEl = document.getElementById('tvIntelAtr');
+    if (atrEl) atrEl.textContent = `₹${atr.toFixed(2)}`;
+
+    const volEl = document.getElementById('tvIntelVolume');
+    if (volEl) volEl.textContent = `${((stock.volume || 250000) / 1000).toFixed(0)}K`;
+
+    // Setup Target / Stop Loss
+    const targetVal = stock.target || parseFloat((stock.ltp + (2.0 * atr)).toFixed(2));
+    const stopLossVal = stock.stopLoss || parseFloat((stock.ltp - (1.2 * atr)).toFixed(2));
+    const targetEl = document.getElementById('tvIntelTarget');
+    if (targetEl) targetEl.textContent = `₹${targetVal.toFixed(2)}`;
+    const slEl = document.getElementById('tvIntelStopLoss');
+    if (slEl) slEl.textContent = `₹${stopLossVal.toFixed(2)}`;
+
+    const confEl = document.getElementById('tvIntelSetupConfidence');
+    if (confEl) confEl.textContent = `${stock.confidence || '85%'} Confidence`;
+
+    // Order shares & margin
+    const sharesEl = document.getElementById('tvOrderShares');
+    if (sharesEl) sharesEl.textContent = `${stock.riskAllocation?.allocatedShares || 10} Shares`;
+    const marginEl = document.getElementById('tvOrderMargin');
+    if (marginEl) marginEl.textContent = `₹${stock.riskAllocation?.marginRequired?.toFixed(0) || '0'}`;
+
+    // Rationale
+    const ratEl = document.getElementById('tvSignalRationale');
+    if (ratEl) ratEl.textContent = stock.rationale || 'Consolidating inside 15m range. Awaiting breakout confluence.';
 
     this.renderChartSVG(stock);
   },
@@ -540,7 +765,7 @@ const StockIntradayWidget = {
 
     let filtered = stocks;
     if (this.searchQuery) {
-      filtered = filtered.filter(s => s.symbol.includes(this.searchQuery));
+      filtered = filtered.filter(s => s.symbol.includes(this.searchQuery) || (s.name && s.name.toUpperCase().includes(this.searchQuery)));
     }
     if (this.selectedSector && this.selectedSector !== 'ALL') {
       filtered = filtered.filter(s => s.sector === this.selectedSector);
@@ -554,19 +779,39 @@ const StockIntradayWidget = {
       const isUp = (s.pChange || 0) >= 0;
       const isBuy = s.signal === 'BUY_LONG';
       const isSell = s.signal === 'SELL_SHORT';
+      
+      const vwapDiff = s.vwap ? (((s.ltp - s.vwap) / s.vwap) * 100).toFixed(1) : '0.0';
+      const isAboveVwap = s.vwap ? s.ltp >= s.vwap : true;
+      const atrVal = s.atr ? s.atr.toFixed(1) : (s.ltp * 0.012).toFixed(1);
 
       return `
-        <div onclick="StockIntradayWidget.selectStock('${s.symbol}')" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; background: ${isSelected ? '#202634' : 'transparent'}; border-left: ${isSelected ? '3px solid #2962ff' : '3px solid transparent'}; transition: background 0.15s;">
-          <div>
-            <div style="font-size: 13px; font-weight: 700; color: ${isSelected ? '#fff' : '#d1d4dc'};">${s.symbol}</div>
-            <div style="font-size: 10.5px; color: ${isBuy ? '#00d084' : (isSell ? '#ff4757' : '#8896a8')}; font-weight: 600;">
-              ${s.signal === 'BUY_LONG' ? '● Breakout' : (s.signal === 'SELL_SHORT' ? '● Breakdown' : 'Neutral')}
+        <div class="tv-watchlist-row" onclick="StockIntradayWidget.selectStock('${s.symbol}')" style="padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; background: ${isSelected ? '#202634' : 'transparent'}; border-left: ${isSelected ? '3px solid #2962ff' : '3px solid transparent'}; transition: background 0.15s;">
+          <!-- Row 1: Symbol, Sector, LTP, % Chg -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 12.5px; font-weight: 700; color: ${isSelected ? '#fff' : '#e1e4ea'};">${s.symbol}</span>
+              <span style="font-size: 9px; padding: 1px 4px; border-radius: 2px; background: rgba(255,255,255,0.06); color: #8896a8;">${s.sector || 'Eq'}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 12.5px; font-weight: 700; font-family: monospace; color: #fff;">₹${s.ltp.toFixed(2)}</span>
+              <span style="font-size: 10px; font-weight: 700; font-family: monospace; padding: 1px 5px; border-radius: 3px; background: ${isUp ? 'rgba(0,208,132,0.15)' : 'rgba(255,71,87,0.15)'}; color: ${isUp ? '#00d084' : '#ff4757'};">
+                ${isUp ? '+' : ''}${s.pChange || 0}%
+              </span>
             </div>
           </div>
-          <div style="text-align: right;">
-            <div style="font-size: 13px; font-weight: 700; font-family: monospace; color: #fff;">₹${s.ltp.toFixed(2)}</div>
-            <div style="font-size: 11px; font-weight: 600; color: ${isUp ? '#00d084' : '#ff4757'};">
-              ${isUp ? '+' : ''}${s.pChange || 0}%
+          
+          <!-- Row 2: Signal badge, VWAP position, ATR -->
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10px;">
+            <div>
+              ${isBuy ? '<span style="color: #00d084; font-weight: 700;">🟢 Breakout</span>' : 
+                (isSell ? '<span style="color: #ff4757; font-weight: 700;">🔴 Breakdown</span>' : 
+                '<span style="color: #8896a8; font-weight: 500;">⚪ Range</span>')}
+            </div>
+            <div style="display: flex; gap: 8px; color: #8896a8; font-size: 9.5px;">
+              <span style="color: ${isAboveVwap ? '#00d084' : '#ff4757'};">
+                ${isAboveVwap ? '▲' : '▼'} ${isAboveVwap ? '+' : ''}${vwapDiff}% VWAP
+              </span>
+              <span>ATR: ₹${atrVal}</span>
             </div>
           </div>
         </div>
@@ -578,18 +823,18 @@ const StockIntradayWidget = {
     const container = document.getElementById('tvChartContainer');
     if (!container) return;
 
-    const width = container.clientWidth || 600;
-    const height = 300;
+    const width = container.clientWidth || 560;
+    const height = 350;
     const ltp = stock.ltp;
-    const vwap = stock.vwap;
-    const orbHigh = stock.orbHigh;
-    const orbLow = stock.orbLow;
-    const ema20 = stock.ema20;
+    const vwap = stock.vwap || ltp;
+    const orbHigh = stock.orbHigh || (ltp * 1.005);
+    const orbLow = stock.orbLow || (ltp * 0.995);
+    const ema20 = stock.ema20 || ltp;
 
     // Price scaling with safe symmetrical padding
     const allPrices = [ltp, vwap, orbHigh, orbLow, ema20];
-    const maxP = Math.max(...allPrices) * 1.004;
-    const minP = Math.min(...allPrices) * 0.996;
+    const maxP = Math.max(...allPrices) * 1.003;
+    const minP = Math.min(...allPrices) * 0.997;
     const pRange = maxP - minP || 1;
 
     const getY = (price) => {
@@ -597,9 +842,10 @@ const StockIntradayWidget = {
       return height - 35 - (((clamped - minP) / pRange) * (height - 70));
     };
 
-    // Generate 18 proportional intraday candles ending cleanly at LTP
-    const numCandles = 18;
+    // Generate 20 proportional intraday candles ending cleanly at LTP
+    const numCandles = 20;
     const candleWidth = (width - 90) / numCandles;
+    const bodyW = Math.max(4, Math.min(18, candleWidth * 0.65));
     let candleSvg = '';
 
     for (let i = 0; i < numCandles; i++) {
@@ -613,20 +859,22 @@ const StockIntradayWidget = {
       let open = baseMid + osc;
       let close = isLast ? ltp : open + (Math.cos(i * 1.2) * (pRange * 0.05));
       if (isLast) {
-        open = close + (stock.signal === 'SELL_SHORT' ? (pRange * 0.08) : -(pRange * 0.08));
+        open = close + (stock.signal === 'SELL_SHORT' ? (pRange * 0.06) : -(pRange * 0.06));
       }
-      let high = Math.max(open, close) + (pRange * 0.02);
-      let low = Math.min(open, close) - (pRange * 0.02);
+      let high = Math.max(open, close) + (pRange * 0.015);
+      let low = Math.min(open, close) - (pRange * 0.015);
 
       const isGreen = close >= open;
       const color = isGreen ? '#00d084' : '#ff4757';
       const yTop = getY(Math.max(open, close));
       const yBot = getY(Math.min(open, close));
       const barH = Math.max(3, yBot - yTop);
+      const wickX = x + candleWidth / 2;
+      const bodyX = wickX - (bodyW / 2);
 
       candleSvg += `
-        <line x1="${x + candleWidth/2}" y1="${getY(high)}" x2="${x + candleWidth/2}" y2="${getY(low)}" stroke="${color}" stroke-width="1.2" />
-        <rect x="${x + 2}" y="${yTop}" width="${Math.max(2, candleWidth - 5)}" height="${barH}" fill="${color}" rx="1" />
+        <line x1="${wickX}" y1="${getY(high)}" x2="${wickX}" y2="${getY(low)}" stroke="${color}" stroke-width="1.2" />
+        <rect x="${bodyX}" y="${yTop}" width="${bodyW}" height="${barH}" fill="${color}" rx="1" />
       `;
     }
 
@@ -638,23 +886,22 @@ const StockIntradayWidget = {
 
     container.innerHTML = `
       <svg width="100%" height="${height}" style="overflow: hidden; display: block;">
-
         <!-- Grid horizontal lines -->
-        <line x1="30" y1="${height/4}" x2="${width-20}" y2="${height/4}" stroke="#202634" stroke-width="1" stroke-dasharray="3,3" />
-        <line x1="30" y1="${height/2}" x2="${width-20}" y2="${height/2}" stroke="#202634" stroke-width="1" stroke-dasharray="3,3" />
-        <line x1="30" y1="${height*0.75}" x2="${width-20}" y2="${height*0.75}" stroke="#202634" stroke-width="1" stroke-dasharray="3,3" />
+        <line x1="30" y1="${height/4}" x2="${width-20}" y2="${height/4}" stroke="#1e2433" stroke-width="1" stroke-dasharray="3,3" />
+        <line x1="30" y1="${height/2}" x2="${width-20}" y2="${height/2}" stroke="#1e2433" stroke-width="1" stroke-dasharray="3,3" />
+        <line x1="30" y1="${height*0.75}" x2="${width-20}" y2="${height*0.75}" stroke="#1e2433" stroke-width="1" stroke-dasharray="3,3" />
 
         <!-- ORB High Level (Green Dashed) -->
         <line x1="30" y1="${yOrbHigh}" x2="${width-20}" y2="${yOrbHigh}" stroke="#00d084" stroke-width="1.5" stroke-dasharray="5,5" />
-        <text x="${width-70}" y="${yOrbHigh - 4}" fill="#00d084" font-size="10" font-weight="700">ORB HIGH ₹${orbHigh.toFixed(0)}</text>
+        <text x="${width-85}" y="${yOrbHigh - 4}" fill="#00d084" font-size="9.5" font-weight="700">ORB HIGH ₹${orbHigh.toFixed(0)}</text>
 
         <!-- ORB Low Level (Red Dashed) -->
         <line x1="30" y1="${yOrbLow}" x2="${width-20}" y2="${yOrbLow}" stroke="#ff4757" stroke-width="1.5" stroke-dasharray="5,5" />
-        <text x="${width-70}" y="${yOrbLow + 12}" fill="#ff4757" font-size="10" font-weight="700">ORB LOW ₹${orbLow.toFixed(0)}</text>
+        <text x="${width-85}" y="${yOrbLow + 12}" fill="#ff4757" font-size="9.5" font-weight="700">ORB LOW ₹${orbLow.toFixed(0)}</text>
 
         <!-- VWAP Line (Cyan/Blue Solid) -->
         <line x1="30" y1="${yVwap}" x2="${width-20}" y2="${yVwap}" stroke="#2962ff" stroke-width="2" />
-        <text x="35" y="${yVwap - 4}" fill="#2962ff" font-size="10" font-weight="700">VWAP ₹${vwap.toFixed(1)}</text>
+        <text x="35" y="${yVwap - 4}" fill="#2962ff" font-size="9.5" font-weight="700">VWAP ₹${vwap.toFixed(1)}</text>
 
         <!-- 20 EMA Line (Yellow) -->
         <line x1="30" y1="${yEma}" x2="${width-20}" y2="${yEma}" stroke="#eab308" stroke-width="1.5" stroke-dasharray="2,2" />
@@ -664,8 +911,8 @@ const StockIntradayWidget = {
 
         <!-- Current LTP Marker -->
         <circle cx="${width - 70}" cy="${getY(ltp)}" r="4" fill="#fff" />
-        <rect x="${width - 60}" y="${getY(ltp) - 10}" width="55" height="18" fill="#2962ff" rx="3" />
-        <text x="${width - 55}" y="${getY(ltp) + 3}" fill="#fff" font-size="10" font-weight="700">₹${ltp.toFixed(0)}</text>
+        <rect x="${width - 64}" y="${getY(ltp) - 10}" width="60" height="18" fill="#2962ff" rx="3" />
+        <text x="${width - 60}" y="${getY(ltp) + 3}" fill="#fff" font-size="10" font-weight="700">₹${ltp.toFixed(1)}</text>
       </svg>
     `;
   },

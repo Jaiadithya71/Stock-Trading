@@ -105,13 +105,19 @@ class StockSignalEngine {
       const signalItem = {
         symbol,
         token: stock.token,
+        name: stock.name || stock.symbol,
         signal,
         action: signal === 'BUY_LONG' ? 'BUY' : (signal === 'SELL_SHORT' ? 'SELL' : 'HOLD'),
         ltp,
+        open: stock.open || ltp,
+        high: stock.high || ltp,
+        low: stock.low || ltp,
+        volume: stock.volume || 0,
         vwap,
         orbHigh,
         orbLow,
         ema20,
+        atr,
         stopLoss,
         target,
         confidence: Math.round(confidence * 100) + '%',
@@ -119,10 +125,10 @@ class StockSignalEngine {
         pChange: pChange !== undefined ? pChange : 0,
         sector: stock.sector || 'Equities',
         riskAllocation: {
-          allocatedShares: signal !== 'NEUTRAL_HOLD' ? calculatedShares : 0,
+          allocatedShares: signal !== 'NEUTRAL_HOLD' ? calculatedShares : Math.max(1, Math.floor(1000 / (atr || 10))),
           riskAmount: riskPerTrade,
-          estimatedExposure: signal !== 'NEUTRAL_HOLD' ? parseFloat((calculatedShares * ltp).toFixed(2)) : 0,
-          marginRequired: signal !== 'NEUTRAL_HOLD' ? parseFloat(((calculatedShares * ltp) / 5).toFixed(2)) : 0
+          estimatedExposure: parseFloat(((signal !== 'NEUTRAL_HOLD' ? calculatedShares : Math.max(1, Math.floor(1000 / (atr || 10)))) * ltp).toFixed(2)),
+          marginRequired: parseFloat((((signal !== 'NEUTRAL_HOLD' ? calculatedShares : Math.max(1, Math.floor(1000 / (atr || 10)))) * ltp) / 5).toFixed(2))
         },
         timestamp: new Date().toISOString()
       };
