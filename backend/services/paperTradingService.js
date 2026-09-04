@@ -123,9 +123,9 @@ class PaperTradingService {
    */
   evaluateOpenPositions(priceMap = {}) {
     const closed = [];
-    const open = [];
+    const openPositions = [...this.positions];
 
-    for (const pos of this.positions) {
+    for (const pos of openPositions) {
       const cleanSymbol = pos.symbol.replace('-EQ', '');
       const currentPrice = priceMap[cleanSymbol] || priceMap[pos.symbol] || pos.entryPrice;
       let shouldExit = false;
@@ -240,6 +240,7 @@ class PaperTradingService {
       completedTradesCount: totalCompleted,
       winRatePct: parseFloat(winRatePct.toFixed(1)),
       totalRealizedPnL: parseFloat(totalRealizedPnL.toFixed(2)),
+      activePositions: this.positions,
       positions: this.positions,
       tradeHistory: this.tradeHistory.slice(0, 50)
     };
