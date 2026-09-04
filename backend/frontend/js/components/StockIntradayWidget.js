@@ -11,6 +11,7 @@ const StockIntradayWidget = {
   searchQuery: '',
   selectedSector: 'ALL',
   activeStocks: [],
+  currentCandles: [],
   pollInterval: null,
   activeTab: 'positions', // 'positions', 'history', 'backtest'
 
@@ -311,7 +312,7 @@ const StockIntradayWidget = {
           <div style="padding: 14px; background: #131722; border-right: 1px solid #2a2e39; display: flex; flex-direction: column; min-width: 0;">
             
             <!-- Chart Toolbar -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
               <div style="display: flex; gap: 8px; align-items: center; font-size: 11px;">
                 <span style="background: #2a2e39; color: #fff; padding: 2px 7px; border-radius: 4px; font-weight: 700;">15m ORB</span>
                 <span style="color: #2962ff; font-weight: 600;">● VWAP</span>
@@ -320,18 +321,29 @@ const StockIntradayWidget = {
                 <span style="color: #ff4757; font-weight: 600;">-- ORB Low</span>
               </div>
 
-              <div id="tvChartStatus" style="font-size: 11px; color: #8896a8; font-family: monospace;">
-                Scales on Selection
+              <div id="tvChartStatus" style="font-size: 10.5px; color: #8896a8; font-family: monospace;">
+                💡 Hover candle for details
               </div>
             </div>
 
+            <!-- Real-Time Interactive OHLC Inspection Bar -->
+            <div id="tvChartOhlcBar" style="display: flex; gap: 10px; font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #8896a8; background: #181c27; padding: 6px 12px; border-radius: 6px; margin-bottom: 8px; flex-wrap: wrap; align-items: center; border: 1px solid rgba(255,255,255,0.06);">
+              <span>Bar: <strong id="tvOhlcTime" style="color: #fff;">--:--</strong></span>
+              <span>O: <strong id="tvOhlcOpen" style="color: #fff;">₹-</strong></span>
+              <span>H: <strong id="tvOhlcHigh" style="color: #00d084;">₹-</strong></span>
+              <span>L: <strong id="tvOhlcLow" style="color: #ff4757;">₹-</strong></span>
+              <span>C: <strong id="tvOhlcClose" style="color: #fff;">₹-</strong></span>
+              <span>Chg: <strong id="tvOhlcChg" style="color: #00d084;">-</strong></span>
+              <span>Vol: <strong id="tvOhlcVol" style="color: #2962ff;">-</strong></span>
+            </div>
+
             <!-- Signal Rationale Callout -->
-            <div id="tvSignalRationale" style="font-size: 11.5px; color: #d1d4dc; background: #1a1e2b; border-left: 3px solid #2962ff; padding: 8px 12px; border-radius: 0 6px 6px 0; margin-bottom: 10px; line-height: 1.4;">
+            <div id="tvSignalRationale" style="font-size: 11.5px; color: #d1d4dc; background: #1a1e2b; border-left: 3px solid #2962ff; padding: 7px 12px; border-radius: 0 6px 6px 0; margin-bottom: 8px; line-height: 1.4;">
               Awaiting ORB Breakout...
             </div>
 
-            <!-- Candlestick SVG Visualizer -->
-            <div id="tvChartContainer" style="flex: 1; min-height: 350px; background: #0e1118; position: relative; border-radius: 6px; border: 1px solid #202634; display: flex; flex-direction: column; justify-content: center;">
+            <!-- Candlestick SVG Visualizer & Hover Overlay -->
+            <div id="tvChartContainer" style="flex: 1; min-height: 350px; background: #0e1118; position: relative; border-radius: 6px; border: 1px solid #202634; display: flex; flex-direction: column; justify-content: center;" onmouseleave="StockIntradayWidget.onLeaveCandle()">
               <!-- Rendered via renderChartSVG -->
             </div>
 
@@ -846,7 +858,10 @@ const StockIntradayWidget = {
     const numCandles = 20;
     const candleWidth = (width - 90) / numCandles;
     const bodyW = Math.max(4, Math.min(18, candleWidth * 0.65));
+
+    this.currentCandles = [];
     let candleSvg = '';
+    let hoverOverlaySvg = '';
 
     for (let i = 0; i < numCandles; i++) {
       const x = 30 + (i * candleWidth);
@@ -872,9 +887,42 @@ const StockIntradayWidget = {
       const wickX = x + candleWidth / 2;
       const bodyX = wickX - (bodyW / 2);
 
+      // Timestamps formatted as 15m intervals starting from 09:15 IST
+      const startMin = 9 * 60 + 15 + (i * 15);
+      const hStr = String(Math.floor(startMin / 60)).padStart(2, '0');
+      const mStr = String(startMin % 60).padStart(2, '0');
+      const timeStr = `${hStr}:${mStr}`;
+      const candleVol = Math.floor(((stock.volume || 250000) / numCandles) * (0.7 + Math.abs(Math.sin(i * 1.5)) * 0.6));
+
+      this.currentCandles.push({
+        index: i,
+        timeStr,
+        open: parseFloat(open.toFixed(2)),
+        high: parseFloat(high.toFixed(2)),
+        low: parseFloat(low.toFixed(2)),
+        close: parseFloat(close.toFixed(2)),
+        change: parseFloat((close - open).toFixed(2)),
+        changePct: parseFloat((((close - open) / open) * 100).toFixed(2)),
+        volume: candleVol,
+        wickX,
+        yClose: getY(close),
+        yOpen: getY(open),
+        isGreen
+      });
+
+      // SVG Candle Group
       candleSvg += `
-        <line x1="${wickX}" y1="${getY(high)}" x2="${wickX}" y2="${getY(low)}" stroke="${color}" stroke-width="1.2" />
-        <rect x="${bodyX}" y="${yTop}" width="${bodyW}" height="${barH}" fill="${color}" rx="1" />
+        <g id="tvCandleG_${i}">
+          <line x1="${wickX}" y1="${getY(high)}" x2="${wickX}" y2="${getY(low)}" stroke="${color}" stroke-width="1.2" />
+          <rect x="${bodyX}" y="${yTop}" width="${bodyW}" height="${barH}" fill="${color}" rx="1" />
+        </g>
+      `;
+
+      // Invisible wide hit area for effortless cursor hovering across the entire vertical band
+      hoverOverlaySvg += `
+        <rect x="${x}" y="0" width="${candleWidth}" height="${height}" fill="transparent" cursor="crosshair"
+          onmouseenter="StockIntradayWidget.onHoverCandle(${i})"
+          onmousemove="StockIntradayWidget.onMoveCandle(event, ${i})" />
       `;
     }
 
@@ -909,12 +957,131 @@ const StockIntradayWidget = {
         <!-- Candlesticks -->
         ${candleSvg}
 
+        <!-- Interactive Crosshair Lines -->
+        <line id="tvCrosshairX" x1="0" y1="0" x2="0" y2="${height}" stroke="#4f596d" stroke-width="1" stroke-dasharray="3,3" style="display: none; pointer-events: none;" />
+        <line id="tvCrosshairY" x1="30" y1="0" x2="${width-20}" y2="0" stroke="#4f596d" stroke-width="1" stroke-dasharray="3,3" style="display: none; pointer-events: none;" />
+
         <!-- Current LTP Marker -->
         <circle cx="${width - 70}" cy="${getY(ltp)}" r="4" fill="#fff" />
         <rect x="${width - 64}" y="${getY(ltp) - 10}" width="60" height="18" fill="#2962ff" rx="3" />
         <text x="${width - 60}" y="${getY(ltp) + 3}" fill="#fff" font-size="10" font-weight="700">₹${ltp.toFixed(1)}</text>
+
+        <!-- Interactive Transparent Hit Overlays (Always on top) -->
+        ${hoverOverlaySvg}
       </svg>
+      <div id="tvCandleTooltip" style="display: none; position: absolute; pointer-events: none; z-index: 50; background: rgba(18, 22, 33, 0.95); backdrop-filter: blur(8px); border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 12px; font-size: 11px; box-shadow: 0 8px 24px rgba(0,0,0,0.7); min-width: 175px;"></div>
     `;
+
+    // Populate OHLC bar with latest candle data by default
+    if (this.currentCandles.length > 0) {
+      this.updateOhlcBar(this.currentCandles[this.currentCandles.length - 1]);
+    }
+  },
+
+  onHoverCandle(idx) {
+    const candle = this.currentCandles[idx];
+    if (!candle) return;
+    this.updateOhlcBar(candle);
+    
+    const crossX = document.getElementById('tvCrosshairX');
+    const crossY = document.getElementById('tvCrosshairY');
+    if (crossX) {
+      crossX.setAttribute('x1', candle.wickX);
+      crossX.setAttribute('x2', candle.wickX);
+      crossX.style.display = 'block';
+    }
+    if (crossY) {
+      crossY.setAttribute('y1', candle.yClose);
+      crossY.setAttribute('y2', candle.yClose);
+      crossY.style.display = 'block';
+    }
+  },
+
+  onMoveCandle(event, idx) {
+    const candle = this.currentCandles[idx];
+    if (!candle) return;
+    const container = document.getElementById('tvChartContainer');
+    const tooltip = document.getElementById('tvCandleTooltip');
+    if (!container || !tooltip) return;
+
+    const rect = container.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    // Position tooltip safely within container
+    let leftPos = mouseX + 16;
+    if (leftPos + 185 > rect.width) {
+      leftPos = Math.max(10, mouseX - 195);
+    }
+    let topPos = Math.max(10, Math.min(rect.height - 125, mouseY - 55));
+
+    const isUp = candle.isGreen;
+    const pnlColor = isUp ? '#00d084' : '#ff4757';
+    const tag = isUp ? '🟢 Bullish' : '🔴 Bearish';
+
+    tooltip.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 4px;">
+        <span style="font-weight: 700; color: #fff;">🕒 ${candle.timeStr} IST</span>
+        <span style="font-size: 10px; font-weight: 700; color: ${pnlColor};">${tag}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 8px; font-family: monospace; font-size: 11px;">
+        <div><span style="color: #8896a8;">O:</span> <strong style="color: #fff;">₹${candle.open.toFixed(2)}</strong></div>
+        <div><span style="color: #8896a8;">H:</span> <strong style="color: #00d084;">₹${candle.high.toFixed(2)}</strong></div>
+        <div><span style="color: #8896a8;">L:</span> <strong style="color: #ff4757;">₹${candle.low.toFixed(2)}</strong></div>
+        <div><span style="color: #8896a8;">C:</span> <strong style="color: #fff;">₹${candle.close.toFixed(2)}</strong></div>
+      </div>
+      <div style="margin-top: 6px; padding-top: 5px; border-top: 1px dashed rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 10.5px; font-family: monospace;">
+        <span style="color: ${pnlColor}; font-weight: 700;">${candle.change >= 0 ? '+' : ''}₹${candle.change.toFixed(2)} (${candle.changePct >= 0 ? '+' : ''}${candle.changePct}%)</span>
+        <span style="color: #8896a8;">Vol: <strong style="color: #2962ff;">${(candle.volume / 1000).toFixed(1)}K</strong></span>
+      </div>
+    `;
+
+    tooltip.style.left = `${leftPos}px`;
+    tooltip.style.top = `${topPos}px`;
+    tooltip.style.display = 'block';
+
+    const crossY = document.getElementById('tvCrosshairY');
+    if (crossY) {
+      crossY.setAttribute('y1', mouseY);
+      crossY.setAttribute('y2', mouseY);
+    }
+  },
+
+  onLeaveCandle() {
+    const crossX = document.getElementById('tvCrosshairX');
+    const crossY = document.getElementById('tvCrosshairY');
+    const tooltip = document.getElementById('tvCandleTooltip');
+    if (crossX) crossX.style.display = 'none';
+    if (crossY) crossY.style.display = 'none';
+    if (tooltip) tooltip.style.display = 'none';
+
+    // Reset OHLC bar to latest candle
+    if (this.currentCandles && this.currentCandles.length > 0) {
+      this.updateOhlcBar(this.currentCandles[this.currentCandles.length - 1]);
+    }
+  },
+
+  updateOhlcBar(candle) {
+    if (!candle) return;
+    const timeEl = document.getElementById('tvOhlcTime');
+    const openEl = document.getElementById('tvOhlcOpen');
+    const highEl = document.getElementById('tvOhlcHigh');
+    const lowEl = document.getElementById('tvOhlcLow');
+    const closeEl = document.getElementById('tvOhlcClose');
+    const chgEl = document.getElementById('tvOhlcChg');
+    const volEl = document.getElementById('tvOhlcVol');
+
+    if (timeEl) timeEl.textContent = `${candle.timeStr} IST`;
+    if (openEl) openEl.textContent = `₹${candle.open.toFixed(2)}`;
+    if (highEl) highEl.textContent = `₹${candle.high.toFixed(2)}`;
+    if (lowEl) lowEl.textContent = `₹${candle.low.toFixed(2)}`;
+    if (closeEl) closeEl.textContent = `₹${candle.close.toFixed(2)}`;
+    if (chgEl) {
+      const isUp = candle.changePct >= 0;
+      chgEl.textContent = `${isUp ? '+' : ''}${candle.changePct}% (${isUp ? '+' : ''}₹${candle.change.toFixed(2)})`;
+      chgEl.style.color = isUp ? '#00d084' : '#ff4757';
+    }
+    if (volEl) volEl.textContent = `${(candle.volume / 1000).toFixed(1)}K`;
   },
 
   renderPositions(positions) {
