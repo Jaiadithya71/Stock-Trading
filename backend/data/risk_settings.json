@@ -4,11 +4,21 @@
   "maxLoss": 5000,
   "maxDailyLoss": 5000,
   "maxDailyTrades": 0,
-  "riskPerTradePct": 1.0,
+  "riskPerTradePct": 1,
   "maxOpenPositions": 5,
   "killSwitchActive": false,
   "tradingMode": "PAPER_TRADING",
   "strategyHorizon": "HYBRID_RUNNER",
-  "targetMonthlyGainPct": 30.0,
-  "swingTrailingStop": "20_EMA_DAILY"
+  "targetMonthlyGainPct": 30,
+  "swingTrailingStop": "20_EMA_DAILY",
+  "emailNotification": {
+    "enabled": true,
+    "recipientEmail": "jaiadithya2020@gmail.com",
+    "sendAtMarketClose": true,
+    "smtpHost": "smtp.gmail.com",
+    "smtpPort": 465,
+    "smtpSecure": true,
+    "smtpUser": "jaiadithya2020@gmail.com",
+    "senderName": "Google Antigravity Quant Terminal"
+  }
 }

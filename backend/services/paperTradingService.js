@@ -42,38 +42,18 @@ class PaperTradingService {
           const totalMargin = (state.positions || []).reduce((sum, p) => sum + (Number(p.marginBlocked) || 0), 0);
           this.currentBalance = parseFloat((this.initialCapital + totalPnL - totalMargin).toFixed(2));
         }
-        this.positions = state.positions || [];
-        this.tradeHistory = state.tradeHistory || [];
-      }
-
-      // Auto-recovery: If positions is empty on disk, check backup file or weekly simulation log
-      if (this.positions.length === 0 && fs.existsSync(backupFile)) {
+        this.positions = Array.isArray(state.positions) ? state.positions : [];
+        this.tradeHistory = Array.isArray(state.tradeHistory) ? state.tradeHistory : [];
+      } else if (fs.existsSync(backupFile)) {
+        // Fallback ONLY if main PAPER_STATE_FILE is completely missing
         try {
           const rawBackup = fs.readFileSync(backupFile, 'utf8');
           const backupState = JSON.parse(rawBackup);
-          if (backupState.positions && backupState.positions.length > 0) {
-            console.log(`♻️ [PaperTrading] Auto-recovering ${backupState.positions.length} open positions from backup file...`);
-            this.positions = backupState.positions;
-            this.currentBalance = backupState.currentBalance !== undefined ? backupState.currentBalance : this.currentBalance;
-            this.initialCapital = backupState.initialCapital || this.initialCapital;
-            this.savePersistedState();
-          }
-        } catch (err) {}
-      }
-
-      // Secondary recovery: Check weekly simulation log
-      if (this.positions.length === 0) {
-        try {
-          const weeklyLogPath = path.join(dir, 'weekly_simulation_log.json');
-          if (fs.existsSync(weeklyLogPath)) {
-            const log = JSON.parse(fs.readFileSync(weeklyLogPath, 'utf8'));
-            const openTrades = (log.trades || []).filter(t => t.status === 'OPEN');
-            if (openTrades.length > 0) {
-              console.log(`♻️ [PaperTrading] Auto-recovering ${openTrades.length} open positions from weekly simulation log...`);
-              this.positions = openTrades;
-              this.savePersistedState();
-            }
-          }
+          this.initialCapital = Number(backupState.initialCapital) || 100000;
+          this.currentBalance = Number(backupState.currentBalance) || this.initialCapital;
+          this.positions = Array.isArray(backupState.positions) ? backupState.positions : [];
+          this.tradeHistory = Array.isArray(backupState.tradeHistory) ? backupState.tradeHistory : [];
+          this.savePersistedState();
         } catch (err) {}
       }
     } catch (e) {

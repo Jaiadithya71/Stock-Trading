@@ -9,6 +9,7 @@ package-lock.json
 encryption.key
 credentials.enc
 credentials*.txt
+backend/data/email_credentials.json
 
 # Data cache files (ephemeral)
 backend/cache/*.json

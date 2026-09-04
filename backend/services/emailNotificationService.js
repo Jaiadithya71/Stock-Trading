@@ -14,6 +14,7 @@ const marketCalendar = require('../utils/marketCalendar');
 
 const DATA_DIR = path.join(__dirname, '../data');
 const SETTINGS_FILE = path.join(DATA_DIR, 'risk_settings.json');
+const CREDENTIALS_FILE = path.join(DATA_DIR, 'email_credentials.json');
 const REPORTS_DIR = path.join(DATA_DIR, 'email_reports');
 
 class EmailNotificationService {
@@ -35,7 +36,17 @@ class EmailNotificationService {
       }
     }
 
+    let creds = {};
+    if (fs.existsSync(CREDENTIALS_FILE)) {
+      try {
+        creds = JSON.parse(fs.readFileSync(CREDENTIALS_FILE, 'utf8'));
+      } catch (e) {}
+    }
+
     const emailConfig = settings.emailNotification || {};
+    const smtpUser = creds.smtpUser || emailConfig.smtpUser || process.env.EMAIL_USER || process.env.SMTP_USER || '';
+    const smtpPass = creds.smtpPass || emailConfig.smtpPass || process.env.EMAIL_PASS || process.env.SMTP_PASS || '';
+
     return {
       enabled: emailConfig.enabled !== false,
       recipientEmail: emailConfig.recipientEmail || process.env.EMAIL_TO || this.defaultRecipient,
@@ -43,8 +54,8 @@ class EmailNotificationService {
       smtpHost: emailConfig.smtpHost || process.env.SMTP_HOST || 'smtp.gmail.com',
       smtpPort: Number(emailConfig.smtpPort || process.env.SMTP_PORT || 465),
       smtpSecure: emailConfig.smtpSecure !== undefined ? emailConfig.smtpSecure : true,
-      smtpUser: emailConfig.smtpUser || process.env.EMAIL_USER || process.env.SMTP_USER || '',
-      smtpPass: emailConfig.smtpPass || process.env.EMAIL_PASS || process.env.SMTP_PASS || '',
+      smtpUser,
+      smtpPass,
       senderName: emailConfig.senderName || 'Google Antigravity Quant Terminal'
     };
   }
@@ -57,13 +68,30 @@ class EmailNotificationService {
       } catch (e) { settings = {}; }
     }
 
+    if (newConfig.smtpUser || newConfig.smtpPass) {
+      try {
+        const creds = {
+          smtpUser: newConfig.smtpUser || 'jaiadithya2020@gmail.com',
+          smtpPass: newConfig.smtpPass || ''
+        };
+        fs.writeFileSync(CREDENTIALS_FILE, JSON.stringify(creds, null, 2), 'utf8');
+      } catch (e) {}
+    }
+
+    const current = this.getSettings();
     settings.emailNotification = {
-      ...this.getSettings(),
-      ...newConfig
+      enabled: newConfig.enabled !== undefined ? newConfig.enabled : current.enabled,
+      recipientEmail: newConfig.recipientEmail || current.recipientEmail,
+      sendAtMarketClose: newConfig.sendAtMarketClose !== undefined ? newConfig.sendAtMarketClose : current.sendAtMarketClose,
+      smtpHost: newConfig.smtpHost || current.smtpHost,
+      smtpPort: newConfig.smtpPort || current.smtpPort,
+      smtpSecure: newConfig.smtpSecure !== undefined ? newConfig.smtpSecure : current.smtpSecure,
+      smtpUser: newConfig.smtpUser || current.smtpUser,
+      senderName: newConfig.senderName || current.senderName
     };
 
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), 'utf8');
-    return settings.emailNotification;
+    return this.getSettings();
   }
 
   /**
