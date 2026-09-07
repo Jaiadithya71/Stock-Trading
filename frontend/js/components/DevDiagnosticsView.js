@@ -95,15 +95,13 @@ const DevDiagnosticsView = {
         }
       } else {
         if (typeof ToastNotification !== 'undefined') {
-          ToastNotification.show(json.message || '⚠️ SMTP Credentials not accepted or missing.', 'warning', 7000);
+          ToastNotification.show(json.message || '⚠️ Could not dispatch email. Check SMTP settings.', 'warning', 7000);
         }
-        this.promptEmailCredentialsModal(json.message);
       }
     } catch (e) {
       if (typeof ToastNotification !== 'undefined') {
         ToastNotification.show('Email test error: ' + e.message, 'error', 6000);
       }
-      this.promptEmailCredentialsModal(e.message);
     } finally {
       this.isEmailing = false;
       this.fetchHealth(true);
