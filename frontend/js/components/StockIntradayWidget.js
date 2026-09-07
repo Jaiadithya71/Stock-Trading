@@ -392,7 +392,10 @@ const StockIntradayWidget = {
             </div>
 
             <div id="tvWatchlistContainer" style="flex: 1; overflow-y: auto; max-height: 480px;">
-              <!-- Populated via renderWatchlist -->
+              <div style="padding: 30px; text-align: center; color: #8896a8; font-size: 11px;">
+                <div class="loading-spinner" style="width: 24px; height: 24px; margin: 0 auto 10px auto;"></div>
+                Loading Stock Universe...
+              </div>
             </div>
 
           </div>

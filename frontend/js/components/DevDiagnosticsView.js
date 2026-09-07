@@ -14,10 +14,12 @@ const DevDiagnosticsView = {
   isEmailing: false,
   isReauthing: false,
   isSettling: false,
-  pollTimer: null,
-  isPaused: false,
+  isInitializing: false,
+  fetchError: null,
 
   init() {
+    if (this.isInitializing) return;
+    this.isInitializing = true;
     this.fetchHealth();
     this.fetchTelemetry();
     if (this.pollTimer) clearInterval(this.pollTimer);
@@ -31,15 +33,27 @@ const DevDiagnosticsView = {
 
   async fetchHealth(silent = false) {
     try {
-      const res = await fetch('/api/dev/system-health');
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
+      const res = await fetch('/api/dev/system-health', { signal: controller.signal });
+      clearTimeout(timeoutId);
+
       const json = await res.json();
       if (json.success && json.data) {
         this.healthData = json.data;
+        this.fetchError = null;
         if (!silent) this.render();
         else this.updateDynamicValues();
+      } else {
+        this.fetchError = json.message || 'Failed to retrieve diagnostics telemetry';
+        if (!silent) this.render();
       }
     } catch (e) {
       console.warn('⚠️ [DevView] Error fetching system health:', e.message);
+      this.fetchError = e.message;
+      if (!silent) this.render();
+    } finally {
+      this.isInitializing = false;
     }
   },
 
@@ -281,10 +295,25 @@ const DevDiagnosticsView = {
     if (!container) return;
 
     if (!this.healthData) {
+      if (this.fetchError) {
+        container.innerHTML = `
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; color: #8896a8; padding: 24px; text-align: center;">
+            <div style="font-size: 32px; margin-bottom: 12px;">⚠️</div>
+            <div style="font-size: 15px; font-weight: 700; color: #f59e0b; margin-bottom: 8px;">Unable to Connect to System Diagnostics Engine</div>
+            <div style="font-size: 12px; color: #8896a8; max-width: 480px; margin-bottom: 18px; line-height: 1.5;">${this.fetchError}</div>
+            <button onclick="DevDiagnosticsView.fetchHealth()" style="padding: 8px 18px; background: #2962ff; color: #fff; border: none; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer;">
+              🔄 Retry Connection
+            </button>
+          </div>
+        `;
+        return;
+      }
+
       container.innerHTML = `
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; color: #8896a8;">
           <div class="loading-spinner" style="width: 36px; height: 36px; margin-bottom: 16px;"></div>
           <div style="font-size: 14px; font-weight: 600;">Connecting to System Diagnostics Engine...</div>
+          <div style="font-size: 11px; color: #55657e; margin-top: 6px;">Probing /api/dev/system-health...</div>
         </div>
       `;
       this.init();
