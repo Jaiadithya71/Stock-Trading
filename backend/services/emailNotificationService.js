@@ -18,17 +18,26 @@ const CREDENTIALS_FILE = path.join(DATA_DIR, 'email_credentials.json');
 const REPORTS_DIR = path.join(DATA_DIR, 'email_reports');
 
 function getEnvValue(...aliases) {
+  const norm = (s) => String(s).toLowerCase().replace(/[\s_\-]/g, '');
+  const aliasNorms = aliases.map(norm);
+
+  // 1. Exact match
   for (const alias of aliases) {
-    if (process.env[alias] && typeof process.env[alias] === 'string' && process.env[alias].trim()) {
-      return process.env[alias].trim().replace(/^["']|["']$/g, '');
-    }
-    const lower = alias.toLowerCase();
-    for (const key of Object.keys(process.env)) {
-      if (key.toLowerCase() === lower && process.env[key] && typeof process.env[key] === 'string' && process.env[key].trim()) {
-        return process.env[key].trim().replace(/^["']|["']$/g, '');
-      }
+    if (process.env[alias] !== undefined && process.env[alias] !== null) {
+      const val = String(process.env[alias]).trim().replace(/^["']|["']$/g, '');
+      if (val.length > 0) return val;
     }
   }
+
+  // 2. Normalized fuzzy key check (ignores casing, underscores, hyphens, spaces in key)
+  for (const key of Object.keys(process.env)) {
+    const keyNorm = norm(key);
+    if (aliasNorms.includes(keyNorm) && process.env[key] !== undefined && process.env[key] !== null) {
+      const val = String(process.env[key]).trim().replace(/^["']|["']$/g, '');
+      if (val.length > 0) return val;
+    }
+  }
+
   return '';
 }
 

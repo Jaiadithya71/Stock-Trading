@@ -72,14 +72,15 @@ router.get('/system-health', async (req, res) => {
     const activeDashboard = dashboards['default'] || Object.values(dashboards).find(d => d && d.authenticated);
     const isAuthenticated = Boolean(activeDashboard && activeDashboard.authenticated);
 
-    // Helper for robust env checking
+    // Helper for robust normalized env checking
+    const norm = (s) => String(s).toLowerCase().replace(/[\s_\-]/g, '');
     const hasEnv = (...aliases) => {
+      const aliasNorms = aliases.map(norm);
       for (const alias of aliases) {
-        if (process.env[alias] && String(process.env[alias]).trim()) return true;
-        const lower = alias.toLowerCase();
-        for (const k of Object.keys(process.env)) {
-          if (k.toLowerCase() === lower && process.env[k] && String(process.env[k]).trim()) return true;
-        }
+        if (process.env[alias] !== undefined && String(process.env[alias]).trim()) return true;
+      }
+      for (const k of Object.keys(process.env)) {
+        if (aliasNorms.includes(norm(k)) && process.env[k] !== undefined && String(process.env[k]).trim()) return true;
       }
       return false;
     };
@@ -104,6 +105,10 @@ router.get('/system-health', async (req, res) => {
       ENCRYPTION_KEY: hasEnv('ENCRYPTION_KEY'),
       CREDENTIALS_JSON: hasEnv('CREDENTIALS_JSON')
     };
+
+    const detectedEnvKeys = Object.keys(process.env)
+      .filter(k => /email|mail|smtp|pass|pwd|token|angel/i.test(k))
+      .map(k => ({ key: k, charCount: process.env[k] ? String(process.env[k]).length : 0 }));
 
     // 2. Data Pipeline Health
     const isMarketOpen = marketCalendar.isMarketOpenNow();
@@ -179,7 +184,8 @@ router.get('/system-health', async (req, res) => {
           authenticated: isAuthenticated,
           clientId: activeDashboard?.credentials?.client_id || autoCreds?.username || 'None',
           authMode: isAuthenticated ? 'AUTHENTICATED_ACTIVE' : (autoCreds ? 'CREDS_DETECTED_UNBOUND' : 'UNAUTHENTICATED'),
-          envAudit
+          envAudit,
+          detectedEnvKeys
         },
         marketData: {
           status: isMarketOpen ? (quotesSnapshot?.source === 'SMARTAPI_LIVE' ? 'PASS' : 'WARN') : 'IDLE',
