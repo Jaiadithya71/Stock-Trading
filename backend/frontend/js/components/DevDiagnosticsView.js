@@ -88,7 +88,8 @@ const DevDiagnosticsView = {
     try {
       const res = await fetch('/api/dev/send-test-email', { method: 'POST' });
       const json = await res.json();
-      if (res.ok && json.success && json.delivered) {
+      if (res.ok && json.success && (json.delivered || json.result?.delivered)) {
+        document.getElementById('dev-email-creds-modal')?.remove();
         if (typeof ToastNotification !== 'undefined') {
           ToastNotification.show(json.message || '✅ Test email successfully dispatched to your inbox!', 'success', 6000);
         }
