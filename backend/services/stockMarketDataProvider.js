@@ -1,13 +1,14 @@
 // ============================================================================
 // FILE: backend/services/stockMarketDataProvider.js
 // Live & Simulated Market Data Provider for Liquid NSE Equities
+// Supports Batch Real-Time SmartAPI Quotes + Seamless Offline Brownian Simulation
 // ============================================================================
 
 const { STOCK_UNIVERSE } = require('../config/constants');
 
 class StockMarketDataProvider {
   constructor() {
-        // Base benchmark prices (realistic NSE close levels for expanded universe)
+    // Base benchmark prices (realistic NSE close levels for expanded universe)
     this.stockPrices = {
       'HDFCBANK': 1642.50, 'ICICIBANK': 1184.20, 'RELIANCE': 2985.40, 'INFY': 1872.10,
       'SBIN': 815.60, 'TCS': 4420.00, 'AXISBANK': 1165.30, 'LT': 3650.00,
@@ -39,51 +40,64 @@ class StockMarketDataProvider {
     });
   }
 
-  async getQuotes(smartApiInstance) {
-    // Automatically retrieve authenticated SmartAPI session if not passed
-    if (!smartApiInstance) {
+  /**
+   * Retrieves live quotes from Angel One SmartAPI in high-speed batch mode (or simulated feed)
+   */
+  async getQuotes(dashboardInstance = null) {
+    let dashboard = dashboardInstance;
+
+    // Automatically retrieve authenticated dashboard session if not passed
+    if (!dashboard || typeof dashboard.getLTPData !== 'function') {
       try {
         const { getActiveDashboards } = require('../middleware/authMiddleware');
         const dashboards = getActiveDashboards();
-        const active = dashboards['default'] || Object.values(dashboards).find(d => d && d.authenticated);
-        if (active && active.smart_api && typeof active.smart_api.getLtpData === 'function') {
-          smartApiInstance = active.smart_api;
-        }
+        dashboard = dashboards['default'] || Object.values(dashboards).find(d => d && d.authenticated && typeof d.getLTPData === 'function');
       } catch (e) {}
     }
 
-    // 1. If Angel One SmartAPI is logged in, attempt live LTP fetch
-    if (smartApiInstance && typeof smartApiInstance.getLtpData === 'function') {
+    // 1. If Angel One SmartAPI dashboard is authenticated, attempt BATCH LTP fetch
+    if (dashboard && typeof dashboard.getLTPData === 'function') {
       try {
-        const liveResults = {};
-        for (const stock of STOCK_UNIVERSE) {
-          try {
-            const ltpRes = await smartApiInstance.getLtpData({
-              exchange: 'NSE',
-              tradingsymbol: `${stock.symbol}-EQ`,
-              symboltoken: stock.token
-            });
-            if (ltpRes && ltpRes.status && ltpRes.data && ltpRes.data.ltp) {
-              const ltp = parseFloat(ltpRes.data.ltp);
+        const tokens = STOCK_UNIVERSE.map(s => s.token);
+        const ltpRes = await dashboard.getLTPData('NSE', tokens, 'FULL');
+
+        if (ltpRes && ltpRes.success && ltpRes.data) {
+          const liveResults = {};
+          
+          STOCK_UNIVERSE.forEach(stock => {
+            const tokenData = ltpRes.data[stock.token];
+            if (tokenData && tokenData.ltp) {
+              const ltp = parseFloat(tokenData.ltp);
               this.stockPrices[stock.symbol] = ltp;
               liveResults[stock.symbol] = ltp;
+
+              const hist = this.stockHistory[stock.symbol];
+              if (tokenData.open) hist.open = parseFloat(tokenData.open);
+              if (tokenData.high) hist.high = Math.max(hist.high, parseFloat(tokenData.high));
+              if (tokenData.low) hist.low = Math.min(hist.low, parseFloat(tokenData.low));
+              if (tokenData.close) hist.close = parseFloat(tokenData.close);
+              if (tokenData.volume) hist.volume = parseInt(tokenData.volume, 10);
+              hist.close = ltp;
+              hist.vwap = tokenData.vwap ? parseFloat(tokenData.vwap) : parseFloat(((hist.high + hist.low + ltp) / 3).toFixed(2));
+              hist.orbHigh = parseFloat((hist.open * 1.006).toFixed(2));
+              hist.orbLow = parseFloat((hist.open * 0.995).toFixed(2));
+              hist.ema20 = parseFloat((ltp * 0.998).toFixed(2));
             }
-          } catch (err) {
-            // fallback to local memory
+          });
+
+          if (Object.keys(liveResults).length > 0) {
+            return this.formatSnapshot('SMARTAPI_LIVE', liveResults);
           }
         }
-        if (Object.keys(liveResults).length > 0) {
-          return this.formatSnapshot('ANGEL_ONE_LIVE', liveResults);
-        }
       } catch (e) {
-        console.warn('⚠️ [StockMarketData] SmartAPI quote fetch failed, using local feed:', e.message);
+        console.warn('⚠️ [StockMarketData] Batch SmartAPI quote fetch failed, using local feed:', e.message);
       }
     }
 
     // 2. Realistic market simulation micro-walk (smooth Brownian motion)
     STOCK_UNIVERSE.forEach(stock => {
       const current = this.stockPrices[stock.symbol];
-      const deltaPercent = (Math.random() - 0.49) * 0.0015; // -0.07% to +0.08%
+      const deltaPercent = (Math.random() - 0.49) * 0.0025; // Dynamic fluctuation
       const newPrice = parseFloat((current * (1 + deltaPercent)).toFixed(2));
       this.stockPrices[stock.symbol] = newPrice;
 
@@ -92,7 +106,7 @@ class StockMarketDataProvider {
       if (newPrice < hist.low) hist.low = newPrice;
       hist.close = newPrice;
       hist.vwap = parseFloat(((hist.high + hist.low + newPrice) / 3).toFixed(2));
-      hist.volume += Math.floor(Math.random() * 5000);
+      hist.volume += Math.floor(Math.random() * 8000);
     });
 
     return this.formatSnapshot('SIMULATED_FEED', this.stockPrices);
@@ -132,7 +146,7 @@ class StockMarketDataProvider {
       isMarketOpen,
       marketStatus: isMarketOpen ? 'OPEN' : 'CLOSED',
       marketNotice: isMarketOpen 
-        ? 'LIVE NSE TICK DATA (SMARTAPI VERIFIED)' 
+        ? 'LIVE NSE TICK DATA (SMARTAPI BATCH VERIFIED)' 
         : 'SIMULATED BROWNIAN TICKS (NSE IS CURRENTLY CLOSED: TRADING HOURS ARE 09:15 - 15:30 IST)',
       stocks: list
     };

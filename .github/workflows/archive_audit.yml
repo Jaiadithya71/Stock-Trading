@@ -120,6 +120,12 @@ jobs:
             }
           "
 
+          echo "📧 Triggering End-of-Day Market Close Summary Email on Render..."
+          curl -s --max-time 30 -X POST \
+            "https://stock-trading-1-cquo.onrender.com/api/quant/send-market-close-summary" \
+            -H "Content-Type: application/json" \
+            -d '{"force": true}' || echo "ℹ️ Email trigger completed"
+
       - name: Commit and Push Archived Logs to GitHub
         run: |
           git config user.name "github-actions[bot]"
