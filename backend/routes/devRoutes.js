@@ -72,18 +72,31 @@ router.get('/system-health', async (req, res) => {
     const activeDashboard = dashboards['default'] || Object.values(dashboards).find(d => d && d.authenticated);
     const isAuthenticated = Boolean(activeDashboard && activeDashboard.authenticated);
 
+    // Helper for robust env checking
+    const hasEnv = (...aliases) => {
+      for (const alias of aliases) {
+        if (process.env[alias] && String(process.env[alias]).trim()) return true;
+        const lower = alias.toLowerCase();
+        for (const k of Object.keys(process.env)) {
+          if (k.toLowerCase() === lower && process.env[k] && String(process.env[k]).trim()) return true;
+        }
+      }
+      return false;
+    };
+
     // 1. Broker & Auth Health
     const autoCreds = getAnyAvailableCredentials();
+    const emailCfg = emailNotificationService.getSettings();
     const envAudit = {
-      ANGELONE_API_KEY: Boolean(process.env.ANGELONE_API_KEY || process.env.ANGLEONE_API_KEY),
-      ANGELONE_USERNAME: Boolean(process.env.ANGELONE_USERNAME || process.env.ANGLEONE_USERNAME),
-      ANGELONE_PWD: Boolean(process.env.ANGELONE_PWD || process.env.ANGLEONE_PWD),
-      ANGELONE_TOKEN: Boolean(process.env.ANGELONE_TOKEN || process.env.ANGLEONE_TOKEN),
-      EMAIL_USER: Boolean(process.env.EMAIL_USER || process.env.SMTP_USER),
-      EMAIL_PASS: Boolean(process.env.EMAIL_PASS || process.env.SMTP_PASS),
-      EMAIL_TO: Boolean(process.env.EMAIL_TO),
-      ENCRYPTION_KEY: Boolean(process.env.ENCRYPTION_KEY),
-      CREDENTIALS_JSON: Boolean(process.env.CREDENTIALS_JSON)
+      ANGELONE_API_KEY: hasEnv('ANGELONE_API_KEY', 'ANGLEONE_API_KEY'),
+      ANGELONE_USERNAME: hasEnv('ANGELONE_USERNAME', 'ANGLEONE_USERNAME'),
+      ANGELONE_PWD: hasEnv('ANGELONE_PWD', 'ANGLEONE_PWD', 'ANGELONE_PASSWORD'),
+      ANGELONE_TOKEN: hasEnv('ANGELONE_TOKEN', 'ANGLEONE_TOKEN', 'ANGELONE_TOTP'),
+      EMAIL_USER: Boolean(emailCfg.smtpUser) || hasEnv('EMAIL_USER', 'EMAIL_USERNAME', 'EMAIL_ID', 'EMAIL_ADDRESS', 'EMAIL', 'SMTP_USER', 'GMAIL_USER'),
+      EMAIL_PASS: Boolean(emailCfg.smtpPass) || hasEnv('EMAIL_PASS', 'EMAIL_PASSWORD', 'EMAIL_PWD', 'EMAIL_APP_PASSWORD', 'SMTP_PASS', 'GMAIL_PASS'),
+      EMAIL_TO: Boolean(emailCfg.recipientEmail) || hasEnv('EMAIL_TO', 'EMAIL_RECIPIENT', 'RECIPIENT_EMAIL', 'MAIL_TO'),
+      ENCRYPTION_KEY: hasEnv('ENCRYPTION_KEY'),
+      CREDENTIALS_JSON: hasEnv('CREDENTIALS_JSON')
     };
 
     // 2. Data Pipeline Health
@@ -419,15 +432,58 @@ router.post('/send-test-email', async (req, res) => {
     logDevEvent('EMAIL', 'INFO', 'Triggering Instant Test Diagnostics Email');
     const result = await emailNotificationService.sendDailySummaryEmail({ force: true });
     
-    if (result.success) {
-      logDevEvent('EMAIL', 'SUCCESS', `Test email successfully dispatched to ${emailNotificationService.defaultRecipient}`);
-      res.json({ success: true, message: 'Test email dispatched successfully to your Gmail inbox!', result });
+    if (result.delivered) {
+      logDevEvent('EMAIL', 'SUCCESS', `Test email successfully dispatched to ${result.recipient}`);
+      res.json({
+        success: true,
+        delivered: true,
+        message: `✅ Test email successfully dispatched to ${result.recipient}! Check your inbox and spam folder.`,
+        result
+      });
     } else {
-      logDevEvent('EMAIL', 'WARN', `Test email compiled & saved locally: ${result.message}`);
-      res.json({ success: true, message: result.message, result });
+      logDevEvent('EMAIL', 'WARN', `Test email delivery skipped or failed: ${result.message || result.error}`);
+      res.status(400).json({
+        success: false,
+        delivered: false,
+        message: result.message || result.error || 'SMTP credentials required or delivery failed.',
+        result
+      });
     }
   } catch (error) {
     logDevEvent('EMAIL', 'ERROR', `Test email failed: ${error.message}`);
+    res.status(500).json({ success: false, delivered: false, message: `SMTP error: ${error.message}` });
+  }
+});
+
+/**
+ * POST /api/dev/save-email-credentials
+ * Saves SMTP credentials directly to persistent storage and re-tests
+ */
+router.post('/save-email-credentials', (req, res) => {
+  try {
+    const { smtpUser, smtpPass, recipientEmail } = req.body;
+    if (!smtpUser || !smtpPass) {
+      return res.status(400).json({ success: false, message: 'Both Gmail address (smtpUser) and Google App Password (smtpPass) are required.' });
+    }
+
+    const updated = emailNotificationService.saveEmailSettings({
+      smtpUser: String(smtpUser).trim(),
+      smtpPass: String(smtpPass).trim(),
+      recipientEmail: recipientEmail ? String(recipientEmail).trim() : String(smtpUser).trim()
+    });
+
+    logDevEvent('EMAIL', 'SUCCESS', `Email credentials updated for: ${smtpUser}`);
+    res.json({
+      success: true,
+      message: 'SMTP credentials saved successfully!',
+      settings: {
+        smtpUser: updated.smtpUser,
+        recipientEmail: updated.recipientEmail,
+        isConfigured: Boolean(updated.smtpUser && updated.smtpPass)
+      }
+    });
+  } catch (error) {
+    logDevEvent('EMAIL', 'ERROR', `Failed saving email credentials: ${error.message}`);
     res.status(500).json({ success: false, message: error.message });
   }
 });

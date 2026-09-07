@@ -17,6 +17,21 @@ const SETTINGS_FILE = path.join(DATA_DIR, 'risk_settings.json');
 const CREDENTIALS_FILE = path.join(DATA_DIR, 'email_credentials.json');
 const REPORTS_DIR = path.join(DATA_DIR, 'email_reports');
 
+function getEnvValue(...aliases) {
+  for (const alias of aliases) {
+    if (process.env[alias] && typeof process.env[alias] === 'string' && process.env[alias].trim()) {
+      return process.env[alias].trim().replace(/^["']|["']$/g, '');
+    }
+    const lower = alias.toLowerCase();
+    for (const key of Object.keys(process.env)) {
+      if (key.toLowerCase() === lower && process.env[key] && typeof process.env[key] === 'string' && process.env[key].trim()) {
+        return process.env[key].trim().replace(/^["']|["']$/g, '');
+      }
+    }
+  }
+  return '';
+}
+
 class EmailNotificationService {
   constructor() {
     if (!fs.existsSync(REPORTS_DIR)) {
@@ -43,19 +58,42 @@ class EmailNotificationService {
       } catch (e) {}
     }
 
+    // Check CREDENTIALS_JSON env variable if present
+    if (!creds.smtpUser || !creds.smtpPass) {
+      const rawCredsJson = getEnvValue('CREDENTIALS_JSON', 'credentials_json');
+      if (rawCredsJson) {
+        try {
+          const parsed = JSON.parse(rawCredsJson);
+          if (parsed.email_user || parsed.EMAIL_USER || parsed.smtpUser) {
+            creds.smtpUser = creds.smtpUser || parsed.email_user || parsed.EMAIL_USER || parsed.smtpUser;
+          }
+          if (parsed.email_pass || parsed.EMAIL_PASS || parsed.smtpPass) {
+            creds.smtpPass = creds.smtpPass || parsed.email_pass || parsed.EMAIL_PASS || parsed.smtpPass;
+          }
+        } catch (e) {}
+      }
+    }
+
     const emailConfig = settings.emailNotification || {};
-    const smtpUser = creds.smtpUser || emailConfig.smtpUser || process.env.EMAIL_USER || process.env.SMTP_USER || '';
-    const smtpPass = creds.smtpPass || emailConfig.smtpPass || process.env.EMAIL_PASS || process.env.SMTP_PASS || '';
+    const smtpUser = creds.smtpUser || emailConfig.smtpUser || 
+      getEnvValue('EMAIL_USER', 'EMAIL_USERNAME', 'EMAIL_ID', 'EMAIL_ADDRESS', 'EMAIL', 'SMTP_USER', 'SMTP_USERNAME', 'GMAIL_USER', 'GMAIL_USERNAME', 'MAIL_USER', 'MAIL_USERNAME', 'EMAIL_HOST_USER');
+    
+    const smtpPass = creds.smtpPass || emailConfig.smtpPass || 
+      getEnvValue('EMAIL_PASS', 'EMAIL_PASSWORD', 'EMAIL_PWD', 'EMAIL_APP_PASSWORD', 'EMAIL_SECRET', 'SMTP_PASS', 'SMTP_PASSWORD', 'GMAIL_PASS', 'GMAIL_PASSWORD', 'GMAIL_APP_PASSWORD', 'MAIL_PASS', 'MAIL_PASSWORD', 'APP_PASSWORD', 'EMAIL_HOST_PASSWORD');
+
+    const recipientEmail = emailConfig.recipientEmail || 
+      getEnvValue('EMAIL_TO', 'EMAIL_RECIPIENT', 'RECIPIENT_EMAIL', 'MAIL_TO', 'TARGET_EMAIL', 'TO_EMAIL', 'ALERT_EMAIL') || 
+      (smtpUser && smtpUser.includes('@') ? smtpUser : this.defaultRecipient);
 
     return {
       enabled: emailConfig.enabled !== false,
-      recipientEmail: emailConfig.recipientEmail || process.env.EMAIL_TO || this.defaultRecipient,
+      recipientEmail,
       sendAtMarketClose: emailConfig.sendAtMarketClose !== false,
-      smtpHost: emailConfig.smtpHost || process.env.SMTP_HOST || 'smtp.gmail.com',
-      smtpPort: Number(emailConfig.smtpPort || process.env.SMTP_PORT || 465),
+      smtpHost: emailConfig.smtpHost || getEnvValue('SMTP_HOST', 'EMAIL_HOST') || 'smtp.gmail.com',
+      smtpPort: Number(emailConfig.smtpPort || getEnvValue('SMTP_PORT', 'EMAIL_PORT') || 465),
       smtpSecure: emailConfig.smtpSecure !== undefined ? emailConfig.smtpSecure : true,
-      smtpUser,
-      smtpPass,
+      smtpUser: smtpUser.trim(),
+      smtpPass: smtpPass.trim(),
       senderName: emailConfig.senderName || 'Google Antigravity Quant Terminal'
     };
   }

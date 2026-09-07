@@ -1,5 +1,5 @@
 // ============================================================================
-// FILE: backend/frontend/js/components/DevDiagnosticsView.js
+// FILE: frontend/js/components/DevDiagnosticsView.js
 // Dev Diagnostics & System Telemetry Cockpit (Dev View)
 // Real-time monitoring across Broker Auth, Data Pipeline, Strategy Engines,
 // OMS Risk Gates, Automation/Crons, and Interactive 1-Click Testbench.
@@ -88,18 +88,123 @@ const DevDiagnosticsView = {
     try {
       const res = await fetch('/api/dev/send-test-email', { method: 'POST' });
       const json = await res.json();
-      if (typeof ToastNotification !== 'undefined') {
-        ToastNotification.show(json.message || 'Test email dispatched!', json.success ? 'success' : 'info');
+      if (res.ok && json.success && json.delivered) {
+        if (typeof ToastNotification !== 'undefined') {
+          ToastNotification.show(json.message || '✅ Test email successfully dispatched to your inbox!', 'success', 6000);
+        }
+      } else {
+        if (typeof ToastNotification !== 'undefined') {
+          ToastNotification.show(json.message || '⚠️ SMTP Credentials not accepted or missing.', 'warning', 7000);
+        }
+        this.promptEmailCredentialsModal(json.message);
       }
     } catch (e) {
       if (typeof ToastNotification !== 'undefined') {
-        ToastNotification.show('Email test failed: ' + e.message, 'error');
+        ToastNotification.show('Email test error: ' + e.message, 'error', 6000);
       }
+      this.promptEmailCredentialsModal(e.message);
     } finally {
       this.isEmailing = false;
       this.fetchHealth(true);
       this.fetchTelemetry(true);
       this.render();
+    }
+  },
+
+  promptEmailCredentialsModal(errorReason = '') {
+    const existing = document.getElementById('dev-email-creds-modal');
+    if (existing) existing.remove();
+
+    const curUser = this.healthData?.modules?.automationUptime?.emailService?.recipient || 'jaiadithya2020@gmail.com';
+
+    const modalHtml = `
+      <div id="dev-email-creds-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: #181c27; border: 1px solid #3b82f6; border-radius: 12px; max-width: 520px; width: 100%; padding: 22px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <div style="font-size: 15px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px;">
+              <span>📧</span> Configure Gmail SMTP Delivery
+            </div>
+            <button onclick="document.getElementById('dev-email-creds-modal').remove()" style="background: none; border: none; color: #8896a8; font-size: 18px; cursor: pointer;">✕</button>
+          </div>
+
+          ${errorReason ? `
+            <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 6px; padding: 10px; margin-bottom: 14px; font-size: 11.5px; color: #f59e0b; line-height: 1.4;">
+              <strong>⚠️ Diagnostic Notice:</strong> ${errorReason}
+            </div>
+          ` : ''}
+
+          <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 6px; padding: 10px; margin-bottom: 14px; font-size: 11.5px; color: #93c5fd; line-height: 1.4;">
+            👉 <strong>Google Requirement:</strong> Gmail requires an <strong>App Password</strong> (16 characters), not your regular login password.<br>
+            Generate one instantly at: <a href="https://myaccount.google.com/apppasswords" target="_blank" style="color: #60a5fa; font-weight: 700; text-decoration: underline;">myaccount.google.com/apppasswords</a>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+            <div>
+              <label style="font-size: 11px; color: #8896a8; font-weight: 600; display: block; margin-bottom: 4px;">GMAIL SENDER ADDRESS</label>
+              <input id="devEmailInputUser" type="email" value="${curUser}" placeholder="e.g. yourname@gmail.com" style="width: 100%; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 12px; font-family: monospace; box-sizing: border-box;">
+            </div>
+
+            <div>
+              <label style="font-size: 11px; color: #8896a8; font-weight: 600; display: block; margin-bottom: 4px;">16-CHAR GOOGLE APP PASSWORD</label>
+              <input id="devEmailInputPass" type="password" placeholder="e.g. abcd efgh ijkl mnop" style="width: 100%; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 12px; font-family: monospace; box-sizing: border-box;">
+              <span style="font-size: 10px; color: #64748b; margin-top: 2px; display: block;">Spaces are automatically trimmed.</span>
+            </div>
+
+            <div>
+              <label style="font-size: 11px; color: #8896a8; font-weight: 600; display: block; margin-bottom: 4px;">RECIPIENT INBOX</label>
+              <input id="devEmailInputTo" type="email" value="${curUser}" placeholder="e.g. yourname@gmail.com" style="width: 100%; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 12px; font-family: monospace; box-sizing: border-box;">
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 8px;">
+            <button onclick="document.getElementById('dev-email-creds-modal').remove()" style="padding: 8px 14px; font-size: 11.5px; background: transparent; border: 1px solid #2a2e39; color: #8896a8; border-radius: 6px; cursor: pointer;">
+              Cancel
+            </button>
+            <button onclick="DevDiagnosticsView.saveAndTestEmailCredentials()" style="padding: 8px 16px; font-size: 11.5px; font-weight: 700; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer;">
+              💾 Save & Send Test Email
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+  },
+
+  async saveAndTestEmailCredentials() {
+    const user = document.getElementById('devEmailInputUser')?.value?.trim();
+    const pass = document.getElementById('devEmailInputPass')?.value?.trim();
+    const to = document.getElementById('devEmailInputTo')?.value?.trim();
+
+    if (!user || !pass) {
+      if (typeof ToastNotification !== 'undefined') {
+        ToastNotification.show('Please provide both Gmail address and 16-character App Password.', 'error');
+      }
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/dev/save-email-credentials', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ smtpUser: user, smtpPass: pass, recipientEmail: to || user })
+      });
+      const json = await res.json();
+      if (json.success) {
+        document.getElementById('dev-email-creds-modal')?.remove();
+        if (typeof ToastNotification !== 'undefined') {
+          ToastNotification.show('Credentials saved! Dispatching test email...', 'info');
+        }
+        await this.sendTestEmail();
+      } else {
+        if (typeof ToastNotification !== 'undefined') {
+          ToastNotification.show(json.message || 'Failed to save credentials', 'error');
+        }
+      }
+    } catch (e) {
+      if (typeof ToastNotification !== 'undefined') {
+        ToastNotification.show('Error saving credentials: ' + e.message, 'error');
+      }
     }
   },
 
@@ -436,12 +541,15 @@ const DevDiagnosticsView = {
                 <span style="color: #8896a8;">Recipient Inbox:</span>
                 <strong style="color: #60a5fa; font-family: monospace;">${automationUptime.emailService.recipient}</strong>
               </div>
-              <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="color: #8896a8;">SMTP Auth Configured:</span>
                 <span style="color: ${automationUptime.emailService.configured ? '#00d084' : '#f59e0b'}; font-weight: 700;">
                   ${automationUptime.emailService.configured ? '✓ READY' : '⚠️ UNSET IN ENV'}
                 </span>
               </div>
+              <button onclick="DevDiagnosticsView.promptEmailCredentialsModal()" style="width: 100%; padding: 6px; font-size: 11px; font-weight: 700; background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 4px; cursor: pointer;">
+                ⚙️ Configure Gmail Credentials
+              </button>
             </div>
           </div>
 
