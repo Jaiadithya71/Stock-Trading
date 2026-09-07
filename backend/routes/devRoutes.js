@@ -114,8 +114,15 @@ router.get('/system-health', async (req, res) => {
     };
 
     const detectedEnvKeys = Object.keys(process.env)
-      .filter(k => /email|mail|smtp|pass|pwd|token|angel/i.test(k))
+      .filter(k => !['PATH', 'PWD', 'OLDPWD', 'HOME', 'USER', 'SHLVL', 'NODE_VERSION', 'YARN_VERSION', '_'].includes(k) && !k.startsWith('npm_config_'))
       .map(k => ({ key: k, charCount: process.env[k] ? String(process.env[k]).length : 0 }));
+
+    const renderInfo = {
+      serviceId: process.env.RENDER_SERVICE_ID || 'Unknown',
+      serviceName: process.env.RENDER_SERVICE_NAME || 'Unknown',
+      instanceId: process.env.RENDER_INSTANCE_ID || 'Unknown',
+      isRender: Boolean(process.env.RENDER)
+    };
 
     // 2. Data Pipeline Health
     const isMarketOpen = marketCalendar.isMarketOpenNow();
@@ -192,7 +199,8 @@ router.get('/system-health', async (req, res) => {
           clientId: activeDashboard?.credentials?.client_id || autoCreds?.username || 'None',
           authMode: isAuthenticated ? 'AUTHENTICATED_ACTIVE' : (autoCreds ? 'CREDS_DETECTED_UNBOUND' : 'UNAUTHENTICATED'),
           envAudit,
-          detectedEnvKeys
+          detectedEnvKeys,
+          renderInfo
         },
         marketData: {
           status: isMarketOpen ? (quotesSnapshot?.source === 'SMARTAPI_LIVE' ? 'PASS' : 'WARN') : 'IDLE',
