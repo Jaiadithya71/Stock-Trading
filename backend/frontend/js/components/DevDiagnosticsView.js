@@ -95,7 +95,7 @@ const DevDiagnosticsView = {
         }
       } else {
         if (typeof ToastNotification !== 'undefined') {
-          ToastNotification.show(json.message || '⚠️ Could not dispatch email. Check SMTP settings.', 'warning', 7000);
+          ToastNotification.show(json.message || '⚠️ Gmail App Password needed. Click "⚙️ Configure Gmail" to enter it, or set EMAIL_PASS in Render.', 'warning', 8000);
         }
       }
     } catch (e) {
