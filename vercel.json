@@ -5,5 +5,15 @@
       "path": "/api/wake",
       "schedule": "40 3 * * 1-5"
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/wake",
+      "destination": "/api/wake"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://stock-trading-1-cquo.onrender.com/api/:path*"
+    }
   ]
 }

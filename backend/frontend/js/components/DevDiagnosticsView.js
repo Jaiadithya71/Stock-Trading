@@ -38,6 +38,16 @@ const DevDiagnosticsView = {
       const res = await fetch('/api/dev/system-health', { signal: controller.signal });
       clearTimeout(timeoutId);
 
+      if (!res.ok) {
+        if (res.status === 404) {
+          this.fetchError = 'API endpoint /api/dev/system-health returned 404 Not Found. If you are accessing this site via a static preview or Vercel URL, please use the live Render backend service.';
+        } else {
+          this.fetchError = `Server responded with HTTP ${res.status}: ${res.statusText}`;
+        }
+        if (!silent) this.render();
+        return;
+      }
+
       const json = await res.json();
       if (json.success && json.data) {
         this.healthData = json.data;
@@ -300,10 +310,15 @@ const DevDiagnosticsView = {
           <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; color: #8896a8; padding: 24px; text-align: center;">
             <div style="font-size: 32px; margin-bottom: 12px;">⚠️</div>
             <div style="font-size: 15px; font-weight: 700; color: #f59e0b; margin-bottom: 8px;">Unable to Connect to System Diagnostics Engine</div>
-            <div style="font-size: 12px; color: #8896a8; max-width: 480px; margin-bottom: 18px; line-height: 1.5;">${this.fetchError}</div>
-            <button onclick="DevDiagnosticsView.fetchHealth()" style="padding: 8px 18px; background: #2962ff; color: #fff; border: none; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer;">
-              🔄 Retry Connection
-            </button>
+            <div style="font-size: 12px; color: #8896a8; max-width: 500px; margin-bottom: 18px; line-height: 1.5;">${this.fetchError}</div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;">
+              <button onclick="DevDiagnosticsView.fetchHealth()" style="padding: 8px 18px; background: #2962ff; color: #fff; border: none; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer;">
+                🔄 Retry Connection
+              </button>
+              <a href="https://stock-trading-1-cquo.onrender.com" target="_blank" style="display: inline-block; padding: 8px 18px; background: #00d084; color: #000; font-weight: 700; border-radius: 6px; text-decoration: none; font-size: 12px;">
+                🚀 Open Live Render Service
+              </a>
+            </div>
           </div>
         `;
         return;

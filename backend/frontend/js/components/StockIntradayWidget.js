@@ -744,6 +744,10 @@ const StockIntradayWidget = {
   async fetchData() {
     try {
       const res = await fetch('/api/stocks/signals');
+      if (!res.ok) {
+        console.warn(`[StockTerminal] /api/stocks/signals returned HTTP ${res.status}`);
+        return;
+      }
       const data = await res.json();
       if (data.success && data.signals) {
         this.activeStocks = data.signals;
