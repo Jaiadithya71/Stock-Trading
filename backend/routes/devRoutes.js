@@ -88,19 +88,26 @@ router.get('/system-health', async (req, res) => {
     // 1. Broker & Auth Health
     const autoCreds = getAnyAvailableCredentials();
     const emailCfg = emailNotificationService.getSettings();
+    const smtpPassStr = String(emailCfg.smtpPass || '').trim();
+    const passLength = smtpPassStr.length;
+    const is16Digits = passLength === 16;
+    const passMasked = passLength >= 4
+      ? `${smtpPassStr.slice(0, 3)}••••••••${smtpPassStr.slice(-3)}`
+      : (passLength > 0 ? '••••' : 'None');
+
     const envAudit = {
       ANGELONE_API_KEY: hasEnv('ANGELONE_API_KEY', 'ANGLEONE_API_KEY'),
       ANGELONE_USERNAME: hasEnv('ANGELONE_USERNAME', 'ANGLEONE_USERNAME'),
       ANGELONE_PWD: hasEnv('ANGELONE_PWD', 'ANGLEONE_PWD', 'ANGELONE_PASSWORD'),
       ANGELONE_TOKEN: hasEnv('ANGELONE_TOKEN', 'ANGLEONE_TOKEN', 'ANGELONE_TOTP'),
       EMAIL_USER: Boolean(emailCfg.smtpUser) || hasEnv('EMAIL_USER', 'EMAIL_USERNAME', 'EMAIL_ID', 'EMAIL_ADDRESS', 'EMAIL', 'SMTP_USER', 'GMAIL_USER'),
-      EMAIL_PASS: Boolean(emailCfg.smtpPass) || hasEnv(
-        'EMAIL_PASS', 'EMAIL_PASSWORD', 'EMAIL_PWD', 'EMAIL_APP_PASSWORD', 'EMAIL_APP_PASS',
-        'EMAIL_SECRET', 'EMAIL_KEY', 'EMAIL_PASS_KEY', 'SMTP_PASS', 'SMTP_PASSWORD', 'SMTP_PWD',
-        'GMAIL_PASS', 'GMAIL_PASSWORD', 'GMAIL_PWD', 'GMAIL_APP_PASSWORD', 'GMAIL_APP_PASS',
-        'GMAIL_KEY', 'GMAIL_TOKEN', 'MAIL_PASS', 'MAIL_PASSWORD', 'APP_PASSWORD',
-        'EMAIL_HOST_PASSWORD', 'PASS', 'PASSWORD'
-      ),
+      EMAIL_PASS: {
+        present: passLength > 0,
+        charCount: passLength,
+        is16CharAppPassword: is16Digits,
+        preview: passMasked,
+        label: passLength > 0 ? `✓ OK (${passLength} chars: ${passMasked})` : '✗ UNSET (0 chars)'
+      },
       EMAIL_TO: Boolean(emailCfg.recipientEmail) || hasEnv('EMAIL_TO', 'EMAIL_RECIPIENT', 'RECIPIENT_EMAIL', 'MAIL_TO'),
       ENCRYPTION_KEY: hasEnv('ENCRYPTION_KEY'),
       CREDENTIALS_JSON: hasEnv('CREDENTIALS_JSON')
@@ -239,6 +246,10 @@ router.get('/system-health', async (req, res) => {
           emailService: {
             enabled: emailConfig.enabled,
             configured: isSmtpConfigured,
+            smtpPassDetected: Boolean(passLength > 0),
+            smtpPassLength: passLength,
+            smtpPassPreview: passMasked,
+            is16CharAppPassword: is16Digits,
             recipient: emailConfig.recipientEmail,
             smtpHost: `${emailConfig.smtpHost}:${emailConfig.smtpPort}`,
             lastSentDate: emailNotificationService.lastSentDate || 'Not yet sent today'

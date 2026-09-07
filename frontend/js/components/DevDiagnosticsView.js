@@ -363,13 +363,31 @@ const DevDiagnosticsView = {
               <!-- ENVIRONMENT VARIABLES CHECK MATRIX -->
               <div style="background: #131722; padding: 10px; border-radius: 6px; border: 1px solid #2a2e39;">
                 <div style="font-size: 10.5px; font-weight: 700; color: #8896a8; margin-bottom: 6px;">ENVIRONMENT SECRETS AUDIT</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 11px; font-family: monospace;">
-                  ${Object.entries(brokerAuth.envAudit).map(([k, present]) => `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 4px;">
-                      <span style="color: #8896a8;">${k}</span>
-                      <span style="color: ${present ? '#00d084' : '#ef4444'}; font-weight: 700;">${present ? '✓ OK' : '✗ UNSET'}</span>
-                    </div>
-                  `).join('')}
+                <div style="display: flex; flex-direction: column; gap: 4px; font-size: 11px; font-family: monospace;">
+                  ${Object.entries(brokerAuth.envAudit).map(([k, item]) => {
+                    let label = '✗ UNSET';
+                    let color = '#ef4444';
+                    if (typeof item === 'boolean') {
+                      label = item ? '✓ OK' : '✗ UNSET';
+                      color = item ? '#00d084' : '#ef4444';
+                    } else if (item && typeof item === 'object') {
+                      if (item.present) {
+                        label = item.is16CharAppPassword 
+                          ? `✓ OK (16-Digit App Pass: ${item.preview})` 
+                          : `✓ OK (${item.charCount} chars: ${item.preview})`;
+                        color = '#00d084';
+                      } else {
+                        label = '✗ UNSET (0 chars)';
+                        color = '#ef4444';
+                      }
+                    }
+                    return `
+                      <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 4px; border-bottom: 1px solid rgba(255,255,255,0.03);">
+                        <span style="color: #8896a8;">${k}</span>
+                        <span style="color: ${color}; font-weight: 700;">${label}</span>
+                      </div>
+                    `;
+                  }).join('')}
                 </div>
               </div>
             </div>
@@ -540,10 +558,18 @@ const DevDiagnosticsView = {
                 <span style="color: #8896a8;">Recipient Inbox:</span>
                 <strong style="color: #60a5fa; font-family: monospace;">${automationUptime.emailService.recipient}</strong>
               </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="color: #8896a8;">16-Digit App Password:</span>
+                <span style="color: ${automationUptime.emailService.smtpPassDetected ? '#00d084' : '#ef4444'}; font-weight: 700; font-family: monospace;">
+                  ${automationUptime.emailService.smtpPassDetected 
+                    ? `🟢 ${automationUptime.emailService.smtpPassLength} chars (${automationUptime.emailService.smtpPassPreview})` 
+                    : '🔴 Not Set (0 chars)'}
+                </span>
+              </div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="color: #8896a8;">SMTP Auth Configured:</span>
+                <span style="color: #8896a8;">Delivery Status:</span>
                 <span style="color: ${automationUptime.emailService.configured ? '#00d084' : '#f59e0b'}; font-weight: 700;">
-                  ${automationUptime.emailService.configured ? '✓ READY' : '⚠️ UNSET IN ENV'}
+                  ${automationUptime.emailService.configured ? '✓ READY TO SEND' : '⚠️ APP PASSWORD REQUIRED'}
                 </span>
               </div>
               <button onclick="DevDiagnosticsView.promptEmailCredentialsModal()" style="width: 100%; padding: 6px; font-size: 11px; font-weight: 700; background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 4px; cursor: pointer;">
