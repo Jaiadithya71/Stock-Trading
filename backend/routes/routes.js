@@ -11,6 +11,7 @@ const pcrRoutes = require("./pcrRoutes"); // NEW
 const quantRoutes = require("./quantRoutes"); // QUANT STRATEGY ROUTES
 const stockRoutes = require("./stockRoutes"); // EQUITY INTRADAY STOCKS
 const simulationRoutes = require("./simulationRoutes"); // HISTORICAL BACKTEST ENGINE
+const devRoutes = require("./devRoutes"); // DEV DIAGNOSTICS & SYSTEM TELEMETRY
 
 // Mount routes
 router.use(authRoutes);
@@ -23,6 +24,7 @@ router.use(pcrRoutes); // NEW - PCR data routes
 router.use(quantRoutes); // NEW - Quant signals & paper trading OMS
 router.use("/stocks", stockRoutes); // NEW - Stocks universe quotes & signals
 router.use("/simulation", simulationRoutes); // NEW - Historical backtesting engine
+router.use("/dev", devRoutes); // NEW - Dev diagnostics cockpit
 
 // Client Survey Submission & Retrieval Routes
 const fs = require("fs");

@@ -41,6 +41,12 @@ const TAB_REGISTRY = {
       render: (state) => RiskSettingsView.render() 
     }
   ],
+  dev: [
+    {
+      id: 'dev-diagnostics-view',
+      render: () => DevDiagnosticsView.render()
+    }
+  ],
   market: [
     { 
       id: 'master-grid-container', 

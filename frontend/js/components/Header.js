@@ -78,6 +78,9 @@ const Header = {
                             <button class="apple-nav-tab ${activeTab === 'settings' ? 'active' : ''}" data-tab="settings" style="padding: 6px 12px; font-size: 12px;">
                                 ⚙️ Risk
                             </button>
+                            <button class="apple-nav-tab ${activeTab === 'dev' ? 'active' : ''}" data-tab="dev" style="padding: 6px 12px; font-size: 12px; color: #a78bfa; font-weight: 600;">
+                                🛠️ Dev
+                            </button>
                         </div>
                     </div>
 
