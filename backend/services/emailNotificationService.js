@@ -521,31 +521,43 @@ class EmailNotificationService {
   }
 
   /**
-   * Send with Nodemailer if available
+   * Send with Nodemailer using specialized Gmail transport or custom SMTP
    */
   async sendViaNodemailer({ host, port, secure, user, pass, to, from, subject, html, text }) {
-    let nodemailer;
-    try {
-      nodemailer = require('nodemailer');
-    } catch (e) {
-      throw new Error('Nodemailer not installed in runtime');
-    }
+    const nodemailer = require('nodemailer');
+    const cleanUser = String(user).trim();
+    const cleanPass = String(pass).replace(/\s+/g, '').trim();
 
-    const transporter = nodemailer.createTransport({
-      host,
-      port,
-      secure: port === 465,
-      auth: {
-        user,
-        pass: pass.replace(/\s+/g, '')
-      },
-      tls: {
-        rejectUnauthorized: false
-      }
-    });
+    const isGmail = (host && host.toLowerCase().includes('gmail')) || cleanUser.toLowerCase().endsWith('@gmail.com');
+
+    const transportConfig = isGmail
+      ? {
+          service: 'gmail',
+          auth: {
+            user: cleanUser,
+            pass: cleanPass
+          },
+          tls: {
+            rejectUnauthorized: false
+          }
+        }
+      : {
+          host: host || 'smtp.gmail.com',
+          port: port || 587,
+          secure: port === 465,
+          auth: {
+            user: cleanUser,
+            pass: cleanPass
+          },
+          tls: {
+            rejectUnauthorized: false
+          }
+        };
+
+    const transporter = nodemailer.createTransport(transportConfig);
 
     return await transporter.sendMail({
-      from: `"Quant Command Center" <${from || user}>`,
+      from: `"Quant Command Center" <${from || cleanUser}>`,
       to,
       subject,
       text,
@@ -565,7 +577,7 @@ class EmailNotificationService {
     // Guard against duplicate sending on the same day unless forced
     if (!isForce && this.lastSentDate === dateStr) {
       console.log(`ℹ️ [EmailService] Daily summary for ${dateStr} has already been dispatched.`);
-      return { success: true, alreadySent: true, message: `Already dispatched today (${dateStr})` };
+      return { success: true, delivered: true, alreadySent: true, message: `Already dispatched today (${dateStr})` };
     }
 
     console.log(`📧 [EmailService] Compiling Daily Market Close Summary for ${recipient} (${dateStr})...`);
@@ -591,21 +603,21 @@ class EmailNotificationService {
       console.log(`👉 To deliver directly to your Gmail inbox, provide your Gmail App Password in Risk Settings.`);
       return {
         success: false,
+        delivered: false,
         archived: true,
         reportFilename,
         reportPath,
         dayData,
         reason: 'CREDENTIALS_REQUIRED',
-        message: `Daily report for ${dateStr} compiled and saved. Add your Gmail App Password in Risk Settings to enable automatic delivery to ${recipient}.`
+        message: `Daily report for ${dateStr} compiled and saved. Add your Gmail App Password in Risk Settings or Dev Tab to enable automatic delivery to ${recipient}.`
       };
     }
 
-    // 3. Dispatch email via Nodemailer or Native SMTP
+    // 3. Dispatch email via Nodemailer or Port 587 STARTTLS
     let deliveryResult = null;
     let deliveryMethod = '';
 
     try {
-      // Attempt nodemailer first
       deliveryResult = await this.sendViaNodemailer({
         host: config.smtpHost,
         port: config.smtpPort,
@@ -618,31 +630,48 @@ class EmailNotificationService {
         html: htmlReport,
         text: textReport
       });
-      deliveryMethod = 'Nodemailer';
+      deliveryMethod = 'Nodemailer (Gmail Transport)';
     } catch (nodemailerErr) {
-      console.warn(`⚠️ [EmailService] Nodemailer dispatch failed (${nodemailerErr.message}). Falling back to Native TLS SMTP...`);
+      console.warn(`⚠️ [EmailService] Primary Gmail transport failed (${nodemailerErr.message}). Attempting port 587 STARTTLS fallback...`);
+      
       try {
-        deliveryResult = await this.sendViaNativeSmtp({
-          host: config.smtpHost,
-          port: config.smtpPort,
-          user: smtpUser,
-          pass: smtpPass,
-          to: recipient,
-          from: smtpUser,
-          subject,
-          html: htmlReport,
-          text: textReport
+        const nodemailer = require('nodemailer');
+        const fallbackTransporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false,
+          requireTLS: true,
+          auth: {
+            user: String(smtpUser).trim(),
+            pass: String(smtpPass).replace(/\s+/g, '').trim()
+          },
+          tls: {
+            rejectUnauthorized: false
+          }
         });
-        deliveryMethod = 'Native TLS SMTP';
-      } catch (nativeErr) {
-        console.error(`❌ [EmailService] Native SMTP failed:`, nativeErr.message);
+
+        deliveryResult = await fallbackTransporter.sendMail({
+          from: `"Quant Command Center" <${smtpUser}>`,
+          to: recipient,
+          subject,
+          text: textReport,
+          html: htmlReport
+        });
+        deliveryMethod = 'Nodemailer (STARTTLS Port 587)';
+      } catch (fallbackErr) {
+        console.error(`❌ [EmailService] Fallback SMTP failed:`, fallbackErr);
+        let errMsg = fallbackErr?.message || nodemailerErr?.message || 'SMTP Authentication failed';
+        if (fallbackErr?.code === 'EAUTH' || errMsg.includes('535') || errMsg.includes('BadCredentials') || errMsg.includes('Username and Password not accepted')) {
+          errMsg = 'Gmail rejected your Google App Password (535 5.7.8 BadCredentials). Please ensure 2-Step Verification is enabled on your Google account and generate a 16-character App Password at myaccount.google.com/apppasswords.';
+        }
         return {
           success: false,
+          delivered: false,
           archived: true,
           reportFilename,
           reportPath,
-          error: nativeErr.message,
-          message: `Failed to deliver email: ${nativeErr.message}. The report is safely saved to disk.`
+          error: errMsg,
+          message: `Failed to deliver email: ${errMsg}`
         };
       }
     }
