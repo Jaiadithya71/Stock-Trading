@@ -170,7 +170,7 @@ router.get('/system-health', async (req, res) => {
           feedSource: quotesSnapshot?.source || 'SIMULATED_FEED',
           stocksBatch: {
             totalStocks: stocksList.length,
-            liveQuotesCount,
+            liveQuotesCount: liveStocksCount,
             batchLatencyMs: quotesLatencyMs,
             sampleQuote: stocksList[0] ? { symbol: stocksList[0].symbol, ltp: stocksList[0].ltp, pChange: stocksList[0].pChange } : null
           },
