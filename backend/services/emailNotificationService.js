@@ -548,7 +548,10 @@ class EmailNotificationService {
           },
           tls: {
             rejectUnauthorized: false
-          }
+          },
+          connectionTimeout: 7000,
+          greetingTimeout: 7000,
+          socketTimeout: 10000
         }
       : {
           host: host || 'smtp.gmail.com',
@@ -560,7 +563,10 @@ class EmailNotificationService {
           },
           tls: {
             rejectUnauthorized: false
-          }
+          },
+          connectionTimeout: 7000,
+          greetingTimeout: 7000,
+          socketTimeout: 10000
         };
 
     const transporter = nodemailer.createTransport(transportConfig);
@@ -656,7 +662,10 @@ class EmailNotificationService {
           },
           tls: {
             rejectUnauthorized: false
-          }
+          },
+          connectionTimeout: 7000,
+          greetingTimeout: 7000,
+          socketTimeout: 10000
         });
 
         deliveryResult = await fallbackTransporter.sendMail({
