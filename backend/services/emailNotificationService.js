@@ -241,7 +241,7 @@ class EmailNotificationService {
     };
   }
 
-  generateHtmlReport(data) {
+  generateHtmlReport(data, targetRecipient = null) {
     const isProfitable = data.summary.totalDayNetPnL >= 0;
     const pnlColor = isProfitable ? '#00d084' : '#ff4757';
     const pnlSign = isProfitable ? '+' : '';
@@ -312,7 +312,7 @@ class EmailNotificationService {
         <span style="color: #94a3b8; font-size: 12px;">Session Date: <strong>${data.date}</strong></span>
       </div>
       <h1 style="margin: 6px 0 4px; font-size: 24px; color: #ffffff; font-weight: 700;">Daily Trading & Portfolio Summary</h1>
-      <p style="margin: 0; color: #94a3b8; font-size: 14px;">Automated executive telemetry dispatched to <strong style="color: #38bdf8;">${this.defaultRecipient}</strong></p>
+      <p style="margin: 0; color: #94a3b8; font-size: 14px;">Automated executive telemetry dispatched to <strong style="color: #38bdf8;">${targetRecipient || this.defaultRecipient}</strong></p>
     </div>
 
     <!-- Executive KPI Scorecard Grid -->
@@ -648,18 +648,24 @@ class EmailNotificationService {
     };
 
     let result = await dispatch(primaryRecipients);
+    let wasRerouted = false;
 
     // If Resend free testing sandbox restricts recipient to the registered account owner
-    if (!result.success && result.statusCode === 403 && typeof result.error === 'string' && result.error.includes('jaiadithya2025.71@gmail.com')) {
-      console.log('ℹ️ [EmailService] Resend testing sandbox restricted to account owner. Auto-routing to registered address: jaiadithya2025.71@gmail.com...');
-      result = await dispatch(['jaiadithya2025.71@gmail.com']);
+    if (!result.success && result.statusCode === 403 && typeof result.error === 'string' && result.error.includes('send testing emails to your own email address')) {
+      const match = result.error.match(/\(([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\)/);
+      const ownerEmail = match ? match[1] : 'jaiadithya2025.71@gmail.com';
+      console.log(`ℹ️ [EmailService] Resend testing sandbox restricted to account owner. Auto-routing to registered address: ${ownerEmail}...`);
+      result = await dispatch([ownerEmail]);
+      if (result.success) {
+        wasRerouted = true;
+      }
     }
 
     if (!result.success) {
       throw new Error(result.error || `Resend API returned HTTP ${result.statusCode}`);
     }
 
-    return result;
+    return { ...result, wasRerouted };
   }
 
   /**
@@ -679,7 +685,7 @@ class EmailNotificationService {
 
     console.log(`📧 [EmailService] Compiling Daily Market Close Summary for ${recipient} (${dateStr})...`);
     const dayData = this.compileDayData(dateStr);
-    const htmlReport = this.generateHtmlReport(dayData);
+    const htmlReport = this.generateHtmlReport(dayData, recipient);
     const textReport = this.generateTextReport(dayData);
 
     // 1. Always save generated HTML report to disk for audit & UI preview
@@ -727,7 +733,9 @@ class EmailNotificationService {
         });
         deliveryResult = resendRes;
         deliveryRecipient = resendRes.recipients?.join(', ') || recipient;
-        deliveryMethod = `Resend HTTP REST API (${deliveryRecipient})`;
+        deliveryMethod = resendRes.wasRerouted 
+          ? `Resend Sandbox (Auto-routed to account owner ${deliveryRecipient})` 
+          : `Resend HTTP REST API (${deliveryRecipient})`;
       } catch (resendErr) {
         console.warn(`⚠️ [EmailService] Resend HTTP dispatch failed (${resendErr.message}). Attempting SMTP fallback...`);
       }
@@ -815,14 +823,20 @@ class EmailNotificationService {
     this.lastSentDate = dateStr;
     console.log(`✅ [EmailService] Daily summary successfully sent to ${deliveryRecipient} via ${deliveryMethod}!`);
 
+    const returnMsg = deliveryResult.wasRerouted
+      ? `Market close summary delivered to ${deliveryRecipient} (Resend sandbox auto-routes to verified owner. To deliver directly to ${recipient}, see Resend settings).`
+      : `Market close summary successfully emailed to ${deliveryRecipient} via ${deliveryMethod}!`;
+
     return {
       success: true,
       delivered: true,
       method: deliveryMethod,
       recipient: deliveryRecipient,
+      targetRecipient: recipient,
+      wasRerouted: Boolean(deliveryResult.wasRerouted),
       date: dateStr,
       reportPath,
-      message: `Market close summary successfully emailed to ${deliveryRecipient} via ${deliveryMethod}!`
+      message: returnMsg
     };
   }
 
