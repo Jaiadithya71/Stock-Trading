@@ -618,7 +618,8 @@ class EmailNotificationService {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(payload)
           },
-          timeout: 10000
+          timeout: 10000,
+          rejectUnauthorized: false
         }, (res) => {
           let body = '';
           res.on('data', chunk => body += chunk);
