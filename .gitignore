@@ -14,6 +14,7 @@ backend/data/email_credentials.json
 # Data cache files (ephemeral)
 backend/cache/*.json
 backend/data/email_reports/*.html
+backend/data/stock_signal_audit_*.json
 
 # Logs
 logs/

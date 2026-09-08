@@ -139,13 +139,14 @@ const DevDiagnosticsView = {
     if (existing) existing.remove();
 
     const curUser = this.healthData?.modules?.automationUptime?.emailService?.recipient || 'jaiadithya2020@gmail.com';
+    const emailSvc = this.healthData?.modules?.automationUptime?.emailService || {};
 
     const modalHtml = `
       <div id="dev-email-creds-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
-        <div style="background: #181c27; border: 1px solid #3b82f6; border-radius: 12px; max-width: 520px; width: 100%; padding: 22px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);">
+        <div style="background: #181c27; border: 1px solid #3b82f6; border-radius: 12px; max-width: 540px; width: 100%; padding: 22px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
             <div style="font-size: 15px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px;">
-              <span>📧</span> Configure Gmail SMTP Delivery
+              <span>📧</span> Configure Email Delivery (Resend API / Gmail)
             </div>
             <button onclick="document.getElementById('dev-email-creds-modal').remove()" style="background: none; border: none; color: #8896a8; font-size: 18px; cursor: pointer;">✕</button>
           </div>
@@ -156,26 +157,28 @@ const DevDiagnosticsView = {
             </div>
           ` : ''}
 
-          <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 6px; padding: 10px; margin-bottom: 14px; font-size: 11.5px; color: #93c5fd; line-height: 1.4;">
-            👉 <strong>Google Requirement:</strong> Gmail requires an <strong>App Password</strong> (16 characters), not your regular login password.<br>
-            Generate one instantly at: <a href="https://myaccount.google.com/apppasswords" target="_blank" style="color: #60a5fa; font-weight: 700; text-decoration: underline;">myaccount.google.com/apppasswords</a>
+          <div style="background: rgba(0, 208, 132, 0.08); border: 1px solid rgba(0, 208, 132, 0.25); border-radius: 6px; padding: 10px; margin-bottom: 14px; font-size: 11.5px; color: #00d084; line-height: 1.4;">
+            🚀 <strong>Render Free Tier Note:</strong> Render blocks outbound SMTP ports 465/587. Using the <strong>Resend HTTP REST API (Port 443)</strong> delivers emails with 100% reliability and zero port blocks!
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
             <div>
-              <label style="font-size: 11px; color: #8896a8; font-weight: 600; display: block; margin-bottom: 4px;">GMAIL SENDER ADDRESS</label>
-              <input id="devEmailInputUser" type="email" value="${curUser}" placeholder="e.g. yourname@gmail.com" style="width: 100%; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 12px; font-family: monospace; box-sizing: border-box;">
-            </div>
-
-            <div>
-              <label style="font-size: 11px; color: #8896a8; font-weight: 600; display: block; margin-bottom: 4px;">16-CHAR GOOGLE APP PASSWORD</label>
-              <input id="devEmailInputPass" type="password" placeholder="e.g. abcd efgh ijkl mnop" style="width: 100%; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 12px; font-family: monospace; box-sizing: border-box;">
-              <span style="font-size: 10px; color: #64748b; margin-top: 2px; display: block;">Spaces are automatically trimmed.</span>
+              <label style="font-size: 11px; color: #8896a8; font-weight: 600; display: block; margin-bottom: 4px;">RESEND HTTP API KEY (RECOMMENDED FOR RENDER)</label>
+              <input id="devEmailInputResendKey" type="password" value="" placeholder="${emailSvc.resendApiKeyDetected ? '•••••••••••••••• (API Key Active)' : 'e.g. re_xxxxxxxxx'}" style="width: 100%; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px; color: #00d084; font-size: 12px; font-family: monospace; box-sizing: border-box;">
+              <span style="font-size: 10px; color: #64748b; margin-top: 2px; display: block;">Free 3,000 emails/month at resend.com. Bypasses all Render firewall restrictions.</span>
             </div>
 
             <div>
               <label style="font-size: 11px; color: #8896a8; font-weight: 600; display: block; margin-bottom: 4px;">RECIPIENT INBOX</label>
-              <input id="devEmailInputTo" type="email" value="${curUser}" placeholder="e.g. yourname@gmail.com" style="width: 100%; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 12px; font-family: monospace; box-sizing: border-box;">
+              <input id="devEmailInputTo" type="email" value="${curUser}" placeholder="e.g. jaiadithya2020@gmail.com" style="width: 100%; background: #131722; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 12px; font-family: monospace; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-top: 4px; border-top: 1px dashed #2a2e39; padding-top: 10px;">
+              <label style="font-size: 11px; color: #64748b; font-weight: 600; display: block; margin-bottom: 4px;">OPTIONAL: GMAIL SMTP FALLBACK</label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <input id="devEmailInputUser" type="email" placeholder="Gmail Address" value="${emailSvc.smtpUser || 'jaiadithya2020@gmail.com'}" style="background: #131722; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px; color: #cbd5e1; font-size: 11.5px; font-family: monospace;">
+                <input id="devEmailInputPass" type="password" placeholder="16-Char App Pass" style="background: #131722; border: 1px solid #2a2e39; border-radius: 6px; padding: 8px 10px; color: #cbd5e1; font-size: 11.5px; font-family: monospace;">
+              </div>
             </div>
           </div>
 
@@ -183,7 +186,7 @@ const DevDiagnosticsView = {
             <button onclick="document.getElementById('dev-email-creds-modal').remove()" style="padding: 8px 14px; font-size: 11.5px; background: transparent; border: 1px solid #2a2e39; color: #8896a8; border-radius: 6px; cursor: pointer;">
               Cancel
             </button>
-            <button onclick="DevDiagnosticsView.saveAndTestEmailCredentials()" style="padding: 8px 16px; font-size: 11.5px; font-weight: 700; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer;">
+            <button onclick="DevDiagnosticsView.saveAndTestEmailCredentials()" style="padding: 8px 16px; font-size: 11.5px; font-weight: 700; background: #00d084; color: #000; border: none; border-radius: 6px; cursor: pointer;">
               💾 Save & Send Test Email
             </button>
           </div>
@@ -195,13 +198,14 @@ const DevDiagnosticsView = {
   },
 
   async saveAndTestEmailCredentials() {
+    const resendApiKey = document.getElementById('devEmailInputResendKey')?.value?.trim();
     const user = document.getElementById('devEmailInputUser')?.value?.trim();
     const pass = document.getElementById('devEmailInputPass')?.value?.trim();
     const to = document.getElementById('devEmailInputTo')?.value?.trim();
 
-    if (!user || !pass) {
+    if (!resendApiKey && (!user || !pass)) {
       if (typeof ToastNotification !== 'undefined') {
-        ToastNotification.show('Please provide both Gmail address and 16-character App Password.', 'error');
+        ToastNotification.show('Please provide a Resend API Key or Gmail address + App Password.', 'error');
       }
       return;
     }
@@ -210,7 +214,7 @@ const DevDiagnosticsView = {
       const res = await fetch('/api/dev/save-email-credentials', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ smtpUser: user, smtpPass: pass, recipientEmail: to || user })
+        body: JSON.stringify({ resendApiKey, smtpUser: user, smtpPass: pass, recipientEmail: to || user })
       });
       const json = await res.json();
       if (json.success) {
@@ -221,14 +225,13 @@ const DevDiagnosticsView = {
         await this.sendTestEmail();
       } else {
         if (typeof ToastNotification !== 'undefined') {
-          ToastNotification.show(json.message || 'Failed to save credentials', 'error');
+          ToastNotification.show(json.message || 'Failed saving credentials', 'error');
         }
       }
     } catch (e) {
       if (typeof ToastNotification !== 'undefined') {
-        ToastNotification.show('Error saving credentials: ' + e.message, 'error');
+        ToastNotification.show('Save error: ' + e.message, 'error');
       }
-    }
   },
 
   async reauthBroker() {
@@ -595,7 +598,13 @@ const DevDiagnosticsView = {
             <!-- EMAIL SERVICE STATUS -->
             <div style="background: #131722; padding: 10px; border-radius: 6px; border: 1px solid #2a2e39; font-size: 11.5px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <span style="color: #8896a8;">SMTP Server:</span>
+                <span style="color: #8896a8;">Email Provider:</span>
+                <strong style="color: ${automationUptime.emailService.activeProvider?.includes('Resend') ? '#00d084' : '#60a5fa'}; font-family: monospace;">
+                  ${automationUptime.emailService.activeProvider || 'Resend HTTP API'}
+                </strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="color: #8896a8;">Delivery Host:</span>
                 <strong style="color: #fff; font-family: monospace;">${automationUptime.emailService.smtpHost}</strong>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
@@ -603,21 +612,19 @@ const DevDiagnosticsView = {
                 <strong style="color: #60a5fa; font-family: monospace;">${automationUptime.emailService.recipient}</strong>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <span style="color: #8896a8;">16-Digit App Password:</span>
-                <span style="color: ${automationUptime.emailService.smtpPassDetected ? '#00d084' : '#ef4444'}; font-weight: 700; font-family: monospace;">
-                  ${automationUptime.emailService.smtpPassDetected 
-                    ? `🟢 ${automationUptime.emailService.smtpPassLength} chars (${automationUptime.emailService.smtpPassPreview})` 
-                    : '🔴 Not Set (0 chars)'}
+                <span style="color: #8896a8;">Resend API Key:</span>
+                <span style="color: ${automationUptime.emailService.resendApiKeyDetected ? '#00d084' : '#64748b'}; font-weight: 700; font-family: monospace;">
+                  ${automationUptime.emailService.resendApiKeyDetected ? `🟢 ${automationUptime.emailService.resendPreview || 'Configured'} (Active)` : '⚪ Not Set'}
                 </span>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="color: #8896a8;">Delivery Status:</span>
                 <span style="color: ${automationUptime.emailService.configured ? '#00d084' : '#f59e0b'}; font-weight: 700;">
-                  ${automationUptime.emailService.configured ? '✓ READY TO SEND' : '⚠️ APP PASSWORD REQUIRED'}
+                  ${automationUptime.emailService.configured ? '✓ READY (HTTPS REST PORT 443)' : '⚠️ API KEY REQUIRED'}
                 </span>
               </div>
-              <button onclick="DevDiagnosticsView.promptEmailCredentialsModal()" style="width: 100%; padding: 6px; font-size: 11px; font-weight: 700; background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 4px; cursor: pointer;">
-                ⚙️ Configure Gmail Credentials
+              <button onclick="DevDiagnosticsView.promptEmailCredentialsModal()" style="width: 100%; padding: 6px; font-size: 11px; font-weight: 700; background: rgba(0, 208, 132, 0.12); color: #00d084; border: 1px solid rgba(0, 208, 132, 0.3); border-radius: 4px; cursor: pointer;">
+                ⚙️ Configure Email Credentials (Resend / Gmail)
               </button>
             </div>
           </div>

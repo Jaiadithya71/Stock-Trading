@@ -109,6 +109,7 @@ router.get('/system-health', async (req, res) => {
         label: passLength > 0 ? `✓ OK (${passLength} chars: ${passMasked})` : '✗ UNSET (0 chars)'
       },
       EMAIL_TO: Boolean(emailCfg.recipientEmail) || hasEnv('EMAIL_TO', 'EMAIL_RECIPIENT', 'RECIPIENT_EMAIL', 'MAIL_TO'),
+      RESEND_API_KEY: Boolean(emailCfg.resendApiKey) || hasEnv('RESEND_API_KEY', 'RESEND_KEY', 'RESEND_TOKEN'),
       ENCRYPTION_KEY: hasEnv('ENCRYPTION_KEY'),
       CREDENTIALS_JSON: hasEnv('CREDENTIALS_JSON')
     };
@@ -253,13 +254,16 @@ router.get('/system-health', async (req, res) => {
           isRender: Boolean(process.env.RENDER),
           emailService: {
             enabled: emailConfig.enabled,
-            configured: isSmtpConfigured,
+            configured: Boolean(emailConfig.resendApiKey || isSmtpConfigured),
+            activeProvider: emailConfig.resendApiKey ? 'Resend (HTTP REST API Port 443)' : 'Gmail SMTP',
+            resendApiKeyDetected: Boolean(emailConfig.resendApiKey),
+            resendPreview: emailConfig.resendApiKey ? `${emailConfig.resendApiKey.slice(0, 5)}••••••••${emailConfig.resendApiKey.slice(-4)}` : 'None',
             smtpPassDetected: Boolean(passLength > 0),
             smtpPassLength: passLength,
             smtpPassPreview: passMasked,
             is16CharAppPassword: is16Digits,
             recipient: emailConfig.recipientEmail,
-            smtpHost: `${emailConfig.smtpHost}:${emailConfig.smtpPort}`,
+            smtpHost: emailConfig.resendApiKey ? 'api.resend.com:443 (HTTPS REST)' : `${emailConfig.smtpHost}:${emailConfig.smtpPort}`,
             lastSentDate: emailNotificationService.lastSentDate || 'Not yet sent today'
           },
           archiver: {
@@ -396,41 +400,71 @@ router.post('/run-audit', async (req, res) => {
     });
   }
 
-  // Test 5: SMTP Connectivity Check (Port 465 TLS)
+  // Test 5: Email Transport & Connectivity Check
   const t5Start = Date.now();
   try {
     const emailConfig = emailNotificationService.getSettings();
-    const host = emailConfig.smtpHost || 'smtp.gmail.com';
-    const port = emailConfig.smtpPort || 465;
-
-    const tlsPromise = new Promise((resolve) => {
-      const socket = tls.connect({ host, port, timeout: 5000 }, () => {
-        socket.end();
-        resolve({ success: true });
+    if (emailConfig.resendApiKey) {
+      const https = require('https');
+      const httpsPromise = new Promise((resolve) => {
+        const req = https.request('https://api.resend.com/emails', {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${emailConfig.resendApiKey}` },
+          timeout: 5000
+        }, (resp) => {
+          resolve({ success: true, status: resp.statusCode });
+        });
+        req.on('error', (err) => resolve({ success: false, error: err.message }));
+        req.on('timeout', () => { req.destroy(); resolve({ success: false, error: 'Socket timed out after 5000ms' }); });
+        req.end();
       });
-      socket.on('error', (err) => resolve({ success: false, error: err.message }));
-      socket.on('timeout', () => {
-        socket.destroy();
-        resolve({ success: false, error: 'Socket timed out after 5000ms' });
+
+      const hRes = await httpsPromise;
+      const t5Duration = Date.now() - t5Start;
+
+      auditResults.push({
+        name: 'Resend Email HTTP REST API (api.resend.com:443)',
+        category: 'EMAIL',
+        status: hRes.success ? 'PASS' : 'WARN',
+        durationMs: t5Duration,
+        message: hRes.success 
+          ? `Successfully connected to Resend API over HTTPS (Port 443) in ${t5Duration}ms (Render port blocks bypassed)`
+          : `Could not connect to Resend API: ${hRes.error}`,
+        details: { provider: 'Resend', host: 'api.resend.com', port: 443 }
       });
-    });
+    } else {
+      const host = emailConfig.smtpHost || 'smtp.gmail.com';
+      const port = emailConfig.smtpPort || 465;
 
-    const tlsRes = await tlsPromise;
-    const t5Duration = Date.now() - t5Start;
+      const tlsPromise = new Promise((resolve) => {
+        const socket = tls.connect({ host, port, timeout: 5000 }, () => {
+          socket.end();
+          resolve({ success: true });
+        });
+        socket.on('error', (err) => resolve({ success: false, error: err.message }));
+        socket.on('timeout', () => {
+          socket.destroy();
+          resolve({ success: false, error: 'Socket timed out after 5000ms' });
+        });
+      });
 
-    auditResults.push({
-      name: `SMTP Mail Server Connectivity (${host}:${port})`,
-      category: 'EMAIL',
-      status: tlsRes.success ? 'PASS' : 'WARN',
-      durationMs: t5Duration,
-      message: tlsRes.success 
-        ? `Successfully established TLS handshake with ${host}:${port} in ${t5Duration}ms`
-        : `Could not connect to ${host}:${port}: ${tlsRes.error}`,
-      details: { host, port }
-    });
+      const tlsRes = await tlsPromise;
+      const t5Duration = Date.now() - t5Start;
+
+      auditResults.push({
+        name: `SMTP Mail Server Connectivity (${host}:${port})`,
+        category: 'EMAIL',
+        status: tlsRes.success ? 'PASS' : 'WARN',
+        durationMs: t5Duration,
+        message: tlsRes.success 
+          ? `Successfully established TLS handshake with ${host}:${port} in ${t5Duration}ms`
+          : `Could not connect to ${host}:${port}: ${tlsRes.error} (Note: Render Free Tier blocks outbound SMTP)`,
+        details: { host, port }
+      });
+    }
   } catch (e) {
     auditResults.push({
-      name: 'SMTP Mail Server Connectivity',
+      name: 'Email Transport Connectivity',
       category: 'EMAIL',
       status: 'WARN',
       durationMs: Date.now() - t5Start,
@@ -492,25 +526,27 @@ router.post('/send-test-email', async (req, res) => {
  */
 router.post('/save-email-credentials', (req, res) => {
   try {
-    const { smtpUser, smtpPass, recipientEmail } = req.body;
-    if (!smtpUser || !smtpPass) {
-      return res.status(400).json({ success: false, message: 'Both Gmail address (smtpUser) and Google App Password (smtpPass) are required.' });
+    const { smtpUser, smtpPass, recipientEmail, resendApiKey } = req.body;
+    if (!resendApiKey && (!smtpUser || !smtpPass)) {
+      return res.status(400).json({ success: false, message: 'Either Resend API Key or Gmail address + App Password are required.' });
     }
 
     const updated = emailNotificationService.saveEmailSettings({
-      smtpUser: String(smtpUser).trim(),
-      smtpPass: String(smtpPass).trim(),
-      recipientEmail: recipientEmail ? String(recipientEmail).trim() : String(smtpUser).trim()
+      smtpUser: smtpUser ? String(smtpUser).trim() : undefined,
+      smtpPass: smtpPass ? String(smtpPass).trim() : undefined,
+      resendApiKey: resendApiKey ? String(resendApiKey).trim() : undefined,
+      recipientEmail: recipientEmail ? String(recipientEmail).trim() : (smtpUser ? String(smtpUser).trim() : undefined)
     });
 
-    logDevEvent('EMAIL', 'SUCCESS', `Email credentials updated for: ${smtpUser}`);
+    logDevEvent('EMAIL', 'SUCCESS', `Email credentials updated (Provider: ${updated.resendApiKey ? 'Resend HTTP API' : 'Gmail SMTP'})`);
     res.json({
       success: true,
-      message: 'SMTP credentials saved successfully!',
+      message: 'Email credentials saved successfully!',
       settings: {
         smtpUser: updated.smtpUser,
         recipientEmail: updated.recipientEmail,
-        isConfigured: Boolean(updated.smtpUser && updated.smtpPass)
+        isConfigured: Boolean(updated.resendApiKey || (updated.smtpUser && updated.smtpPass)),
+        activeProvider: updated.resendApiKey ? 'Resend (HTTP REST API Port 443)' : 'Gmail SMTP'
       }
     });
   } catch (error) {

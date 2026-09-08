@@ -100,6 +100,9 @@ class EmailNotificationService {
       getEnvValue('EMAIL_TO', 'EMAIL_RECIPIENT', 'RECIPIENT_EMAIL', 'MAIL_TO', 'TARGET_EMAIL', 'TO_EMAIL', 'ALERT_EMAIL') || 
       (smtpUser && smtpUser.includes('@') ? smtpUser : this.defaultRecipient);
 
+    const resendApiKey = creds.resendApiKey || emailConfig.resendApiKey || 
+      getEnvValue('RESEND_API_KEY', 'RESEND_KEY', 'RESEND_TOKEN') || '';
+
     return {
       enabled: emailConfig.enabled !== false,
       recipientEmail,
@@ -109,6 +112,7 @@ class EmailNotificationService {
       smtpSecure: emailConfig.smtpSecure !== undefined ? emailConfig.smtpSecure : true,
       smtpUser: smtpUser.trim(),
       smtpPass: smtpPass.trim(),
+      resendApiKey: resendApiKey.trim(),
       senderName: emailConfig.senderName || 'Google Antigravity Quant Terminal'
     };
   }
@@ -131,11 +135,17 @@ class EmailNotificationService {
       } catch (e) {}
     }
 
+    if (newConfig.resendApiKey !== undefined) {
+      settings.emailNotification = settings.emailNotification || {};
+      settings.emailNotification.resendApiKey = String(newConfig.resendApiKey).trim();
+    }
+
     const current = this.getSettings();
     settings.emailNotification = {
       enabled: newConfig.enabled !== undefined ? newConfig.enabled : current.enabled,
       recipientEmail: newConfig.recipientEmail || current.recipientEmail,
       sendAtMarketClose: newConfig.sendAtMarketClose !== undefined ? newConfig.sendAtMarketClose : current.sendAtMarketClose,
+      resendApiKey: newConfig.resendApiKey !== undefined ? String(newConfig.resendApiKey).trim() : current.resendApiKey,
       smtpHost: newConfig.smtpHost || current.smtpHost,
       smtpPort: newConfig.smtpPort || current.smtpPort,
       smtpSecure: newConfig.smtpSecure !== undefined ? newConfig.smtpSecure : current.smtpSecure,
@@ -581,6 +591,78 @@ class EmailNotificationService {
   }
 
   /**
+   * Resend HTTP REST API Transport (Port 443 HTTPS)
+   * 100% resilient against cloud hosting outbound SMTP port blocks (Render Free Tier)
+   */
+  async sendViaResend({ apiKey, to, from, subject, html, text }) {
+    const https = require('https');
+    const cleanKey = String(apiKey || '').trim();
+    if (!cleanKey) throw new Error('Resend API key is missing');
+
+    const primaryRecipients = Array.isArray(to) ? to : [to];
+
+    const dispatch = (recipients) => {
+      return new Promise((resolve, reject) => {
+        const payload = JSON.stringify({
+          from: from || 'Quant Command Center <onboarding@resend.dev>',
+          to: recipients,
+          subject,
+          html,
+          text
+        });
+
+        const req = https.request('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${cleanKey}`,
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(payload)
+          },
+          timeout: 10000
+        }, (res) => {
+          let body = '';
+          res.on('data', chunk => body += chunk);
+          res.on('end', () => {
+            try {
+              const parsed = JSON.parse(body);
+              if (res.statusCode >= 200 && res.statusCode < 300) {
+                resolve({ success: true, id: parsed.id, recipients });
+              } else {
+                resolve({ success: false, statusCode: res.statusCode, error: parsed.message || body, data: parsed });
+              }
+            } catch (e) {
+              resolve({ success: false, statusCode: res.statusCode, error: body });
+            }
+          });
+        });
+
+        req.on('error', (err) => resolve({ success: false, error: err.message }));
+        req.on('timeout', () => {
+          req.destroy();
+          resolve({ success: false, error: 'Resend API request timed out after 10s' });
+        });
+
+        req.write(payload);
+        req.end();
+      });
+    };
+
+    let result = await dispatch(primaryRecipients);
+
+    // If Resend free testing sandbox restricts recipient to the registered account owner
+    if (!result.success && result.statusCode === 403 && typeof result.error === 'string' && result.error.includes('jaiadithya2025.71@gmail.com')) {
+      console.log('ℹ️ [EmailService] Resend testing sandbox restricted to account owner. Auto-routing to registered address: jaiadithya2025.71@gmail.com...');
+      result = await dispatch(['jaiadithya2025.71@gmail.com']);
+    }
+
+    if (!result.success) {
+      throw new Error(result.error || `Resend API returned HTTP ${result.statusCode}`);
+    }
+
+    return result;
+  }
+
+  /**
    * Main Dispatch Method: Sends or archives the daily summary email
    */
   async sendDailySummaryEmail(options = {}) {
@@ -607,15 +689,15 @@ class EmailNotificationService {
     console.log(`💾 [EmailService] Saved daily HTML summary report to: ${reportPath}`);
 
     // 2. Check credentials
+    const resendApiKey = config.resendApiKey || process.env.RESEND_API_KEY || '';
     const smtpUser = config.smtpUser || process.env.EMAIL_USER;
     const smtpPass = config.smtpPass || process.env.EMAIL_PASS;
 
     const subject = `📊 NSE Daily Market Close Summary - ${dateStr} [P&L: ${dayData.summary.totalDayNetPnL >= 0 ? '+' : ''}₹${dayData.summary.totalDayNetPnL}]`;
 
-    if (!smtpUser || !smtpPass) {
-      console.log(`⚠️ [EmailService] SMTP credentials (smtpUser / smtpPass) not yet configured.`);
+    if (!resendApiKey && (!smtpUser || !smtpPass)) {
+      console.log(`⚠️ [EmailService] Neither Resend API key nor SMTP credentials are configured.`);
       console.log(`👉 The daily summary has been prepared and archived to: ${reportFilename}`);
-      console.log(`👉 To deliver directly to your Gmail inbox, provide your Gmail App Password in Risk Settings.`);
       return {
         success: false,
         delivered: false,
@@ -624,87 +706,123 @@ class EmailNotificationService {
         reportPath,
         dayData,
         reason: 'CREDENTIALS_REQUIRED',
-        message: `Daily report for ${dateStr} compiled and saved. Add your Gmail App Password in Risk Settings or Dev Tab to enable automatic delivery to ${recipient}.`
+        message: `Daily report for ${dateStr} compiled and saved. Provide your Resend API Key or Gmail App Password to enable automatic delivery to ${recipient}.`
       };
     }
 
-    // 3. Dispatch email via Nodemailer or Port 587 STARTTLS
+    // 3. Dispatch email: Prioritize Resend HTTP REST API (Port 443, 100% immune to Render outbound SMTP port blocking)
     let deliveryResult = null;
     let deliveryMethod = '';
+    let deliveryRecipient = recipient;
 
-    try {
-      deliveryResult = await this.sendViaNodemailer({
-        host: config.smtpHost,
-        port: config.smtpPort,
-        secure: config.smtpSecure,
-        user: smtpUser,
-        pass: smtpPass,
-        to: recipient,
-        from: smtpUser,
-        subject,
-        html: htmlReport,
-        text: textReport
-      });
-      deliveryMethod = 'Nodemailer (Gmail Transport)';
-    } catch (nodemailerErr) {
-      console.warn(`⚠️ [EmailService] Primary Gmail transport failed (${nodemailerErr.message}). Attempting port 587 STARTTLS fallback...`);
-      
+    if (resendApiKey) {
       try {
-        const nodemailer = require('nodemailer');
-        const fallbackTransporter = nodemailer.createTransport({
-          host: 'smtp.gmail.com',
-          port: 587,
-          secure: false,
-          requireTLS: true,
-          auth: {
-            user: String(smtpUser).trim(),
-            pass: String(smtpPass).replace(/\s+/g, '').trim()
-          },
-          tls: {
-            rejectUnauthorized: false
-          },
-          connectionTimeout: 7000,
-          greetingTimeout: 7000,
-          socketTimeout: 10000
-        });
-
-        deliveryResult = await fallbackTransporter.sendMail({
-          from: `"Quant Command Center" <${smtpUser}>`,
+        console.log(`📡 [EmailService] Dispatching Daily Summary via Resend HTTP REST API (Port 443)...`);
+        const resendRes = await this.sendViaResend({
+          apiKey: resendApiKey,
           to: recipient,
           subject,
-          text: textReport,
-          html: htmlReport
+          html: htmlReport,
+          text: textReport
         });
-        deliveryMethod = 'Nodemailer (STARTTLS Port 587)';
-      } catch (fallbackErr) {
-        console.error(`❌ [EmailService] Fallback SMTP failed:`, fallbackErr);
-        let errMsg = fallbackErr?.message || nodemailerErr?.message || 'SMTP Authentication failed';
-        if (fallbackErr?.code === 'EAUTH' || errMsg.includes('535') || errMsg.includes('BadCredentials') || errMsg.includes('Username and Password not accepted')) {
-          errMsg = 'Gmail rejected your Google App Password (535 5.7.8 BadCredentials). Please ensure 2-Step Verification is enabled on your Google account and generate a 16-character App Password at myaccount.google.com/apppasswords.';
-        }
-        return {
-          success: false,
-          delivered: false,
-          archived: true,
-          reportFilename,
-          reportPath,
-          error: errMsg,
-          message: `Failed to deliver email: ${errMsg}`
-        };
+        deliveryResult = resendRes;
+        deliveryRecipient = resendRes.recipients?.join(', ') || recipient;
+        deliveryMethod = `Resend HTTP REST API (${deliveryRecipient})`;
+      } catch (resendErr) {
+        console.warn(`⚠️ [EmailService] Resend HTTP dispatch failed (${resendErr.message}). Attempting SMTP fallback...`);
       }
     }
 
+    // Fallback: If Resend wasn't configured or failed, attempt direct SMTP
+    if (!deliveryResult && smtpUser && smtpPass) {
+      try {
+        deliveryResult = await this.sendViaNodemailer({
+          host: config.smtpHost,
+          port: config.smtpPort,
+          secure: config.smtpSecure,
+          user: smtpUser,
+          pass: smtpPass,
+          to: recipient,
+          from: smtpUser,
+          subject,
+          html: htmlReport,
+          text: textReport
+        });
+        deliveryMethod = 'Nodemailer (Gmail Transport)';
+      } catch (nodemailerErr) {
+        console.warn(`⚠️ [EmailService] Primary Gmail transport failed (${nodemailerErr.message}). Attempting port 587 STARTTLS fallback...`);
+        
+        try {
+          const nodemailer = require('nodemailer');
+          const fallbackTransporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+              user: String(smtpUser).trim(),
+              pass: String(smtpPass).replace(/\s+/g, '').trim()
+            },
+            tls: {
+              rejectUnauthorized: false
+            },
+            connectionTimeout: 7000,
+            greetingTimeout: 7000,
+            socketTimeout: 10000
+          });
+
+          deliveryResult = await fallbackTransporter.sendMail({
+            from: `"Quant Command Center" <${smtpUser}>`,
+            to: recipient,
+            subject,
+            text: textReport,
+            html: htmlReport
+          });
+          deliveryMethod = 'Nodemailer (STARTTLS Port 587)';
+        } catch (fallbackErr) {
+          console.error(`❌ [EmailService] All email delivery methods failed:`, fallbackErr);
+          let errMsg = fallbackErr?.message || nodemailerErr?.message || 'SMTP Authentication failed';
+          if (fallbackErr?.code === 'EAUTH' || errMsg.includes('535') || errMsg.includes('BadCredentials') || errMsg.includes('Username and Password not accepted')) {
+            errMsg = 'Gmail rejected your Google App Password (535 5.7.8 BadCredentials). Please ensure 2-Step Verification is enabled on your Google account and generate a 16-character App Password at myaccount.google.com/apppasswords.';
+          } else if (errMsg.includes('timeout') || errMsg.includes('ETIMEDOUT')) {
+            errMsg = 'Connection timeout (Render blocks outbound SMTP ports 25, 465, 587 on Free Tier). Resend HTTP REST API is recommended.';
+          }
+          return {
+            success: false,
+            delivered: false,
+            archived: true,
+            reportFilename,
+            reportPath,
+            error: errMsg,
+            message: `Failed to deliver email: ${errMsg}`
+          };
+        }
+      }
+    }
+
+    if (!deliveryResult) {
+      return {
+        success: false,
+        delivered: false,
+        archived: true,
+        reportFilename,
+        reportPath,
+        error: 'No email delivery provider succeeded',
+        message: 'Failed to deliver email via Resend and SMTP fallback.'
+      };
+    }
+
     this.lastSentDate = dateStr;
-    console.log(`✅ [EmailService] Daily summary successfully sent to ${recipient} via ${deliveryMethod}!`);
+    console.log(`✅ [EmailService] Daily summary successfully sent to ${deliveryRecipient} via ${deliveryMethod}!`);
 
     return {
       success: true,
       delivered: true,
       method: deliveryMethod,
-      recipient,
+      recipient: deliveryRecipient,
       date: dateStr,
       reportPath,
-      message: `Market close summary successfully emailed to ${recipient}!`
+      message: `Market close summary successfully emailed to ${deliveryRecipient} via ${deliveryMethod}!`
     };
   }
 
