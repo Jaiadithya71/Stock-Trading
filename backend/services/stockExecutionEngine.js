@@ -25,8 +25,20 @@ class StockExecutionEngine {
     this.isRunning = false;
     this.intervalId = null;
     this.autoExecutionEnabled = true;
-    this.lastSettledDate = null;
+    this.lastSettledDate = this.loadLastSettledDate();
     this.tradesToday = [];
+  }
+
+  loadLastSettledDate() {
+    try {
+      if (fs.existsSync(DAILY_LEDGER_FILE)) {
+        const ledger = JSON.parse(fs.readFileSync(DAILY_LEDGER_FILE, 'utf8'));
+        if (Array.isArray(ledger) && ledger.length > 0 && ledger[0].date) {
+          return ledger[0].date;
+        }
+      }
+    } catch (e) {}
+    return null;
   }
 
   getRiskSettings() {
@@ -155,8 +167,16 @@ class StockExecutionEngine {
         }
       }
 
-      // 4. 3:30 PM END-OF-DAY P&L FETCHING & STORAGE
-      if (ist.timeInMinutes >= 930 && this.lastSettledDate !== ist.dateString) {
+      // 4. 3:30 PM - 4:15 PM END-OF-DAY P&L SETTLEMENT & ARCHIVAL WINDOW
+      const archiveFileExists = fs.existsSync(path.join(DATA_DIR, `daily_pnl_archive_${ist.dateString}.json`));
+      if (archiveFileExists && this.lastSettledDate !== ist.dateString) {
+        this.lastSettledDate = ist.dateString;
+      }
+
+      const isTradingDay = marketCalendar.isTradingDay();
+      const isSettlementWindow = ist.timeInMinutes >= 930 && ist.timeInMinutes <= 975; // 3:30 PM to 4:15 PM IST
+
+      if (isTradingDay && isSettlementWindow && !archiveFileExists && this.lastSettledDate !== ist.dateString) {
         await this.settleAndArchiveDailyPnL(ist.dateString, smartApiInstance);
         this.lastSettledDate = ist.dateString;
         return;

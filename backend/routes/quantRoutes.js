@@ -599,7 +599,7 @@ router.post('/quant/send-market-close-summary', async (req, res) => {
     const { recipient, force } = req.body || {};
     const result = await emailNotificationService.sendDailySummaryEmail({
       recipient,
-      force: force !== false // manual trigger forces dispatch
+      force: force === true // Only force if explicitly passed as true
     });
     res.json(result);
   } catch (error) {

@@ -16,6 +16,7 @@ const DATA_DIR = path.join(__dirname, '../data');
 const SETTINGS_FILE = path.join(DATA_DIR, 'risk_settings.json');
 const CREDENTIALS_FILE = path.join(DATA_DIR, 'email_credentials.json');
 const REPORTS_DIR = path.join(DATA_DIR, 'email_reports');
+const DISPATCH_STATUS_FILE = path.join(DATA_DIR, 'email_dispatch_status.json');
 
 function getEnvValue(...aliases) {
   const norm = (s) => String(s).toLowerCase().replace(/[\s_\-]/g, '');
@@ -47,7 +48,32 @@ class EmailNotificationService {
       try { fs.mkdirSync(REPORTS_DIR, { recursive: true }); } catch (e) {}
     }
     this.defaultRecipient = 'jaiadithya2020@gmail.com';
-    this.lastSentDate = null;
+    this.lastSentDate = this.loadLastSentDate();
+  }
+
+  loadLastSentDate() {
+    try {
+      if (fs.existsSync(DISPATCH_STATUS_FILE)) {
+        const raw = fs.readFileSync(DISPATCH_STATUS_FILE, 'utf8');
+        const parsed = JSON.parse(raw);
+        return parsed.lastSentDate || null;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  recordDispatchedDate(dateStr, meta = {}) {
+    this.lastSentDate = dateStr;
+    try {
+      const payload = {
+        lastSentDate: dateStr,
+        timestamp: new Date().toISOString(),
+        ...meta
+      };
+      fs.writeFileSync(DISPATCH_STATUS_FILE, JSON.stringify(payload, null, 2), 'utf8');
+    } catch (e) {
+      console.warn('⚠️ [EmailService] Could not persist email dispatch status:', e.message);
+    }
   }
 
   getSettings() {
@@ -679,9 +705,18 @@ class EmailNotificationService {
     const isForce = options.force === true;
 
     // Guard against duplicate sending on the same day unless forced
-    if (!isForce && this.lastSentDate === dateStr) {
-      console.log(`ℹ️ [EmailService] Daily summary for ${dateStr} has already been dispatched.`);
-      return { success: true, delivered: true, alreadySent: true, message: `Already dispatched today (${dateStr})` };
+    const persistedDate = this.loadLastSentDate();
+    const effectiveLastSent = this.lastSentDate || persistedDate;
+
+    if (!isForce && effectiveLastSent === dateStr) {
+      console.log(`ℹ️ [EmailService] Daily summary for ${dateStr} has already been dispatched today. Skipping duplicate.`);
+      return {
+        success: true,
+        delivered: false,
+        alreadySent: true,
+        date: dateStr,
+        message: `Daily summary for ${dateStr} has already been dispatched today.`
+      };
     }
 
     console.log(`📧 [EmailService] Compiling Daily Market Close Summary for ${recipient} (${dateStr})...`);
@@ -821,7 +856,11 @@ class EmailNotificationService {
       };
     }
 
-    this.lastSentDate = dateStr;
+    this.recordDispatchedDate(dateStr, {
+      recipient: deliveryRecipient,
+      method: deliveryMethod,
+      targetRecipient: recipient
+    });
     console.log(`✅ [EmailService] Daily summary successfully sent to ${deliveryRecipient} via ${deliveryMethod}!`);
 
     const returnMsg = deliveryResult.wasRerouted
