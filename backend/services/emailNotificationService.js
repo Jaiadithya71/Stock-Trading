@@ -271,9 +271,11 @@ class EmailNotificationService {
     const isProfitable = data.summary.totalDayNetPnL >= 0;
     const pnlColor = isProfitable ? '#00d084' : '#ff4757';
     const pnlSign = isProfitable ? '+' : '';
+    const recipient = targetRecipient || this.defaultRecipient;
 
+    // Desktop Table Rows for Closed Trades
     const closedTradesRows = data.closedTrades.length > 0
-      ? data.closedTrades.map((t, idx) => {
+      ? data.closedTrades.map((t) => {
           const tradeProfitable = (t.pnl || 0) >= 0;
           const color = tradeProfitable ? '#00d084' : '#ff4757';
           const sign = tradeProfitable ? '+' : '';
@@ -298,6 +300,49 @@ class EmailNotificationService {
         }).join('')
       : `<tr><td colspan="8" style="padding: 20px; text-align: center; color: #718096;">No trades executed or closed in this session.</td></tr>`;
 
+    // Mobile Cards View for Closed Trades
+    const closedTradesCards = data.closedTrades.length > 0
+      ? data.closedTrades.map((t) => {
+          const tradeProfitable = (t.pnl || 0) >= 0;
+          const color = tradeProfitable ? '#00d084' : '#ff4757';
+          const sign = tradeProfitable ? '+' : '';
+          const exitTimeIST = t.exitTimestamp ? new Date(t.exitTimestamp).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'N/A';
+          return `
+            <div style="background: #1e2433; border: 1px solid #2a3142; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <strong style="font-size: 14px; color: #f0f3f6; font-family: monospace;">${t.symbol}</strong>
+                  <span style="background: ${t.action === 'BUY' ? 'rgba(0,208,132,0.15)' : 'rgba(255,71,87,0.15)'}; color: ${t.action === 'BUY' ? '#00d084' : '#ff4757'}; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid ${t.action === 'BUY' ? 'rgba(0,208,132,0.3)' : 'rgba(255,71,87,0.3)'};">
+                    ${t.action} ${t.quantity}
+                  </span>
+                </div>
+                <div style="text-align: right;">
+                  <span style="font-size: 15px; font-weight: 800; color: ${color}; font-family: monospace;">
+                    ${sign}₹${Number(t.pnl).toFixed(2)}
+                  </span>
+                  <span style="font-size: 11px; color: ${color}; font-weight: 600; margin-left: 3px;">(${sign}${t.pnlPct || 0}%)</span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 11.5px; color: #94a3b8; background: rgba(0,0,0,0.25); padding: 7px 10px; border-radius: 6px; margin-bottom: 7px;">
+                <div>Entry: <strong style="color: #cbd5e1;">₹${Number(t.entryPrice).toFixed(2)}</strong></div>
+                <div>Exit: <strong style="color: #cbd5e1;">₹${Number(t.exitPrice).toFixed(2)}</strong></div>
+                <div>Time: <strong style="color: #cbd5e1;">${exitTimeIST}</strong></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; color: #64748b; margin-bottom: 6px;">
+                <span>Trigger: <strong style="color: #cbd5e0; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px;">${t.exitReason || 'AUTO'}</strong></span>
+              </div>
+
+              <div style="font-size: 11px; color: #8892b0; font-style: italic; border-top: 1px dashed #2a2e39; padding-top: 6px;">
+                💡 ${t.rationale || 'Breakout momentum setup with confluence.'}
+              </div>
+            </div>
+          `;
+        }).join('')
+      : `<div style="background: rgba(255,255,255,0.03); border: 1px dashed #2a2e39; border-radius: 8px; padding: 18px; text-align: center; color: #8892b0; font-size: 12.5px;">🛡️ No intraday trades were closed in this session. Capital was 100% protected.</div>`;
+
+    // Desktop Swing Rows
     const swingRows = data.openSwingPositions.length > 0
       ? data.openSwingPositions.map(p => {
           const upnl = p.unrealizedPnL || 0;
@@ -318,79 +363,192 @@ class EmailNotificationService {
         }).join('')
       : `<tr><td colspan="8" style="padding: 16px; text-align: center; color: #718096;">No positional swing trades currently held overnight.</td></tr>`;
 
+    // Mobile Cards View for Swing Positions
+    const swingCards = data.openSwingPositions.length > 0
+      ? data.openSwingPositions.map(p => {
+          const upnl = p.unrealizedPnL || 0;
+          const uColor = upnl >= 0 ? '#00d084' : '#ff4757';
+          const uSign = upnl >= 0 ? '+' : '';
+          return `
+            <div style="background: #1e2433; border: 1px solid #2a3142; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <strong style="font-size: 14px; color: #38bdf8; font-family: monospace;">${p.symbol}</strong>
+                  <span style="background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.3);">
+                    SWING ${p.quantity} QTY
+                  </span>
+                </div>
+                <div style="text-align: right;">
+                  <span style="font-size: 15px; font-weight: 800; color: ${uColor}; font-family: monospace;">
+                    ${uSign}₹${Number(upnl).toFixed(2)}
+                  </span>
+                  <div style="font-size: 10px; color: #94a3b8;">Floating P&L</div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 11.5px; color: #94a3b8; background: rgba(0,0,0,0.25); padding: 7px 10px; border-radius: 6px; margin-bottom: 7px;">
+                <div>Entry: <strong style="color: #cbd5e1;">₹${Number(p.entryPrice).toFixed(2)}</strong></div>
+                <div>LTP: <strong style="color: #cbd5e1;">₹${Number(p.currentPrice || p.entryPrice).toFixed(2)}</strong></div>
+                <div>Trailing SL: <strong style="color: #fbbf24;">₹${Number(p.stopLoss).toFixed(2)}</strong></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #a78bfa;">
+                <span>🎯 Target: ₹${Number(p.target).toFixed(2)} (+30%)</span>
+                <span>20-EMA Active</span>
+              </div>
+            </div>
+          `;
+        }).join('')
+      : `<div style="background: rgba(255,255,255,0.03); border: 1px dashed #2a2e39; border-radius: 8px; padding: 16px; text-align: center; color: #8892b0; font-size: 12.5px;">🌙 No positional swing trades currently held overnight.</div>`;
+
     return `
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
   <title>Market Close Executive Summary - ${data.date}</title>
+  <style>
+    /* Responsive Breakpoints for Mobile Email Clients */
+    @media only screen and (max-width: 600px) {
+      .email-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+      }
+      .header-section {
+        padding: 20px 16px !important;
+      }
+      .header-title {
+        font-size: 20px !important;
+        line-height: 1.3 !important;
+      }
+      .content-section {
+        padding: 16px 14px !important;
+      }
+      .kpi-card {
+        flex: 1 1 calc(50% - 6px) !important;
+        min-width: calc(50% - 6px) !important;
+        padding: 10px 10px !important;
+      }
+      .kpi-value {
+        font-size: 18px !important;
+      }
+      .kpi-subtext {
+        font-size: 9.5px !important;
+      }
+      .desktop-table-view {
+        display: none !important;
+        mso-hide: all !important;
+      }
+      .mobile-card-view {
+        display: block !important;
+      }
+      .hero-scorecard {
+        padding: 12px 14px !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+      }
+      .hero-scorecard-right {
+        text-align: left !important;
+        margin-top: 8px !important;
+      }
+    }
+    @media only screen and (min-width: 601px) {
+      .desktop-table-view {
+        display: block !important;
+      }
+      .mobile-card-view {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #0f1318; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #d1d4dc;">
-  <div style="max-width: 820px; margin: 24px auto; background-color: #131722; border: 1px solid #2a2e39; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+<body style="margin: 0; padding: 0; background-color: #0b0e14; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #d1d4dc; -webkit-font-smoothing: antialiased;">
+  <div class="email-container" style="max-width: 680px; width: 100%; margin: 16px auto; background-color: #131722; border: 1px solid #2a2e39; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
     
     <!-- Top Header Banner -->
-    <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 28px 32px; border-bottom: 2px solid #2962ff;">
+    <div class="header-section" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 24px 28px; border-bottom: 2px solid #2962ff;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <span style="background: #2962ff; color: #ffffff; font-size: 11px; font-weight: bold; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; letter-spacing: 0.5px;">
-          NSE Daily Market Close Report
+        <span style="background: #2962ff; color: #ffffff; font-size: 10.5px; font-weight: 800; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; letter-spacing: 0.5px;">
+          NSE Daily Market Close
         </span>
-        <span style="color: #94a3b8; font-size: 12px;">Session Date: <strong>${data.date}</strong></span>
+        <span style="color: #94a3b8; font-size: 12px;">Session: <strong style="color: #f0f3f6;">${data.date}</strong></span>
       </div>
-      <h1 style="margin: 6px 0 4px; font-size: 24px; color: #ffffff; font-weight: 700;">Daily Trading & Portfolio Summary</h1>
-      <p style="margin: 0; color: #94a3b8; font-size: 14px;">Automated executive telemetry dispatched to <strong style="color: #38bdf8;">${targetRecipient || this.defaultRecipient}</strong></p>
+      <h1 class="header-title" style="margin: 6px 0 4px; font-size: 22px; color: #ffffff; font-weight: 700; letter-spacing: -0.3px;">Daily Trading & Portfolio Summary</h1>
+      <p style="margin: 0; color: #94a3b8; font-size: 13px;">Executive telemetry dispatched to <strong style="color: #38bdf8;">${recipient}</strong></p>
+
+      <!-- Instant Mobile Hero P&L Scorecard -->
+      <div class="hero-scorecard" style="background: ${isProfitable ? 'rgba(0, 208, 132, 0.12)' : 'rgba(255, 71, 87, 0.12)'}; border: 1px solid ${isProfitable ? 'rgba(0, 208, 132, 0.35)' : 'rgba(255, 71, 87, 0.35)'}; border-radius: 8px; padding: 14px 18px; margin-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <span style="font-size: 10.5px; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.5px; display: block;">Session Net Result</span>
+          <span style="font-size: 26px; font-weight: 800; color: ${pnlColor}; font-family: monospace;">${pnlSign}₹${data.summary.totalDayNetPnL.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+        </div>
+        <div class="hero-scorecard-right" style="text-align: right;">
+          <span style="display: inline-block; background: ${isProfitable ? '#00d084' : '#ff4757'}; color: #000; font-size: 10.5px; font-weight: 800; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">
+            ${isProfitable ? 'PROFITABLE DAY' : (data.summary.totalTrades === 0 ? 'FLAT / NO TRADES' : 'SESSION LOSS')}
+          </span>
+          <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Win Rate: <strong style="color: #f0f3f6;">${data.summary.winRatePct}%</strong> (${data.summary.winningTrades}W / ${data.summary.losingTrades}L)</div>
+        </div>
+      </div>
     </div>
 
-    <!-- Executive KPI Scorecard Grid -->
-    <div style="padding: 24px 32px; background: #161b26; border-bottom: 1px solid #2a2e39;">
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+    <!-- Executive KPI Scorecard Grid (Fluid 2x2 on Mobile, 4x1 on Desktop) -->
+    <div class="content-section" style="padding: 20px 24px; background: #161b26; border-bottom: 1px solid #2a2e39;">
+      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
         
-        <div style="background: #1e2433; padding: 16px; border-radius: 8px; border: 1px solid #2a3142;">
-          <div style="font-size: 11px; color: #8892b0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Net Total Day P&L</div>
-          <div style="font-size: 24px; font-weight: bold; color: ${pnlColor};">${pnlSign}₹${data.summary.totalDayNetPnL.toLocaleString('en-IN')}</div>
-          <div style="font-size: 11px; color: #718096; margin-top: 4px;">Active Session: ₹${data.summary.activeSessionPnL} | Pre-Refill: ₹${data.summary.archivedSessionPnL}</div>
+        <div class="kpi-card" style="flex: 1 1 calc(50% - 6px); min-width: 130px; background: #1e2433; padding: 12px 14px; border-radius: 8px; border: 1px solid #2a3142; box-sizing: border-box;">
+          <div style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Net Realized P&L</div>
+          <div class="kpi-value" style="font-size: 20px; font-weight: 800; color: ${pnlColor}; font-family: monospace;">${pnlSign}₹${data.summary.netRealizedPnL.toLocaleString('en-IN')}</div>
+          <div class="kpi-subtext" style="font-size: 10px; color: #718096; margin-top: 3px;">Pre-Refill: ₹${data.summary.archivedSessionPnL}</div>
         </div>
 
-        <div style="background: #1e2433; padding: 16px; border-radius: 8px; border: 1px solid #2a3142;">
-          <div style="font-size: 11px; color: #8892b0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Win Rate & Record</div>
-          <div style="font-size: 24px; font-weight: bold; color: #f0f3f6;">${data.summary.winRatePct}%</div>
-          <div style="font-size: 11px; color: #718096; margin-top: 4px;">${data.summary.winningTrades}W / ${data.summary.losingTrades}L (${data.summary.totalTrades} Total)</div>
+        <div class="kpi-card" style="flex: 1 1 calc(50% - 6px); min-width: 130px; background: #1e2433; padding: 12px 14px; border-radius: 8px; border: 1px solid #2a3142; box-sizing: border-box;">
+          <div style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Win Rate & Trades</div>
+          <div class="kpi-value" style="font-size: 20px; font-weight: 800; color: #f0f3f6; font-family: monospace;">${data.summary.winRatePct}%</div>
+          <div class="kpi-subtext" style="font-size: 10px; color: #718096; margin-top: 3px;">${data.summary.winningTrades}W / ${data.summary.losingTrades}L (${data.summary.totalTrades} Total)</div>
         </div>
 
-        <div style="background: #1e2433; padding: 16px; border-radius: 8px; border: 1px solid #2a3142;">
-          <div style="font-size: 11px; color: #8892b0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Total Portfolio Equity</div>
-          <div style="font-size: 24px; font-weight: bold; color: #38bdf8;">₹${data.summary.totalEquity.toLocaleString('en-IN')}</div>
-          <div style="font-size: 11px; color: #718096; margin-top: 4px;">Cash Balance: ₹${data.summary.endingCashBalance.toLocaleString('en-IN')} (Refill ₹1,00,000)</div>
+        <div class="kpi-card" style="flex: 1 1 calc(50% - 6px); min-width: 130px; background: #1e2433; padding: 12px 14px; border-radius: 8px; border: 1px solid #2a3142; box-sizing: border-box;">
+          <div style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Portfolio Equity</div>
+          <div class="kpi-value" style="font-size: 20px; font-weight: 800; color: #38bdf8; font-family: monospace;">₹${data.summary.totalEquity.toLocaleString('en-IN')}</div>
+          <div class="kpi-subtext" style="font-size: 10px; color: #718096; margin-top: 3px;">Cash: ₹${data.summary.endingCashBalance.toLocaleString('en-IN')}</div>
         </div>
 
-        <div style="background: #1e2433; padding: 16px; border-radius: 8px; border: 1px solid #2a3142;">
-          <div style="font-size: 11px; color: #8892b0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Overnight Swing Trades</div>
-          <div style="font-size: 24px; font-weight: bold; color: #a78bfa;">${data.openSwingPositions.length}</div>
-          <div style="font-size: 11px; color: #718096; margin-top: 4px;">Carried with 20-EMA Trailing Stop</div>
+        <div class="kpi-card" style="flex: 1 1 calc(50% - 6px); min-width: 130px; background: #1e2433; padding: 12px 14px; border-radius: 8px; border: 1px solid #2a3142; box-sizing: border-box;">
+          <div style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Overnight Swings</div>
+          <div class="kpi-value" style="font-size: 20px; font-weight: 800; color: #a78bfa; font-family: monospace;">${data.openSwingPositions.length}</div>
+          <div class="kpi-subtext" style="font-size: 10px; color: #718096; margin-top: 3px;">20-EMA Trailing Active</div>
         </div>
 
       </div>
     </div>
 
-    <!-- Closed Trades Table Section -->
-    <div style="padding: 28px 32px 16px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-        <h2 style="margin: 0; font-size: 17px; color: #ffffff; font-weight: 600;">⚡ Closed Trades Ledger (Today)</h2>
-        <span style="font-size: 12px; color: #8892b0;">${data.closedTrades.length} Completed Trades</span>
+    <!-- Closed Trades Section -->
+    <div class="content-section" style="padding: 22px 24px 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="margin: 0; font-size: 16px; color: #ffffff; font-weight: 700;">⚡ Closed Trades Ledger</h2>
+        <span style="font-size: 11px; color: #8892b0;">${data.closedTrades.length} Trades Completed</span>
       </div>
 
-      <div style="overflow-x: auto; background: #161b26; border: 1px solid #2a2e39; border-radius: 8px;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+      <!-- Desktop Table View -->
+      <div class="desktop-table-view" style="overflow-x: auto; background: #161b26; border: 1px solid #2a2e39; border-radius: 8px;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
           <thead>
-            <tr style="background: #1a202c; color: #8892b0; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #2a2e39;">
-              <th style="padding: 10px 12px;">Symbol</th>
-              <th style="padding: 10px 12px;">Side</th>
-              <th style="padding: 10px 12px;">Qty</th>
-              <th style="padding: 10px 12px;">Entry</th>
-              <th style="padding: 10px 12px;">Exit</th>
-              <th style="padding: 10px 12px;">Realized P&L</th>
-              <th style="padding: 10px 12px;">Trigger</th>
-              <th style="padding: 10px 12px;">Exit Time</th>
+            <tr style="background: #1a202c; color: #8892b0; font-size: 10.5px; text-transform: uppercase; border-bottom: 1px solid #2a2e39;">
+              <th style="padding: 8px 10px;">Symbol</th>
+              <th style="padding: 8px 10px;">Side</th>
+              <th style="padding: 8px 10px;">Qty</th>
+              <th style="padding: 8px 10px;">Entry</th>
+              <th style="padding: 8px 10px;">Exit</th>
+              <th style="padding: 8px 10px;">Realized P&L</th>
+              <th style="padding: 8px 10px;">Trigger</th>
+              <th style="padding: 8px 10px;">Exit Time</th>
             </tr>
           </thead>
           <tbody>
@@ -398,27 +556,33 @@ class EmailNotificationService {
           </tbody>
         </table>
       </div>
+
+      <!-- Mobile Cards View -->
+      <div class="mobile-card-view" style="display: none;">
+        ${closedTradesCards}
+      </div>
     </div>
 
     <!-- Overnight Swing Positions Section -->
-    <div style="padding: 16px 32px 28px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-        <h2 style="margin: 0; font-size: 17px; color: #ffffff; font-weight: 600;">🌙 Multi-Week Positional Holdings (Carried Overnight)</h2>
-        <span style="font-size: 12px; color: #38bdf8;">Protected from EOD Liquidation (30% Target)</span>
+    <div class="content-section" style="padding: 14px 24px 22px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="margin: 0; font-size: 16px; color: #ffffff; font-weight: 700;">🌙 Positional Swing Holdings</h2>
+        <span style="font-size: 11px; color: #38bdf8;">Overnight Runner (+30% Target)</span>
       </div>
 
-      <div style="overflow-x: auto; background: #161b26; border: 1px solid #2a2e39; border-radius: 8px;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+      <!-- Desktop Table View -->
+      <div class="desktop-table-view" style="overflow-x: auto; background: #161b26; border: 1px solid #2a2e39; border-radius: 8px;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
           <thead>
-            <tr style="background: #1a202c; color: #8892b0; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #2a2e39;">
-              <th style="padding: 10px 12px;">Symbol</th>
-              <th style="padding: 10px 12px;">Side</th>
-              <th style="padding: 10px 12px;">Qty</th>
-              <th style="padding: 10px 12px;">Entry</th>
-              <th style="padding: 10px 12px;">LTP</th>
-              <th style="padding: 10px 12px;">Trailing SL</th>
-              <th style="padding: 10px 12px;">Target (30%)</th>
-              <th style="padding: 10px 12px;">Floating P&L</th>
+            <tr style="background: #1a202c; color: #8892b0; font-size: 10.5px; text-transform: uppercase; border-bottom: 1px solid #2a2e39;">
+              <th style="padding: 8px 10px;">Symbol</th>
+              <th style="padding: 8px 10px;">Side</th>
+              <th style="padding: 8px 10px;">Qty</th>
+              <th style="padding: 8px 10px;">Entry</th>
+              <th style="padding: 8px 10px;">LTP</th>
+              <th style="padding: 8px 10px;">Trailing SL</th>
+              <th style="padding: 8px 10px;">Target</th>
+              <th style="padding: 8px 10px;">Floating P&L</th>
             </tr>
           </thead>
           <tbody>
@@ -426,21 +590,26 @@ class EmailNotificationService {
           </tbody>
         </table>
       </div>
+
+      <!-- Mobile Cards View -->
+      <div class="mobile-card-view" style="display: none;">
+        ${swingCards}
+      </div>
     </div>
 
     <!-- Strategy Outlook & Risk Compliance Footer -->
-    <div style="background: #161b26; padding: 20px 32px; border-top: 1px solid #2a2e39; font-size: 12px; color: #8892b0; line-height: 1.6;">
-      <div style="margin-bottom: 8px;">
-        🛡️ <strong>Risk & Capital Guardrails:</strong> ₹5,000 Daily Circuit Breaker Active | 5 Concurrent Slot Capacity | Strict Breakeven Trailing on Swing Runners.
+    <div class="content-section" style="background: #161b26; padding: 18px 24px; border-top: 1px solid #2a2e39; font-size: 11.5px; color: #8892b0; line-height: 1.6;">
+      <div style="margin-bottom: 6px;">
+        🛡️ <strong>Risk Guardrails:</strong> ₹5,000 Circuit Breaker Active | 5 Slots Capacity | Breakeven Trailing Enforced.
       </div>
       <div>
-        📈 <strong>Next Session Outlook:</strong> Monitoring Stage-2 breakouts above daily 20-EMA. High-momentum runners will automatically be promoted to swing positions with breakeven stops locked.
+        📈 <strong>Outlook:</strong> Monitoring Stage-2 breakouts above daily 20-EMA. Profitable intraday runners are automatically promoted to swing runners.
       </div>
     </div>
 
     <!-- Terminal Signature -->
-    <div style="background: #0f1318; padding: 14px 32px; text-align: center; font-size: 11px; color: #4a5568; border-top: 1px solid #1e222d;">
-      Google DeepMind Antigravity Quant Command Center • Automated End-of-Day Dispatch • All rights reserved.
+    <div style="background: #0f1318; padding: 14px 20px; text-align: center; font-size: 10.5px; color: #64748b; border-top: 1px solid #1e222d;">
+      Google DeepMind Antigravity Quant Command Center • Automated Dispatch • All rights reserved.
     </div>
 
   </div>
