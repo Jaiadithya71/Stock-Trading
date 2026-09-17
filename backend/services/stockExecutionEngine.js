@@ -114,6 +114,9 @@ class StockExecutionEngine {
       // Once any position gains >= +1.0% floating profit, lock stopLoss at Breakeven (+0.2% buffer).
       // A winning trade can NEVER turn into a loss!
       paperTrading.positions.forEach(pos => {
+        // Skip SWING_POSITIONAL holdings so their swing stop cushion / 20-EMA trailing is managed by positionalSignalEngine
+        if (pos.holdingType === 'SWING_POSITIONAL') return;
+
         const cleanSym = pos.symbol.replace('-EQ', '');
         const currentPrice = priceMap[cleanSym] || priceMap[pos.symbol] || pos.currentPrice || pos.entryPrice;
         const pnlPct = pos.action === 'BUY'
@@ -141,6 +144,20 @@ class StockExecutionEngine {
       const swingEval = positionalSignalEngine.evaluateSwingPositions(paperTrading.positions, priceMap);
       if (swingEval.pyramidAlerts && swingEval.pyramidAlerts.length > 0) {
         swingEval.pyramidAlerts.forEach(a => console.log(a.message));
+      }
+
+      // Execute swing exits if stopLoss or swingTarget was triggered
+      if (swingEval.exits && swingEval.exits.length > 0) {
+        for (const exit of swingEval.exits) {
+          try {
+            console.log(`🎯 [StockEngine] Executing Swing Exit for ${exit.symbol}: ${exit.exitReason} @ ₹${exit.exitPrice}`);
+            const closedTrade = paperTrading.closePosition(exit.id, exit.exitPrice, exit.exitReason);
+            this.tradesToday.push(closedTrade);
+            weeklyAuditLogger.logTradeEvent(closedTrade);
+          } catch (err) {
+            console.error(`❌ [StockEngine] Failed to close swing position ${exit.symbol}:`, err.message);
+          }
+        }
       }
 
       // 3. 3:15 PM EOD INTRADAY MIS SQUARE-OFF RULE

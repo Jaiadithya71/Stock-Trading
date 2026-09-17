@@ -784,14 +784,28 @@ const StockIntradayWidget = {
               const todayStr = new Date().toISOString().split('T')[0];
               const isToday = backup.dateStr === todayStr;
               const isRecent = (Date.now() - (backup.timestamp || 0)) < 12 * 3600 * 1000;
-              if (isToday && isRecent && Array.isArray(backup.positions) && backup.positions.length > 0) {
+
+              // Filter for multi-day swing positions if carried over overnight or across dates
+              const allPositions = Array.isArray(backup.positions) ? backup.positions : [];
+              const swingPositions = allPositions.filter(p => p.holdingType === 'SWING_POSITIONAL');
+              const isSwingValid = (Date.now() - (backup.timestamp || 0)) < 30 * 24 * 3600 * 1000;
+
+              let positionsToRestore = null;
+              if (isToday && isRecent && allPositions.length > 0) {
+                positionsToRestore = allPositions;
+              } else if (isSwingValid && swingPositions.length > 0) {
+                console.log(`🌙 [StockTerminal] Restoring ${swingPositions.length} multi-day swing holding(s) carried over overnight...`);
+                positionsToRestore = swingPositions;
+              }
+
+              if (positionsToRestore && positionsToRestore.length > 0) {
                 this._restoredThisSession = true;
-                console.log('♻️ [StockTerminal] Auto-restoring active positions across cloud deployment...', backup.positions.length);
+                console.log('♻️ [StockTerminal] Auto-restoring positions across cloud deployment...', positionsToRestore.length);
                 fetch('/api/paper/restore-state', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    positions: backup.positions,
+                    positions: positionsToRestore,
                     currentBalance: backup.balance,
                     initialCapital: backup.capital,
                     tradeHistory: backup.tradeHistory

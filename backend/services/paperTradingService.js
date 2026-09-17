@@ -175,40 +175,50 @@ class PaperTradingService {
       pos.unrealizedPnL = parseFloat(unrealizedPnL.toFixed(2));
       pos.unrealizedPnLPct = parseFloat(pnlPct.toFixed(2));
 
-      // 1. DYNAMIC TRAILING STOP & BREAKEVEN MECHANISM
-      // Stage 1: If profit reaches +0.8%, ratchet Stop-Loss to Breakeven (Entry Price)
-      if (pnlPct >= 0.8) {
-        if (isBuy && pos.stopLoss < pos.entryPrice) {
-          pos.stopLoss = pos.entryPrice;
-          pos.trailingStatus = 'BREAKEVEN_LOCKED';
-          console.log(`🛡️ [PaperTrading] Breakeven Locked for ${pos.symbol} @ ₹${pos.entryPrice}`);
-        } else if (!isBuy && pos.stopLoss > pos.entryPrice) {
-          pos.stopLoss = pos.entryPrice;
-          pos.trailingStatus = 'BREAKEVEN_LOCKED';
-          console.log(`🛡️ [PaperTrading] Breakeven Locked for ${pos.symbol} @ ₹${pos.entryPrice}`);
-        }
-      }
-
-      // Stage 2: If profit reaches +1.4%, trail Stop-Loss aggressively to lock in +0.6% gain
-      if (pnlPct >= 1.4) {
-        if (isBuy) {
-          const trailedSl = parseFloat((pos.entryPrice * 1.006).toFixed(2));
-          if (pos.stopLoss < trailedSl) {
-            pos.stopLoss = trailedSl;
-            pos.trailingStatus = 'PROFIT_TRAILED';
-          }
-        } else {
-          const trailedSl = parseFloat((pos.entryPrice * 0.994).toFixed(2));
-          if (pos.stopLoss > trailedSl) {
-            pos.stopLoss = trailedSl;
-            pos.trailingStatus = 'PROFIT_TRAILED';
-          }
-        }
-      }
-
       let shouldExit = false;
       let exitPrice = currentPrice;
       let exitReason = '';
+
+      // 1. DYNAMIC TRAILING STOP & BREAKEVEN MECHANISM FOR INTRADAY
+      if (pos.holdingType !== 'SWING_POSITIONAL') {
+        // Stage 1: If profit reaches +0.8%, ratchet Stop-Loss to Breakeven (Entry Price)
+        if (pnlPct >= 0.8) {
+          if (isBuy && pos.stopLoss < pos.entryPrice) {
+            pos.stopLoss = pos.entryPrice;
+            pos.trailingStatus = 'BREAKEVEN_LOCKED';
+            console.log(`🛡️ [PaperTrading] Breakeven Locked for ${pos.symbol} @ ₹${pos.entryPrice}`);
+          } else if (!isBuy && pos.stopLoss > pos.entryPrice) {
+            pos.stopLoss = pos.entryPrice;
+            pos.trailingStatus = 'BREAKEVEN_LOCKED';
+            console.log(`🛡️ [PaperTrading] Breakeven Locked for ${pos.symbol} @ ₹${pos.entryPrice}`);
+          }
+        }
+
+        // Stage 2: If profit reaches +1.4%, trail Stop-Loss aggressively to lock in +0.8% gain
+        if (pnlPct >= 1.4) {
+          if (isBuy) {
+            const trailedSl = parseFloat((pos.entryPrice * 1.008).toFixed(2));
+            if (pos.stopLoss < trailedSl) {
+              pos.stopLoss = trailedSl;
+              pos.trailingStatus = 'PROFIT_TRAILED';
+            }
+          } else {
+            const trailedSl = parseFloat((pos.entryPrice * 0.992).toFixed(2));
+            if (pos.stopLoss > trailedSl) {
+              pos.stopLoss = trailedSl;
+              pos.trailingStatus = 'PROFIT_TRAILED';
+            }
+          }
+        }
+
+        // Stage 3: Intraday Profit-Take Milestone (+1.8% gain)
+        // For large-cap equities, bank +1.8% intraday rather than waiting for 3:15 PM liquidation
+        if (pnlPct >= 1.8 && !shouldExit) {
+          shouldExit = true;
+          exitPrice = currentPrice;
+          exitReason = 'INTRADAY_PROFIT_TARGET_HIT';
+        }
+      }
 
       if (pos.action === 'BUY') {
         if (currentPrice >= pos.target) {
@@ -315,7 +325,7 @@ class PaperTradingService {
 
   /**
    * Promote an Intraday Winner into a Multi-Week Positional Swing Runner
-   * Locks Stop-Loss at Breakeven (making trade risk-free) and expands target to +30%
+   * Gives a 3.5% / 20-EMA volatility cushion so normal overnight opening swings don't choke the runner
    */
   promotePositionToSwing(orderId) {
     this.loadPersistedState();
@@ -327,17 +337,19 @@ class PaperTradingService {
     pos.holdingType = 'SWING_POSITIONAL';
     pos.holdingDaysCount = (pos.holdingDaysCount || 0) + 1;
 
-    // Move Stop Loss to Breakeven (+0.2% buffer) if currently in profit
-    const currentPrice = pos.currentPrice || pos.entryPrice;
-    if (pos.action === 'BUY' && currentPrice > pos.entryPrice) {
-      pos.stopLoss = parseFloat((pos.entryPrice * 1.002).toFixed(2));
-      pos.trailingStatus = 'STOP_AT_BREAKEVEN_RISK_FREE';
-    }
+    // Swing stop loss cushion: Anchor to 20-day EMA or 3.5% below entry to allow normal overnight/opening volatility
+    const swingStopLoss = (pos.ema20 && pos.ema20 < pos.entryPrice)
+      ? Math.max(pos.ema20, parseFloat((pos.entryPrice * 0.965).toFixed(2)))
+      : parseFloat((pos.entryPrice * 0.965).toFixed(2));
+
+    pos.stopLoss = swingStopLoss;
+    pos.trailingStatus = 'SWING_ACTIVE_20_EMA';
+    pos.pyramidTriggerPct = 3.0; // Once it gains >= +3.0%, evaluateSwingPositions moves SL to breakeven
 
     // Set 30% Multi-Week Target roadmap
     pos.swingTarget = parseFloat((pos.entryPrice * 1.30).toFixed(2));
     pos.target = pos.swingTarget;
-    pos.rationale = `🚀 PROMOTED TO SWING RUNNER: Riding multi-week momentum with risk locked at Breakeven (₹${pos.stopLoss}). Target: ₹${pos.target} (+30%).`;
+    pos.rationale = `🚀 PROMOTED TO SWING RUNNER: Riding multi-week momentum with 3.5% / 20-EMA cushion (SL: ₹${pos.stopLoss}). Target: ₹${pos.target} (+30%).`;
 
     this.savePersistedState();
     console.log(`🚀 [PaperTrading] Promoted ${pos.symbol} to SWING RUNNER! SL: ₹${pos.stopLoss} | Target: ₹${pos.target} (+30%)`);
