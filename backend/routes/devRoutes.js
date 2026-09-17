@@ -24,6 +24,7 @@ const signalAuditLogger = require('../services/signalAuditLogger');
 const emailNotificationService = require('../services/emailNotificationService');
 const PCRStorageService = require('../services/pcrStorageService');
 const PaperTradingService = require('../services/paperTradingService');
+const executionSafetyGuard = require('../services/executionSafetyGuard');
 
 const pcrStorage = new PCRStorageService();
 const paperTrading = new PaperTradingService();
@@ -270,7 +271,8 @@ router.get('/system-health', async (req, res) => {
             totalArchiveFiles: archiveFilesCount,
             archiveDirectory: 'backend/data/archive/'
           }
-        }
+        },
+        executionSafety: executionSafetyGuard.getDiagnostics()
       }
     };
 
@@ -624,6 +626,127 @@ router.post('/clear-logs', (req, res) => {
   telemetryBuffer.length = 0;
   logDevEvent('SYSTEM', 'INFO', 'Telemetry log stream cleared');
   res.json({ success: true, message: 'Log stream cleared' });
+});
+
+/**
+ * GET /api/dev/metrics & /api/monitoring/metrics
+ * Prometheus / OpenMetrics Exposition Plain-Text Endpoint
+ */
+router.get('/metrics', (req, res) => {
+  try {
+    const metrics = executionSafetyGuard.getPrometheusMetrics();
+    res.setHeader('Content-Type', 'text/plain; version=0.0.4; charset=utf-8');
+    res.send(metrics);
+  } catch (error) {
+    res.status(500).send(`# ERROR: ${error.message}`);
+  }
+});
+
+/**
+ * POST /api/dev/reset-circuit-breaker
+ * Operator manual override to reset circuit breaker and re-arm execution loops
+ */
+router.post('/reset-circuit-breaker', (req, res) => {
+  try {
+    const result = executionSafetyGuard.resetCircuitBreaker('DevTerminalOperator');
+    logDevEvent('RISK', 'WARN', 'Manual Circuit Breaker Reset triggered by Dev Operator');
+    res.json({ success: true, message: result.message, status: 'NORMAL' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * POST /api/dev/emergency-halt
+ * Panic kill-switch: Immediately trips circuit breaker to lock down new order placement
+ */
+router.post('/emergency-halt', (req, res) => {
+  try {
+    executionSafetyGuard.tripCircuitBreaker('MANUAL_EMERGENCY_HALT_TRIGGERED_VIA_DEV_TAB');
+    logDevEvent('RISK', 'ERROR', 'EMERGENCY HALT TRIGGERED: All new automated order placement locked');
+    res.json({ success: true, message: 'Emergency halt triggered. Engine locked.', status: 'TRIPPED' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/**
+ * POST /api/dev/test-invariant-probe
+ * Synthetic Invariant Probe: Validates all pre-trade and runtime invariants without risking real funds
+ */
+router.post('/test-invariant-probe', (req, res) => {
+  try {
+    const probeResults = [];
+
+    // Test 1: Geometry Invariant on valid order
+    try {
+      executionSafetyGuard.validatePreTradeOrder({
+        symbol: 'TEST-RELIANCE',
+        action: 'BUY',
+        entryPrice: 2000,
+        quantity: 5,
+        stopLoss: 1980,
+        target: 2040,
+        holdingType: 'INTRADAY'
+      }, 2000, { currentBalance: 100000, initialCapital: 100000 });
+      probeResults.push({ test: 'Pre-Trade Geometry Invariant (Valid BUY)', status: 'PASS' });
+    } catch (e) {
+      probeResults.push({ test: 'Pre-Trade Geometry Invariant (Valid BUY)', status: 'FAIL', error: e.message });
+    }
+
+    // Test 2: Inverted Stop-Loss rejection (Malicious/Buggy SL)
+    try {
+      executionSafetyGuard.validatePreTradeOrder({
+        symbol: 'TEST-FAIL-SL',
+        action: 'BUY',
+        entryPrice: 2000,
+        quantity: 5,
+        stopLoss: 2020, // SL higher than entry on BUY!
+        target: 2040,
+        holdingType: 'INTRADAY'
+      }, 2000, { currentBalance: 100000, initialCapital: 100000 });
+      probeResults.push({ test: 'Malicious Inverted SL Rejection', status: 'FAIL (Allowed invalid order)' });
+    } catch (e) {
+      probeResults.push({ test: 'Malicious Inverted SL Rejection', status: 'PASS (Successfully blocked)', error: e.message });
+    }
+
+    // Test 3: Short Equity Overnight Compliance Rejection
+    try {
+      executionSafetyGuard.validatePreTradeOrder({
+        symbol: 'TEST-SHORT-EQUITY',
+        action: 'SELL',
+        entryPrice: 1000,
+        quantity: 10,
+        stopLoss: 1020,
+        target: 960,
+        holdingType: 'SWING_POSITIONAL', // Illegal overnight cash short
+        assetType: 'EQUITY_CASH'
+      }, 1000, { currentBalance: 100000, initialCapital: 100000 });
+      probeResults.push({ test: 'Overnight Cash Short Rejection', status: 'FAIL (Allowed illegal short delivery)' });
+    } catch (e) {
+      probeResults.push({ test: 'Overnight Cash Short Rejection', status: 'PASS (Successfully blocked)', error: e.message });
+    }
+
+    // Test 4: Runtime Portfolio Scan
+    const scanResult = executionSafetyGuard.runRuntimeScan(
+      paperTrading.positions,
+      paperTrading.currentBalance,
+      paperTrading.initialCapital,
+      stockExecutionEngine.tradesToday || [],
+      new Date().getHours() * 60 + new Date().getMinutes()
+    );
+    probeResults.push({
+      test: 'Live Portfolio Runtime Invariant Scan',
+      status: scanResult.passed ? 'PASS (0 violations)' : `WARN (${scanResult.violations.length} violations)`,
+      violations: scanResult.violations
+    });
+
+    logDevEvent('RISK', 'SUCCESS', 'Synthetic Invariant Probe completed successfully');
+    res.json({ success: true, probeResults, diagnostics: executionSafetyGuard.getDiagnostics() });
+  } catch (error) {
+    logDevEvent('RISK', 'ERROR', `Synthetic Invariant Probe failed: ${error.message}`);
+    res.status(500).json({ success: false, message: error.message });
+  }
 });
 
 module.exports = router;

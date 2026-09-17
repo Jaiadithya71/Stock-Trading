@@ -1,0 +1,42 @@
+{
+  "circuitBreakerStatus": "NORMAL",
+  "circuitBreakerReason": null,
+  "circuitBreakerTrippedAt": null,
+  "cooldownUntil": null,
+  "invariantChecksTotal": 0,
+  "invariantViolationsTotal": 0,
+  "recentViolations": [],
+  "setupMetrics": {
+    "EMA20_PULLBACK": {
+      "total": 0,
+      "wins": 0,
+      "losses": 0,
+      "pnl": 0
+    },
+    "ORB_BREAKOUT": {
+      "total": 0,
+      "wins": 0,
+      "losses": 0,
+      "pnl": 0
+    },
+    "INSIDE_BAR": {
+      "total": 0,
+      "wins": 0,
+      "losses": 0,
+      "pnl": 0
+    },
+    "SWING_RUNNER": {
+      "total": 0,
+      "wins": 0,
+      "losses": 0,
+      "pnl": 0
+    },
+    "UNCLASSIFIED": {
+      "total": 0,
+      "wins": 0,
+      "losses": 0,
+      "pnl": 0
+    }
+  },
+  "lastUpdated": "2026-09-18T01:42:00.000Z"
+}

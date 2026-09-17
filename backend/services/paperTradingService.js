@@ -6,6 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const executionSafetyGuard = require('./executionSafetyGuard');
 
 const PAPER_STATE_FILE = path.join(__dirname, '../data/paper_portfolio_state.json');
 
@@ -117,6 +118,24 @@ class PaperTradingService {
     // Intraday equity gets 5x MIS leverage; Positional swing delivery uses 1x capital (or options full premium)
     const requiredMargin = (isOption || isSwing) ? totalTradeValue : (totalTradeValue / this.intradayLeverage);
 
+    const candidateSl = stopLoss ? parseFloat(stopLoss.toFixed(2)) : (stopLossPrice ? parseFloat(stopLossPrice.toFixed(2)) : (isShort ? effectivePrice * 1.01 : effectivePrice * 0.99));
+    const candidateTgt = target ? parseFloat(target.toFixed(2)) : (targetPrice ? parseFloat(targetPrice.toFixed(2)) : (isShort ? effectivePrice * 0.985 : effectivePrice * 1.015));
+
+    // Production Execution Safety Guardkeeper (Asserts SL/Target geometry, size limits, circuit breakers)
+    executionSafetyGuard.validatePreTradeOrder({
+      symbol: symbol ? symbol.toUpperCase() : 'BANKNIFTY',
+      action: action.toUpperCase(),
+      entryPrice: parseFloat(effectivePrice.toFixed(2)),
+      quantity: parseInt(quantity, 10),
+      stopLoss: candidateSl,
+      target: candidateTgt,
+      holdingType,
+      assetType: isOption ? 'OPTIONS' : 'EQUITY_CASH'
+    }, effectivePrice, {
+      currentBalance: this.currentBalance,
+      initialCapital: this.initialCapital
+    });
+
     if (requiredMargin > this.currentBalance) {
       throw new Error(`Insufficient virtual capital. Required Margin: ₹${requiredMargin.toFixed(2)}, Available: ₹${this.currentBalance.toFixed(2)}`);
     }
@@ -136,8 +155,8 @@ class PaperTradingService {
       quantity: parseInt(quantity, 10),
       totalValue: parseFloat(totalTradeValue.toFixed(2)),
       marginBlocked: parseFloat(requiredMargin.toFixed(2)),
-      stopLoss: stopLoss ? parseFloat(stopLoss.toFixed(2)) : (stopLossPrice ? parseFloat(stopLossPrice.toFixed(2)) : (isShort ? effectivePrice * 1.01 : effectivePrice * 0.99)),
-      target: target ? parseFloat(target.toFixed(2)) : (targetPrice ? parseFloat(targetPrice.toFixed(2)) : (isShort ? effectivePrice * 0.985 : effectivePrice * 1.015)),
+      stopLoss: candidateSl,
+      target: candidateTgt,
       status: 'OPEN',
       rationale: rationale || 'Quantitative Confluence Signal',
       entryTimestamp: new Date().toISOString()
@@ -289,6 +308,7 @@ class PaperTradingService {
 
     this.positions.splice(posIndex, 1);
     this.tradeHistory.unshift(closedRecord);
+    executionSafetyGuard.recordTradeAttribution(closedRecord);
     this.savePersistedState();
 
     console.log(`🏁 [PaperTrading] Closed: ${pos.symbol} P&L: ₹${closedRecord.pnl} (${closedRecord.pnlPct}%) Reason: ${exitReason}`);

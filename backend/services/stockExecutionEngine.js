@@ -14,6 +14,7 @@ const signalAuditLogger = require('./signalAuditLogger');
 const positionalSignalEngine = require('./positionalSignalEngine');
 const emailNotificationService = require('./emailNotificationService');
 const marketCalendar = require('../utils/marketCalendar');
+const executionSafetyGuard = require('./executionSafetyGuard');
 
 const paperTrading = new PaperTradingService();
 const DATA_DIR = path.join(__dirname, '../data');
@@ -110,6 +111,15 @@ class StockExecutionEngine {
         console.log(`🎯 [StockEngine] Position Auto-Closed: ${trade.symbol} P&L: ₹${trade.pnl} (${trade.exitReason})`);
       }
 
+      // 2A. Runtime Safety Guardrail & Invariant Sentinel (Continuous Prometheus Probes)
+      executionSafetyGuard.runRuntimeScan(
+        paperTrading.positions,
+        paperTrading.currentBalance,
+        paperTrading.initialCapital,
+        this.tradesToday,
+        ist.timeInMinutes
+      );
+
       // 2B. Dynamic Breakeven Lock (+1.0% Profit Lock)
       // Once any position gains >= +1.0% floating profit, lock stopLoss at Breakeven (+0.2% buffer).
       // A winning trade can NEVER turn into a loss!
@@ -203,6 +213,18 @@ class StockExecutionEngine {
       // Entry Cutoff: Only enter new intraday trades before 2:15 PM (855 min)
       // This ensures trades have at least 1 hour of active trading runway before 3:15 PM EOD square-off
       if (this.autoExecutionEnabled && ist.timeInMinutes < 855) {
+        // Circuit Breaker & Safety Sentinel Check
+        if (executionSafetyGuard.circuitBreakerStatus === 'TRIPPED') {
+          console.warn(`🛑 [StockEngine] Safety Circuit Breaker is TRIPPED (${executionSafetyGuard.circuitBreakerReason}). New order entry blocked.`);
+          return;
+        }
+
+        if (executionSafetyGuard.cooldownUntil && new Date() < executionSafetyGuard.cooldownUntil) {
+          const mins = Math.ceil((executionSafetyGuard.cooldownUntil - new Date()) / 60000);
+          console.warn(`⏳ [StockEngine] Consecutive loss cooldown active (${mins}m remaining). New order entry paused.`);
+          return;
+        }
+
         // Daily Loss Limit Check
         const todayPnL = this.tradesToday.reduce((acc, t) => acc + (t.pnl || 0), 0);
         if (todayPnL <= -(settings.maxDailyLoss || 5000)) {

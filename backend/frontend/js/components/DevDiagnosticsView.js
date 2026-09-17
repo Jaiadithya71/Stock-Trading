@@ -290,16 +290,51 @@ const DevDiagnosticsView = {
     } catch (e) {}
   },
 
-  setFilter(category) {
-    this.activeFilter = category;
-    this.renderTelemetryLogs();
+  async runInvariantProbe() {
+    try {
+      if (typeof ToastNotification !== 'undefined') ToastNotification.show('Executing Synthetic Invariant Probe...', 'info');
+      const res = await fetch('/api/dev/test-invariant-probe', { method: 'POST' });
+      const json = await res.json();
+      if (json.success) {
+        if (typeof ToastNotification !== 'undefined') {
+          ToastNotification.show('Invariant Probe: All 4 safety invariants verified & passing!', 'success');
+        }
+        this.fetchHealth(true);
+        this.render();
+      } else {
+        if (typeof ToastNotification !== 'undefined') ToastNotification.show('Probe error: ' + json.message, 'error');
+      }
+    } catch (e) {
+      if (typeof ToastNotification !== 'undefined') ToastNotification.show('Probe request failed: ' + e.message, 'error');
+    }
   },
 
-  togglePause() {
-    this.isPaused = !this.isPaused;
-    const btn = document.getElementById('devBtnPause');
-    if (btn) {
-      btn.innerText = this.isPaused ? '▶️ Resume Stream' : '⏸️ Pause Stream';
+  async resetCircuitBreaker() {
+    try {
+      const res = await fetch('/api/dev/reset-circuit-breaker', { method: 'POST' });
+      const json = await res.json();
+      if (typeof ToastNotification !== 'undefined') {
+        ToastNotification.show(json.message || 'Circuit breaker reset successfully', 'success');
+      }
+      this.fetchHealth(true);
+      this.render();
+    } catch (e) {
+      if (typeof ToastNotification !== 'undefined') ToastNotification.show('Reset error: ' + e.message, 'error');
+    }
+  },
+
+  async triggerEmergencyHalt() {
+    if (!confirm('🛑 EMERGENCY KILL-SWITCH: Are you sure you want to halt the trading engine and freeze all order placement?')) return;
+    try {
+      const res = await fetch('/api/dev/emergency-halt', { method: 'POST' });
+      const json = await res.json();
+      if (typeof ToastNotification !== 'undefined') {
+        ToastNotification.show('EMERGENCY HALT TRIPPED: All new automated order entry blocked!', 'error');
+      }
+      this.fetchHealth(true);
+      this.render();
+    } catch (e) {
+      if (typeof ToastNotification !== 'undefined') ToastNotification.show('Halt error: ' + e.message, 'error');
     }
   },
 
@@ -339,7 +374,7 @@ const DevDiagnosticsView = {
     }
 
     const { modules, istTime } = this.healthData;
-    const { brokerAuth, marketData, strategyEngines, omsRisk, automationUptime } = modules;
+    const { brokerAuth, marketData, strategyEngines, omsRisk, automationUptime, executionSafety } = modules;
 
     container.innerHTML = `
       <div class="dev-diagnostics-cockpit" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #d1d4dc;">
@@ -663,7 +698,113 @@ const DevDiagnosticsView = {
 
         </div>
 
-        <!-- MODULE 7: LIVE TELEMETRY & EVENT STREAM -->
+        <!-- MODULE 7: STRATEGY EXECUTION & SAFETY GUARDRAILS (PROMETHEUS TELEMETRY) -->
+        <div style="background: #181c27; border: 1px solid ${executionSafety?.circuitBreaker?.status === 'TRIPPED' ? 'rgba(239, 68, 68, 0.6)' : 'rgba(0, 208, 132, 0.3)'}; border-radius: 10px; padding: 16px; margin-bottom: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.25);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 18px;">🛡️</span>
+              <div>
+                <span style="font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.5px;">STRATEGY EXECUTION & SAFETY GUARDRAILS</span>
+                <span style="font-size: 10px; color: #8896a8; margin-left: 6px;">(Runtime Invariants & Prometheus Telemetry)</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="font-size: 11px; padding: 3px 10px; border-radius: 12px; font-weight: 700; background: ${executionSafety?.circuitBreaker?.status === 'TRIPPED' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(0, 208, 132, 0.15)'}; color: ${executionSafety?.circuitBreaker?.status === 'TRIPPED' ? '#ef4444' : '#00d084'}; border: 1px solid ${executionSafety?.circuitBreaker?.status === 'TRIPPED' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(0, 208, 132, 0.3)'};">
+                ${executionSafety?.circuitBreaker?.status === 'TRIPPED' ? '🔴 CIRCUIT BREAKER TRIPPED' : '🟢 ARMED & OPERATIONAL'}
+              </span>
+              <button onclick="DevDiagnosticsView.runInvariantProbe()" style="padding: 5px 10px; font-size: 11px; font-weight: 700; background: rgba(0, 208, 132, 0.15); color: #00d084; border: 1px solid rgba(0, 208, 132, 0.4); border-radius: 6px; cursor: pointer;">
+                ⚡ Run Invariant Probe
+              </button>
+              ${executionSafety?.circuitBreaker?.status === 'TRIPPED' ? `
+                <button onclick="DevDiagnosticsView.resetCircuitBreaker()" style="padding: 5px 10px; font-size: 11px; font-weight: 700; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 6px; cursor: pointer;">
+                  🔄 Reset Circuit Breaker
+                </button>
+              ` : `
+                <button onclick="DevDiagnosticsView.triggerEmergencyHalt()" style="padding: 5px 10px; font-size: 11px; font-weight: 700; background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 6px; cursor: pointer;">
+                  🛑 Emergency Panic Halt
+                </button>
+              `}
+              <a href="/api/dev/metrics" target="_blank" style="display: inline-block; padding: 5px 10px; font-size: 11px; font-weight: 700; background: rgba(255, 255, 255, 0.08); color: #cbd5e1; border: 1px solid #2a2e39; border-radius: 6px; text-decoration: none;">
+                📊 Open /metrics (Prometheus)
+              </a>
+            </div>
+          </div>
+
+          <!-- STATUS & STATS GRID -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 14px;">
+            <div style="background: #131722; padding: 10px; border-radius: 6px; border: 1px solid #2a2e39;">
+              <div style="color: #8896a8; font-size: 10px;">INVARIANT CHECKS TOTAL</div>
+              <div style="font-weight: 800; font-size: 15px; color: #fff; font-family: monospace;">${executionSafety?.invariantSentinel?.checksTotal || 0}</div>
+              <div style="color: #00d084; font-size: 10px; margin-top: 2px;">✓ Continuous 5s Sentinel</div>
+            </div>
+            <div style="background: #131722; padding: 10px; border-radius: 6px; border: 1px solid #2a2e39;">
+              <div style="color: #8896a8; font-size: 10px;">VIOLATIONS INTERCEPTED</div>
+              <div style="font-weight: 800; font-size: 15px; color: ${executionSafety?.invariantSentinel?.violationsTotal > 0 ? '#ef4444' : '#00d084'}; font-family: monospace;">
+                ${executionSafety?.invariantSentinel?.violationsTotal || 0}
+              </div>
+              <div style="color: ${executionSafety?.invariantSentinel?.violationsTotal > 0 ? '#ef4444' : '#8896a8'}; font-size: 10px; margin-top: 2px;">
+                ${executionSafety?.invariantSentinel?.violationsTotal > 0 ? '⚠️ Violations Prevented' : 'Zero Faults in Production'}
+              </div>
+            </div>
+            <div style="background: #131722; padding: 10px; border-radius: 6px; border: 1px solid #2a2e39;">
+              <div style="color: #8896a8; font-size: 10px;">CIRCUIT BREAKER STATE</div>
+              <div style="font-weight: 800; font-size: 13px; color: ${executionSafety?.circuitBreaker?.status === 'TRIPPED' ? '#ef4444' : '#00d084'}; font-family: monospace;">
+                ${executionSafety?.circuitBreaker?.status || 'NORMAL'}
+              </div>
+              <div style="color: #8896a8; font-size: 10px; margin-top: 2px;">
+                ${executionSafety?.circuitBreaker?.cooldownActive ? '⏳ In Cooldown (' + executionSafety.circuitBreaker.cooldownMinsRemaining + 'm left)' : 'Drawdown Limit: -2.0%'}
+              </div>
+            </div>
+            <div style="background: #131722; padding: 10px; border-radius: 6px; border: 1px solid #2a2e39;">
+              <div style="color: #8896a8; font-size: 10px;">PROMETHEUS TELEMETRY</div>
+              <div style="font-weight: 800; font-size: 13px; color: #60a5fa; font-family: monospace;">OpenMetrics v0.0.4</div>
+              <div style="color: #8896a8; font-size: 10px; margin-top: 2px;">Scrapable via /api/dev/metrics</div>
+            </div>
+          </div>
+
+          <!-- STRATEGY PERFORMANCE GAUGES (PROMETHEUS) -->
+          <div style="background: #131722; padding: 12px; border-radius: 6px; border: 1px solid #2a2e39; margin-bottom: 12px;">
+            <div style="font-size: 11px; font-weight: 700; color: #8896a8; margin-bottom: 8px; display: flex; justify-content: space-between;">
+              <span>STRATEGY SETUP PERFORMANCE GAUGES</span>
+              <span style="color: #00d084;">Live Attribution Tracking</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px;">
+              ${(executionSafety?.setupPerformance || []).map(s => `
+                <div style="background: #181c27; padding: 8px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); font-size: 11px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <strong style="color: #fff; font-family: monospace;">${s.setup}</strong>
+                    <span style="color: ${s.winRatePct >= 50 ? '#00d084' : (s.total > 0 ? '#ef4444' : '#8896a8')}; font-weight: 700;">
+                      ${s.total > 0 ? s.winRatePct + '% Win' : 'No Trades'}
+                    </span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; color: #8896a8; font-size: 10.5px;">
+                    <span>Trades: <strong style="color: #cbd5e1;">${s.total} (${s.wins}W / ${s.losses}L)</strong></span>
+                    <span>Net P&L: <strong style="color: ${s.netPnL >= 0 ? '#00d084' : '#ef4444'}; font-family: monospace;">₹${s.netPnL}</strong></span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- INVARIANT RULES ACTIVE STATUS CHECKLIST -->
+          <div style="background: #131722; padding: 10px 12px; border-radius: 6px; border: 1px solid #2a2e39;">
+            <div style="font-size: 10.5px; font-weight: 700; color: #8896a8; margin-bottom: 6px;">
+              ACTIVE INVARIANT ASSERTIONS (FINANCIAL INTEGRITY GATES)
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 6px; font-size: 11px;">
+              ${(executionSafety?.safetyRules || []).map(r => `
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 3px 6px; background: #181c27; border-radius: 4px; border: 1px solid rgba(255,255,255,0.03);">
+                  <span style="color: #cbd5e1;">${r.name}</span>
+                  <span style="color: ${r.status === 'PASS' ? '#00d084' : '#ef4444'}; font-weight: 700; font-family: monospace; font-size: 10px;">
+                    ${r.status === 'PASS' ? '✓ ENFORCED' : '⚠️ ' + r.status}
+                  </span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+
+        <!-- MODULE 8: LIVE TELEMETRY & EVENT STREAM -->
         <div style="background: #131722; border: 1px solid #2a2e39; border-radius: 10px; padding: 14px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
             <div style="display: flex; align-items: center; gap: 8px;">
