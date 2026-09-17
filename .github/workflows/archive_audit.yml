@@ -2,15 +2,10 @@ name: Automated End-of-Day Audit Archiver
 
 on:
   schedule:
-    # Multiple redundant schedules to guarantee execution even with GitHub Actions queue delays
-    # 10:05 UTC = 3:35 PM IST (Primary end-of-day run)
+    # 10:05 UTC = 3:35 PM IST (Primary end-of-day run shortly after 3:30 PM closing bell)
     - cron: '05 10 * * 1-5'
-    # 10:35 UTC = 4:05 PM IST (1st fallback trigger)
-    - cron: '35 10 * * 1-5'
-    # 11:05 UTC = 4:35 PM IST (2nd fallback trigger)
-    - cron: '05 11 * * 1-5'
-    # 12:30 UTC = 6:00 PM IST (Evening final sweep)
-    - cron: '30 12 * * 1-5'
+    # 10:45 UTC = 4:15 PM IST (Single fallback trigger for queue delays)
+    - cron: '45 10 * * 1-5'
   workflow_dispatch: # Allows manual trigger anytime from GitHub Actions UI
 
 jobs:
@@ -120,11 +115,7 @@ jobs:
             }
           "
 
-          echo "📧 Triggering End-of-Day Market Close Summary Email on Render..."
-          curl -s --max-time 30 -X POST \
-            "https://stock-trading-1-cquo.onrender.com/api/quant/send-market-close-summary" \
-            -H "Content-Type: application/json" \
-            -d '{"force": false}' || echo "ℹ️ Email trigger completed"
+          echo "ℹ️ Audit archiving complete. Automated emails are handled strictly by the server at 3:30 PM IST."
 
       - name: Commit and Push Archived Logs to GitHub
         run: |

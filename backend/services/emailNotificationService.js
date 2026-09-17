@@ -56,9 +56,30 @@ class EmailNotificationService {
       if (fs.existsSync(DISPATCH_STATUS_FILE)) {
         const raw = fs.readFileSync(DISPATCH_STATUS_FILE, 'utf8');
         const parsed = JSON.parse(raw);
-        return parsed.lastSentDate || null;
+        if (parsed.lastSentDate) return parsed.lastSentDate;
       }
     } catch (e) {}
+
+    // Fallback: Also check if today's EOD settlement archive already exists
+    try {
+      const todayStr = marketCalendar.getDateKeyIST();
+      const archivePath = path.join(DATA_DIR, `daily_pnl_archive_${todayStr}.json`);
+      if (fs.existsSync(archivePath)) {
+        return todayStr;
+      }
+    } catch (e) {}
+
+    // Fallback: Check daily ledger for latest date
+    try {
+      const ledgerFile = path.join(DATA_DIR, 'daily_pnl_ledger.json');
+      if (fs.existsSync(ledgerFile)) {
+        const ledger = JSON.parse(fs.readFileSync(ledgerFile, 'utf8'));
+        if (Array.isArray(ledger) && ledger.length > 0 && ledger[0].date) {
+          return ledger[0].date;
+        }
+      }
+    } catch (e) {}
+
     return null;
   }
 
@@ -873,7 +894,40 @@ class EmailNotificationService {
     const dateStr = options.date || marketCalendar.getDateKeyIST();
     const isForce = options.force === true;
 
-    // Guard against duplicate sending on the same day unless forced
+    // 1. Strict Non-Trading-Day & Time-Window Guard for Automated Dispatches
+    if (!isForce) {
+      const isTradingDay = marketCalendar.isTradingDay();
+      if (!isTradingDay) {
+        console.log(`ℹ️ [EmailService] Skipping automated email: ${dateStr} is not an active exchange trading day (Weekend/Holiday).`);
+        return {
+          success: true,
+          delivered: false,
+          skipped: true,
+          reason: 'NOT_TRADING_DAY',
+          date: dateStr,
+          message: `Skipping automated market close summary: ${dateStr} is not an active exchange trading day.`
+        };
+      }
+
+      const istDate = marketCalendar.getISTDate();
+      const timeInMinutes = istDate.getHours() * 60 + istDate.getMinutes();
+      const timeStr = `${String(istDate.getHours()).padStart(2, '0')}:${String(istDate.getMinutes()).padStart(2, '0')} IST`;
+      // Allow automated dispatch strictly within the Market Close / EOD settlement window: 3:30 PM (930m) to 5:00 PM (1020m) IST
+      const isMarketCloseWindow = timeInMinutes >= 930 && timeInMinutes <= 1020;
+      if (!isMarketCloseWindow) {
+        console.log(`ℹ️ [EmailService] Skipping automated email: Current time (${timeStr}) is outside the market close window (15:30 - 17:00 IST).`);
+        return {
+          success: true,
+          delivered: false,
+          skipped: true,
+          reason: 'OUTSIDE_MARKET_CLOSE_WINDOW',
+          date: dateStr,
+          message: `Skipping automated market close summary: Current time (${timeStr}) is outside the market close window (15:30 - 17:00 IST).`
+        };
+      }
+    }
+
+    // 2. Strict One-Email-Per-Day Guard against duplicate sending on the same day unless forced
     const persistedDate = this.loadLastSentDate();
     const effectiveLastSent = this.lastSentDate || persistedDate;
 

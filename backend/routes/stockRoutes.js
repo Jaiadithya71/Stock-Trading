@@ -84,7 +84,7 @@ router.get('/download-pnl-data', (req, res) => {
     const fs = require('fs');
     const path = require('path');
     const dataDir = path.join(__dirname, '../data');
-    const files = fs.readdirSync(dataDir).filter(f => f.startsWith('daily_pnl_') || f.startsWith('paper_portfolio_') || f.startsWith('stock_signal_audit_'));
+    const files = fs.readdirSync(dataDir).filter(f => f.startsWith('daily_pnl_') || f.startsWith('paper_portfolio_') || f.startsWith('stock_signal_audit_') || f === 'email_dispatch_status.json');
 
     const backupBundle = {
       exportTimestamp: new Date().toISOString(),
