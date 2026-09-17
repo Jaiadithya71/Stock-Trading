@@ -334,6 +334,12 @@ class PaperTradingService {
       throw new Error(`Position ${orderId} not found`);
     }
 
+    // Short selling in cash equity (MIS) cannot be carried overnight on NSE/BSE
+    if (pos.action === 'SELL' && pos.assetType !== 'OPTIONS' && pos.assetType !== 'FUTURES') {
+      console.warn(`⚠️ [PaperTrading] Cannot promote short cash equity ${pos.symbol} to overnight swing (MIS exchange restriction).`);
+      return pos;
+    }
+
     pos.holdingType = 'SWING_POSITIONAL';
     pos.holdingDaysCount = (pos.holdingDaysCount || 0) + 1;
 

@@ -166,7 +166,7 @@ class StockExecutionEngine {
         // In HYBRID_RUNNER mode: If any intraday position has >= 0.6% profit, auto-promote to Swing runner!
         if (settings.strategyHorizon === 'HYBRID_RUNNER' || settings.strategyHorizon === 'SWING_POSITIONAL') {
           paperTrading.positions.forEach(p => {
-            if (p.holdingType !== 'SWING_POSITIONAL' && (p.unrealizedPnLPct || 0) >= 0.6) {
+            if (p.action === 'BUY' && p.holdingType !== 'SWING_POSITIONAL' && (p.unrealizedPnLPct || 0) >= 0.6) {
               console.log(`🚀 [StockEngine] Auto-Promoting profitable intraday runner to Swing: ${p.symbol} (+${p.unrealizedPnLPct}%)`);
               paperTrading.promotePositionToSwing(p.id);
             }
